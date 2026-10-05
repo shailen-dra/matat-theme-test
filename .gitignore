@@ -1,0 +1,48 @@
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Editors / IDEs
+.idea/
+*.iml
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+*~
+
+# Local tooling / agent state
+.remember/
+.claude/settings.local.json
+
+# Shopify CLI
+.shopify/
+.env
+.env.*
+shopify.theme.toml
+
+# Dependencies & build output
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npm/
+.cache/
+dist/
+
+# Release / packaged themes
+release
+*.zip
+
+# Logs & temp
+logs/
+*.log
+tmp/
