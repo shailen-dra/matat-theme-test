@@ -1,0 +1,92 @@
+{% doc %}
+  Renders a row of tags / badges from a comma-separated list.
+
+  @example
+  {% content_for 'block', type: 'tags', id: 'tags' %}
+{% enddoc %}
+
+{%- assign items = block.settings.tags | split: ',' -%}
+
+<ul
+  class="tags"
+  {% if block.settings.alignment != 'auto' %}
+    style="--tags-justify: {{ block.settings.alignment }};"
+  {% endif %}
+  role="list"
+  {{ block.shopify_attributes }}
+>
+  {%- for item in items -%}
+    {%- assign label = item | strip -%}
+    {%- if label != blank -%}
+      <li>{% render 'tag', label: label, style: block.settings.style, size: block.settings.size %}</li>
+    {%- endif -%}
+  {%- endfor -%}
+</ul>
+
+{% stylesheet %}
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: var(--tags-justify, var(--content-justify, flex-start));
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.tags.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "tags",
+      "label": "t:blocks.tags.tags",
+      "info": "t:blocks.tags.tags_info",
+      "default": "Handcrafted, 18k gold, Ethically sourced"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:labels.style",
+      "options": [
+        { "value": "outline", "label": "t:options.tag_style.outline" },
+        { "value": "solid", "label": "t:options.tag_style.solid" },
+        { "value": "accent", "label": "t:options.tag_style.accent" },
+        { "value": "text", "label": "t:options.tag_style.text" }
+      ],
+      "default": "outline"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "t:labels.size",
+      "options": [
+        { "value": "sm", "label": "t:options.size.small" },
+        { "value": "md", "label": "t:options.size.medium" }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:labels.alignment",
+      "options": [
+        { "value": "auto", "label": "t:options.alignment.inherit" },
+        { "value": "flex-start", "label": "t:options.alignment.left" },
+        { "value": "center", "label": "t:options.alignment.center" },
+        { "value": "flex-end", "label": "t:options.alignment.right" }
+      ],
+      "default": "auto"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.tags.name",
+      "category": "t:general.text"
+    }
+  ]
+}
+{% endschema %}

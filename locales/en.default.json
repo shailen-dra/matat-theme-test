@@ -48,5 +48,15 @@
     "submit": "Search",
     "no_results_html": "No results found for {{ terms }}",
     "results_for_html": "{{ count }} results found for {{ terms }}"
+  },
+  "general": {
+    "language": {
+      "label": "Language"
+    }
+  },
+  "sections": {
+    "hero": {
+      "demo_image_alt": "Hands adorned with fine gold rings and delicate chain bracelets"
+    }
   }
 }

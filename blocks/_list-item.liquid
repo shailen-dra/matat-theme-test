@@ -1,0 +1,17 @@
+<li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+
+{% schema %}
+{
+  "name": "t:blocks.list_item.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "List item"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.list_item.name" }]
+}
+{% endschema %}

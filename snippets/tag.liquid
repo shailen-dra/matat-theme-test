@@ -1,0 +1,74 @@
+{% doc %}
+  Renders a single tag / badge. Used by the `tags` block and reusable for
+  product badges ("New", "Sold out"), article tags, filters, etc.
+
+  @param {string} label - The tag text
+  @param {string} [url] - Optional link; renders an `<a>` when present
+  @param {string} [style] - Visual style: `outline` (default), `solid`, `accent` or `text`
+  @param {string} [size] - Size: `sm` or `md` (default)
+
+  @example
+  {% render 'tag', label: 'New' %}
+  {% render 'tag', label: tag, url: collection.url, style: 'solid', size: 'sm' %}
+{% enddoc %}
+
+{%- liquid
+  assign style = style | default: 'outline'
+  assign size = size | default: 'md'
+  assign classes = 'tag tag--' | append: style | append: ' tag--' | append: size
+-%}
+
+{%- if url != blank -%}
+  <a href="{{ url }}" class="{{ classes }}">{{ label | escape }}</a>
+{%- else -%}
+  <span class="{{ classes }}">{{ label | escape }}</span>
+{%- endif -%}
+
+{% stylesheet %}
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.875rem;
+    border: 1px solid currentcolor;
+    border-radius: 999px;
+    color: var(--color-foreground);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .tag--sm {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+  }
+
+  .tag--solid {
+    border-color: var(--color-foreground);
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .tag--accent {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    color: #fff;
+  }
+
+  .tag--text {
+    padding-inline: 0;
+    border-color: transparent;
+  }
+
+  a.tag:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  a.tag--solid:hover,
+  a.tag--accent:hover {
+    background-color: transparent;
+  }
+{% endstylesheet %}

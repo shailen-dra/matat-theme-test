@@ -31,7 +31,12 @@
     "sidebar": "Sidebar",
     "text": "Text",
     "theme": "Theme",
-    "typography": "Typography"
+    "typography": "Typography",
+    "banners": "Banners",
+    "buttons": "Buttons",
+    "links": "Links",
+    "hebrew_fonts": "Hebrew fonts",
+    "hebrew_fonts_info": "Used for Hebrew text. Latin characters keep the fonts above."
   },
   "labels": {
     "alignment": "Alignment",
@@ -48,13 +53,36 @@
     "page_width": "Page width",
     "show_payment_icons": "Show payment icons",
     "text_style": "Text style",
-    "text": "Text"
+    "text": "Text",
+    "accent": "Accent",
+    "body_font": "Body",
+    "button_corner_radius": "Button corner radius",
+    "color": "Color",
+    "columns_desktop": "Columns on desktop",
+    "full_width": "Full width",
+    "gap": "Spacing",
+    "heading_font": "Headings",
+    "height": "Height",
+    "html_tag": "HTML tag",
+    "image": "Image",
+    "label": "Label",
+    "link": "Link",
+    "max_width": "Maximum width",
+    "opacity": "Opacity",
+    "open_in_new_tab": "Open link in new tab",
+    "padding_bottom": "Bottom padding",
+    "padding_top": "Top padding",
+    "size": "Size",
+    "style": "Style",
+    "text_color": "Text color"
   },
   "options": {
     "alignment": {
       "left": "Left",
       "center": "Center",
-      "right": "Right"
+      "right": "Right",
+      "inherit": "Inherit",
+      "space_between": "Space between"
     },
     "direction": {
       "horizontal": "Horizontal",
@@ -66,12 +94,109 @@
     },
     "size": {
       "large": "Large",
-      "small": "Small"
+      "small": "Small",
+      "medium": "Medium",
+      "full_screen": "Full screen",
+      "adapt_to_image": "Adapt to image"
     },
     "text_style": {
       "title": "Title",
       "subtitle": "Subtitle",
       "normal": "Normal text"
     },
+    "vertical": {
+      "top": "Top",
+      "center": "Center",
+      "bottom": "Bottom"
+    },
+    "heading_style": {
+      "display": "Display",
+      "h1": "Heading 1",
+      "h2": "Heading 2",
+      "h3": "Heading 3",
+      "subtitle": "Subtitle",
+      "eyebrow": "Eyebrow",
+      "eyebrow_accent": "Eyebrow (accent)"
+    },
+    "tag": {
+      "paragraph": "Paragraph",
+      "div": "Div"
+    },
+    "button_style": {
+      "primary": "Primary",
+      "secondary": "Secondary",
+      "outline": "Outline",
+      "link": "Link"
+    },
+    "tag_style": {
+      "outline": "Outline",
+      "solid": "Solid",
+      "accent": "Accent",
+      "text": "Text only"
+    },
+    "list_marker": {
+      "bullet": "Bullet",
+      "diamond": "Diamond",
+      "dash": "Dash",
+      "check": "Check",
+      "numbered": "Numbered",
+      "numbered_zero": "Numbered (01)",
+      "none": "None"
+    },
+    "mobile_layout": {
+      "overlay": "Text over image",
+      "stacked": "Text below image"
+    },
+    "overlay_style": {
+      "solid": "Solid",
+      "gradient": "Gradient"
+    }
+  },
+  "blocks": {
+    "heading": {
+      "name": "Heading",
+      "text_info": "Use italics to highlight words in the accent color.",
+      "tag_info": "Use one H1 per page for SEO.",
+      "max_width_info": "Set to 0 for no limit.",
+      "presets": {
+        "title": "Title",
+        "subtitle": "Subtitle",
+        "eyebrow": "Eyebrow"
+      }
+    },
+    "button": {
+      "name": "Button"
+    },
+    "tags": {
+      "name": "Tags",
+      "tags": "Tags",
+      "tags_info": "Separate tags with commas."
+    },
+    "list": {
+      "name": "List",
+      "marker": "Marker"
+    },
+    "list_item": {
+      "name": "List item"
+    },
+    "group": {
+      "presets": {
+        "buttons": "Buttons"
+      }
+    }
+  },
+  "sections": {
+    "hero": {
+      "name": "Hero banner",
+      "media": "Media",
+      "image_mobile": "Mobile image",
+      "image_mobile_info": "Optional. Shown on screens narrower than 750px.",
+      "mobile_layout": "Mobile layout",
+      "overlay": "Overlay",
+      "position_x": "Horizontal position",
+      "position_y": "Vertical position",
+      "text_color_info": "Buttons, tags and lists inside the banner adapt to this color.",
+      "animate": "Animate on load"
+    }
   }
 }

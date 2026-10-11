@@ -1,0 +1,172 @@
+{% doc %}
+  Renders an ordered or unordered list. Items are nested `_list-item` blocks
+  so merchants can add, reorder and remove them individually.
+
+  @example
+  {% content_for 'block', type: 'list', id: 'list' %}
+{% enddoc %}
+
+{%- liquid
+  assign list_tag = 'ul'
+  if block.settings.marker contains 'numbered'
+    assign list_tag = 'ol'
+  endif
+-%}
+
+<{{ list_tag }}
+  class="list {{ block.settings.marker }} list--cols-{{ block.settings.columns }}"
+  style="--list-gap: {{ block.settings.gap }}px;"
+  role="list"
+  {{ block.shopify_attributes }}
+>
+  {% content_for 'blocks' %}
+</{{ list_tag }}>
+
+{% stylesheet %}
+  .list {
+    --list-marker-size: 1.25em;
+
+    display: grid;
+    gap: var(--list-gap);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: list;
+    color: var(--color-foreground);
+    text-align: start;
+  }
+
+  @media (min-width: 750px) {
+    .list--cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 2rem;
+    }
+  }
+
+  .list > li {
+    position: relative;
+    padding-inline-start: calc(var(--list-marker-size) + 0.625rem);
+    line-height: 1.6;
+    counter-increment: list;
+  }
+
+  .list--none > li {
+    padding-inline-start: 0;
+  }
+
+  .list > li::before {
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    width: var(--list-marker-size);
+    color: var(--color-accent);
+  }
+
+  .list--bullet > li::before {
+    content: '';
+    top: 0.7em;
+    width: 0.375rem;
+    height: 0.375rem;
+    margin-inline-start: 0.25em;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+  }
+
+  .list--diamond > li::before {
+    content: '';
+    top: 0.65em;
+    width: 0.4rem;
+    height: 0.4rem;
+    margin-inline-start: 0.25em;
+    background-color: var(--color-accent);
+    transform: rotate(45deg);
+  }
+
+  .list--dash > li::before {
+    content: '';
+    top: 0.8em;
+    width: 0.875rem;
+    height: 1px;
+    background-color: var(--color-accent);
+  }
+
+  .list--check > li::before {
+    content: '';
+    top: 0.2em;
+    height: var(--list-marker-size);
+    background-color: var(--color-accent);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.6'%3E%3Cpath d='M4 10.5l4 4 8-9'/%3E%3C/svg%3E") center / contain no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.6'%3E%3Cpath d='M4 10.5l4 4 8-9'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .list--numbered > li::before {
+    content: counter(list) '.';
+    font-variant-numeric: tabular-nums;
+  }
+
+  .list--numbered-zero {
+    --list-marker-size: 1.75em;
+  }
+
+  .list--numbered-zero > li::before {
+    content: counter(list, decimal-leading-zero);
+    font-family: var(--font-heading--family);
+    font-variant-numeric: tabular-nums;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.list.name",
+  "tag": null,
+  "blocks": [{ "type": "_list-item" }],
+  "settings": [
+    {
+      "type": "select",
+      "id": "marker",
+      "label": "t:blocks.list.marker",
+      "options": [
+        { "value": "list--bullet", "label": "t:options.list_marker.bullet" },
+        { "value": "list--diamond", "label": "t:options.list_marker.diamond" },
+        { "value": "list--dash", "label": "t:options.list_marker.dash" },
+        { "value": "list--check", "label": "t:options.list_marker.check" },
+        { "value": "list--numbered", "label": "t:options.list_marker.numbered" },
+        { "value": "list--numbered-zero", "label": "t:options.list_marker.numbered_zero" },
+        { "value": "list--none", "label": "t:options.list_marker.none" }
+      ],
+      "default": "list--check"
+    },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "t:labels.columns_desktop",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "1"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:labels.gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.list.name",
+      "category": "t:general.text",
+      "blocks": [
+        { "type": "_list-item", "settings": { "text": "Recycled 18k gold and sterling silver" } },
+        { "type": "_list-item", "settings": { "text": "Conflict-free, certified stones" } },
+        { "type": "_list-item", "settings": { "text": "Free resizing and lifetime care" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

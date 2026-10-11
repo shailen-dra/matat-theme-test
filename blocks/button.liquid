@@ -1,0 +1,73 @@
+{% doc %}
+  Renders a single button. Wraps the `button` snippet so merchants can add,
+  style and reorder calls to action in any section that accepts theme blocks.
+
+  @example
+  {% content_for 'block', type: 'button', id: 'button' %}
+{% enddoc %}
+
+{%- liquid
+  assign label = block.settings.label | default: 'Button'
+  render 'button', label: label, url: block.settings.link, style: block.settings.style, size: block.settings.size, open_in_new_tab: block.settings.open_in_new_tab, full_width: block.settings.full_width, class: 'button-block', attributes: block.shopify_attributes
+-%}
+
+{% schema %}
+{
+  "name": "t:blocks.button.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:labels.label",
+      "default": "Shop now"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:labels.link"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_in_new_tab",
+      "label": "t:labels.open_in_new_tab",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:labels.style",
+      "options": [
+        { "value": "primary", "label": "t:options.button_style.primary" },
+        { "value": "secondary", "label": "t:options.button_style.secondary" },
+        { "value": "outline", "label": "t:options.button_style.outline" },
+        { "value": "link", "label": "t:options.button_style.link" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "t:labels.size",
+      "options": [
+        { "value": "sm", "label": "t:options.size.small" },
+        { "value": "md", "label": "t:options.size.medium" },
+        { "value": "lg", "label": "t:options.size.large" }
+      ],
+      "default": "md"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:labels.full_width",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.button.name",
+      "category": "t:general.links"
+    }
+  ]
+}
+{% endschema %}

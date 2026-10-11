@@ -1,0 +1,30 @@
+{% doc %}
+  Loads the Hebrew companion fonts from Google Fonts on Hebrew storefronts.
+
+  Shopify's font library only covers Latin, so the heading/body font stacks in
+  `css-variables` list a Hebrew font right after the Latin one. Latin glyphs
+  (prices, SKUs, brand names) keep using the theme fonts; Hebrew glyphs fall
+  through to these. Google serves them per unicode-range, so only the Hebrew
+  subset is downloaded.
+
+  @example
+  {% render 'hebrew-fonts' %}
+{% enddoc %}
+
+{%- if request.locale.iso_code == 'he' -%}
+  {%- liquid
+    assign heading_family = settings.hebrew_heading_font | replace: ' ', '+'
+    assign body_family = settings.hebrew_body_font | replace: ' ', '+'
+    assign fonts_url = 'https://fonts.googleapis.com/css2?family=' | append: heading_family | append: ':wght@400;500;700'
+    if body_family != heading_family
+      assign fonts_url = fonts_url | append: '&family=' | append: body_family | append: ':wght@400;500;700'
+    endif
+    assign fonts_url = fonts_url | append: '&display=swap'
+  -%}
+  {% # Shopify's font library has no Hebrew glyphs, so these are served by Google %}
+  {% # theme-check-disable RemoteAsset %}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{{ fonts_url }}">
+  {% # theme-check-enable RemoteAsset %}
+{%- endif -%}

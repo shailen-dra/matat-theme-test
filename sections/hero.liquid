@@ -1,0 +1,544 @@
+{%- liquid
+  assign image = section.settings.image
+  assign image_mobile = section.settings.image_mobile
+
+  # Scoped color tokens: every block inside (heading, button, tags, list)
+  # re-themes itself from these, so text stays legible over the image.
+  assign text_brightness = section.settings.text_color | color_brightness
+  if text_brightness > 128
+    assign contrast_color = '#111111'
+  else
+    assign contrast_color = '#ffffff'
+  endif
+
+  assign image_style = 'object-position: ' | append: image.presentation.focal_point | append: ';'
+
+  assign loading = 'lazy'
+  assign fetchpriority = 'auto'
+  if section.index == 1
+    assign loading = 'eager'
+    assign fetchpriority = 'high'
+  endif
+
+  assign hero_classes = 'hero full-width ' | append: section.settings.height | append: ' ' | append: section.settings.mobile_layout | append: ' ' | append: section.settings.content_position_x | append: ' ' | append: section.settings.content_position_y | append: ' ' | append: section.settings.overlay_style
+  if section.settings.animate
+    assign hero_classes = hero_classes | append: ' hero--animate'
+  endif
+-%}
+
+<div
+  class="{{ hero_classes }}"
+  style="
+    --hero-fg: {{ section.settings.text_color }};
+    --hero-bg: {{ contrast_color }};
+    --hero-overlay-color: {{ section.settings.overlay_color }};
+    --hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+    --hero-content-width: {{ section.settings.content_width }}px;
+    --hero-gap: {{ section.settings.content_gap }}px;
+    --hero-padding-top: {{ section.settings.padding_top }}px;
+    --hero-padding-bottom: {{ section.settings.padding_bottom }}px;
+    {% if image %}--hero-aspect: {{ image.aspect_ratio }};{% endif %}
+    {% if image_mobile %}--hero-aspect-mobile: {{ image_mobile.aspect_ratio }};{% endif %}
+  "
+>
+  <div class="hero__media">
+    {%- if image -%}
+      <picture>
+        {%- if image_mobile -%}
+          <source
+            media="(max-width: 749px)"
+            srcset="
+              {{ image_mobile | image_url: width: 375 }} 375w,
+              {{ image_mobile | image_url: width: 550 }} 550w,
+              {{ image_mobile | image_url: width: 750 }} 750w,
+              {{ image_mobile | image_url: width: 1100 }} 1100w,
+              {{ image_mobile | image_url: width: 1500 }} 1500w
+            "
+            sizes="100vw"
+            width="{{ image_mobile.width }}"
+            height="{{ image_mobile.height }}"
+          >
+        {%- endif -%}
+        {{
+          image
+          | image_url: width: 3000
+          | image_tag:
+            widths: '375, 550, 750, 1100, 1500, 1780, 2000, 2500, 3000',
+            sizes: '100vw',
+            loading: loading,
+            fetchpriority: fetchpriority,
+            class: 'hero__image',
+            style: image_style,
+            alt: image.alt
+        }}
+      </picture>
+    {%- else -%}
+      {%- # Demo photography (theme assets) until the merchant picks an image -%}
+      <picture>
+        <source
+          media="(max-width: 749px)"
+          srcset="
+            {{ 'demo-hero-mobile.jpg' | asset_img_url: '550x' }} 550w,
+            {{ 'demo-hero-mobile.jpg' | asset_img_url: '750x' }} 750w,
+            {{ 'demo-hero-mobile.jpg' | asset_img_url: '1100x' }} 1100w
+          "
+          sizes="100vw"
+          width="1200"
+          height="1252"
+        >
+        <img
+          src="{{ 'demo-hero.jpg' | asset_img_url: '1500x' }}"
+          srcset="
+            {{ 'demo-hero.jpg' | asset_img_url: '750x' }} 750w,
+            {{ 'demo-hero.jpg' | asset_img_url: '1100x' }} 1100w,
+            {{ 'demo-hero.jpg' | asset_img_url: '1500x' }} 1500w,
+            {{ 'demo-hero.jpg' | asset_img_url: '2000x' }} 2000w,
+            {{ 'demo-hero.jpg' | asset_img_url: '2400x' }} 2400w
+          "
+          sizes="100vw"
+          width="2400"
+          height="1597"
+          alt="{{ 'sections.hero.demo_image_alt' | t | escape }}"
+          class="hero__image"
+          style="object-position: 50% 35%;"
+          loading="{{ loading }}"
+          fetchpriority="{{ fetchpriority }}"
+        >
+      </picture>
+    {%- endif -%}
+  </div>
+
+  <div class="hero__overlay" aria-hidden="true"></div>
+
+  <div class="hero__inner">
+    <div class="hero__content">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-areas: 'stack';
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .hero > * {
+    grid-area: stack;
+  }
+
+  /* Height */
+  .hero--small {
+    min-height: 45svh;
+  }
+
+  .hero--medium {
+    min-height: 65svh;
+  }
+
+  .hero--large {
+    min-height: 85svh;
+  }
+
+  .hero--full {
+    min-height: 100svh;
+  }
+
+  .hero--adapt {
+    aspect-ratio: var(--hero-aspect, 16 / 9);
+  }
+
+  /* Media */
+  .hero__media {
+    position: relative;
+    z-index: -2;
+    background-color: color-mix(in srgb, var(--color-foreground) 6%, var(--color-background));
+  }
+
+  .hero__media picture {
+    display: contents;
+  }
+
+  .hero__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Overlay */
+  .hero__overlay {
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--hero-overlay-color);
+    opacity: var(--hero-overlay-opacity);
+  }
+
+  .hero--overlay-gradient .hero__overlay {
+    --hero-gradient-dir: to top;
+    background: linear-gradient(var(--hero-gradient-dir), var(--hero-overlay-color) 0%, transparent 75%);
+    opacity: calc(var(--hero-overlay-opacity) * 2.5);
+  }
+
+  .hero--overlay-gradient.hero--x-left .hero__overlay {
+    --hero-gradient-dir: to right;
+  }
+
+  .hero--overlay-gradient.hero--x-right .hero__overlay {
+    --hero-gradient-dir: to left;
+  }
+
+  [dir='rtl'] .hero--overlay-gradient.hero--x-left .hero__overlay {
+    --hero-gradient-dir: to left;
+  }
+
+  [dir='rtl'] .hero--overlay-gradient.hero--x-right .hero__overlay {
+    --hero-gradient-dir: to right;
+  }
+
+  .hero--overlay-gradient.hero--x-center.hero--y-top .hero__overlay {
+    --hero-gradient-dir: to bottom;
+  }
+
+  /* Content */
+  .hero__inner {
+    display: grid;
+    grid-template-columns: var(--content-grid);
+    padding-block: var(--hero-padding-top) var(--hero-padding-bottom);
+  }
+
+  .hero__content {
+    --color-foreground: var(--hero-fg);
+    --color-background: var(--hero-bg);
+
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: var(--content-justify);
+    gap: var(--hero-gap);
+    width: 100%;
+    max-width: var(--hero-content-width);
+    color: var(--color-foreground);
+    text-align: var(--content-text-align);
+  }
+
+  .hero--x-left {
+    --content-justify: flex-start;
+    --content-text-align: start;
+  }
+
+  .hero--x-center {
+    --content-justify: center;
+    --content-text-align: center;
+  }
+
+  .hero--x-right {
+    --content-justify: flex-end;
+    --content-text-align: end;
+  }
+
+  .hero--x-left .hero__content {
+    justify-self: start;
+  }
+
+  .hero--x-center .hero__content {
+    justify-self: center;
+  }
+
+  .hero--x-right .hero__content {
+    justify-self: end;
+  }
+
+  .hero--y-top .hero__content {
+    align-self: start;
+  }
+
+  .hero--y-center .hero__content {
+    align-self: center;
+  }
+
+  .hero--y-bottom .hero__content {
+    align-self: end;
+  }
+
+  /* Mobile */
+  @media (max-width: 749px) {
+    .hero {
+      --hero-padding-top: 48px;
+      --hero-padding-bottom: 48px;
+    }
+
+    .hero--adapt {
+      aspect-ratio: var(--hero-aspect-mobile, var(--hero-aspect, 4 / 5));
+    }
+
+    /* Overlay gradients always rise from the bottom on small screens */
+    .hero--overlay-gradient .hero__overlay {
+      --hero-gradient-dir: to top;
+    }
+
+    .hero--mobile-stacked {
+      grid-template-areas: 'media' 'content';
+      min-height: 0;
+      aspect-ratio: auto;
+    }
+
+    .hero--mobile-stacked .hero__media {
+      grid-area: media;
+      aspect-ratio: var(--hero-aspect-mobile, var(--hero-aspect, 4 / 5));
+    }
+
+    .hero--mobile-stacked .hero__overlay {
+      display: none;
+    }
+
+    .hero--mobile-stacked .hero__inner {
+      grid-area: content;
+    }
+
+    /* Content sits on the page background, so fall back to page colors */
+    .hero--mobile-stacked .hero__content {
+      --color-foreground: inherit;
+      --color-background: inherit;
+    }
+  }
+
+  /* Entrance animation */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero--animate .hero__image {
+      animation: hero-zoom 2.4s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+    }
+
+    .hero--animate .hero__content > * {
+      animation: hero-rise 0.9s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+    }
+
+    .hero--animate .hero__content > :nth-child(2) {
+      animation-delay: 0.1s;
+    }
+
+    .hero--animate .hero__content > :nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .hero--animate .hero__content > :nth-child(4) {
+      animation-delay: 0.3s;
+    }
+
+    .hero--animate .hero__content > :nth-child(n + 5) {
+      animation-delay: 0.4s;
+    }
+  }
+
+  @keyframes hero-rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+
+  @keyframes hero-zoom {
+    from {
+      transform: scale(1.06);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.hero.name",
+  "tag": "section",
+  "class": "hero-section",
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.hero.media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "t:sections.hero.image_mobile",
+      "info": "t:sections.hero.image_mobile_info"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "t:labels.height",
+      "options": [
+        { "value": "hero--small", "label": "t:options.size.small" },
+        { "value": "hero--medium", "label": "t:options.size.medium" },
+        { "value": "hero--large", "label": "t:options.size.large" },
+        { "value": "hero--full", "label": "t:options.size.full_screen" },
+        { "value": "hero--adapt", "label": "t:options.size.adapt_to_image" }
+      ],
+      "default": "hero--large"
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "t:sections.hero.mobile_layout",
+      "options": [
+        { "value": "hero--mobile-overlay", "label": "t:options.mobile_layout.overlay" },
+        { "value": "hero--mobile-stacked", "label": "t:options.mobile_layout.stacked" }
+      ],
+      "default": "hero--mobile-overlay"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.hero.overlay"
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "t:labels.style",
+      "options": [
+        { "value": "hero--overlay-solid", "label": "t:options.overlay_style.solid" },
+        { "value": "hero--overlay-gradient", "label": "t:options.overlay_style.gradient" }
+      ],
+      "default": "hero--overlay-gradient"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "t:labels.color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:labels.opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 25
+    },
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "select",
+      "id": "content_position_x",
+      "label": "t:sections.hero.position_x",
+      "options": [
+        { "value": "hero--x-left", "label": "t:options.alignment.left" },
+        { "value": "hero--x-center", "label": "t:options.alignment.center" },
+        { "value": "hero--x-right", "label": "t:options.alignment.right" }
+      ],
+      "default": "hero--x-left"
+    },
+    {
+      "type": "select",
+      "id": "content_position_y",
+      "label": "t:sections.hero.position_y",
+      "options": [
+        { "value": "hero--y-top", "label": "t:options.vertical.top" },
+        { "value": "hero--y-center", "label": "t:options.vertical.center" },
+        { "value": "hero--y-bottom", "label": "t:options.vertical.bottom" }
+      ],
+      "default": "hero--y-bottom"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:labels.text_color",
+      "info": "t:sections.hero.text_color_info",
+      "default": "#ffffff"
+    },
+    {
+      "type": "range",
+      "id": "content_width",
+      "label": "t:labels.max_width",
+      "min": 320,
+      "max": 1000,
+      "step": 20,
+      "unit": "px",
+      "default": 640
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "label": "t:labels.gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "checkbox",
+      "id": "animate",
+      "label": "t:sections.hero.animate",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:labels.padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.hero.name",
+      "category": "t:general.banners",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": { "text": "The autumn edit", "style": "heading--eyebrow", "tag": "p" }
+        },
+        {
+          "type": "heading",
+          "settings": { "text": "Jewelry made to be <em>kept</em>", "style": "heading--display", "tag": "h1" }
+        },
+        {
+          "type": "heading",
+          "settings": {
+            "text": "Fine pieces in recycled gold, designed to be worn every day and passed on.",
+            "style": "heading--subtitle",
+            "tag": "p",
+            "max_width": 44
+          }
+        },
+        {
+          "type": "group",
+          "settings": { "layout_direction": "group--horizontal", "gap": 20 },
+          "blocks": [
+            { "type": "button", "settings": { "label": "Shop the collection", "style": "primary" } },
+            { "type": "button", "settings": { "label": "Our story", "style": "link" } }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

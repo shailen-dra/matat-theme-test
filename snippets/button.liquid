@@ -1,0 +1,166 @@
+{% doc %}
+  Renders a button or a button-styled link. Shared by the `button` block and
+  any section/snippet that needs a call to action (forms, cards, etc.).
+
+  Colors come from the `--color-foreground` / `--color-background` /
+  `--color-accent` tokens, so a parent can re-theme every button inside it by
+  overriding those variables.
+
+  @param {string} label - The button text
+  @param {string} [url] - Destination URL. Renders an `<a>` when present, otherwise a `<button>`
+  @param {string} [style] - Visual style: `primary` (default), `secondary`, `outline` or `link`
+  @param {string} [size] - Size: `sm`, `md` (default) or `lg`
+  @param {string} [type] - The `type` attribute when rendered as a `<button>` (default `button`)
+  @param {boolean} [open_in_new_tab] - Opens the link in a new tab
+  @param {boolean} [full_width] - Stretches the button to its container width
+  @param {string} [class] - Extra classes added to the element
+  @param {string} [attributes] - Extra raw HTML attributes (e.g. `block.shopify_attributes`)
+
+  @example
+  {% render 'button', label: 'Shop now', url: collection.url %}
+  {% render 'button', label: 'Add to cart', type: 'submit', style: 'secondary', size: 'lg', full_width: true %}
+{% enddoc %}
+
+{%- liquid
+  assign style = style | default: 'primary'
+  assign size = size | default: 'md'
+  capture classes
+    echo 'button button--' | append: style | append: ' button--' | append: size
+    if full_width
+      echo ' button--full'
+    endif
+    if class != blank
+      echo ' ' | append: class
+    endif
+  endcapture
+-%}
+
+{%- if url != blank -%}
+  <a
+    href="{{ url }}"
+    class="{{ classes }}"
+    {% if open_in_new_tab %}
+      target="_blank" rel="noopener"
+    {% endif %}
+    {{ attributes }}
+  >
+    <span class="button__label">{{ label }}</span>
+  </a>
+{%- else -%}
+  <button type="{{ type | default: 'button' }}" class="{{ classes }}" {{ attributes }}>
+    <span class="button__label">{{ label }}</span>
+  </button>
+{%- endif -%}
+
+{% stylesheet %}
+  .button {
+    --button-bg: var(--color-foreground);
+    --button-fg: var(--color-background);
+    --button-border: var(--color-foreground);
+    --button-pad-y: 0.875rem;
+    --button-pad-x: 2rem;
+    --button-font-size: 0.8125rem;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: var(--button-pad-y) var(--button-pad-x);
+    border: 1px solid var(--button-border);
+    border-radius: var(--style-border-radius-buttons);
+    background-color: var(--button-bg);
+    color: var(--button-fg);
+    font-family: var(--font-primary--family);
+    font-size: var(--button-font-size);
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+  }
+
+  .button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .button--sm {
+    --button-pad-y: 0.625rem;
+    --button-pad-x: 1.25rem;
+    --button-font-size: 0.75rem;
+  }
+
+  .button--lg {
+    --button-pad-y: 1.125rem;
+    --button-pad-x: 2.75rem;
+    --button-font-size: 0.875rem;
+  }
+
+  .button--full {
+    width: 100%;
+  }
+
+  .button--primary:hover {
+    --button-bg: transparent;
+    --button-fg: var(--color-foreground);
+  }
+
+  .button--secondary {
+    --button-bg: var(--color-accent);
+    --button-fg: #fff;
+    --button-border: var(--color-accent);
+  }
+
+  .button--secondary:hover {
+    --button-bg: transparent;
+    --button-fg: var(--color-accent);
+  }
+
+  .button--outline {
+    --button-bg: transparent;
+    --button-fg: var(--color-foreground);
+  }
+
+  .button--outline:hover {
+    --button-bg: var(--color-foreground);
+    --button-fg: var(--color-background);
+  }
+
+  .button--link {
+    --button-bg: transparent;
+    --button-fg: var(--color-foreground);
+    --button-border: transparent;
+    --button-pad-x: 0;
+    position: relative;
+  }
+
+  .button--link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: calc(var(--button-pad-y) - 0.35rem);
+    height: 1px;
+    background: currentcolor;
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  [dir='rtl'] .button--link::after {
+    transform-origin: right;
+  }
+
+  .button--link:hover::after {
+    transform: scaleX(0.4);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .button,
+    .button--link::after {
+      transition: none;
+    }
+  }
+{% endstylesheet %}

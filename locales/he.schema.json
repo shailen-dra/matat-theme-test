@@ -1,0 +1,202 @@
+{
+  "general": {
+    "404": "לא נמצא",
+    "article": "מאמר",
+    "block": "בלוק",
+    "blog": "בלוג",
+    "cart": "סל קניות",
+    "collection": "קולקציה",
+    "collections": "קולקציות",
+    "collection_card": "כרטיס קולקציה",
+    "collections_grid": "רשת קולקציות",
+    "colors": "צבעים",
+    "column": "עמודה",
+    "content": "תוכן",
+    "custom_section": "סקשן מותאם",
+    "fonts": "גופנים",
+    "footer": "כותרת תחתונה",
+    "group": "קבוצה",
+    "header": "כותרת עליונה",
+    "layout": "פריסה",
+    "main": "ראשי",
+    "page": "דף",
+    "password": "סיסמה",
+    "primary": "ראשי",
+    "product": "מוצר",
+    "row": "שורה",
+    "search": "חיפוש",
+    "secondary": "משני",
+    "section": "סקשן",
+    "settings": "הגדרות",
+    "sidebar": "סרגל צד",
+    "text": "טקסט",
+    "theme": "ערכת עיצוב",
+    "typography": "טיפוגרפיה",
+    "banners": "באנרים",
+    "buttons": "כפתורים",
+    "links": "קישורים",
+    "hebrew_fonts": "גופנים בעברית",
+    "hebrew_fonts_info": "משמשים לטקסט בעברית. תווים לטיניים ממשיכים להשתמש בגופנים שלמעלה."
+  },
+  "labels": {
+    "alignment": "יישור",
+    "background": "רקע",
+    "foreground": "צבע טקסט",
+    "grid_gap": "מרווח ברשת",
+    "grid_item_width": "רוחב פריט ברשת",
+    "input_corner_radius": "עיגול פינות בשדות",
+    "layout_direction": "כיוון פריסה",
+    "menu": "תפריט",
+    "customer_account_menu": "תפריט חשבון לקוח",
+    "padding": "ריפוד",
+    "page_margin": "שוליים",
+    "page_width": "רוחב דף",
+    "show_payment_icons": "הצגת סמלי אמצעי תשלום",
+    "text_style": "סגנון טקסט",
+    "text": "טקסט",
+    "accent": "צבע הדגשה",
+    "body_font": "גוף הטקסט",
+    "button_corner_radius": "עיגול פינות בכפתורים",
+    "color": "צבע",
+    "columns_desktop": "עמודות במחשב",
+    "full_width": "רוחב מלא",
+    "gap": "מרווח",
+    "heading_font": "כותרות",
+    "height": "גובה",
+    "html_tag": "תגית HTML",
+    "image": "תמונה",
+    "label": "תווית",
+    "link": "קישור",
+    "max_width": "רוחב מרבי",
+    "opacity": "אטימות",
+    "open_in_new_tab": "פתיחת הקישור בכרטיסייה חדשה",
+    "padding_bottom": "ריפוד תחתון",
+    "padding_top": "ריפוד עליון",
+    "size": "גודל",
+    "style": "סגנון",
+    "text_color": "צבע טקסט"
+  },
+  "options": {
+    "alignment": {
+      "left": "התחלה",
+      "center": "מרכז",
+      "right": "סוף",
+      "inherit": "בירושה",
+      "space_between": "פיזור שווה"
+    },
+    "direction": {
+      "horizontal": "אופקי",
+      "vertical": "אנכי"
+    },
+    "page_width": {
+      "narrow": "צר",
+      "wide": "רחב"
+    },
+    "size": {
+      "large": "גדול",
+      "small": "קטן",
+      "medium": "בינוני",
+      "full_screen": "מסך מלא",
+      "adapt_to_image": "התאמה לתמונה"
+    },
+    "text_style": {
+      "title": "כותרת",
+      "subtitle": "כותרת משנה",
+      "normal": "טקסט רגיל"
+    },
+    "vertical": {
+      "top": "למעלה",
+      "center": "מרכז",
+      "bottom": "למטה"
+    },
+    "heading_style": {
+      "display": "תצוגה",
+      "h1": "כותרת 1",
+      "h2": "כותרת 2",
+      "h3": "כותרת 3",
+      "subtitle": "כותרת משנה",
+      "eyebrow": "כותרת עילית",
+      "eyebrow_accent": "כותרת עילית (צבע הדגשה)"
+    },
+    "tag": {
+      "paragraph": "פסקה",
+      "div": "Div"
+    },
+    "button_style": {
+      "primary": "ראשי",
+      "secondary": "משני",
+      "outline": "מתאר",
+      "link": "קישור"
+    },
+    "tag_style": {
+      "outline": "מתאר",
+      "solid": "מלא",
+      "accent": "צבע הדגשה",
+      "text": "טקסט בלבד"
+    },
+    "list_marker": {
+      "bullet": "נקודה",
+      "diamond": "יהלום",
+      "dash": "קו",
+      "check": "וי",
+      "numbered": "ממוספר",
+      "numbered_zero": "ממוספר (01)",
+      "none": "ללא"
+    },
+    "mobile_layout": {
+      "overlay": "טקסט על גבי התמונה",
+      "stacked": "טקסט מתחת לתמונה"
+    },
+    "overlay_style": {
+      "solid": "אחיד",
+      "gradient": "מעבר צבע"
+    }
+  },
+  "blocks": {
+    "heading": {
+      "name": "כותרת",
+      "text_info": "השתמשו בהטיה כדי להדגיש מילים בצבע ההדגשה.",
+      "tag_info": "מומלץ להשתמש ב-H1 אחד בלבד בכל דף לטובת SEO.",
+      "max_width_info": "0 = ללא הגבלה.",
+      "presets": {
+        "title": "כותרת",
+        "subtitle": "כותרת משנה",
+        "eyebrow": "כותרת עילית"
+      }
+    },
+    "button": {
+      "name": "כפתור"
+    },
+    "tags": {
+      "name": "תגיות",
+      "tags": "תגיות",
+      "tags_info": "הפרידו בין התגיות בפסיקים."
+    },
+    "list": {
+      "name": "רשימה",
+      "marker": "סמן"
+    },
+    "list_item": {
+      "name": "פריט ברשימה"
+    },
+    "group": {
+      "presets": {
+        "buttons": "כפתורים"
+      }
+    }
+  },
+  "sections": {
+    "hero": {
+      "name": "באנר ראשי",
+      "media": "מדיה",
+      "image_mobile": "תמונה למובייל",
+      "image_mobile_info": "אופציונלי. מוצגת במסכים צרים מ-750px.",
+      "mobile_layout": "פריסה במובייל",
+      "overlay": "שכבת כיסוי",
+      "position_x": "מיקום אופקי",
+      "position_y": "מיקום אנכי",
+      "text_color_info": "כפתורים, תגיות ורשימות בתוך הבאנר מתאימים את עצמם לצבע זה.",
+      "animate": "אנימציה בטעינה"
+    }
+  }
+}

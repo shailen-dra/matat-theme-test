@@ -1,0 +1,81 @@
+{% doc %}
+  Renders a compact language switcher (e.g. EN / עב) when the store has more
+  than one published language. Each option submits the localization form, so
+  Shopify redirects to the same page in the chosen language.
+
+  @example
+  {% render 'language-switcher' %}
+{% enddoc %}
+
+{%- if localization.available_languages.size > 1 -%}
+  {%- form 'localization', class: 'language-switcher' -%}
+    <span class="visually-hidden">{{ 'general.language.label' | t }}</span>
+    <ul class="language-switcher__list" role="list">
+      {%- for language in localization.available_languages -%}
+        {%- assign is_current = false -%}
+        {%- if language.iso_code == localization.language.iso_code -%}
+          {%- assign is_current = true -%}
+        {%- endif -%}
+        <li>
+          <button
+            type="submit"
+            name="language_code"
+            value="{{ language.iso_code }}"
+            lang="{{ language.iso_code }}"
+            class="language-switcher__option"
+            {% if is_current %}
+              aria-current="true"
+            {% endif %}
+            title="{{ language.endonym_name | capitalize }}"
+          >
+            {%- if language.iso_code == 'he' -%}
+              עב
+            {%- else -%}
+              {{ language.iso_code | upcase }}
+            {%- endif -%}
+          </button>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endform -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .language-switcher__list {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .language-switcher__list li + li::before {
+    content: '/';
+    margin-inline-end: 0.25rem;
+    opacity: 0.35;
+  }
+
+  .language-switcher__option {
+    padding: 0.25rem;
+    border: 0;
+    background: none;
+    color: var(--color-foreground);
+    font: inherit;
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+    cursor: pointer;
+  }
+
+  .language-switcher__option:hover,
+  .language-switcher__option[aria-current='true'] {
+    opacity: 1;
+  }
+
+  .language-switcher__option[aria-current='true'] {
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+    text-decoration-color: var(--color-accent);
+  }
+{% endstylesheet %}

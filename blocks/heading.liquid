@@ -1,0 +1,173 @@
+{% doc %}
+  Renders a heading-style text: title, subtitle or eyebrow. One block with
+  several presets so every section styles headings the same way.
+
+  @example
+  {% content_for 'block', type: 'heading', id: 'heading' %}
+{% enddoc %}
+
+{%- assign tag = block.settings.tag | default: 'h2' -%}
+
+<{{ tag }}
+  class="heading {{ block.settings.style }}"
+  style="
+    --heading-align: {{ block.settings.alignment }};
+    --heading-max-width: {% if block.settings.max_width > 0 %}{{ block.settings.max_width }}ch{% else %}none{% endif %};
+  "
+  {{ block.shopify_attributes }}
+>
+  {{- block.settings.text -}}
+</{{ tag }}>
+
+{% stylesheet %}
+  .heading {
+    max-width: var(--heading-max-width);
+    margin: 0;
+    color: var(--color-foreground);
+    text-align: var(--heading-align);
+    text-wrap: balance;
+  }
+
+  .heading em {
+    color: var(--color-accent);
+  }
+
+  .heading--display,
+  .heading--h1,
+  .heading--h2,
+  .heading--h3 {
+    font-family: var(--font-heading--family);
+    font-style: var(--font-heading--style);
+    font-weight: var(--font-heading--weight);
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+  }
+
+  .heading--display {
+    font-size: clamp(2.75rem, 6vw + 1rem, 5.5rem);
+    line-height: 1.02;
+  }
+
+  .heading--h1 {
+    font-size: clamp(2.25rem, 4vw + 1rem, 4rem);
+  }
+
+  .heading--h2 {
+    font-size: clamp(1.75rem, 2.5vw + 1rem, 2.75rem);
+  }
+
+  .heading--h3 {
+    font-size: clamp(1.375rem, 1vw + 1rem, 1.75rem);
+  }
+
+  .heading--subtitle {
+    font-size: clamp(1rem, 0.5vw + 0.875rem, 1.25rem);
+    font-weight: 400;
+    line-height: 1.6;
+    opacity: 0.85;
+  }
+
+  .heading--eyebrow {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.24em;
+    line-height: 1.4;
+    text-transform: uppercase;
+  }
+
+  .heading--eyebrow.heading--accent,
+  .heading--accent {
+    color: var(--color-accent);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.heading.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "t:labels.text",
+      "info": "t:blocks.heading.text_info",
+      "default": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:labels.style",
+      "options": [
+        { "value": "heading--display", "label": "t:options.heading_style.display" },
+        { "value": "heading--h1", "label": "t:options.heading_style.h1" },
+        { "value": "heading--h2", "label": "t:options.heading_style.h2" },
+        { "value": "heading--h3", "label": "t:options.heading_style.h3" },
+        { "value": "heading--subtitle", "label": "t:options.heading_style.subtitle" },
+        { "value": "heading--eyebrow", "label": "t:options.heading_style.eyebrow" },
+        { "value": "heading--eyebrow heading--accent", "label": "t:options.heading_style.eyebrow_accent" }
+      ],
+      "default": "heading--h2"
+    },
+    {
+      "type": "select",
+      "id": "tag",
+      "label": "t:labels.html_tag",
+      "info": "t:blocks.heading.tag_info",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "p", "label": "t:options.tag.paragraph" },
+        { "value": "div", "label": "t:options.tag.div" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "label": "t:labels.alignment",
+      "options": [
+        { "value": "inherit", "label": "t:options.alignment.inherit" },
+        { "value": "start", "label": "t:options.alignment.left" },
+        { "value": "center", "label": "t:options.alignment.center" },
+        { "value": "end", "label": "t:options.alignment.right" }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "t:labels.max_width",
+      "info": "t:blocks.heading.max_width_info",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "ch",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.heading.presets.title",
+      "category": "t:general.text",
+      "settings": { "text": "Heading", "style": "heading--h2", "tag": "h2" }
+    },
+    {
+      "name": "t:blocks.heading.presets.subtitle",
+      "category": "t:general.text",
+      "settings": {
+        "text": "Add a short supporting line that tells the story behind your collection.",
+        "style": "heading--subtitle",
+        "tag": "p",
+        "max_width": 48
+      }
+    },
+    {
+      "name": "t:blocks.heading.presets.eyebrow",
+      "category": "t:general.text",
+      "settings": { "text": "New collection", "style": "heading--eyebrow", "tag": "p" }
+    }
+  ]
+}
+{% endschema %}

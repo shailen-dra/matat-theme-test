@@ -9,12 +9,87 @@
  */
 {
   "sections": {
+    "hero": {
+      "type": "hero",
+      "blocks": {
+        "eyebrow": {
+          "type": "heading",
+          "settings": {
+            "text": "The autumn edit",
+            "style": "heading--eyebrow",
+            "tag": "p"
+          }
+        },
+        "title": {
+          "type": "heading",
+          "settings": {
+            "text": "Jewelry made to be <em>kept</em>",
+            "style": "heading--display",
+            "tag": "h1"
+          }
+        },
+        "subtitle": {
+          "type": "heading",
+          "settings": {
+            "text": "Fine pieces in recycled gold, designed to be worn every day and passed on.",
+            "style": "heading--subtitle",
+            "tag": "p",
+            "max_width": 44
+          }
+        },
+        "tags": {
+          "type": "tags",
+          "settings": {
+            "tags": "Handcrafted, 18k gold, Ethically sourced",
+            "style": "outline",
+            "size": "sm"
+          }
+        },
+        "buttons": {
+          "type": "group",
+          "settings": {
+            "layout_direction": "group--horizontal",
+            "gap": 20
+          },
+          "blocks": {
+            "button_primary": {
+              "type": "button",
+              "settings": {
+                "label": "Shop the collection",
+                "link": "shopify://collections/all",
+                "style": "primary"
+              }
+            },
+            "button_link": {
+              "type": "button",
+              "settings": {
+                "label": "Our story",
+                "style": "link"
+              }
+            }
+          },
+          "block_order": [
+            "button_primary",
+            "button_link"
+          ]
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "title",
+        "subtitle",
+        "tags",
+        "buttons"
+      ],
+      "settings": {}
+    },
     "main": {
       "type": "hello-world",
       "settings": {}
     }
   },
   "order": [
+    "hero",
     "main"
   ]
 }

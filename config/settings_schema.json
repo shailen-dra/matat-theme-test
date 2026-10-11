@@ -17,8 +17,67 @@
       {
         "type": "font_picker",
         "id": "type_primary_font",
-        "default": "work_sans_n4",
-        "label": "t:general.primary"
+        "default": "jost_n4",
+        "label": "t:labels.body_font"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "default": "cormorant_n5",
+        "label": "t:labels.heading_font"
+      },
+      {
+        "type": "header",
+        "content": "t:general.hebrew_fonts",
+        "info": "t:general.hebrew_fonts_info"
+      },
+      {
+        "type": "select",
+        "id": "hebrew_heading_font",
+        "label": "t:labels.heading_font",
+        "default": "Frank Ruhl Libre",
+        "options": [
+          {
+            "value": "Frank Ruhl Libre",
+            "label": "Frank Ruhl Libre"
+          },
+          {
+            "value": "David Libre",
+            "label": "David Libre"
+          },
+          {
+            "value": "Noto Serif Hebrew",
+            "label": "Noto Serif Hebrew"
+          },
+          {
+            "value": "Assistant",
+            "label": "Assistant"
+          }
+        ]
+      },
+      {
+        "type": "select",
+        "id": "hebrew_body_font",
+        "label": "t:labels.body_font",
+        "default": "Assistant",
+        "options": [
+          {
+            "value": "Assistant",
+            "label": "Assistant"
+          },
+          {
+            "value": "Heebo",
+            "label": "Heebo"
+          },
+          {
+            "value": "Rubik",
+            "label": "Rubik"
+          },
+          {
+            "value": "Noto Sans Hebrew",
+            "label": "Noto Sans Hebrew"
+          }
+        ]
       }
     ]
   },
@@ -69,6 +128,12 @@
         "label": "t:labels.foreground"
       },
       {
+        "type": "color",
+        "id": "accent_color",
+        "default": "#B08D57",
+        "label": "t:labels.accent"
+      },
+      {
         "type": "range",
         "id": "input_corner_radius",
         "min": 0,
@@ -77,6 +142,21 @@
         "unit": "px",
         "label": "t:labels.input_corner_radius",
         "default": 4
+      }
+    ]
+  },
+  {
+    "name": "t:general.buttons",
+    "settings": [
+      {
+        "type": "range",
+        "id": "button_corner_radius",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "t:labels.button_corner_radius",
+        "default": 0
       }
     ]
   }

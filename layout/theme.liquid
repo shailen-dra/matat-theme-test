@@ -1,8 +1,16 @@
 <!doctype html>
-<html lang="{{ request.locale.iso_code }}">
+{%- liquid
+  assign rtl_locales = 'he,ar,fa,ur' | split: ','
+  assign text_direction = 'ltr'
+  if rtl_locales contains request.locale.iso_code
+    assign text_direction = 'rtl'
+  endif
+-%}
+<html lang="{{ request.locale.iso_code }}" dir="{{ text_direction }}">
   <head>
     {% # Inlined CSS Variables %}
     {% render 'css-variables' %}
+    {% render 'hebrew-fonts' %}
 
     {% comment %}
       Font preloading:

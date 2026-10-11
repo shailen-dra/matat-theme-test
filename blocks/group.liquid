@@ -6,6 +6,7 @@
 
   This component is a wrapper concerned only with rendering its children in
   the specified layout direction with appropriate padding and alignment.
+  Rows wrap on small screens, so it doubles as a button / tag row.
 
   @example
   {% content_for 'block', type: 'group', id: 'group' %}
@@ -15,7 +16,8 @@
   class="group {{ block.settings.layout_direction }}"
   style="
     --padding: {{ block.settings.padding }}px;
-    --alignment: {{ block.settings.alignment }};
+    --group-gap: {{ block.settings.gap }}px;
+    {% if block.settings.alignment != 'auto' %}--group-alignment: {{ block.settings.alignment }};{% endif %}
   "
   {{ block.shopify_attributes }}
 >
@@ -24,21 +26,24 @@
 
 {% stylesheet %}
   .group {
+    --alignment: var(--group-alignment, var(--content-justify, flex-start));
+
     display: flex;
-    flex-wrap: nowrap;
-    overflow: hidden;
+    gap: var(--group-gap);
     width: 100%;
   }
 
   .group--horizontal {
     flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: var(--alignment);
     align-items: center;
     padding: 0 var(--padding);
   }
 
   .group--vertical {
     flex-direction: column;
+    flex-wrap: nowrap;
     align-items: var(--alignment);
     padding: var(--padding) 0;
   }
@@ -47,6 +52,7 @@
 {% schema %}
 {
   "name": "t:general.group",
+  "tag": null,
   "blocks": [{ "type": "@theme" }],
   "settings": [
     {
@@ -60,16 +66,27 @@
       ]
     },
     {
-      "visible_if": "{{ block.settings.layout_direction == 'group--vertical' }}",
       "type": "select",
       "id": "alignment",
       "label": "t:labels.alignment",
-      "default": "flex-start",
+      "default": "auto",
       "options": [
+        { "value": "auto", "label": "t:options.alignment.inherit" },
         { "value": "flex-start", "label": "t:options.alignment.left" },
         { "value": "center", "label": "t:options.alignment.center" },
-        { "value": "flex-end", "label": "t:options.alignment.right" }
+        { "value": "flex-end", "label": "t:options.alignment.right" },
+        { "value": "space-between", "label": "t:options.alignment.space_between" }
       ]
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:labels.gap",
+      "default": 16,
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px"
     },
     {
       "type": "range",
@@ -88,7 +105,6 @@
       "category": "t:general.layout",
       "settings": {
         "layout_direction": "group--vertical",
-        "alignment": "flex-start",
         "padding": 0
       }
     },
@@ -99,6 +115,18 @@
         "layout_direction": "group--horizontal",
         "padding": 0
       }
+    },
+    {
+      "name": "t:blocks.group.presets.buttons",
+      "category": "t:general.links",
+      "settings": {
+        "layout_direction": "group--horizontal",
+        "gap": 12
+      },
+      "blocks": [
+        { "type": "button", "settings": { "label": "Shop the collection", "style": "primary" } },
+        { "type": "button", "settings": { "label": "Our story", "style": "link" } }
+      ]
     }
   ]
 }

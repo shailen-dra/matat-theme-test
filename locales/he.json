@@ -1,0 +1,62 @@
+{
+  "404": {
+    "title": "404",
+    "not_found": "הדף לא נמצא.",
+    "back_to_shopping": "חזרה לחנות"
+  },
+  "blog": {
+    "article_comments": "תגובות",
+    "article_metadata_html": "{{ date }} מאת {{ author }}",
+    "comment_form_body": "תגובה",
+    "comment_form_email": "אימייל",
+    "comment_form_name": "שם",
+    "comment_form_submit": "פרסום",
+    "comment_form_title": "הוספת תגובה"
+  },
+  "cart": {
+    "checkout": "לתשלום",
+    "title": "סל הקניות",
+    "update": "עדכון",
+    "remove": "הסרה"
+  },
+  "customers": {
+    "login": {
+      "email": "אימייל",
+      "password": "סיסמה",
+      "submit": "התחברות",
+      "title": "התחברות"
+    }
+  },
+  "collections": {
+    "title": "קולקציות"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "הוספה ל-Apple Wallet",
+    "card": "כרטיס מתנה",
+    "expired": "תוקף כרטיס המתנה פג",
+    "expires_on": "בתוקף עד {{ expires_on }}",
+    "use_at_checkout": "ניתן לממש את כרטיס המתנה בתשלום"
+  },
+  "password": {
+    "title": "החנות פרטית",
+    "password": "סיסמה",
+    "enter": "כניסה"
+  },
+  "search": {
+    "title": "חיפוש",
+    "placeholder": "חיפוש מאמרים, דפים או מוצרים",
+    "submit": "חיפוש",
+    "no_results_html": "לא נמצאו תוצאות עבור {{ terms }}",
+    "results_for_html": "נמצאו {{ count }} תוצאות עבור {{ terms }}"
+  },
+  "general": {
+    "language": {
+      "label": "שפה"
+    }
+  },
+  "sections": {
+    "hero": {
+      "demo_image_alt": "ידיים עונדות טבעות זהב עדינות וצמידי שרשרת דקים"
+    }
+  }
+}

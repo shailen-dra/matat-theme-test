@@ -10,6 +10,8 @@
   </div>
 
   <div class="header__icons">
+    {% render 'language-switcher' %}
+
     {% if shop.customer_accounts_enabled %}
       <shopify-account menu="{{ section.settings.customer_account_menu }}">
         {{ 'icon-account.svg' | inline_asset_content }}
@@ -43,7 +45,7 @@
   }
   header a sup {
     position: absolute;
-    left: 100%;
+    inset-inline-start: 100%;
     overflow: hidden;
     max-width: var(--page-margin);
   }
