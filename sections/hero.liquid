@@ -208,7 +208,12 @@
   .hero__inner {
     display: grid;
     grid-template-columns: var(--content-grid);
-    padding-block: var(--hero-padding-top) var(--hero-padding-bottom);
+    padding-block: calc(var(--hero-padding-top) + var(--hero-offset, 0px)) var(--hero-padding-bottom);
+  }
+
+  /* Clear the transparent header when the hero is the first section on the page */
+  body:has(.header--transparent) main > .shopify-section:first-child .hero {
+    --hero-offset: var(--header-height, 5rem);
   }
 
   .hero__content {
@@ -297,6 +302,8 @@
     }
 
     .hero--mobile-stacked .hero__inner {
+      --hero-offset: 0px;
+
       grid-area: content;
     }
 

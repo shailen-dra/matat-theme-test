@@ -74,7 +74,8 @@
     "padding_top": "ריפוד עליון",
     "size": "גודל",
     "style": "סגנון",
-    "text_color": "צבע טקסט"
+    "text_color": "צבע טקסט",
+    "heading": "כותרת"
   },
   "options": {
     "alignment": {
@@ -150,6 +151,20 @@
     "overlay_style": {
       "solid": "אחיד",
       "gradient": "מעבר צבע"
+    },
+    "header_layout": {
+      "logo_center": "לוגו במרכז, תפריט בהתחלה",
+      "logo_left": "לוגו בהתחלה, תפריט במרכז",
+      "logo_left_menu_right": "לוגו בהתחלה, תפריט בסוף"
+    },
+    "menu_style": {
+      "uppercase": "אותיות גדולות",
+      "regular": "רגיל"
+    },
+    "sticky": {
+      "none": "ללא",
+      "always": "תמיד",
+      "scroll_up": "בגלילה למעלה"
     }
   },
   "blocks": {
@@ -197,6 +212,25 @@
       "position_y": "מיקום אנכי",
       "text_color_info": "כפתורים, תגיות ורשימות בתוך הבאנר מתאימים את עצמם לצבע זה.",
       "animate": "אנימציה בטעינה"
+    },
+    "header": {
+      "logo": "לוגו",
+      "logo_width": "רוחב הלוגו",
+      "logo_width_mobile": "רוחב הלוגו במובייל",
+      "navigation": "ניווט",
+      "menu_style": "סגנון התפריט",
+      "promo": "קידום בתפריט המורחב",
+      "promo_info": "מוצג בתפריטים נפתחים עם שלוש רמות.",
+      "behavior": "התנהגות",
+      "sticky": "כותרת דביקה",
+      "transparent_on_home": "שקופה בדף הבית",
+      "transparent_on_home_info": "מוצגת מעל הסקשן הראשון והופכת לאטומה במעבר עכבר ובגלילה.",
+      "transparent_logo": "לוגו לכותרת השקופה",
+      "transparent_logo_info": "אופציונלי. גרסה בהירה של הלוגו.",
+      "show_search": "הצגת חיפוש",
+      "show_language": "הצגת בורר שפה",
+      "show_border": "הצגת קו תחתון",
+      "padding": "ריפוד אנכי"
     }
   }
 }

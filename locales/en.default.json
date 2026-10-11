@@ -52,11 +52,25 @@
   "general": {
     "language": {
       "label": "Language"
-    }
+    },
+    "skip_to_content": "Skip to content"
   },
   "sections": {
     "hero": {
       "demo_image_alt": "Hands adorned with fine gold rings and delicate chain bracelets"
+    }
+  },
+  "header": {
+    "open_menu": "Open menu",
+    "close": "Close",
+    "main_menu": "Main menu",
+    "search": "Search",
+    "search_placeholder": "Search rings, necklaces, earrings…",
+    "account": "Account",
+    "view_all": "Shop all {{ title }}",
+    "cart_count": {
+      "one": "Cart, {{ count }} item",
+      "other": "Cart, {{ count }} items"
     }
   }
 }

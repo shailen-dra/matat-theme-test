@@ -1,0 +1,54 @@
+{% doc %}
+  Renders an inline SVG icon from the theme's line-icon set. Icons inherit
+  `currentColor`, scale with `--icon-size` and use `--icon-stroke-width`.
+
+  @param {string} name - Icon name: `menu`, `close`, `search`, `cart`, `account`, `chevron-down`, `arrow`
+  @param {string} [class] - Extra classes for the `<svg>`
+
+  @example
+  {% render 'icon', name: 'search' %}
+  {% render 'icon', name: 'chevron-down', class: 'menu__chevron' %}
+{% enddoc %}
+
+<svg
+  class="icon icon--{{ name }} {{ class }}"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 20 20"
+  fill="none"
+  stroke="currentColor"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {%- case name -%}
+    {%- when 'menu' -%}
+      <path d="M3 6.5h14M3 13.5h14"/>
+    {%- when 'close' -%}
+      <path d="M5 5l10 10M15 5L5 15"/>
+    {%- when 'search' -%}
+      <circle cx="8.75" cy="8.75" r="5.25"/><path d="M12.5 12.5L16.5 16.5"/>
+    {%- when 'cart' -%}
+      <path d="M3.392 6.875h13.216v8.016c0 .567-.224 1.112-.624 1.513-.4.402-.941.627-1.506.627H5.522a2.13 2.13 0 0 1-1.506-.627 2.15 2.15 0 0 1-.624-1.513zM8.818 2.969h2.333c.618 0 1.211.247 1.649.686a2.35 2.35 0 0 1 .683 1.658v1.562H6.486V5.313c0-.622.246-1.218.683-1.658a2.33 2.33 0 0 1 1.65-.686"/>
+    {%- when 'account' -%}
+      <circle cx="10" cy="6.5" r="2.75"/><path d="m5.172 14.591-.437.786a.588.588 0 0 0 .514.873h9.502a.588.588 0 0 0 .514-.873l-.437-.786a5.523 5.523 0 0 0-9.656 0"/>
+    {%- when 'chevron-down' -%}
+      <path d="M6 8l4 4 4-4"/>
+    {%- when 'arrow' -%}
+      <path d="M4 10h12M12 6l4 4-4 4"/>
+  {%- endcase -%}
+</svg>
+
+{% stylesheet %}
+  .icon {
+    display: block;
+    flex-shrink: 0;
+    width: var(--icon-size, 1.25rem);
+    height: var(--icon-size, 1.25rem);
+    stroke-width: var(--icon-stroke-width, 1.25);
+  }
+
+  [dir='rtl'] .icon--arrow {
+    transform: scaleX(-1);
+  }
+{% endstylesheet %}

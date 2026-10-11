@@ -74,7 +74,8 @@
     "padding_top": "Top padding",
     "size": "Size",
     "style": "Style",
-    "text_color": "Text color"
+    "text_color": "Text color",
+    "heading": "Heading"
   },
   "options": {
     "alignment": {
@@ -150,6 +151,20 @@
     "overlay_style": {
       "solid": "Solid",
       "gradient": "Gradient"
+    },
+    "header_layout": {
+      "logo_center": "Logo center, menu left",
+      "logo_left": "Logo left, menu center",
+      "logo_left_menu_right": "Logo left, menu right"
+    },
+    "menu_style": {
+      "uppercase": "Uppercase",
+      "regular": "Regular"
+    },
+    "sticky": {
+      "none": "None",
+      "always": "Always",
+      "scroll_up": "On scroll up"
     }
   },
   "blocks": {
@@ -197,6 +212,25 @@
       "position_y": "Vertical position",
       "text_color_info": "Buttons, tags and lists inside the banner adapt to this color.",
       "animate": "Animate on load"
+    },
+    "header": {
+      "logo": "Logo",
+      "logo_width": "Logo width",
+      "logo_width_mobile": "Logo width on mobile",
+      "navigation": "Navigation",
+      "menu_style": "Menu style",
+      "promo": "Mega menu promo",
+      "promo_info": "Shown in dropdowns that have three menu levels.",
+      "behavior": "Behavior",
+      "sticky": "Sticky header",
+      "transparent_on_home": "Transparent on home page",
+      "transparent_on_home_info": "Overlays the first section. Turns solid on hover and scroll.",
+      "transparent_logo": "Logo for transparent header",
+      "transparent_logo_info": "Optional light version of your logo.",
+      "show_search": "Show search",
+      "show_language": "Show language selector",
+      "show_border": "Show bottom border",
+      "padding": "Vertical padding"
     }
   }
 }

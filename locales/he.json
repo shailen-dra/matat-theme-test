@@ -52,11 +52,27 @@
   "general": {
     "language": {
       "label": "שפה"
-    }
+    },
+    "skip_to_content": "דילוג לתוכן"
   },
   "sections": {
     "hero": {
       "demo_image_alt": "ידיים עונדות טבעות זהב עדינות וצמידי שרשרת דקים"
+    }
+  },
+  "header": {
+    "open_menu": "פתיחת תפריט",
+    "close": "סגירה",
+    "main_menu": "תפריט ראשי",
+    "search": "חיפוש",
+    "search_placeholder": "חיפוש טבעות, שרשראות, עגילים…",
+    "account": "החשבון שלי",
+    "view_all": "{{ title }}: לכל הפריטים",
+    "cart_count": {
+      "one": "סל קניות, פריט אחד",
+      "two": "סל קניות, {{ count }} פריטים",
+      "many": "סל קניות, {{ count }} פריטים",
+      "other": "סל קניות, {{ count }} פריטים"
     }
   }
 }
