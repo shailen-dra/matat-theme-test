@@ -1,0 +1,171 @@
+{% doc %}
+  Renders the selected variant's price with compare-at price, sale badge,
+  unit price and an optional tax note. Reads the product from
+  `closest.product`, so it works in any product context.
+
+  @example
+  {% content_for 'block', type: 'price', id: 'price' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+
+  assign on_sale = false
+  if variant.compare_at_price > variant.price
+    assign on_sale = true
+  endif
+
+  if block.settings.show_currency_code
+    assign price = variant.price | money_with_currency
+    assign compare_at_price = variant.compare_at_price | money_with_currency
+  else
+    assign price = variant.price | money
+    assign compare_at_price = variant.compare_at_price | money
+  endif
+-%}
+
+{%- if product != blank -%}
+  <div
+    class="price {{ block.settings.size }}{% if on_sale %} price--on-sale{% endif %}"
+    data-update="price-{{ block.id }}"
+    {{ block.shopify_attributes }}
+  >
+    <div class="price__row">
+      {%- if on_sale -%}
+        <span class="visually-hidden">{{ 'product.price.sale' | t }}</span>
+        <span class="price__current">{{ price }}</span>
+        <span class="visually-hidden">{{ 'product.price.regular' | t }}</span>
+        <s class="price__compare">{{ compare_at_price }}</s>
+      {%- else -%}
+        <span class="visually-hidden">{{ 'product.price.regular' | t }}</span>
+        <span class="price__current">{{ price }}</span>
+      {%- endif -%}
+
+      {%- if variant.available == false -%}
+        {%- assign badge_label = 'product.sold_out' | t -%}
+        {% render 'tag', label: badge_label, style: 'solid', size: 'sm' %}
+      {%- elsif on_sale and block.settings.sale_badge != 'none' -%}
+        {%- liquid
+          if block.settings.sale_badge == 'percent'
+            assign saving = variant.compare_at_price | minus: variant.price | times: 100.0 | divided_by: variant.compare_at_price | round
+            assign badge_label = 'product.price.save_percent' | t: percent: saving
+          else
+            assign badge_label = 'product.price.sale_badge' | t
+          endif
+        -%}
+        {% render 'tag', label: badge_label, style: 'accent', size: 'sm' %}
+      {%- endif -%}
+    </div>
+
+    {%- if variant.unit_price_measurement -%}
+      <p class="price__unit">
+        <span class="visually-hidden">{{ 'product.price.unit' | t }}</span>
+        {{ variant.unit_price | unit_price_with_measurement: variant.unit_price_measurement }}
+      </p>
+    {%- endif -%}
+
+    {%- if block.settings.show_tax_note -%}
+      <p class="price__note">
+        {%- if cart.taxes_included -%}
+          {{ 'product.price.tax_included' | t }}
+        {%- else -%}
+          {{ 'product.price.tax_excluded' | t }}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .price {
+    display: grid;
+    gap: 0.375rem;
+    color: var(--color-foreground);
+  }
+
+  .price__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.875rem;
+  }
+
+  .price__current {
+    font-size: 1.25rem;
+    letter-spacing: 0.02em;
+  }
+
+  .price--lg .price__current {
+    font-size: 1.5rem;
+  }
+
+  .price--sm .price__current {
+    font-size: 1rem;
+  }
+
+  .price--on-sale .price__current {
+    color: var(--color-accent);
+  }
+
+  .price__compare {
+    color: color-mix(in srgb, var(--color-foreground) 55%, transparent);
+    font-size: 0.9375rem;
+  }
+
+  .price__unit,
+  .price__note {
+    margin: 0;
+    color: color-mix(in srgb, var(--color-foreground) 65%, transparent);
+    font-size: 0.8125rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.price.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "size",
+      "label": "t:labels.size",
+      "options": [
+        { "value": "price--sm", "label": "t:options.size.small" },
+        { "value": "price--md", "label": "t:options.size.medium" },
+        { "value": "price--lg", "label": "t:options.size.large" }
+      ],
+      "default": "price--md"
+    },
+    {
+      "type": "select",
+      "id": "sale_badge",
+      "label": "t:blocks.price.sale_badge",
+      "options": [
+        { "value": "none", "label": "t:options.sale_badge.none" },
+        { "value": "text", "label": "t:options.sale_badge.text" },
+        { "value": "percent", "label": "t:options.sale_badge.percent" }
+      ],
+      "default": "percent"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_currency_code",
+      "label": "t:blocks.price.show_currency_code",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tax_note",
+      "label": "t:blocks.price.show_tax_note",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.price.name",
+      "category": "t:general.product"
+    }
+  ]
+}
+{% endschema %}

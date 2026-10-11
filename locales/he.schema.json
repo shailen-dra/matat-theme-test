@@ -189,6 +189,26 @@
     "newsletter_style": {
       "underline": "קו תחתון עם חץ",
       "boxed": "תיבה עם כפתור"
+    },
+    "gallery_layout": {
+      "stacked": "מוערם",
+      "grid": "רשת",
+      "carousel": "קרוסלה",
+      "thumbnails": "קרוסלה עם תמונות ממוזערות"
+    },
+    "media_width": {
+      "half": "חצי",
+      "default": "ברירת מחדל",
+      "wide": "רחב"
+    },
+    "sale_badge": {
+      "none": "ללא",
+      "text": "תווית \"מבצע\"",
+      "percent": "אחוז החיסכון"
+    },
+    "picker_style": {
+      "buttons": "כפתורים",
+      "dropdown": "רשימה נפתחת"
     }
   },
   "blocks": {
@@ -245,6 +265,31 @@
     "newsletter": {
       "name": "ניוזלטר",
       "info": "הנרשמים מתווספים ללקוחות עם התגית \"newsletter\"."
+    },
+    "price": {
+      "name": "מחיר",
+      "sale_badge": "תג מבצע",
+      "show_currency_code": "הצגת קוד המטבע",
+      "show_tax_note": "הצגת הערה על מסים ומשלוח"
+    },
+    "variant_picker": {
+      "name": "בורר וריאציות",
+      "show_swatches": "הצגת דוגמיות",
+      "show_swatches_info": "משתמש בדוגמיות הצבע או התמונה שהוגדרו במטא-שדה של הקטגוריה."
+    },
+    "buy_buttons": {
+      "name": "כפתורי קנייה",
+      "show_quantity": "הצגת בורר כמות",
+      "show_dynamic_checkout": "הצגת כפתורי תשלום מהיר",
+      "show_dynamic_checkout_info": "מציג את אמצעי התשלום המועדף על הלקוח, כמו Shop Pay או Apple Pay."
+    },
+    "product_description": {
+      "name": "תיאור המוצר"
+    },
+    "accordion": {
+      "name": "אקורדיון",
+      "open": "פתוח כברירת מחדל",
+      "content_info": "חברו מטא-שדה של מוצר כדי להציג תוכן שונה לכל מוצר."
     }
   },
   "sections": {
@@ -286,6 +331,16 @@
       "bottom_bar": "פס תחתון",
       "show_policies": "הצגת קישורי מדיניות",
       "show_powered_by": "הצגת \"Powered by Shopify\""
+    },
+    "product": {
+      "name": "פרטי מוצר",
+      "product_info": "השאירו ריק בדפי מוצר כדי להציג את המוצר של אותו דף.",
+      "gallery": "גלריית מדיה",
+      "media_ratio": "יחס גובה-רוחב של המדיה",
+      "media_width": "רוחב המדיה",
+      "details": "פרטי המוצר",
+      "sticky_details": "השארת הפרטים גלויים בזמן גלילה",
+      "featured_preset": "מוצר מומלץ"
     }
   }
 }

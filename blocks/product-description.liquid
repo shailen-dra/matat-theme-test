@@ -1,0 +1,56 @@
+{% doc %}
+  Renders the product description with the same typography as the Text block.
+
+  @example
+  {% content_for 'block', type: 'product-description', id: 'description' %}
+{% enddoc %}
+
+{%- assign product = closest.product -%}
+
+{%- if product.description != blank -%}
+  <div
+    class="rte text product-description {{ block.settings.size }}{% if block.settings.muted %} text--muted{% endif %}"
+    {{ block.shopify_attributes }}
+  >
+    {{ product.description }}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-description img {
+    max-width: 100%;
+    height: auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.product_description.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "size",
+      "label": "t:labels.size",
+      "options": [
+        { "value": "text--small", "label": "t:options.size.small" },
+        { "value": "text--body", "label": "t:options.size.medium" },
+        { "value": "text--large", "label": "t:options.size.large" }
+      ],
+      "default": "text--body"
+    },
+    {
+      "type": "checkbox",
+      "id": "muted",
+      "label": "t:blocks.text.muted",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.product_description.name",
+      "category": "t:general.product"
+    }
+  ]
+}
+{% endschema %}

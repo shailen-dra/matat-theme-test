@@ -1,0 +1,130 @@
+{% doc %}
+  Renders a number input with decrease / increase buttons. Used by the buy
+  buttons block and reusable in the cart.
+
+  @param {string} id - The input's id
+  @param {string} [name] - The input's name (default `quantity`)
+  @param {number} [value] - Starting value (default 1)
+  @param {number} [min] - Minimum value (default 1)
+  @param {number} [max] - Optional maximum value
+  @param {string} [form] - Optional id of the form the input belongs to
+
+  @example
+  {% render 'quantity-input', id: 'Quantity-' | append: block.id %}
+  {% render 'quantity-input', id: 'Quantity-cart-1', name: 'updates[]', value: item.quantity, min: 0 %}
+{% enddoc %}
+
+{%- liquid
+  assign name = name | default: 'quantity'
+  assign value = value | default: 1
+  assign min = min | default: 1
+-%}
+
+<quantity-input class="quantity">
+  <button type="button" class="quantity__button" data-quantity-step="-1">
+    {% render 'icon', name: 'minus' %}
+    <span class="visually-hidden">{{ 'product.quantity.decrease' | t }}</span>
+  </button>
+  <label class="visually-hidden" for="{{ id }}">{{ 'product.quantity.label' | t }}</label>
+  <input
+    class="quantity__input"
+    type="number"
+    inputmode="numeric"
+    id="{{ id }}"
+    name="{{ name }}"
+    value="{{ value }}"
+    min="{{ min }}"
+    {% if max %}
+      max="{{ max }}"
+    {% endif %}
+    {% if form %}
+      form="{{ form }}"
+    {% endif %}
+  >
+  <button type="button" class="quantity__button" data-quantity-step="1">
+    {% render 'icon', name: 'plus' %}
+    <span class="visually-hidden">{{ 'product.quantity.increase' | t }}</span>
+  </button>
+</quantity-input>
+
+{% stylesheet %}
+  .quantity {
+    display: inline-flex;
+    align-items: stretch;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 30%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+    color: var(--color-foreground);
+  }
+
+  .quantity__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .quantity__button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .quantity__input {
+    width: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: center;
+    -moz-appearance: textfield;
+  }
+
+  .quantity__input::-webkit-inner-spin-button,
+  .quantity__input::-webkit-outer-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+  }
+
+  .quantity__input:focus-visible,
+  .quantity__button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  class QuantityInput extends HTMLElement {
+    connectedCallback() {
+      this.input = this.querySelector('input');
+      this.addEventListener('click', this.onClick);
+      this.input.addEventListener('change', this.updateButtons);
+      this.updateButtons();
+    }
+
+    onClick = (event) => {
+      const button = event.target.closest('[data-quantity-step]');
+      if (!button) return;
+      const previous = this.input.value;
+      Number(button.dataset.quantityStep) > 0 ? this.input.stepUp() : this.input.stepDown();
+      if (previous !== this.input.value) {
+        this.input.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    };
+
+    updateButtons = () => {
+      const value = Number(this.input.value);
+      const [decrease, increase] = this.querySelectorAll('[data-quantity-step]');
+      decrease.disabled = this.input.min !== '' && value <= Number(this.input.min);
+      increase.disabled = this.input.max !== '' && value >= Number(this.input.max);
+    };
+  }
+
+  if (!customElements.get('quantity-input')) {
+    customElements.define('quantity-input', QuantityInput);
+  }
+{% endjavascript %}

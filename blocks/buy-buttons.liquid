@@ -1,0 +1,276 @@
+{% doc %}
+  Renders the add-to-cart form: quantity, add to cart button and Shopify's
+  dynamic checkout buttons. Adds to the cart without leaving the page and
+  refreshes the header cart count; falls back to a normal form post without
+  JavaScript.
+
+  @example
+  {% content_for 'block', type: 'buy-buttons', id: 'buy-buttons' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign form_id = 'ProductForm-' | append: block.id
+  assign quantity_id = 'Quantity-' | append: block.id
+
+  assign can_buy = true
+  if variant == blank or variant.available == false
+    assign can_buy = false
+  endif
+
+  if variant == blank
+    assign button_label = 'product.unavailable' | t
+  elsif variant.available == false
+    assign button_label = 'product.sold_out' | t
+  else
+    assign button_label = 'product.add_to_cart' | t
+  endif
+
+  assign button_attributes = 'name="add" data-add-to-cart'
+  unless can_buy
+    assign button_attributes = button_attributes | append: ' disabled'
+  endunless
+-%}
+
+{%- if product != blank -%}
+  <product-form class="buy-buttons" {{ block.shopify_attributes }}>
+    {%- form 'product', product, id: form_id, class: 'buy-buttons__form', novalidate: 'novalidate' -%}
+      <div class="buy-buttons__row">
+        {%- if block.settings.show_quantity -%}
+          {% render 'quantity-input', id: quantity_id %}
+        {%- endif -%}
+
+        <div class="buy-buttons__submit" data-update="buy-{{ block.id }}">
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          {% render 'button',
+            label: button_label,
+            type: 'submit',
+            style: block.settings.button_style,
+            size: 'lg',
+            full_width: true,
+            class: 'buy-buttons__add',
+            attributes: button_attributes
+          %}
+        </div>
+      </div>
+
+      {%- if block.settings.show_dynamic_checkout -%}
+        <div class="buy-buttons__dynamic{% unless can_buy %} buy-buttons__dynamic--hidden{% endunless %}" data-dynamic-checkout>
+          {{ form | payment_button }}
+        </div>
+      {%- endif -%}
+
+      <div class="buy-buttons__status" role="status" aria-live="polite">
+        <p class="buy-buttons__message buy-buttons__message--success" hidden data-added-message>
+          {% render 'icon', name: 'check' %}
+          <span>{{ 'product.added_to_cart' | t }}</span>
+          <a href="{{ routes.cart_url }}">{{ 'product.view_cart' | t }}</a>
+        </p>
+        <p
+          class="buy-buttons__message buy-buttons__message--error"
+          hidden
+          data-error-message
+          data-fallback="{{ 'product.add_error' | t | escape }}"
+        ></p>
+      </div>
+    {%- endform -%}
+  </product-form>
+{%- endif -%}
+
+{% stylesheet %}
+  .buy-buttons__form {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .buy-buttons__row {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .buy-buttons__submit {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .buy-buttons__add {
+    height: 100%;
+  }
+
+  .buy-buttons__add:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .buy-buttons__add[aria-busy='true'] {
+    cursor: progress;
+    opacity: 0.7;
+  }
+
+  .buy-buttons__dynamic--hidden {
+    display: none;
+  }
+
+  .buy-buttons__dynamic .shopify-payment-button__button {
+    min-height: 3.25rem;
+    border-radius: var(--style-border-radius-buttons);
+  }
+
+  .buy-buttons__message {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .buy-buttons__message[hidden] {
+    display: none;
+  }
+
+  .buy-buttons__message--success .icon {
+    color: var(--color-accent);
+  }
+
+  .buy-buttons__message--success a {
+    margin-inline-start: auto;
+    color: var(--color-foreground);
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.2em;
+  }
+
+  .buy-buttons__message--error {
+    color: #b3261e;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Adds the selected variant to the cart with the Ajax API and re-renders
+   * the header so the cart count updates. Dispatches `cart:update` for any
+   * other component (e.g. a future cart drawer) to react to.
+   */
+  class ProductForm extends HTMLElement {
+    connectedCallback() {
+      this.form = this.querySelector('form');
+      this.form?.addEventListener('submit', this.onSubmit);
+      document.addEventListener('variant:change', this.onVariantChange);
+    }
+
+    disconnectedCallback() {
+      this.form?.removeEventListener('submit', this.onSubmit);
+      document.removeEventListener('variant:change', this.onVariantChange);
+    }
+
+    /** Dynamic checkout buttons are rendered once by Shopify, so only toggle them */
+    onVariantChange = () => {
+      const canBuy = !this.querySelector('[data-add-to-cart]')?.disabled;
+      this.querySelector('[data-dynamic-checkout]')?.classList.toggle('buy-buttons__dynamic--hidden', !canBuy);
+      this.toggleMessages();
+    };
+
+    onSubmit = async (event) => {
+      event.preventDefault();
+      const button = this.querySelector('[data-add-to-cart]');
+      if (!button || button.disabled || button.getAttribute('aria-busy') === 'true') return;
+
+      this.toggleMessages();
+      button.setAttribute('aria-busy', 'true');
+
+      const formData = new FormData(this.form);
+      const headerSection = document.querySelector('header-component')?.closest('.shopify-section');
+      const headerSectionId = headerSection?.id.replace('shopify-section-', '');
+      if (headerSectionId) {
+        formData.append('sections', headerSectionId);
+        formData.append('sections_url', window.location.pathname);
+      }
+
+      try {
+        const root = window.Shopify?.routes?.root ?? '/';
+        const response = await fetch(`${root}cart/add.js`, {
+          method: 'POST',
+          headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+          body: formData,
+        });
+        const data = await response.json();
+
+        if (!response.ok || data.status) {
+          this.toggleMessages({ error: data.description || data.message });
+          return;
+        }
+
+        this.renderHeaderCart(data.sections?.[headerSectionId]);
+        this.toggleMessages({ success: true });
+        document.dispatchEvent(new CustomEvent('cart:update', { detail: { item: data } }));
+      } catch (error) {
+        console.error(error);
+        this.toggleMessages({ error: '' });
+      } finally {
+        button.removeAttribute('aria-busy');
+      }
+    };
+
+    renderHeaderCart(html) {
+      if (!html) return;
+      const fresh = new DOMParser().parseFromString(html, 'text/html').querySelector('.header__cart');
+      const current = document.querySelector('.header__cart');
+      if (fresh && current) current.innerHTML = fresh.innerHTML;
+    }
+
+    toggleMessages({ success = false, error = null } = {}) {
+      const added = this.querySelector('[data-added-message]');
+      const failed = this.querySelector('[data-error-message]');
+      if (added) added.hidden = !success;
+      if (failed) {
+        failed.hidden = error === null;
+        failed.textContent = error || failed.dataset.fallback;
+      }
+    }
+  }
+
+  if (!customElements.get('product-form')) {
+    customElements.define('product-form', ProductForm);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:blocks.buy_buttons.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_quantity",
+      "label": "t:blocks.buy_buttons.show_quantity",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "t:labels.style",
+      "options": [
+        { "value": "primary", "label": "t:options.button_style.primary" },
+        { "value": "secondary", "label": "t:options.button_style.secondary" },
+        { "value": "outline", "label": "t:options.button_style.outline" }
+      ],
+      "default": "primary"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "t:blocks.buy_buttons.show_dynamic_checkout",
+      "info": "t:blocks.buy_buttons.show_dynamic_checkout_info",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.buy_buttons.name",
+      "category": "t:general.product"
+    }
+  ]
+}
+{% endschema %}

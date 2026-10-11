@@ -189,6 +189,26 @@
     "newsletter_style": {
       "underline": "Underline with arrow",
       "boxed": "Boxed with button"
+    },
+    "gallery_layout": {
+      "stacked": "Stacked",
+      "grid": "Grid",
+      "carousel": "Carousel",
+      "thumbnails": "Carousel with thumbnails"
+    },
+    "media_width": {
+      "half": "Half",
+      "default": "Default",
+      "wide": "Wide"
+    },
+    "sale_badge": {
+      "none": "None",
+      "text": "\"Sale\" label",
+      "percent": "Percentage saved"
+    },
+    "picker_style": {
+      "buttons": "Buttons",
+      "dropdown": "Dropdown"
     }
   },
   "blocks": {
@@ -245,6 +265,31 @@
     "newsletter": {
       "name": "Newsletter",
       "info": "Subscribers are added to Customers with the tag \"newsletter\"."
+    },
+    "price": {
+      "name": "Price",
+      "sale_badge": "Sale badge",
+      "show_currency_code": "Show currency code",
+      "show_tax_note": "Show tax and shipping note"
+    },
+    "variant_picker": {
+      "name": "Variant picker",
+      "show_swatches": "Show swatches",
+      "show_swatches_info": "Uses the color or image swatches set on the option's category metafield."
+    },
+    "buy_buttons": {
+      "name": "Buy buttons",
+      "show_quantity": "Show quantity selector",
+      "show_dynamic_checkout": "Show dynamic checkout buttons",
+      "show_dynamic_checkout_info": "Shows the customer's preferred payment method, like Shop Pay or Apple Pay."
+    },
+    "product_description": {
+      "name": "Product description"
+    },
+    "accordion": {
+      "name": "Accordion",
+      "open": "Open by default",
+      "content_info": "Connect a product metafield to show different content for each product."
     }
   },
   "sections": {
@@ -286,6 +331,16 @@
       "bottom_bar": "Bottom bar",
       "show_policies": "Show policy links",
       "show_powered_by": "Show \"Powered by Shopify\""
+    },
+    "product": {
+      "name": "Product information",
+      "product_info": "Leave empty on product pages to show that page's product.",
+      "gallery": "Media gallery",
+      "media_ratio": "Media aspect ratio",
+      "media_width": "Media width",
+      "details": "Product details",
+      "sticky_details": "Keep details visible while scrolling",
+      "featured_preset": "Featured product"
     }
   }
 }

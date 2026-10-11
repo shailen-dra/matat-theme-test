@@ -1,0 +1,423 @@
+{% doc %}
+  Renders a product's media (images, videos, 3D models) as a stacked list,
+  a two-column grid, or a carousel with optional thumbnails. Every layout
+  turns into a swipeable carousel on phones. The selected variant's media is
+  shown first. Without a product, demo images are shown as a placeholder.
+
+  @param {product} product - The product whose media to render
+  @param {string} [layout] - `product-gallery--stacked`, `product-gallery--grid` (default),
+    `product-gallery--carousel` or `product-gallery--thumbnails`
+  @param {string} [ratio] - Media aspect ratio: `adapt`, `portrait` (default) or `square`
+  @param {string} [loading] - Loading strategy for the first image: `eager` or `lazy` (default)
+  @param {string} [id] - Unique id used to scope element ids (e.g. `section.id`)
+
+  @example
+  {% render 'product-gallery', product: product, layout: 'product-gallery--thumbnails', id: section.id %}
+{% enddoc %}
+
+{%- liquid
+  assign layout = layout | default: 'product-gallery--grid'
+  assign ratio = ratio | default: 'portrait'
+  assign variant = product.selected_or_first_available_variant
+  assign featured_media = variant.featured_media | default: product.featured_media
+
+  case ratio
+    when 'square'
+      assign media_ratio = '1'
+    when 'portrait'
+      assign media_ratio = '0.8'
+    else
+      assign media_ratio = featured_media.preview_image.aspect_ratio | default: '0.8'
+  endcase
+
+  case layout
+    when 'product-gallery--stacked', 'product-gallery--carousel', 'product-gallery--thumbnails'
+      assign sizes = '(min-width: 990px) 55vw, 100vw'
+    else
+      assign sizes = '(min-width: 990px) 28vw, 100vw'
+  endcase
+
+  if product != blank
+    assign media_count = product.media.size
+  else
+    assign media_count = 4
+  endif
+-%}
+
+<product-gallery
+  class="product-gallery {{ layout }}{% if media_count < 2 %} product-gallery--single{% endif %}"
+  style="--media-ratio: {{ media_ratio }};"
+  data-update="gallery-{{ id }}"
+  data-featured-media-id="{{ featured_media.id }}"
+>
+  <div
+    class="product-gallery__track"
+    role="region"
+    aria-label="{{ 'product.gallery.label' | t }}"
+    tabindex="-1"
+    data-gallery-track
+  >
+    {%- if product != blank -%}
+      {%- comment -%} Featured media first, then the rest in their original order {%- endcomment -%}
+      {%- liquid
+        assign ordered_media = product.media
+        if featured_media
+          assign ordered_media = product.media | where: 'id', featured_media.id
+          assign rest = product.media | reject: 'id', featured_media.id
+          assign ordered_media = ordered_media | concat: rest
+        endif
+      -%}
+
+      {%- for media in ordered_media -%}
+        {%- liquid
+          assign media_loading = 'lazy'
+          if forloop.first
+            assign media_loading = loading | default: 'lazy'
+          endif
+          assign media_alt = media.alt | default: product.title | escape
+        -%}
+        <div class="product-gallery__item product-gallery__item--{{ media.media_type }}" data-media-id="{{ media.id }}">
+          {%- case media.media_type -%}
+            {%- when 'image' -%}
+              {{
+                media
+                | image_url: width: 2400
+                | image_tag:
+                  widths: '400, 600, 800, 1000, 1300, 1600, 2000, 2400',
+                  sizes: sizes,
+                  loading: media_loading,
+                  alt: media_alt,
+                  class: 'product-gallery__image'
+              }}
+            {%- when 'video' -%}
+              {{ media | video_tag: controls: true, playsinline: true, muted: true, loop: true, image_size: '1600x', class: 'product-gallery__video' }}
+            {%- when 'external_video' -%}
+              {{ media | external_video_tag: class: 'product-gallery__video' }}
+            {%- when 'model' -%}
+              {{ media | model_viewer_tag: image_size: '1600x', reveal: 'interaction', toggleable: true, class: 'product-gallery__model' }}
+          {%- endcase -%}
+        </div>
+      {%- else -%}
+        <div class="product-gallery__item">
+          {{ 'product-1' | placeholder_svg_tag: 'product-gallery__placeholder' }}
+        </div>
+      {%- endfor -%}
+    {%- else -%}
+      {%- assign demo_images = 'demo-ginkgo-set.jpg,demo-layered-necklaces.jpg,demo-hoops.jpg,demo-rings-hand.jpg' | split: ',' -%}
+      {%- for demo_image in demo_images -%}
+        <div class="product-gallery__item">
+          <img
+            class="product-gallery__image"
+            src="{{ demo_image | asset_img_url: '1200x' }}"
+            alt=""
+            width="1200"
+            height="1500"
+            loading="lazy"
+          >
+        </div>
+      {%- endfor -%}
+    {%- endif -%}
+  </div>
+
+  {%- if media_count > 1 -%}
+    <div class="product-gallery__controls">
+      <button type="button" class="product-gallery__arrow" data-gallery-prev>
+        {% render 'icon', name: 'chevron-left' %}
+        <span class="visually-hidden">{{ 'product.gallery.previous' | t }}</span>
+      </button>
+      <p class="product-gallery__counter" dir="ltr" aria-hidden="true">
+        <span data-gallery-current>1</span> / {{ media_count }}
+      </p>
+      <button type="button" class="product-gallery__arrow" data-gallery-next>
+        {% render 'icon', name: 'chevron-right' %}
+        <span class="visually-hidden">{{ 'product.gallery.next' | t }}</span>
+      </button>
+    </div>
+
+    {%- if layout == 'product-gallery--thumbnails' and product != blank -%}
+      <ul class="product-gallery__thumbnails" role="list">
+        {%- for media in ordered_media -%}
+          <li>
+            <button
+              type="button"
+              class="product-gallery__thumbnail"
+              data-gallery-thumbnail="{{ forloop.index0 }}"
+              {% if forloop.first %}
+                aria-current="true"
+              {% endif %}
+            >
+              {{
+                media.preview_image
+                | image_url: width: 240
+                | image_tag: loading: 'lazy', alt: '', class: 'product-gallery__thumbnail-image'
+              }}
+              <span class="visually-hidden">{{ 'product.gallery.go_to' | t: index: forloop.index }}</span>
+            </button>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  {%- endif -%}
+</product-gallery>
+
+{% stylesheet %}
+  .product-gallery {
+    --gallery-gap: 0.5rem;
+    position: relative;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .product-gallery__track {
+    position: relative;
+    display: grid;
+    gap: var(--gallery-gap);
+    outline: none;
+  }
+
+  .product-gallery__item {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--media-ratio);
+    background-color: color-mix(in srgb, var(--color-foreground) 4%, var(--color-background));
+  }
+
+  .product-gallery__item > :is(img, svg, video, iframe, model-viewer),
+  .product-gallery__item :is(.product-gallery__video, .product-gallery__model) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 0;
+  }
+
+  .product-gallery__item--external_video iframe {
+    object-fit: contain;
+  }
+
+  .product-gallery__placeholder {
+    fill: color-mix(in srgb, var(--color-foreground) 25%, transparent);
+  }
+
+  /* Grid: hero image full width, the rest in two columns */
+  .product-gallery--grid .product-gallery__track {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .product-gallery--grid .product-gallery__item:first-child,
+  .product-gallery--grid .product-gallery__item:last-child:nth-child(even) {
+    grid-column: 1 / -1;
+  }
+
+  /* Carousel: one slide at a time, swipe or use the arrows */
+  .product-gallery--carousel .product-gallery__track,
+  .product-gallery--thumbnails .product-gallery__track {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  .product-gallery--carousel .product-gallery__item,
+  .product-gallery--thumbnails .product-gallery__item {
+    flex: 0 0 100%;
+    scroll-snap-align: start;
+  }
+
+  .product-gallery__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .product-gallery__controls {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.1em;
+  }
+
+  .product-gallery--carousel .product-gallery__controls,
+  .product-gallery--thumbnails .product-gallery__controls {
+    display: flex;
+  }
+
+  .product-gallery__counter {
+    min-width: 3.5rem;
+    margin: 0;
+    text-align: center;
+  }
+
+  .product-gallery__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    border-radius: 50%;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    cursor: pointer;
+    transition: border-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .product-gallery__arrow:hover {
+    border-color: var(--color-foreground);
+  }
+
+  .product-gallery__arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  [dir='rtl'] .product-gallery__arrow .icon {
+    transform: scaleX(-1);
+  }
+
+  .product-gallery__thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .product-gallery__thumbnail {
+    display: block;
+    width: 4.5rem;
+    padding: 0;
+    border: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+  }
+
+  .product-gallery__thumbnail:hover,
+  .product-gallery__thumbnail[aria-current='true'] {
+    opacity: 1;
+  }
+
+  .product-gallery__thumbnail[aria-current='true'] {
+    border-color: var(--color-foreground);
+  }
+
+  .product-gallery__thumbnail-image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: var(--media-ratio);
+    object-fit: cover;
+  }
+
+  .product-gallery--single .product-gallery__track {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* Phones: every layout becomes a swipeable carousel */
+  @media (max-width: 749px) {
+    .product-gallery .product-gallery__track {
+      display: flex;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      scrollbar-width: none;
+      gap: 0;
+    }
+
+    .product-gallery .product-gallery__item {
+      flex: 0 0 100%;
+      scroll-snap-align: start;
+    }
+
+    .product-gallery .product-gallery__controls {
+      display: flex;
+    }
+
+    .product-gallery__thumbnails {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .product-gallery__track {
+      scroll-behavior: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /** Arrow, counter and thumbnail navigation for the product media carousel. */
+  class ProductGallery extends HTMLElement {
+    connectedCallback() {
+      this.track = this.querySelector('[data-gallery-track]');
+      this.items = [...this.track.children];
+      this.prev = this.querySelector('[data-gallery-prev]');
+      this.next = this.querySelector('[data-gallery-next]');
+      this.counter = this.querySelector('[data-gallery-current]');
+      this.thumbnails = [...this.querySelectorAll('[data-gallery-thumbnail]')];
+      if (this.items.length < 2) return;
+
+      this.prev?.addEventListener('click', () => this.goTo(this.index - 1));
+      this.next?.addEventListener('click', () => this.goTo(this.index + 1));
+      this.thumbnails.forEach((thumbnail) =>
+        thumbnail.addEventListener('click', () => this.goTo(Number(thumbnail.dataset.galleryThumbnail)))
+      );
+      this.track.addEventListener('scroll', this.onScroll, { passive: true });
+      this.track.addEventListener('keydown', this.onKeydown);
+      this.update();
+    }
+
+    disconnectedCallback() {
+      this.track?.removeEventListener('scroll', this.onScroll);
+    }
+
+    get isRTL() {
+      return getComputedStyle(this).direction === 'rtl';
+    }
+
+    get step() {
+      return this.items[1].offsetWidth + (parseFloat(getComputedStyle(this.track).columnGap) || 0);
+    }
+
+    get index() {
+      return Math.round(Math.abs(this.track.scrollLeft) / this.step);
+    }
+
+    goTo(index) {
+      const target = Math.max(0, Math.min(index, this.items.length - 1));
+      this.track.scrollTo({ left: target * this.step * (this.isRTL ? -1 : 1) });
+    }
+
+    onScroll = () => {
+      cancelAnimationFrame(this.frame);
+      this.frame = requestAnimationFrame(() => this.update());
+    };
+
+    onKeydown = (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      const forward = (event.key === 'ArrowRight') !== this.isRTL;
+      this.goTo(this.index + (forward ? 1 : -1));
+      event.preventDefault();
+    };
+
+    update() {
+      const index = this.index;
+      if (this.counter) this.counter.textContent = index + 1;
+      if (this.prev) this.prev.disabled = index === 0;
+      if (this.next) this.next.disabled = index === this.items.length - 1;
+      this.thumbnails.forEach((thumbnail, i) => thumbnail.setAttribute('aria-current', String(i === index)));
+    }
+  }
+
+  if (!customElements.get('product-gallery')) {
+    customElements.define('product-gallery', ProductGallery);
+  }
+{% endjavascript %}

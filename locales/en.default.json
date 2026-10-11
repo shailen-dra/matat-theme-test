@@ -93,5 +93,34 @@
     "submit": "Subscribe",
     "success": "Thank you for subscribing.",
     "error": "Please enter a valid email address."
+  },
+  "product": {
+    "select_product": "Select a product in the section settings to feature it here.",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable",
+    "add_to_cart": "Add to cart",
+    "added_to_cart": "Added to your cart",
+    "view_cart": "View cart",
+    "add_error": "This item couldn't be added to your cart. Please try again.",
+    "price": {
+      "regular": "Regular price",
+      "sale": "Sale price",
+      "unit": "Unit price",
+      "sale_badge": "Sale",
+      "save_percent": "Save {{ percent }}%",
+      "tax_included": "Tax included. Shipping calculated at checkout.",
+      "tax_excluded": "Taxes and shipping calculated at checkout."
+    },
+    "quantity": {
+      "label": "Quantity",
+      "decrease": "Decrease quantity",
+      "increase": "Increase quantity"
+    },
+    "gallery": {
+      "label": "Product media",
+      "previous": "Previous image",
+      "next": "Next image",
+      "go_to": "Show image {{ index }}"
+    }
   }
 }

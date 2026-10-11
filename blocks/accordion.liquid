@@ -1,0 +1,136 @@
+{% doc %}
+  Renders a collapsible row with a heading and rich text, plus any nested
+  blocks (lists, buttons, images…). Stack several for FAQs, product details
+  or shipping info; adjacent accordions share a single divider.
+
+  @example
+  {% content_for 'block', type: 'accordion', id: 'accordion' %}
+{% enddoc %}
+
+<details
+  class="accordion"
+  {% if block.settings.open %}
+    open
+  {% endif %}
+  {{ block.shopify_attributes }}
+>
+  <summary class="accordion__summary">
+    <span class="accordion__heading">{{ block.settings.heading | escape }}</span>
+    {% render 'icon', name: 'chevron-down', class: 'accordion__icon' %}
+  </summary>
+  <div class="accordion__content">
+    {%- if block.settings.content != blank -%}
+      <div class="rte text text--small text--muted">{{ block.settings.content }}</div>
+    {%- endif -%}
+    {% content_for 'blocks' %}
+  </div>
+</details>
+
+{% stylesheet %}
+  .accordion {
+    interpolate-size: allow-keywords;
+    border-block: 1px solid color-mix(in srgb, var(--color-foreground) 15%, transparent);
+    color: var(--color-foreground);
+  }
+
+  /* Stacked accordions read as one list: no gap, one shared divider */
+  .accordion + .accordion {
+    margin-block-start: calc(var(--group-gap, var(--product-details-gap, 0px)) * -1);
+    border-block-start: 0;
+  }
+
+  .accordion__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.125rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .accordion__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .accordion__summary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .accordion__icon {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+  }
+
+  .accordion[open] .accordion__icon {
+    transform: rotate(180deg);
+  }
+
+  .accordion__content {
+    display: grid;
+    gap: 1rem;
+    padding-block-end: 1.25rem;
+  }
+
+  /* Smooth open/close where the browser supports animating to `auto` */
+  .accordion::details-content {
+    block-size: 0;
+    overflow: clip;
+    transition: block-size 0.3s ease, content-visibility 0.3s allow-discrete;
+  }
+
+  .accordion[open]::details-content {
+    block-size: auto;
+  }
+
+  :root[dir='rtl'] .accordion__summary {
+    letter-spacing: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accordion::details-content,
+    .accordion__icon {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.accordion.name",
+  "tag": null,
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Materials & care"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "t:labels.text",
+      "info": "t:blocks.accordion.content_info",
+      "default": "<p>Solid 14k recycled gold. Remove before swimming and store separately in the pouch provided.</p>"
+    },
+    {
+      "type": "checkbox",
+      "id": "open",
+      "label": "t:blocks.accordion.open",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.accordion.name",
+      "category": "t:general.layout"
+    }
+  ]
+}
+{% endschema %}

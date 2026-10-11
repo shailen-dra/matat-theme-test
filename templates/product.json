@@ -11,7 +11,104 @@
   "sections": {
     "main": {
       "type": "product",
-      "settings": {}
+      "blocks": {
+        "vendor": {
+          "type": "heading",
+          "settings": {
+            "text": "{{ closest.product.vendor }}",
+            "style": "heading--eyebrow heading--accent",
+            "tag": "p"
+          }
+        },
+        "title": {
+          "type": "heading",
+          "settings": {
+            "text": "{{ closest.product.title }}",
+            "style": "heading--h2",
+            "tag": "h1"
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker": {
+          "type": "variant-picker",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy-buttons",
+          "settings": {}
+        },
+        "highlights": {
+          "type": "list",
+          "settings": {
+            "marker": "list--check",
+            "columns": "1",
+            "gap": 8
+          },
+          "blocks": {
+            "h1": {
+              "type": "_list-item",
+              "settings": {
+                "text": "Recycled 14k gold, made to last"
+              }
+            },
+            "h2": {
+              "type": "_list-item",
+              "settings": {
+                "text": "Free insured shipping and 30-day returns"
+              }
+            },
+            "h3": {
+              "type": "_list-item",
+              "settings": {
+                "text": "Arrives gift-wrapped in our signature box"
+              }
+            }
+          },
+          "block_order": [
+            "h1",
+            "h2",
+            "h3"
+          ]
+        },
+        "description": {
+          "type": "product-description",
+          "settings": {}
+        },
+        "materials": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Materials & care",
+            "content": "<p>Solid 14k recycled gold. Remove before swimming and store separately in the pouch provided. Polish gently with a soft cloth.</p>"
+          }
+        },
+        "shipping": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Shipping & returns",
+            "content": "<p>Free insured shipping on all orders. Not quite right? Return unworn pieces within 30 days for a full refund.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "vendor",
+        "title",
+        "price",
+        "variant_picker",
+        "buy_buttons",
+        "highlights",
+        "description",
+        "materials",
+        "shipping"
+      ],
+      "settings": {
+        "gallery_layout": "product-gallery--grid",
+        "media_ratio": "portrait",
+        "media_width": "product--media-default",
+        "sticky_details": true
+      }
     }
   },
   "order": [

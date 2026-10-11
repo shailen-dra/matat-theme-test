@@ -2,7 +2,8 @@
   Renders an inline SVG icon from the theme's line-icon set. Icons inherit
   `currentColor`, scale with `--icon-size` and use `--icon-stroke-width`.
 
-  @param {string} name - Icon name: `menu`, `close`, `search`, `cart`, `account`, `chevron-down`, `arrow`,
+  @param {string} name - Icon name: `menu`, `close`, `search`, `cart`, `account`, `chevron-down`, `chevron-left`, `chevron-right`,
+    `arrow`, `plus`, `minus`, `check`, `zoom`,
     or a social network: `instagram`, `facebook`, `pinterest`, `tiktok`, `youtube`, `whatsapp`, `x`
   @param {string} [class] - Extra classes for the `<svg>`
 
@@ -37,6 +38,18 @@
       <path d="M6 8l4 4 4-4"/>
     {%- when 'arrow' -%}
       <path d="M4 10h12M12 6l4 4-4 4"/>
+    {%- when 'chevron-left' -%}
+      <path d="M12 6l-4 4 4 4"/>
+    {%- when 'chevron-right' -%}
+      <path d="M8 6l4 4-4 4"/>
+    {%- when 'plus' -%}
+      <path d="M10 4.5v11M4.5 10h11"/>
+    {%- when 'minus' -%}
+      <path d="M4.5 10h11"/>
+    {%- when 'check' -%}
+      <path d="M4.5 10.5l3.5 3.5 7.5-8"/>
+    {%- when 'zoom' -%}
+      <circle cx="8.75" cy="8.75" r="5.25"/><path d="M12.5 12.5L16.5 16.5M8.75 6.75v4M6.75 8.75h4"/>
     {%- when 'instagram' -%}
       <rect x="3" y="3" width="14" height="14" rx="4"/><circle cx="10" cy="10" r="3.25"/><circle cx="14.25" cy="5.75" r=".5" fill="currentColor" stroke="none"/>
     {%- when 'facebook' -%}
