@@ -13,7 +13,22 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {},
+      "blocks": {
+        "mega_catalog": {
+          "type": "mega_menu",
+          "settings": {
+            "menu_item": "Catalog",
+            "heading_1": "Layered gold",
+            "heading_2": "Everyday hoops",
+            "image_ratio": "mega-promo--portrait",
+            "show_view_all": true
+          }
+        }
+      },
+      "block_order": [
+        "mega_catalog"
+      ]
     }
   },
   "order": [

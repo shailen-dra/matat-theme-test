@@ -153,9 +153,12 @@
       "gradient": "Gradient"
     },
     "header_layout": {
-      "logo_center": "Logo center, menu left",
       "logo_left": "Logo left, menu center",
-      "logo_left_menu_right": "Logo left, menu right"
+      "logo_left_menu_right": "Logo left, menu right",
+      "logo_center": "Logo center, menu left",
+      "logo_center_menu_below": "Logo center, menu below",
+      "logo_right": "Logo right, menu center",
+      "logo_right_menu_left": "Logo right, menu left"
     },
     "menu_style": {
       "uppercase": "Uppercase",
@@ -165,6 +168,11 @@
       "none": "None",
       "always": "Always",
       "scroll_up": "On scroll up"
+    },
+    "ratio": {
+      "portrait": "Portrait",
+      "square": "Square",
+      "landscape": "Landscape"
     }
   },
   "blocks": {
@@ -198,6 +206,15 @@
       "presets": {
         "buttons": "Buttons"
       }
+    },
+    "mega_menu": {
+      "name": "Mega menu",
+      "menu_item": "Menu item",
+      "menu_item_info": "Title of a top-level item in the header menu, e.g. Jewelry. Its submenu becomes a full-width mega menu.",
+      "show_view_all": "Show \"Shop all\" link",
+      "image_ratio": "Image shape",
+      "featured_1": "Featured card 1",
+      "featured_2": "Featured card 2"
     }
   },
   "sections": {
@@ -219,8 +236,6 @@
       "logo_width_mobile": "Logo width on mobile",
       "navigation": "Navigation",
       "menu_style": "Menu style",
-      "promo": "Mega menu promo",
-      "promo_info": "Shown in dropdowns that have three menu levels.",
       "behavior": "Behavior",
       "sticky": "Sticky header",
       "transparent_on_home": "Transparent on home page",
@@ -230,7 +245,9 @@
       "show_search": "Show search",
       "show_language": "Show language selector",
       "show_border": "Show bottom border",
-      "padding": "Vertical padding"
+      "padding": "Vertical padding",
+      "layout": "Desktop layout",
+      "layout_info": "On mobile the logo is always centered."
     }
   }
 }

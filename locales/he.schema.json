@@ -153,9 +153,12 @@
       "gradient": "מעבר צבע"
     },
     "header_layout": {
-      "logo_center": "לוגו במרכז, תפריט בהתחלה",
       "logo_left": "לוגו בהתחלה, תפריט במרכז",
-      "logo_left_menu_right": "לוגו בהתחלה, תפריט בסוף"
+      "logo_left_menu_right": "לוגו בהתחלה, תפריט בסוף",
+      "logo_center": "לוגו במרכז, תפריט בהתחלה",
+      "logo_center_menu_below": "לוגו במרכז, תפריט מתחת",
+      "logo_right": "לוגו בסוף, תפריט במרכז",
+      "logo_right_menu_left": "לוגו בסוף, תפריט בהתחלה"
     },
     "menu_style": {
       "uppercase": "אותיות גדולות",
@@ -165,6 +168,11 @@
       "none": "ללא",
       "always": "תמיד",
       "scroll_up": "בגלילה למעלה"
+    },
+    "ratio": {
+      "portrait": "לאורך",
+      "square": "ריבוע",
+      "landscape": "לרוחב"
     }
   },
   "blocks": {
@@ -198,6 +206,15 @@
       "presets": {
         "buttons": "כפתורים"
       }
+    },
+    "mega_menu": {
+      "name": "תפריט מורחב",
+      "menu_item": "פריט בתפריט",
+      "menu_item_info": "שם של פריט ראשי בתפריט הכותרת, למשל תכשיטים. תת־התפריט שלו יוצג כתפריט מורחב ברוחב מלא.",
+      "show_view_all": "הצגת קישור \"לכל הפריטים\"",
+      "image_ratio": "צורת התמונה",
+      "featured_1": "כרטיס מומלץ 1",
+      "featured_2": "כרטיס מומלץ 2"
     }
   },
   "sections": {
@@ -219,8 +236,6 @@
       "logo_width_mobile": "רוחב הלוגו במובייל",
       "navigation": "ניווט",
       "menu_style": "סגנון התפריט",
-      "promo": "קידום בתפריט המורחב",
-      "promo_info": "מוצג בתפריטים נפתחים עם שלוש רמות.",
       "behavior": "התנהגות",
       "sticky": "כותרת דביקה",
       "transparent_on_home": "שקופה בדף הבית",
@@ -230,7 +245,9 @@
       "show_search": "הצגת חיפוש",
       "show_language": "הצגת בורר שפה",
       "show_border": "הצגת קו תחתון",
-      "padding": "ריפוד אנכי"
+      "padding": "ריפוד אנכי",
+      "layout": "פריסה במחשב",
+      "layout_info": "במובייל הלוגו תמיד ממורכז."
     }
   }
 }
