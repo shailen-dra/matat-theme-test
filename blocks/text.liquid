@@ -1,13 +1,16 @@
 {% doc %}
-  Renders a text block.
+  Renders a rich text block: paragraphs, links, bold/italic and lists.
 
   @example
   {% content_for 'block', type: 'text', id: 'text' %}
 {% enddoc %}
 
 <div
-  class="text {{ block.settings.text_style }}"
-  style="--text-align: {{ block.settings.alignment }}"
+  class="rte text {{ block.settings.size }}{% if block.settings.muted %} text--muted{% endif %}"
+  style="
+    --text-align: {{ block.settings.alignment }};
+    --text-max-width: {% if block.settings.max_width > 0 %}{{ block.settings.max_width }}ch{% else %}none{% endif %};
+  "
   {{ block.shopify_attributes }}
 >
   {{ block.settings.text }}
@@ -15,45 +18,104 @@
 
 {% stylesheet %}
   .text {
+    max-width: var(--text-max-width);
+    color: var(--color-foreground);
     text-align: var(--text-align);
+    line-height: 1.7;
   }
-  .text--title {
-    font-size: 2rem;
-    font-weight: 700;
+
+  .text--small {
+    font-size: 0.875rem;
   }
-  .text--subtitle {
-    font-size: 1.5rem;
+
+  .text--body {
+    font-size: 1rem;
+  }
+
+  .text--large {
+    font-size: 1.125rem;
+  }
+
+  .text--muted {
+    color: color-mix(in srgb, var(--color-foreground) 70%, transparent);
+  }
+
+  .rte > * + * {
+    margin-block-start: 0.75em;
+  }
+
+  .rte a {
+    color: inherit;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.2em;
+  }
+
+  .rte a:hover {
+    color: var(--color-accent);
+  }
+
+  .rte :is(ul, ol) {
+    padding-inline-start: 1.25em;
   }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.text",
+  "tag": null,
   "settings": [
     {
-      "type": "text",
+      "type": "richtext",
       "id": "text",
       "label": "t:labels.text",
-      "default": "Text"
+      "default": "<p>Share a short story about your brand, a product, or a promise to your customers.</p>"
     },
     {
       "type": "select",
-      "id": "text_style",
-      "label": "t:labels.text_style",
+      "id": "size",
+      "label": "t:labels.size",
       "options": [
-        { "value": "text--title", "label": "t:options.text_style.title" },
-        { "value": "text--subtitle", "label": "t:options.text_style.subtitle" },
-        { "value": "text--normal", "label": "t:options.text_style.normal" }
+        { "value": "text--small", "label": "t:options.size.small" },
+        { "value": "text--body", "label": "t:options.size.medium" },
+        { "value": "text--large", "label": "t:options.size.large" }
       ],
-      "default": "text--title"
+      "default": "text--body"
     },
     {
-      "type": "text_alignment",
+      "type": "checkbox",
+      "id": "muted",
+      "label": "t:blocks.text.muted",
+      "default": false
+    },
+    {
+      "type": "select",
       "id": "alignment",
       "label": "t:labels.alignment",
-      "default": "left"
+      "options": [
+        { "value": "inherit", "label": "t:options.alignment.inherit" },
+        { "value": "start", "label": "t:options.alignment.left" },
+        { "value": "center", "label": "t:options.alignment.center" },
+        { "value": "end", "label": "t:options.alignment.right" }
+      ],
+      "default": "inherit"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "t:labels.max_width",
+      "info": "t:blocks.heading.max_width_info",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "ch",
+      "default": 0
     }
   ],
-  "presets": [{ "name": "t:general.text" }]
+  "presets": [
+    {
+      "name": "t:general.text",
+      "category": "t:general.text"
+    }
+  ]
 }
 {% endschema %}

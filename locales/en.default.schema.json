@@ -36,7 +36,18 @@
     "buttons": "Buttons",
     "links": "Links",
     "hebrew_fonts": "Hebrew fonts",
-    "hebrew_fonts_info": "Used for Hebrew text. Latin characters keep the fonts above."
+    "hebrew_fonts_info": "Used for Hebrew text. Latin characters keep the fonts above.",
+    "forms": "Forms",
+    "social_media": "Social media",
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "pinterest": "Pinterest",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "whatsapp": "WhatsApp",
+      "x": "X (Twitter)"
+    }
   },
   "labels": {
     "alignment": "Alignment",
@@ -75,7 +86,8 @@
     "size": "Size",
     "style": "Style",
     "text_color": "Text color",
-    "heading": "Heading"
+    "heading": "Heading",
+    "button_label": "Button label"
   },
   "options": {
     "alignment": {
@@ -173,6 +185,10 @@
       "portrait": "Portrait",
       "square": "Square",
       "landscape": "Landscape"
+    },
+    "newsletter_style": {
+      "underline": "Underline with arrow",
+      "boxed": "Boxed with button"
     }
   },
   "blocks": {
@@ -215,6 +231,20 @@
       "image_ratio": "Image shape",
       "featured_1": "Featured card 1",
       "featured_2": "Featured card 2"
+    },
+    "text": {
+      "muted": "Muted color"
+    },
+    "menu": {
+      "name": "Menu"
+    },
+    "social_links": {
+      "name": "Social links",
+      "info": "Manage links in Theme settings → Social media."
+    },
+    "newsletter": {
+      "name": "Newsletter",
+      "info": "Subscribers are added to Customers with the tag \"newsletter\"."
     }
   },
   "sections": {
@@ -248,6 +278,14 @@
       "padding": "Vertical padding",
       "layout": "Desktop layout",
       "layout_info": "On mobile the logo is always centered."
+    },
+    "footer": {
+      "first_column_wide": "Make first column wider",
+      "show_wordmark": "Show large wordmark",
+      "show_wordmark_info": "Displays the store name in large type above the bottom bar.",
+      "bottom_bar": "Bottom bar",
+      "show_policies": "Show policy links",
+      "show_powered_by": "Show \"Powered by Shopify\""
     }
   }
 }

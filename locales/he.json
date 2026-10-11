@@ -53,7 +53,17 @@
     "language": {
       "label": "שפה"
     },
-    "skip_to_content": "דילוג לתוכן"
+    "skip_to_content": "דילוג לתוכן",
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "pinterest": "Pinterest",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "whatsapp": "WhatsApp",
+      "x": "X (טוויטר)",
+      "empty": "הוסיפו קישורים לרשתות החברתיות בהגדרות ערכת העיצוב ← רשתות חברתיות."
+    }
   },
   "sections": {
     "hero": {
@@ -74,5 +84,16 @@
       "many": "סל קניות, {{ count }} פריטים",
       "other": "סל קניות, {{ count }} פריטים"
     }
+  },
+  "footer": {
+    "copyright": "© {{ year }} {{ shop }}",
+    "payment_methods": "אמצעי תשלום"
+  },
+  "newsletter": {
+    "email_label": "אימייל",
+    "email_placeholder": "כתובת האימייל שלך",
+    "submit": "הרשמה",
+    "success": "תודה שנרשמת.",
+    "error": "יש להזין כתובת אימייל תקינה."
   }
 }

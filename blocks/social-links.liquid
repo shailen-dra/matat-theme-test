@@ -1,0 +1,111 @@
+{% doc %}
+  Renders links to the store's social media profiles. URLs are managed once
+  in Theme settings → Social media, so every instance stays in sync.
+
+  @example
+  {% content_for 'block', type: 'social-links', id: 'social-links' %}
+{% enddoc %}
+
+{%- liquid
+  assign networks = 'instagram,facebook,pinterest,tiktok,youtube,whatsapp,x' | split: ','
+  assign has_links = false
+  for network in networks
+    assign setting_key = 'social_' | append: network | append: '_link'
+    if settings[setting_key] != blank
+      assign has_links = true
+      break
+    endif
+  endfor
+-%}
+
+{%- if has_links -%}
+  <ul
+    class="social-links social-links--{{ block.settings.size }}"
+    role="list"
+    {{ block.shopify_attributes }}
+  >
+    {%- for network in networks -%}
+      {%- liquid
+        assign setting_key = 'social_' | append: network | append: '_link'
+        assign url = settings[setting_key]
+        assign label_key = 'general.social.' | append: network
+      -%}
+      {%- if url != blank -%}
+        <li>
+          <a href="{{ url }}" class="social-links__link" target="_blank" rel="noopener">
+            {% render 'icon', name: network %}
+            <span class="visually-hidden">{{ label_key | t }}</span>
+          </a>
+        </li>
+      {%- endif -%}
+    {%- endfor -%}
+  </ul>
+{%- elsif request.design_mode -%}
+  <p class="social-links__empty" {{ block.shopify_attributes }}>{{ 'general.social.empty' | t }}</p>
+{%- endif -%}
+
+{% stylesheet %}
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    margin: 0;
+    margin-inline-start: -0.5rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .social-links__link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    color: var(--color-foreground);
+    transition: color 0.2s ease;
+  }
+
+  .social-links--lg .social-links__link {
+    --icon-size: 1.5rem;
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .social-links__link:hover {
+    color: var(--color-accent);
+  }
+
+  .social-links__empty {
+    font-size: 0.8125rem;
+    opacity: 0.6;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.social_links.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:blocks.social_links.info"
+    },
+    {
+      "type": "select",
+      "id": "size",
+      "label": "t:labels.size",
+      "options": [
+        { "value": "md", "label": "t:options.size.medium" },
+        { "value": "lg", "label": "t:options.size.large" }
+      ],
+      "default": "md"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.social_links.name",
+      "category": "t:general.links"
+    }
+  ]
+}
+{% endschema %}

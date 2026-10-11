@@ -1,0 +1,221 @@
+{% doc %}
+  Renders an email signup form that adds the customer to the store's
+  marketing list (tagged `newsletter`). Works in the footer or any section.
+
+  @example
+  {% content_for 'block', type: 'newsletter', id: 'newsletter' %}
+{% enddoc %}
+
+{%- liquid
+  assign form_id = 'Newsletter-' | append: block.id
+  assign input_id = 'NewsletterEmail-' | append: block.id
+  assign button_label = block.settings.button_label
+  if button_label == blank
+    assign button_label = 'newsletter.submit' | t
+  endif
+-%}
+
+<div class="newsletter {{ block.settings.form_style }}" {{ block.shopify_attributes }}>
+  {%- if block.settings.heading != blank -%}
+    <h2 class="newsletter__heading">{{ block.settings.heading | escape }}</h2>
+  {%- endif -%}
+  {%- if block.settings.text != blank -%}
+    <div class="newsletter__text rte">{{ block.settings.text }}</div>
+  {%- endif -%}
+
+  {%- form 'customer', id: form_id, class: 'newsletter__form' -%}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+
+    {%- if form.posted_successfully? -%}
+      <p class="newsletter__message newsletter__message--success" role="status">
+        {{ 'newsletter.success' | t }}
+      </p>
+    {%- else -%}
+      <div class="newsletter__field">
+        <label for="{{ input_id }}" class="visually-hidden">{{ 'newsletter.email_label' | t }}</label>
+        <input
+          id="{{ input_id }}"
+          class="newsletter__input"
+          type="email"
+          name="contact[email]"
+          value="{{ form.email }}"
+          placeholder="{{ 'newsletter.email_placeholder' | t }}"
+          autocomplete="email"
+          autocapitalize="off"
+          spellcheck="false"
+          required
+          {% if form.errors %}
+            aria-invalid="true" aria-describedby="{{ input_id }}-error"
+          {% endif %}
+        >
+        {%- if block.settings.form_style == 'newsletter--underline' -%}
+          <button type="submit" class="newsletter__arrow">
+            {% render 'icon', name: 'arrow' %}
+            <span class="visually-hidden">{{ button_label | escape }}</span>
+          </button>
+        {%- else -%}
+          {% render 'button', label: button_label, type: 'submit', style: 'primary' %}
+        {%- endif -%}
+      </div>
+
+      {%- if form.errors -%}
+        <p id="{{ input_id }}-error" class="newsletter__message newsletter__message--error" role="alert">
+          {{ 'newsletter.error' | t }}
+        </p>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endform -%}
+</div>
+
+{% stylesheet %}
+  .newsletter {
+    display: grid;
+    gap: 1rem;
+    align-content: start;
+    color: var(--color-foreground);
+  }
+
+  .newsletter__heading {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.5rem, 1vw + 1.125rem, 2rem);
+    font-weight: var(--font-heading--weight);
+    line-height: 1.15;
+  }
+
+  .newsletter__text {
+    color: color-mix(in srgb, var(--color-foreground) 72%, transparent);
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  .newsletter__form {
+    margin-block-start: 0.5rem;
+  }
+
+  .newsletter__field {
+    display: flex;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .newsletter__input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.875rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 30%, transparent);
+    background: transparent;
+    color: var(--color-foreground);
+    font-size: 0.9375rem;
+  }
+
+  .newsletter__input::placeholder {
+    color: color-mix(in srgb, var(--color-foreground) 50%, transparent);
+  }
+
+  .newsletter__input:focus {
+    outline: none;
+    border-color: var(--color-foreground);
+  }
+
+  .newsletter--underline .newsletter__field {
+    gap: 0;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 40%, transparent);
+    transition: border-color 0.2s ease;
+  }
+
+  .newsletter--underline .newsletter__field:focus-within {
+    border-bottom-color: var(--color-foreground);
+  }
+
+  .newsletter--underline .newsletter__input {
+    padding-inline: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .newsletter__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+
+  .newsletter__arrow .icon {
+    transition: transform 0.25s ease;
+  }
+
+  .newsletter__arrow:hover .icon {
+    transform: translateX(4px);
+  }
+
+  [dir='rtl'] .newsletter__arrow:hover .icon {
+    transform: scaleX(-1) translateX(4px);
+  }
+
+  .newsletter__message {
+    margin-block-start: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .newsletter__message--success {
+    margin-block-start: 0;
+    color: var(--color-accent);
+  }
+
+  .newsletter__message--error {
+    color: #d1544a;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.newsletter.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:blocks.newsletter.info"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Join the list"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "<p>Early access to new collections, private sales and stories from the studio.</p>"
+    },
+    {
+      "type": "select",
+      "id": "form_style",
+      "label": "t:labels.style",
+      "options": [
+        { "value": "newsletter--underline", "label": "t:options.newsletter_style.underline" },
+        { "value": "newsletter--boxed", "label": "t:options.newsletter_style.boxed" }
+      ],
+      "default": "newsletter--underline"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:labels.button_label",
+      "default": "Subscribe"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.newsletter.name",
+      "category": "t:general.forms"
+    }
+  ]
+}
+{% endschema %}

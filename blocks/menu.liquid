@@ -1,0 +1,108 @@
+{% doc %}
+  Renders a titled vertical list of links from a store menu. Used for footer
+  columns, sidebars, or any "quick links" area.
+
+  @example
+  {% content_for 'block', type: 'menu', id: 'menu' %}
+{% enddoc %}
+
+{%- assign menu = block.settings.menu -%}
+
+<nav
+  class="menu-block"
+  {% if block.settings.heading != blank %}
+    aria-label="{{ block.settings.heading | escape }}"
+  {% endif %}
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.heading != blank -%}
+    <h2 class="menu-block__heading">{{ block.settings.heading | escape }}</h2>
+  {%- endif -%}
+
+  {%- if menu != blank -%}
+    <ul class="menu-block__list" role="list">
+      {%- for link in menu.links -%}
+        <li>
+          <a
+            href="{{ link.url }}"
+            class="menu-block__link"
+            {% if link.current %}
+              aria-current="page"
+            {% endif %}
+          >
+            {{- link.title | escape -}}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</nav>
+
+{% stylesheet %}
+  .menu-block {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+
+  .menu-block__heading {
+    margin: 0;
+    color: var(--color-foreground);
+    font-family: var(--font-primary--family);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .menu-block__list {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .menu-block__link {
+    color: color-mix(in srgb, var(--color-foreground) 72%, transparent);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .menu-block__link:hover,
+  .menu-block__link[aria-current='page'] {
+    color: var(--color-foreground);
+  }
+
+  :root[dir='rtl'] .menu-block__heading {
+    letter-spacing: 0;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.menu.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Shop"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "t:labels.menu",
+      "default": "footer"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.menu.name",
+      "category": "t:general.links"
+    }
+  ]
+}
+{% endschema %}

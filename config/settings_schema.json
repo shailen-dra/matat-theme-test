@@ -159,5 +159,52 @@
         "default": 0
       }
     ]
+  },
+  {
+    "name": "t:general.social_media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "t:general.social.instagram",
+        "placeholder": "https://instagram.com/"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "t:general.social.facebook",
+        "placeholder": "https://facebook.com/"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest_link",
+        "label": "t:general.social.pinterest",
+        "placeholder": "https://pinterest.com/"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok_link",
+        "label": "t:general.social.tiktok",
+        "placeholder": "https://tiktok.com/@"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "t:general.social.youtube",
+        "placeholder": "https://youtube.com/@"
+      },
+      {
+        "type": "text",
+        "id": "social_whatsapp_link",
+        "label": "t:general.social.whatsapp",
+        "placeholder": "https://wa.me/972"
+      },
+      {
+        "type": "text",
+        "id": "social_x_link",
+        "label": "t:general.social.x",
+        "placeholder": "https://x.com/"
+      }
+    ]
   }
 ]

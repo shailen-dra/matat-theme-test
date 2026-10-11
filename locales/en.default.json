@@ -53,7 +53,17 @@
     "language": {
       "label": "Language"
     },
-    "skip_to_content": "Skip to content"
+    "skip_to_content": "Skip to content",
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "pinterest": "Pinterest",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "whatsapp": "WhatsApp",
+      "x": "X (Twitter)",
+      "empty": "Add your social media links in Theme settings → Social media."
+    }
   },
   "sections": {
     "hero": {
@@ -72,5 +82,16 @@
       "one": "Cart, {{ count }} item",
       "other": "Cart, {{ count }} items"
     }
+  },
+  "footer": {
+    "copyright": "© {{ year }} {{ shop }}",
+    "payment_methods": "Payment methods"
+  },
+  "newsletter": {
+    "email_label": "Email",
+    "email_placeholder": "Your email address",
+    "submit": "Subscribe",
+    "success": "Thank you for subscribing.",
+    "error": "Please enter a valid email address."
   }
 }

@@ -36,7 +36,18 @@
     "buttons": "כפתורים",
     "links": "קישורים",
     "hebrew_fonts": "גופנים בעברית",
-    "hebrew_fonts_info": "משמשים לטקסט בעברית. תווים לטיניים ממשיכים להשתמש בגופנים שלמעלה."
+    "hebrew_fonts_info": "משמשים לטקסט בעברית. תווים לטיניים ממשיכים להשתמש בגופנים שלמעלה.",
+    "forms": "טפסים",
+    "social_media": "רשתות חברתיות",
+    "social": {
+      "instagram": "Instagram",
+      "facebook": "Facebook",
+      "pinterest": "Pinterest",
+      "tiktok": "TikTok",
+      "youtube": "YouTube",
+      "whatsapp": "WhatsApp",
+      "x": "X (טוויטר)"
+    }
   },
   "labels": {
     "alignment": "יישור",
@@ -75,7 +86,8 @@
     "size": "גודל",
     "style": "סגנון",
     "text_color": "צבע טקסט",
-    "heading": "כותרת"
+    "heading": "כותרת",
+    "button_label": "טקסט הכפתור"
   },
   "options": {
     "alignment": {
@@ -173,6 +185,10 @@
       "portrait": "לאורך",
       "square": "ריבוע",
       "landscape": "לרוחב"
+    },
+    "newsletter_style": {
+      "underline": "קו תחתון עם חץ",
+      "boxed": "תיבה עם כפתור"
     }
   },
   "blocks": {
@@ -215,6 +231,20 @@
       "image_ratio": "צורת התמונה",
       "featured_1": "כרטיס מומלץ 1",
       "featured_2": "כרטיס מומלץ 2"
+    },
+    "text": {
+      "muted": "צבע מעומעם"
+    },
+    "menu": {
+      "name": "תפריט"
+    },
+    "social_links": {
+      "name": "רשתות חברתיות",
+      "info": "ניהול הקישורים בהגדרות ערכת העיצוב ← רשתות חברתיות."
+    },
+    "newsletter": {
+      "name": "ניוזלטר",
+      "info": "הנרשמים מתווספים ללקוחות עם התגית \"newsletter\"."
     }
   },
   "sections": {
@@ -248,6 +278,14 @@
       "padding": "ריפוד אנכי",
       "layout": "פריסה במחשב",
       "layout_info": "במובייל הלוגו תמיד ממורכז."
+    },
+    "footer": {
+      "first_column_wide": "עמודה ראשונה רחבה יותר",
+      "show_wordmark": "הצגת שם החנות בגדול",
+      "show_wordmark_info": "מציג את שם החנות באותיות גדולות מעל הפס התחתון.",
+      "bottom_bar": "פס תחתון",
+      "show_policies": "הצגת קישורי מדיניות",
+      "show_powered_by": "הצגת \"Powered by Shopify\""
     }
   }
 }

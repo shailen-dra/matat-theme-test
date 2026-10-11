@@ -13,8 +13,72 @@
   "sections": {
     "footer": {
       "type": "footer",
+      "blocks": {
+        "brand": {
+          "type": "group",
+          "settings": {
+            "layout_direction": "group--vertical",
+            "gap": 20,
+            "alignment": "auto",
+            "padding": 0
+          },
+          "blocks": {
+            "brand_heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Fine jewelry, made to be <em>kept</em>.",
+                "style": "heading--h3",
+                "tag": "p"
+              }
+            },
+            "brand_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Recycled gold and ethically sourced stones, crafted in small batches.</p>",
+                "size": "text--small",
+                "muted": true,
+                "max_width": 40
+              }
+            },
+            "brand_social": {
+              "type": "social-links",
+              "settings": {
+                "size": "md"
+              }
+            }
+          },
+          "block_order": [
+            "brand_heading",
+            "brand_text",
+            "brand_social"
+          ]
+        },
+        "menu_shop": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu"
+          }
+        },
+        "menu_help": {
+          "type": "menu",
+          "settings": {
+            "heading": "Help",
+            "menu": "footer"
+          }
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "brand",
+        "menu_shop",
+        "menu_help",
+        "newsletter"
+      ],
       "settings": {
-        "menu": "",
         "show_payment_icons": true
       }
     }
