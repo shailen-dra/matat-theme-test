@@ -1,0 +1,114 @@
+{% doc %}
+  Renders one tile of the Collection tiles section: an image (or a metal-style
+  swatch) with a label, linking to a collection.
+
+  Falls back to the collection's image, then to demo photography picked from
+  the tile title, so the section looks finished before images are uploaded.
+{% enddoc %}
+
+{%- liquid
+  assign collection = block.settings.collection
+  assign placeholder_title = 'sections.collection_tiles.placeholder_title' | t
+  assign title = block.settings.title | default: collection.title | default: placeholder_title
+  assign url = block.settings.link | default: collection.url | default: routes.all_products_collection_url
+  assign image = block.settings.image | default: collection.featured_image
+  assign swatch = block.settings.swatch
+  assign image_style = 'object-position: ' | append: image.presentation.focal_point
+
+  if image == blank and swatch == blank
+    assign key = title | downcase
+    # Earrings first: "earring" also contains "ring"
+    if key contains 'earring' or key contains 'hoop'
+      assign demo_image = 'demo-hoops.jpg'
+    elsif key contains 'ring'
+      assign demo_image = 'demo-rings-hand.jpg'
+    elsif key contains 'necklace' or key contains 'pendant'
+      assign demo_image = 'demo-layered-necklaces.jpg'
+    elsif key contains 'bracelet' or key contains 'bangle'
+      assign demo_image = 'demo-flatlay.jpg'
+    else
+      assign demo_image = 'demo-ginkgo-set.jpg'
+    endif
+  endif
+-%}
+
+<a href="{{ url }}" class="tile" {{ block.shopify_attributes }}>
+  <span class="tile__media"{% if swatch != blank %} style="--tile-swatch: {{ swatch }};"{% endif %}>
+    {%- if swatch != blank -%}
+      <span class="tile__swatch" aria-hidden="true"></span>
+    {%- elsif image != blank -%}
+      {{
+        image
+        | image_url: width: 900
+        | image_tag:
+          widths: '240, 360, 480, 600, 750, 900',
+          sizes: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 45vw',
+          loading: 'lazy',
+          class: 'tile__image',
+          style: image_style,
+          alt: ''
+      }}
+    {%- else -%}
+      <img
+        src="{{ demo_image | asset_img_url: '600x' }}"
+        srcset="{{ demo_image | asset_img_url: '360x' }} 360w, {{ demo_image | asset_img_url: '600x' }} 600w, {{ demo_image | asset_img_url: '900x' }} 900w"
+        sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 45vw"
+        width="900"
+        height="900"
+        alt=""
+        class="tile__image"
+        loading="lazy"
+      >
+    {%- endif -%}
+  </span>
+  <span class="tile__label">
+    <span class="tile__title">{{ title }}</span>
+    {%- if block.settings.caption != blank -%}
+      <span class="tile__caption">{{ block.settings.caption }}</span>
+    {%- endif -%}
+  </span>
+</a>
+
+{% schema %}
+{
+  "name": "t:blocks.collection_tile.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:general.collection"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.heading",
+      "info": "t:blocks.collection_tile.title_info"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "t:blocks.collection_tile.caption"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:labels.link",
+      "info": "t:blocks.collection_tile.link_info"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image",
+      "info": "t:blocks.collection_tile.image_info"
+    },
+    {
+      "type": "color_background",
+      "id": "swatch",
+      "label": "t:blocks.collection_tile.swatch",
+      "info": "t:blocks.collection_tile.swatch_info"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.collection_tile.name" }]
+}
+{% endschema %}

@@ -4,6 +4,7 @@
 
   @param {string} name - Icon name: `menu`, `close`, `search`, `cart`, `account`, `chevron-down`, `chevron-left`, `chevron-right`,
     `arrow`, `plus`, `minus`, `check`, `zoom`,
+    trust badges: `diamond`, `certificate`, `truck`, `returns`, `shield`, `gift`, `sparkle`, `hallmark`,
     or a social network: `instagram`, `facebook`, `pinterest`, `tiktok`, `youtube`, `whatsapp`, `x`
   @param {string} [class] - Extra classes for the `<svg>`
 
@@ -50,6 +51,22 @@
       <path d="M4.5 10.5l3.5 3.5 7.5-8"/>
     {%- when 'zoom' -%}
       <circle cx="8.75" cy="8.75" r="5.25"/><path d="M12.5 12.5L16.5 16.5M8.75 6.75v4M6.75 8.75h4"/>
+    {%- when 'diamond' -%}
+      <path d="M5.5 3.5h9l3 4-7.5 9-7.5-9zM2.5 7.5h15M8 3.5l-1.25 4L10 16.5l3.25-9-1.25-4"/>
+    {%- when 'certificate' -%}
+      <circle cx="10" cy="8" r="4.75"/><circle cx="10" cy="8" r="2"/><path d="M7 11.75L5.75 17.5 8 16.25 10 17.5M13 11.75l1.25 5.75L12 16.25"/>
+    {%- when 'truck' -%}
+      <path d="M2.5 5h9.5v8.5H2.5zM12 8h3l2.5 2.75v2.75H12"/><circle cx="5.75" cy="14.5" r="1.5" fill="var(--color-background, #fff)"/><circle cx="14.5" cy="14.5" r="1.5" fill="var(--color-background, #fff)"/>
+    {%- when 'returns' -%}
+      <path d="M4 8.5h8.25a4 4 0 0 1 0 8H8M7 5.5l-3 3 3 3"/>
+    {%- when 'shield' -%}
+      <path d="M10 2.75l6 2.25v4.5c0 3.75-2.5 6.5-6 7.75-3.5-1.25-6-4-6-7.75V5z"/><path d="M7.25 10l2 2 3.5-4"/>
+    {%- when 'gift' -%}
+      <path d="M3.5 7.5h13v3h-13zM4.5 10.5h11v6h-11zM10 7.5v9M10 7.5C9 5 6.5 3.5 6 5.25S8 7.5 10 7.5c2 0 4.5-.5 4-2.25S11 5 10 7.5"/>
+    {%- when 'sparkle' -%}
+      <path d="M10 2.5c.5 3.75 1.75 5 5.5 5.5-3.75.5-5 1.75-5.5 5.5-.5-3.75-1.75-5-5.5-5.5 3.75-.5 5-1.75 5.5-5.5zM15.25 13c.25 1.5.75 2 2.25 2.25-1.5.25-2 .75-2.25 2.25-.25-1.5-.75-2-2.25-2.25 1.5-.25 2-.75 2.25-2.25z"/>
+    {%- when 'hallmark' -%}
+      <rect x="3" y="5.5" width="14" height="9" rx="1.5"/><path d="M6.5 12.25V7.75l1.75 2.5L10 7.75v4.5M12.5 7.75h1.25a1.25 1.25 0 0 1 0 2.5H12.5v2"/>
     {%- when 'instagram' -%}
       <rect x="3" y="3" width="14" height="14" rx="4"/><circle cx="10" cy="10" r="3.25"/><circle cx="14.25" cy="5.75" r=".5" fill="currentColor" stroke="none"/>
     {%- when 'facebook' -%}

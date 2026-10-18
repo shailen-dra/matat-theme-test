@@ -68,6 +68,12 @@
   "sections": {
     "hero": {
       "demo_image_alt": "Hands adorned with fine gold rings and delicate chain bracelets"
+    },
+    "collection_tiles": {
+      "placeholder_title": "Collection"
+    },
+    "image_with_text": {
+      "demo_image_alt": "Gold ginkgo leaf necklace and earrings laid on linen"
     }
   },
   "header": {
@@ -121,6 +127,10 @@
       "previous": "Previous image",
       "next": "Next image",
       "go_to": "Show image {{ index }}"
+    },
+    "card": {
+      "from_price": "From {{ price }}",
+      "placeholder_title": "Product title"
     }
   }
 }

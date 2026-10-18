@@ -68,6 +68,12 @@
   "sections": {
     "hero": {
       "demo_image_alt": "ידיים עונדות טבעות זהב עדינות וצמידי שרשרת דקים"
+    },
+    "collection_tiles": {
+      "placeholder_title": "קולקציה"
+    },
+    "image_with_text": {
+      "demo_image_alt": "שרשרת ועגילי זהב בצורת עלי גינקו על בד פשתן"
     }
   },
   "header": {
@@ -123,6 +129,10 @@
       "previous": "התמונה הקודמת",
       "next": "התמונה הבאה",
       "go_to": "הצגת תמונה {{ index }}"
+    },
+    "card": {
+      "from_price": "החל מ-{{ price }}",
+      "placeholder_title": "שם המוצר"
     }
   }
 }

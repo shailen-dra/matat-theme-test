@@ -47,7 +47,8 @@
       "youtube": "YouTube",
       "whatsapp": "WhatsApp",
       "x": "X (Twitter)"
-    }
+    },
+    "trust": "Trust"
   },
   "labels": {
     "alignment": "Alignment",
@@ -87,7 +88,19 @@
     "style": "Style",
     "text_color": "Text color",
     "heading": "Heading",
-    "button_label": "Button label"
+    "button_label": "Button label",
+    "eyebrow": "Eyebrow",
+    "subtitle": "Subtitle",
+    "link_label": "Link label",
+    "shape": "Shape",
+    "mobile_layout": "Mobile layout",
+    "section": "Section",
+    "tinted_background": "Tinted background",
+    "columns_mobile": "Columns on mobile",
+    "image_ratio": "Image ratio",
+    "icon": "Icon",
+    "icon_size": "Icon size",
+    "layout": "Layout"
   },
   "options": {
     "alignment": {
@@ -95,7 +108,8 @@
       "center": "Center",
       "right": "Right",
       "inherit": "Inherit",
-      "space_between": "Space between"
+      "space_between": "Space between",
+      "split": "Title left, link right"
     },
     "direction": {
       "horizontal": "Horizontal",
@@ -158,7 +172,9 @@
     },
     "mobile_layout": {
       "overlay": "Text over image",
-      "stacked": "Text below image"
+      "stacked": "Text below image",
+      "scroll": "Swipe",
+      "grid": "Grid"
     },
     "overlay_style": {
       "solid": "Solid",
@@ -209,6 +225,36 @@
     "picker_style": {
       "buttons": "Buttons",
       "dropdown": "Dropdown"
+    },
+    "shape": {
+      "circle": "Circle",
+      "square": "Square",
+      "portrait": "Portrait",
+      "arch": "Arch"
+    },
+    "label_style": {
+      "below": "Below image",
+      "overlay": "On image"
+    },
+    "icon": {
+      "diamond": "Diamond",
+      "certificate": "Certificate",
+      "hallmark": "Hallmark",
+      "shield": "Shield",
+      "truck": "Delivery",
+      "returns": "Returns",
+      "gift": "Gift",
+      "sparkle": "Sparkle",
+      "none": "None"
+    },
+    "badge_style": {
+      "plain": "Plain",
+      "divided": "Dividers",
+      "boxed": "Boxed"
+    },
+    "badge_layout": {
+      "stacked": "Icon above text",
+      "inline": "Icon beside text"
     }
   },
   "blocks": {
@@ -290,6 +336,18 @@
       "name": "Accordion",
       "open": "Open by default",
       "content_info": "Connect a product metafield to show different content for each product."
+    },
+    "collection_tile": {
+      "name": "Collection tile",
+      "title_info": "Leave empty to use the collection title.",
+      "caption": "Caption",
+      "link_info": "Leave empty to link to the collection.",
+      "image_info": "Leave empty to use the collection image.",
+      "swatch": "Swatch",
+      "swatch_info": "Shows a color or gradient instead of an image, e.g. for metals."
+    },
+    "trust_badge": {
+      "name": "Trust badge"
     }
   },
   "sections": {
@@ -341,6 +399,31 @@
       "details": "Product details",
       "sticky_details": "Keep details visible while scrolling",
       "featured_preset": "Featured product"
+    },
+    "collection_tiles": {
+      "name": "Collection tiles",
+      "tiles": "Tiles",
+      "label_style": "Label position",
+      "presets": {
+        "category": "Shop by category",
+        "metal": "Shop by metal"
+      }
+    },
+    "featured_collection": {
+      "name": "Featured products",
+      "products_to_show": "Products to show",
+      "link_info": "Leave empty to link to the collection.",
+      "cards": "Product cards",
+      "show_secondary_image": "Show second image on hover",
+      "show_vendor": "Show vendor"
+    },
+    "image_with_text": {
+      "name": "Image with text",
+      "image_position": "Image position",
+      "image_width": "Image width"
+    },
+    "trust_badges": {
+      "name": "Trust badges"
     }
   }
 }

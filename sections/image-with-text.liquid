@@ -1,0 +1,311 @@
+{%- liquid
+  assign image = section.settings.image
+  assign image_style = 'object-position: ' | append: image.presentation.focal_point
+
+  assign classes = 'image-text ' | append: section.settings.image_position | append: ' ' | append: section.settings.image_width | append: ' ' | append: section.settings.content_position | append: ' ' | append: section.settings.content_alignment
+  if section.settings.image_ratio == 'adapt' and image != blank
+    assign ratio_style = '--image-text-ratio: ' | append: image.aspect_ratio
+  endif
+-%}
+
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="{{ classes }}" style="--image-text-gap: {{ section.settings.content_gap }}px;">
+    <div class="image-text__media image-text--{{ section.settings.image_ratio }}" style="{{ ratio_style }}">
+      {%- if image != blank -%}
+        {{
+          image
+          | image_url: width: 1800
+          | image_tag:
+            widths: '375, 550, 750, 1000, 1300, 1600, 1800',
+            sizes: '(min-width: 750px) 55vw, 100vw',
+            loading: 'lazy',
+            class: 'image-text__image',
+            style: image_style,
+            alt: image.alt
+        }}
+      {%- else -%}
+        <img
+          src="{{ 'demo-ginkgo-set.jpg' | asset_img_url: '1100x' }}"
+          srcset="
+            {{ 'demo-ginkgo-set.jpg' | asset_img_url: '550x' }} 550w,
+            {{ 'demo-ginkgo-set.jpg' | asset_img_url: '1100x' }} 1100w,
+            {{ 'demo-ginkgo-set.jpg' | asset_img_url: '1600x' }} 1600w
+          "
+          sizes="(min-width: 750px) 55vw, 100vw"
+          width="1600"
+          height="1067"
+          alt="{{ 'sections.image_with_text.demo_image_alt' | t | escape }}"
+          class="image-text__image"
+          loading="lazy"
+        >
+      {%- endif -%}
+    </div>
+
+    <div class="image-text__content">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .image-text {
+    --image-text-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+    display: grid;
+    grid-template-columns: var(--image-text-columns);
+    grid-template-areas: 'media content';
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: var(--image-text-align, center);
+  }
+
+  .image-text--wide {
+    --image-text-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+
+  .image-text--narrow {
+    --image-text-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  }
+
+  .image-text--image-end {
+    grid-template-areas: 'content media';
+  }
+
+  .image-text--image-end.image-text--wide {
+    --image-text-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  }
+
+  .image-text--image-end.image-text--narrow {
+    --image-text-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+
+  .image-text--top {
+    --image-text-align: start;
+  }
+
+  .image-text--middle {
+    --image-text-align: center;
+  }
+
+  .image-text--bottom {
+    --image-text-align: end;
+  }
+
+  .image-text__media {
+    --image-text-ratio: 4 / 5;
+
+    grid-area: media;
+    position: relative;
+    aspect-ratio: var(--image-text-ratio);
+    overflow: hidden;
+    border-radius: var(--style-border-radius-buttons);
+    background-color: color-mix(in srgb, var(--color-foreground) 6%, var(--color-background));
+  }
+
+  .image-text--square {
+    --image-text-ratio: 1;
+  }
+
+  .image-text--landscape {
+    --image-text-ratio: 4 / 3;
+  }
+
+  .image-text--arch {
+    border-radius: 999px 999px 0 0;
+  }
+
+  .image-text__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .image-text__content {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--image-text-gap);
+    max-width: 34rem;
+  }
+
+  .image-text--content-center .image-text__content {
+    align-items: center;
+    justify-self: center;
+    text-align: center;
+  }
+
+  @media (max-width: 749px) {
+    .image-text,
+    .image-text--image-end {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: 'media' 'content';
+    }
+
+    .image-text__content {
+      max-width: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.image_with_text.name",
+  "tag": "section",
+  "class": "image-with-text-section",
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.hero.media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:labels.image_ratio",
+      "options": [
+        { "value": "portrait", "label": "t:options.ratio.portrait" },
+        { "value": "square", "label": "t:options.ratio.square" },
+        { "value": "landscape", "label": "t:options.ratio.landscape" },
+        { "value": "arch", "label": "t:options.shape.arch" },
+        { "value": "adapt", "label": "t:options.size.adapt_to_image" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.image_with_text.image_position",
+      "options": [
+        { "value": "image-text--image-start", "label": "t:options.alignment.left" },
+        { "value": "image-text--image-end", "label": "t:options.alignment.right" }
+      ],
+      "default": "image-text--image-start"
+    },
+    {
+      "type": "select",
+      "id": "image_width",
+      "label": "t:sections.image_with_text.image_width",
+      "options": [
+        { "value": "image-text--narrow", "label": "t:options.size.small" },
+        { "value": "image-text--half", "label": "t:options.media_width.half" },
+        { "value": "image-text--wide", "label": "t:options.size.large" }
+      ],
+      "default": "image-text--half"
+    },
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "t:sections.hero.position_y",
+      "options": [
+        { "value": "image-text--top", "label": "t:options.vertical.top" },
+        { "value": "image-text--middle", "label": "t:options.vertical.center" },
+        { "value": "image-text--bottom", "label": "t:options.vertical.bottom" }
+      ],
+      "default": "image-text--middle"
+    },
+    {
+      "type": "select",
+      "id": "content_alignment",
+      "label": "t:labels.alignment",
+      "options": [
+        { "value": "image-text--content-start", "label": "t:options.alignment.left" },
+        { "value": "image-text--content-center", "label": "t:options.alignment.center" }
+      ],
+      "default": "image-text--content-start"
+    },
+    {
+      "type": "range",
+      "id": "content_gap",
+      "label": "t:labels.gap",
+      "min": 0,
+      "max": 60,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "t:labels.section"
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.image_with_text.name",
+      "category": "t:general.banners",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": { "text": "Our craft", "style": "heading--eyebrow heading--accent", "tag": "p" }
+        },
+        {
+          "type": "heading",
+          "settings": { "text": "Made by hand, <em>made to last</em>", "style": "heading--h2", "tag": "h2" }
+        },
+        {
+          "type": "text",
+          "settings": {
+            "text": "<p>Every piece is cast, set and polished by hand in our studio, using recycled gold and conflict-free stones. We make fewer things, and we make them well.</p>",
+            "muted": true
+          }
+        },
+        {
+          "type": "list",
+          "settings": { "marker": "list--diamond" },
+          "blocks": [
+            { "type": "_list-item", "settings": { "text": "Recycled 18k gold and sterling silver" } },
+            { "type": "_list-item", "settings": { "text": "Certified, conflict-free stones" } },
+            { "type": "_list-item", "settings": { "text": "Free resizing and lifetime care" } }
+          ]
+        },
+        {
+          "type": "button",
+          "settings": { "label": "Read our story", "style": "outline" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

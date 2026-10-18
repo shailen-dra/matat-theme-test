@@ -1,0 +1,57 @@
+{% doc %}
+  Renders one badge of the Trust badges section: a line icon, a short title
+  and an optional supporting line.
+{% enddoc %}
+
+<div class="badge" {{ block.shopify_attributes }}>
+  {%- if block.settings.icon != 'none' -%}
+    <span class="badge__icon">{% render 'icon', name: block.settings.icon %}</span>
+  {%- endif -%}
+  <div class="badge__text">
+    {%- if block.settings.title != blank -%}
+      <p class="badge__title">{{ block.settings.title }}</p>
+    {%- endif -%}
+    {%- if block.settings.text != blank -%}
+      <p class="badge__description">{{ block.settings.text }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:blocks.trust_badge.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "t:labels.icon",
+      "options": [
+        { "value": "diamond", "label": "t:options.icon.diamond" },
+        { "value": "certificate", "label": "t:options.icon.certificate" },
+        { "value": "hallmark", "label": "t:options.icon.hallmark" },
+        { "value": "shield", "label": "t:options.icon.shield" },
+        { "value": "truck", "label": "t:options.icon.truck" },
+        { "value": "returns", "label": "t:options.icon.returns" },
+        { "value": "gift", "label": "t:options.icon.gift" },
+        { "value": "sparkle", "label": "t:options.icon.sparkle" },
+        { "value": "none", "label": "t:options.icon.none" }
+      ],
+      "default": "diamond"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Certified diamonds"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "Every stone is graded and comes with its certificate."
+    }
+  ],
+  "presets": [{ "name": "t:blocks.trust_badge.name" }]
+}
+{% endschema %}

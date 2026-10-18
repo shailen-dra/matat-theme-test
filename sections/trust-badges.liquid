@@ -1,0 +1,245 @@
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    alignment: 'center',
+    title_style: 'heading--h3'
+  %}
+
+  <div
+    class="badges {{ section.settings.style }} {{ section.settings.layout }}"
+    style="
+      --badges-columns: {{ section.blocks.size | at_least: 1 | at_most: 5 }};
+      --badges-icon-size: {{ section.settings.icon_size }}px;
+    "
+  >
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .badges {
+    display: grid;
+    grid-template-columns: repeat(var(--badges-columns), minmax(0, 1fr));
+    gap: 2rem;
+  }
+
+  .badge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .badges--inline .badge {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .badge__icon {
+    --icon-size: var(--badges-icon-size);
+    --icon-stroke-width: 1;
+
+    color: var(--color-accent);
+  }
+
+  .badge__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .badge__title {
+    font-family: var(--font-heading--family);
+    font-size: 1.125rem;
+    line-height: 1.3;
+  }
+
+  .badge__description {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    opacity: 0.7;
+  }
+
+  /* Hairline dividers between badges */
+  .badges--divided {
+    gap: 0;
+  }
+
+  .badges--divided .badge {
+    padding-inline: clamp(1rem, 2vw, 2rem);
+  }
+
+  .badges--divided .badge + .badge {
+    border-inline-start: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+  }
+
+  .badges--boxed .badge {
+    padding: 2rem 1.5rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+    background-color: var(--color-background);
+  }
+
+  @media (max-width: 989px) {
+    .badges {
+      grid-template-columns: repeat(min(var(--badges-columns), 2), minmax(0, 1fr));
+      row-gap: 2.5rem;
+    }
+
+    .badges--divided .badge + .badge {
+      border-inline-start: 0;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .badges {
+      column-gap: 1rem;
+    }
+
+    .badges--divided .badge {
+      padding-inline: 0;
+    }
+
+    .badges--boxed .badge {
+      padding: 1.5rem 1rem;
+    }
+
+    .badges--inline .badge {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.trust_badges.name",
+  "tag": "section",
+  "class": "trust-badges-section",
+  "blocks": [{ "type": "_trust-badge" }],
+  "max_blocks": 8,
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading"
+    },
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:labels.style",
+      "options": [
+        { "value": "badges--plain", "label": "t:options.badge_style.plain" },
+        { "value": "badges--divided", "label": "t:options.badge_style.divided" },
+        { "value": "badges--boxed", "label": "t:options.badge_style.boxed" }
+      ],
+      "default": "badges--divided"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:labels.layout",
+      "options": [
+        { "value": "badges--stacked", "label": "t:options.badge_layout.stacked" },
+        { "value": "badges--inline", "label": "t:options.badge_layout.inline" }
+      ],
+      "default": "badges--stacked"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "t:labels.icon_size",
+      "min": 20,
+      "max": 64,
+      "step": 2,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "t:labels.section"
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.trust_badges.name",
+      "category": "t:general.trust",
+      "blocks": [
+        {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "diamond",
+            "title": "Certified diamonds",
+            "text": "Every stone is graded and comes with its certificate."
+          }
+        },
+        {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "hallmark",
+            "title": "Hallmarked gold",
+            "text": "Independently assayed 14k and 18k gold."
+          }
+        },
+        {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free insured shipping",
+            "text": "Fully insured delivery, gift-wrapped as standard."
+          }
+        },
+        {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "returns",
+            "title": "30-day returns",
+            "text": "Not quite right? Return or exchange it, free."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,131 @@
+- generic [active] [ref=f142e1]:
+  - link "Skip to content" [ref=f142e2] [cursor=pointer]:
+    - /url: "#MainContent"
+  - generic [ref=f142e5]:
+    - link "Matat-Theme" [ref=f142e6] [cursor=pointer]:
+      - /url: /
+    - navigation "Main menu" [ref=f142e8]:
+      - list [ref=f142e9]:
+        - listitem [ref=f142e10]:
+          - link "Home" [ref=f142e11] [cursor=pointer]:
+            - /url: /
+        - listitem [ref=f142e12]:
+          - group [ref=f142e13]:
+            - generic "Catalog" [ref=f142e14] [cursor=pointer]
+        - listitem [ref=f142e17]:
+          - link "Contact" [ref=f142e18] [cursor=pointer]:
+            - /url: /pages/contact
+    - generic [ref=f142e19]:
+      - button "Search" [ref=f142e20] [cursor=pointer]
+      - button "Account" [ref=f142e29] [cursor=pointer]
+      - link "Cart, 0 items" [ref=f142e33] [cursor=pointer]:
+        - /url: /cart
+  - main [ref=f142e37]:
+    - generic [ref=f142e39]:
+      - img "Hands adorned with fine gold rings and delicate chain bracelets" [ref=f142e42]
+      - generic [ref=f142e44]:
+        - paragraph [ref=f142e45]: The autumn edit
+        - heading [level=1] [ref=f142e46]:
+          - text: Jewelry made to be
+          - emphasis [ref=f142e47]: kept
+        - paragraph [ref=f142e48]: Fine pieces in recycled gold, designed to be worn every day and passed on.
+        - list [ref=f142e49]:
+          - listitem [ref=f142e50]:
+            - generic [ref=f142e51]: Handcrafted
+          - listitem [ref=f142e52]:
+            - generic [ref=f142e53]: 18k gold
+          - listitem [ref=f142e54]:
+            - generic [ref=f142e55]: Ethically sourced
+        - generic [ref=f142e56]:
+          - link "Shop the collection" [ref=f142e57] [cursor=pointer]:
+            - /url: /collections/all
+          - button "Our story" [ref=f142e59] [cursor=pointer]
+    - generic [ref=f142e61]:
+      - generic [ref=f142e64]:
+        - heading "Hello, World!" [level=1] [ref=f142e65]
+        - paragraph [ref=f142e66]: The Skeleton theme is a minimal, carefully structured Shopify theme designed to help you quickly get started. Designed with modularity, maintainability, and Shopify's best practices in mind.
+        - paragraph [ref=f142e67]: Themes shape the online store experience for merchants and their customers. Build fast, flexible themes at scale using Liquid, Shopify's theme templating language, along with HTML, CSS, JavaScript, and JSON.
+      - generic [ref=f142e70]:
+        - generic [ref=f142e71]:
+          - heading "Key Concepts" [level=3] [ref=f142e72]
+          - paragraph [ref=f142e73]: Shopify themes are a package of template files, building blocks, and supporting assets. Use these building blocks to create modular, customizable themes.
+          - paragraph [ref=f142e74]:
+            - link "Learn more about key concepts" [ref=f142e75] [cursor=pointer]:
+              - /url: https://shopify.dev/docs/storefronts/themes/architecture
+        - generic [ref=f142e76]:
+          - heading "Liquid" [level=3] [ref=f142e77]
+          - paragraph [ref=f142e78]: The Liquid templating language is the backbone of Shopify themes, and is used to load dynamic content on storefronts. Extend Liquid objects to store and present custom data using metafields.
+          - paragraph [ref=f142e79]:
+            - link "View the Liquid reference" [ref=f142e80] [cursor=pointer]:
+              - /url: https://shopify.dev/docs/api/liquid
+        - generic [ref=f142e81]:
+          - heading "Best Practices" [level=3] [ref=f142e82]
+          - paragraph [ref=f142e83]: To optimize your theme development experience, Shopify has established a set of best practices that you can refer to when developing your theme and setting up your toolchains and processes.
+          - paragraph [ref=f142e84]:
+            - link "Follow best practices" [ref=f142e85] [cursor=pointer]:
+              - /url: https://shopify.dev/docs/storefronts/themes/best-practices
+    - generic [ref=f142e87]:
+      - generic [ref=f142e89]:
+        - region "Product media" [ref=f142e90]
+        - generic [ref=f142e95]:
+          - button "Previous image" [disabled] [ref=f142e96]
+          - paragraph [aria-hidden] [ref=f142e100]: 1 / 4
+          - button "Next image" [ref=f142e101] [cursor=pointer]
+      - generic [ref=f142e106]:
+        - group [ref=f142e107]:
+          - generic "Materials & care" [ref=f142e108] [cursor=pointer]
+        - group [ref=f142e112]:
+          - generic "Shipping" [ref=f142e113] [cursor=pointer]
+          - paragraph [ref=f142e119]: Test 2
+  - contentinfo [ref=f142e121]:
+    - generic [ref=f142e122]:
+      - generic [ref=f142e123]:
+        - generic [ref=f142e124]:
+          - paragraph [ref=f142e125]:
+            - text: Fine jewelry, made to be
+            - emphasis [ref=f142e126]: kept
+            - text: .
+          - paragraph [ref=f142e128]: Recycled gold and ethically sourced stones, crafted in small batches.
+          - list [ref=f142e129]:
+            - listitem [ref=f142e130]:
+              - link "Instagram" [ref=f142e131] [cursor=pointer]:
+                - /url: https://instagram.com/shopify
+            - listitem [ref=f142e137]:
+              - link "Facebook" [ref=f142e138] [cursor=pointer]:
+                - /url: https://facebook.com/shopify
+            - listitem [ref=f142e142]:
+              - link "Pinterest" [ref=f142e143] [cursor=pointer]:
+                - /url: https://pinterest.com/shopify
+        - navigation "Shop" [ref=f142e148]:
+          - heading "Shop" [level=2] [ref=f142e149]
+          - list [ref=f142e150]:
+            - listitem [ref=f142e151]:
+              - link "Home" [ref=f142e152] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=f142e153]:
+              - link "Catalog" [ref=f142e154] [cursor=pointer]:
+                - /url: /collections/all
+            - listitem [ref=f142e155]:
+              - link "Contact" [ref=f142e156] [cursor=pointer]:
+                - /url: /pages/contact
+        - navigation "Help" [ref=f142e157]:
+          - heading "Help" [level=2] [ref=f142e158]
+          - list [ref=f142e159]:
+            - listitem [ref=f142e160]:
+              - link "Search" [ref=f142e161] [cursor=pointer]:
+                - /url: /search
+        - generic [ref=f142e162]:
+          - heading "Join the list" [level=2] [ref=f142e163]
+          - paragraph [ref=f142e165]: Early access to new collections, private sales and stories from the studio.
+          - generic [ref=f142e167]:
+            - generic [ref=f142e168]: Email
+            - textbox "Email" [ref=f142e169]:
+              - /placeholder: Your email address
+            - button "Subscribe" [ref=f142e170] [cursor=pointer]
+      - generic [ref=f142e175]: Matat-Theme
+      - generic [ref=f142e177]:
+        - paragraph [ref=f142e178]: © 2026 Matat-Theme
+        - list [ref=f142e179]:
+          - listitem [ref=f142e180]:
+            - link "Privacy policy" [ref=f142e181] [cursor=pointer]:
+              - /url: /policies/privacy-policy

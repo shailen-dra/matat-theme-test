@@ -47,7 +47,8 @@
       "youtube": "YouTube",
       "whatsapp": "WhatsApp",
       "x": "X (טוויטר)"
-    }
+    },
+    "trust": "אמון"
   },
   "labels": {
     "alignment": "יישור",
@@ -87,7 +88,19 @@
     "style": "סגנון",
     "text_color": "צבע טקסט",
     "heading": "כותרת",
-    "button_label": "טקסט הכפתור"
+    "button_label": "טקסט הכפתור",
+    "eyebrow": "כותרת עליונה",
+    "subtitle": "כותרת משנה",
+    "link_label": "טקסט הקישור",
+    "shape": "צורה",
+    "mobile_layout": "פריסה במובייל",
+    "section": "מקטע",
+    "tinted_background": "רקע גוון",
+    "columns_mobile": "עמודות במובייל",
+    "image_ratio": "יחס תמונה",
+    "icon": "אייקון",
+    "icon_size": "גודל אייקון",
+    "layout": "פריסה"
   },
   "options": {
     "alignment": {
@@ -95,7 +108,8 @@
       "center": "מרכז",
       "right": "סוף",
       "inherit": "בירושה",
-      "space_between": "פיזור שווה"
+      "space_between": "פיזור שווה",
+      "split": "כותרת בצד אחד, קישור בצד השני"
     },
     "direction": {
       "horizontal": "אופקי",
@@ -158,7 +172,9 @@
     },
     "mobile_layout": {
       "overlay": "טקסט על גבי התמונה",
-      "stacked": "טקסט מתחת לתמונה"
+      "stacked": "טקסט מתחת לתמונה",
+      "scroll": "החלקה",
+      "grid": "רשת"
     },
     "overlay_style": {
       "solid": "אחיד",
@@ -209,6 +225,36 @@
     "picker_style": {
       "buttons": "כפתורים",
       "dropdown": "רשימה נפתחת"
+    },
+    "shape": {
+      "circle": "עיגול",
+      "square": "ריבוע",
+      "portrait": "לאורך",
+      "arch": "קשת"
+    },
+    "label_style": {
+      "below": "מתחת לתמונה",
+      "overlay": "על התמונה"
+    },
+    "icon": {
+      "diamond": "יהלום",
+      "certificate": "תעודה",
+      "hallmark": "חותמת",
+      "shield": "מגן",
+      "truck": "משלוח",
+      "returns": "החזרות",
+      "gift": "מתנה",
+      "sparkle": "נצנוץ",
+      "none": "ללא"
+    },
+    "badge_style": {
+      "plain": "פשוט",
+      "divided": "קווי הפרדה",
+      "boxed": "במסגרת"
+    },
+    "badge_layout": {
+      "stacked": "אייקון מעל הטקסט",
+      "inline": "אייקון לצד הטקסט"
     }
   },
   "blocks": {
@@ -290,6 +336,18 @@
       "name": "אקורדיון",
       "open": "פתוח כברירת מחדל",
       "content_info": "חברו מטא-שדה של מוצר כדי להציג תוכן שונה לכל מוצר."
+    },
+    "collection_tile": {
+      "name": "אריח קולקציה",
+      "title_info": "השאירו ריק כדי להשתמש בשם הקולקציה.",
+      "caption": "כיתוב",
+      "link_info": "השאירו ריק כדי לקשר לקולקציה.",
+      "image_info": "השאירו ריק כדי להשתמש בתמונת הקולקציה.",
+      "swatch": "דוגמית צבע",
+      "swatch_info": "מציג צבע או מעבר צבע במקום תמונה, למשל עבור מתכות."
+    },
+    "trust_badge": {
+      "name": "תג אמון"
     }
   },
   "sections": {
@@ -341,6 +399,31 @@
       "details": "פרטי המוצר",
       "sticky_details": "השארת הפרטים גלויים בזמן גלילה",
       "featured_preset": "מוצר מומלץ"
+    },
+    "collection_tiles": {
+      "name": "אריחי קולקציות",
+      "tiles": "אריחים",
+      "label_style": "מיקום הכיתוב",
+      "presets": {
+        "category": "קנו לפי קטגוריה",
+        "metal": "קנו לפי מתכת"
+      }
+    },
+    "featured_collection": {
+      "name": "מוצרים נבחרים",
+      "products_to_show": "מספר מוצרים להצגה",
+      "link_info": "השאירו ריק כדי לקשר לקולקציה.",
+      "cards": "כרטיסי מוצר",
+      "show_secondary_image": "הצגת תמונה שנייה במעבר עכבר",
+      "show_vendor": "הצגת ספק"
+    },
+    "image_with_text": {
+      "name": "תמונה עם טקסט",
+      "image_position": "מיקום התמונה",
+      "image_width": "רוחב התמונה"
+    },
+    "trust_badges": {
+      "name": "תגי אמון"
     }
   }
 }

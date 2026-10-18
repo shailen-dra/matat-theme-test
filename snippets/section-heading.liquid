@@ -1,0 +1,100 @@
+{% doc %}
+  Renders the intro above a content section: eyebrow, title, subtitle and an
+  optional "view all" link. Reuses the heading and button styles so every
+  section intro matches the Heading block.
+
+  With `alignment: 'split'` the title sits at the start and the link at the
+  end of the same row (stacks on mobile).
+
+  @param {string} [eyebrow] - Small uppercase line above the title
+  @param {string} [title] - Section title (inline rich text)
+  @param {string} [subtitle] - Supporting line below the title
+  @param {string} [link_label] - Label of the "view all" link
+  @param {string} [link_url] - Destination of the "view all" link
+  @param {string} [alignment] - `start`, `center` (default) or `split`
+  @param {string} [title_style] - Heading style class (default `heading--h2`)
+
+  @example
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    link_label: section.settings.link_label,
+    link_url: section.settings.link_url,
+    alignment: section.settings.heading_alignment
+  %}
+{% enddoc %}
+
+{%- liquid
+  assign alignment = alignment | default: 'center'
+  assign title_style = title_style | default: 'heading--h2'
+  assign has_link = false
+  if link_label != blank and link_url != blank
+    assign has_link = true
+  endif
+-%}
+
+{%- if eyebrow != blank or title != blank or subtitle != blank or has_link -%}
+  <header class="section-heading section-heading--{{ alignment }}">
+    <div class="section-heading__text">
+      {%- if eyebrow != blank -%}
+        <p class="heading heading--eyebrow heading--accent">{{ eyebrow }}</p>
+      {%- endif -%}
+      {%- if title != blank -%}
+        <h2 class="heading {{ title_style }}">{{ title }}</h2>
+      {%- endif -%}
+      {%- if subtitle != blank -%}
+        <p class="heading heading--subtitle section-heading__subtitle">{{ subtitle }}</p>
+      {%- endif -%}
+    </div>
+    {%- if has_link -%}
+      {% render 'button', label: link_label, url: link_url, style: 'link', class: 'section-heading__link' %}
+    {%- endif -%}
+  </header>
+{%- endif -%}
+
+{% stylesheet %}
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-block-end: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .section-heading__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .section-heading__subtitle {
+    max-width: 52ch;
+  }
+
+  .section-heading--center {
+    align-items: center;
+    text-align: center;
+  }
+
+  .section-heading--center .section-heading__text {
+    align-items: center;
+  }
+
+  .section-heading--start {
+    align-items: flex-start;
+    text-align: start;
+  }
+
+  .section-heading--split {
+    text-align: start;
+  }
+
+  @media (min-width: 750px) {
+    .section-heading--split {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+  }
+{% endstylesheet %}

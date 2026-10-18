@@ -1,0 +1,243 @@
+{%- liquid
+  assign collection = section.settings.collection
+  assign limit = section.settings.products_to_show
+  assign link_url = section.settings.link_url | default: collection.url
+
+  assign columns = section.settings.columns_desktop
+  assign desktop_width = 100 | divided_by: columns
+  capture sizes
+    echo '(min-width: 990px) ' | append: desktop_width | append: 'vw, '
+    if section.settings.columns_mobile == '1'
+      echo '100vw'
+    else
+      echo '50vw'
+    endif
+  endcapture
+
+  assign demo_images = 'demo-layered-necklaces.jpg,demo-hoops.jpg,demo-rings-hand.jpg,demo-ginkgo-set.jpg,demo-flatlay.jpg' | split: ','
+-%}
+
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    link_label: section.settings.link_label,
+    link_url: link_url,
+    alignment: section.settings.heading_alignment
+  %}
+
+  <ul
+    class="product-grid"
+    role="list"
+    style="
+      --grid-columns: {{ columns }};
+      --grid-columns-mobile: {{ section.settings.columns_mobile }};
+    "
+  >
+    {%- if collection.products_count > 0 -%}
+      {%- for product in collection.products limit: limit -%}
+        <li class="product-grid__item">
+          {% render 'product-card',
+            product: product,
+            ratio: section.settings.image_ratio,
+            show_secondary_image: section.settings.show_secondary_image,
+            show_vendor: section.settings.show_vendor,
+            sizes: sizes
+          %}
+        </li>
+      {%- endfor -%}
+    {%- else -%}
+      {%- # Placeholder cards until a collection with products is picked -%}
+      {%- for i in (1..limit) -%}
+        {%- assign demo_index = forloop.index0 | modulo: demo_images.size -%}
+        <li class="product-grid__item">
+          {% render 'product-card', placeholder_image: demo_images[demo_index], ratio: section.settings.image_ratio, sizes: sizes %}
+        </li>
+      {%- endfor -%}
+    {%- endif -%}
+  </ul>
+</div>
+
+{% stylesheet %}
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-columns), minmax(0, 1fr));
+    gap: clamp(2rem, 3vw, 3rem) clamp(1rem, 2vw, 1.75rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 989px) {
+    .product-grid {
+      grid-template-columns: repeat(min(var(--grid-columns), 3), minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 749px) {
+    .product-grid {
+      grid-template-columns: repeat(var(--grid-columns-mobile), minmax(0, 1fr));
+      column-gap: 0.75rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.featured_collection.name",
+  "tag": "section",
+  "class": "featured-collection-section",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:general.collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "t:sections.featured_collection.products_to_show",
+      "min": 2,
+      "max": 16,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "header",
+      "content": "t:labels.heading"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Featured products"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "t:labels.link_label",
+      "default": "View all"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:labels.link",
+      "info": "t:sections.featured_collection.link_info"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "t:labels.alignment",
+      "options": [
+        { "value": "center", "label": "t:options.alignment.center" },
+        { "value": "start", "label": "t:options.alignment.left" },
+        { "value": "split", "label": "t:options.alignment.split" }
+      ],
+      "default": "split"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.featured_collection.cards"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "t:labels.columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "t:labels.columns_mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:labels.image_ratio",
+      "options": [
+        { "value": "card--portrait", "label": "t:options.ratio.portrait" },
+        { "value": "card--square", "label": "t:options.ratio.square" },
+        { "value": "card--natural", "label": "t:options.size.adapt_to_image" }
+      ],
+      "default": "card--portrait"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "t:sections.featured_collection.show_secondary_image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "t:sections.featured_collection.show_vendor",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:labels.section"
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_collection.name",
+      "category": "t:general.collections",
+      "settings": {
+        "eyebrow": "Bestsellers",
+        "title": "Pieces our customers <em>love</em>"
+      }
+    }
+  ]
+}
+{% endschema %}

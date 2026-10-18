@@ -116,6 +116,33 @@ body {
   grid-column: 1 / -1;
 }
 
+/**
+ * Content section wrapper: spans the viewport (so a background tint reaches
+ * the edges) and re-creates the page grid for its children.
+ * Sections set `--section-padding-top` / `--section-padding-bottom`.
+ */
+.section {
+  display: grid;
+  grid-template-columns: var(--content-grid);
+  padding-block: var(--section-padding-top, 64px) var(--section-padding-bottom, 64px);
+  background-color: var(--section-bg, transparent);
+}
+
+.section > * {
+  grid-column: 2;
+  min-width: 0;
+}
+
+.section--tinted {
+  --section-bg: color-mix(in srgb, var(--color-foreground) 4%, var(--color-background));
+}
+
+@media (max-width: 749px) {
+  .section {
+    padding-block: calc(var(--section-padding-top, 64px) * 0.65) calc(var(--section-padding-bottom, 64px) * 0.65);
+  }
+}
+
 /** Right-to-left (Hebrew) adjustments */
 
 /* Hebrew has no letter case, so wide tracking only hurts legibility */

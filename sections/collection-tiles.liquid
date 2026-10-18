@@ -1,0 +1,409 @@
+{%- liquid
+  assign tiles_classes = 'tiles ' | append: section.settings.shape | append: ' ' | append: section.settings.mobile_layout | append: ' ' | append: section.settings.label_style
+-%}
+
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    link_label: section.settings.link_label,
+    link_url: section.settings.link_url,
+    alignment: section.settings.heading_alignment
+  %}
+
+  <div
+    class="{{ tiles_classes }}"
+    style="
+      --tiles-columns: {{ section.settings.columns_desktop }};
+      --tiles-gap: {{ section.settings.gap }}px;
+    "
+  >
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .tiles {
+    --tiles-ratio: 1;
+    --tiles-radius: 0;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--tiles-gap);
+  }
+
+  .tiles > .tile {
+    flex: 0 0 calc((100% - var(--tiles-gap) * (var(--tiles-columns) - 1)) / var(--tiles-columns));
+  }
+
+  .tiles--circle {
+    --tiles-radius: 50%;
+  }
+
+  .tiles--square {
+    --tiles-radius: var(--style-border-radius-buttons);
+  }
+
+  .tiles--portrait {
+    --tiles-ratio: 3 / 4;
+    --tiles-radius: var(--style-border-radius-buttons);
+  }
+
+  .tiles--arch {
+    --tiles-ratio: 3 / 4;
+    --tiles-radius: 999px 999px 0 0;
+  }
+
+  /* Tile */
+  .tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+    color: var(--color-foreground);
+    text-align: center;
+    text-decoration: none;
+  }
+
+  .tile__media {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: var(--tiles-ratio);
+    overflow: hidden;
+    border-radius: var(--tiles-radius);
+    background-color: color-mix(in srgb, var(--color-foreground) 6%, var(--color-background));
+    isolation: isolate;
+  }
+
+  .tile__image,
+  .tile__swatch {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+
+  .tile__swatch {
+    background: var(--tile-swatch);
+  }
+
+  /* Soft highlight so flat colors read as polished metal */
+  .tile__swatch::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(120% 80% at 30% 15%, rgb(255 255 255 / 0.55), transparent 55%),
+      radial-gradient(90% 60% at 80% 100%, rgb(0 0 0 / 0.18), transparent 60%);
+  }
+
+  .tile:hover .tile__image,
+  .tile:hover .tile__swatch {
+    transform: scale(1.05);
+  }
+
+  .tile__label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .tile__title {
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.125rem, 0.6vw + 0.9rem, 1.375rem);
+    line-height: 1.2;
+  }
+
+  .tile__caption {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  [dir='rtl'] .tile__caption {
+    letter-spacing: 0;
+  }
+
+  .tile:focus-visible {
+    outline: none;
+  }
+
+  .tile:focus-visible .tile__media {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  /* Label over the image */
+  .tiles--label-overlay .tile {
+    display: grid;
+    grid-template-areas: 'stack';
+  }
+
+  .tiles--label-overlay .tile > * {
+    grid-area: stack;
+  }
+
+  .tiles--label-overlay .tile__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.45), transparent 55%);
+  }
+
+  .tiles--label-overlay .tile__label {
+    z-index: 1;
+    align-self: end;
+    padding: 1.5rem 1rem;
+    color: #fff;
+  }
+
+  @media (max-width: 749px) {
+    .tiles--mobile-grid {
+      --tiles-columns: 2;
+    }
+
+    /* Swipeable row that bleeds to the screen edges */
+    .tiles--mobile-scroll {
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+      margin-inline: calc(var(--page-margin) * -1);
+      padding-inline: var(--page-margin);
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-padding-inline: var(--page-margin);
+      scrollbar-width: none;
+    }
+
+    .tiles--mobile-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .tiles--mobile-scroll > .tile {
+      flex: 0 0 38%;
+      scroll-snap-align: start;
+    }
+
+    .tiles--mobile-scroll:is(.tiles--portrait, .tiles--arch) > .tile {
+      flex-basis: 62%;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tile__image,
+    .tile__swatch {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.collection_tiles.name",
+  "tag": "section",
+  "class": "collection-tiles-section",
+  "blocks": [{ "type": "_collection-tile" }],
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:labels.heading"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Shop by category"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "t:labels.link_label"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "t:labels.link"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "t:labels.alignment",
+      "options": [
+        { "value": "center", "label": "t:options.alignment.center" },
+        { "value": "start", "label": "t:options.alignment.left" },
+        { "value": "split", "label": "t:options.alignment.split" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection_tiles.tiles"
+    },
+    {
+      "type": "select",
+      "id": "shape",
+      "label": "t:labels.shape",
+      "options": [
+        { "value": "tiles--circle", "label": "t:options.shape.circle" },
+        { "value": "tiles--square", "label": "t:options.shape.square" },
+        { "value": "tiles--portrait", "label": "t:options.shape.portrait" },
+        { "value": "tiles--arch", "label": "t:options.shape.arch" }
+      ],
+      "default": "tiles--circle"
+    },
+    {
+      "type": "select",
+      "id": "label_style",
+      "label": "t:sections.collection_tiles.label_style",
+      "options": [
+        { "value": "tiles--label-below", "label": "t:options.label_style.below" },
+        { "value": "tiles--label-overlay", "label": "t:options.label_style.overlay" }
+      ],
+      "default": "tiles--label-below"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "t:labels.columns_desktop",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "mobile_layout",
+      "label": "t:labels.mobile_layout",
+      "options": [
+        { "value": "tiles--mobile-scroll", "label": "t:options.mobile_layout.scroll" },
+        { "value": "tiles--mobile-grid", "label": "t:options.mobile_layout.grid" }
+      ],
+      "default": "tiles--mobile-scroll"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:labels.gap",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "t:labels.section"
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.collection_tiles.presets.category",
+      "category": "t:general.collections",
+      "settings": {
+        "eyebrow": "Find your piece",
+        "title": "Shop by category",
+        "shape": "tiles--circle"
+      },
+      "blocks": [
+        { "type": "_collection-tile", "settings": { "title": "Rings" } },
+        { "type": "_collection-tile", "settings": { "title": "Necklaces" } },
+        { "type": "_collection-tile", "settings": { "title": "Earrings" } },
+        { "type": "_collection-tile", "settings": { "title": "Bracelets" } }
+      ]
+    },
+    {
+      "name": "t:sections.collection_tiles.presets.metal",
+      "category": "t:general.collections",
+      "settings": {
+        "eyebrow": "Precious metals",
+        "title": "Shop by <em>metal</em>",
+        "shape": "tiles--arch",
+        "tinted": true
+      },
+      "blocks": [
+        {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Yellow gold",
+            "caption": "18k · 14k",
+            "swatch": "linear-gradient(135deg, rgba(240, 214, 140, 1) 0%, rgba(201, 158, 74, 1) 50%, rgba(232, 200, 120, 1) 100%)"
+          }
+        },
+        {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Rose gold",
+            "caption": "18k",
+            "swatch": "linear-gradient(135deg, rgba(240, 196, 176, 1) 0%, rgba(196, 130, 108, 1) 50%, rgba(232, 182, 160, 1) 100%)"
+          }
+        },
+        {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Sterling silver",
+            "caption": "925",
+            "swatch": "linear-gradient(135deg, rgba(236, 238, 240, 1) 0%, rgba(168, 172, 178, 1) 50%, rgba(220, 222, 226, 1) 100%)"
+          }
+        },
+        {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Platinum",
+            "caption": "950",
+            "swatch": "linear-gradient(135deg, rgba(222, 224, 228, 1) 0%, rgba(140, 146, 156, 1) 50%, rgba(200, 204, 210, 1) 100%)"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

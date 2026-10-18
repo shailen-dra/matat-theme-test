@@ -83,13 +83,263 @@
       ],
       "settings": {}
     },
-    "main": {
-      "type": "hello-world",
-      "settings": {}
+    "category_tiles": {
+      "type": "collection-tiles",
+      "blocks": {
+        "tile_1": {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Rings"
+          }
+        },
+        "tile_2": {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Necklaces"
+          }
+        },
+        "tile_3": {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Earrings"
+          }
+        },
+        "tile_4": {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Bracelets"
+          }
+        }
+      },
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3",
+        "tile_4"
+      ],
+      "settings": {
+        "eyebrow": "Find your piece",
+        "title": "Shop by category",
+        "shape": "tiles--circle",
+        "label_style": "tiles--label-below",
+        "columns_desktop": 4,
+        "mobile_layout": "tiles--mobile-scroll",
+        "gap": 24,
+        "tinted": false,
+        "padding_top": 96,
+        "padding_bottom": 80
+      }
+    },
+    "featured_products": {
+      "type": "featured-collection",
+      "settings": {
+        "products_to_show": 4,
+        "eyebrow": "Bestsellers",
+        "title": "Pieces our customers <em>love</em>",
+        "link_label": "View all",
+        "heading_alignment": "split",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "image_ratio": "card--portrait",
+        "show_secondary_image": true,
+        "padding_top": 40,
+        "padding_bottom": 96
+      }
+    },
+    "brand_story": {
+      "type": "image-with-text",
+      "blocks": {
+        "eyebrow": {
+          "type": "heading",
+          "settings": {
+            "text": "Our craft",
+            "style": "heading--eyebrow heading--accent",
+            "tag": "p"
+          }
+        },
+        "title": {
+          "type": "heading",
+          "settings": {
+            "text": "Made by hand, <em>made to last</em>",
+            "style": "heading--h2",
+            "tag": "h2"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Every piece is cast, set and polished by hand in our studio, using recycled gold and conflict-free stones. We make fewer things, and we make them well.</p>",
+            "muted": true
+          }
+        },
+        "list": {
+          "type": "list",
+          "settings": {
+            "marker": "list--diamond"
+          },
+          "blocks": {
+            "item_1": {
+              "type": "_list-item",
+              "settings": {
+                "text": "Recycled 18k gold and sterling silver"
+              }
+            },
+            "item_2": {
+              "type": "_list-item",
+              "settings": {
+                "text": "Certified, conflict-free stones"
+              }
+            },
+            "item_3": {
+              "type": "_list-item",
+              "settings": {
+                "text": "Free resizing and lifetime care"
+              }
+            }
+          },
+          "block_order": [
+            "item_1",
+            "item_2",
+            "item_3"
+          ]
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "label": "Read our story",
+            "style": "outline"
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "title",
+        "text",
+        "list",
+        "button"
+      ],
+      "settings": {
+        "image_ratio": "arch",
+        "image_position": "image-text--image-start",
+        "image_width": "image-text--half",
+        "tinted": true,
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "metal_tiles": {
+      "type": "collection-tiles",
+      "blocks": {
+        "metal_1": {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Yellow gold",
+            "caption": "18k · 14k",
+            "swatch": "linear-gradient(135deg, rgba(240, 214, 140, 1) 0%, rgba(201, 158, 74, 1) 50%, rgba(232, 200, 120, 1) 100%)"
+          }
+        },
+        "metal_2": {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Rose gold",
+            "caption": "18k",
+            "swatch": "linear-gradient(135deg, rgba(240, 196, 176, 1) 0%, rgba(196, 130, 108, 1) 50%, rgba(232, 182, 160, 1) 100%)"
+          }
+        },
+        "metal_3": {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Sterling silver",
+            "caption": "925",
+            "swatch": "linear-gradient(135deg, rgba(236, 238, 240, 1) 0%, rgba(168, 172, 178, 1) 50%, rgba(220, 222, 226, 1) 100%)"
+          }
+        },
+        "metal_4": {
+          "type": "_collection-tile",
+          "settings": {
+            "title": "Platinum",
+            "caption": "950",
+            "swatch": "linear-gradient(135deg, rgba(222, 224, 228, 1) 0%, rgba(140, 146, 156, 1) 50%, rgba(200, 204, 210, 1) 100%)"
+          }
+        }
+      },
+      "block_order": [
+        "metal_1",
+        "metal_2",
+        "metal_3",
+        "metal_4"
+      ],
+      "settings": {
+        "eyebrow": "Precious metals",
+        "title": "Shop by <em>metal</em>",
+        "shape": "tiles--arch",
+        "label_style": "tiles--label-below",
+        "columns_desktop": 4,
+        "mobile_layout": "tiles--mobile-scroll",
+        "gap": 24,
+        "tinted": false,
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "trust": {
+      "type": "trust-badges",
+      "blocks": {
+        "badge_1": {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "diamond",
+            "title": "Certified diamonds",
+            "text": "Every stone is graded and comes with its certificate."
+          }
+        },
+        "badge_2": {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "hallmark",
+            "title": "Hallmarked gold",
+            "text": "Independently assayed 14k and 18k gold."
+          }
+        },
+        "badge_3": {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free insured shipping",
+            "text": "Fully insured delivery, gift-wrapped as standard."
+          }
+        },
+        "badge_4": {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "returns",
+            "title": "30-day returns",
+            "text": "Not quite right? Return or exchange it, free."
+          }
+        }
+      },
+      "block_order": [
+        "badge_1",
+        "badge_2",
+        "badge_3",
+        "badge_4"
+      ],
+      "settings": {
+        "style": "badges--divided",
+        "layout": "badges--stacked",
+        "icon_size": 36,
+        "tinted": true,
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
     }
   },
   "order": [
     "hero",
-    "main"
+    "category_tiles",
+    "featured_products",
+    "brand_story",
+    "metal_tiles",
+    "trust"
   ]
 }
