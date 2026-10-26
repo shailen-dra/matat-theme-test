@@ -1,11 +1,22 @@
 [
   {
     "name": "theme_info",
-    "theme_name": "Skeleton",
-    "theme_version": "0.1.0",
-    "theme_author": "Shopify",
+    "theme_name": "Matat",
+    "theme_version": "1.0.0",
+    "theme_author": "Matat",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
+  },
+  {
+    "name": "t:settings.favicon.group",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "t:settings.favicon.label",
+        "info": "t:settings.favicon.info"
+      }
+    ]
   },
   {
     "name": "t:general.typography",
@@ -169,26 +180,6 @@
         "label": "t:settings.product_cards.enable_quick_add",
         "info": "t:settings.product_cards.enable_quick_add_info",
         "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "enable_wishlist",
-        "label": "t:settings.product_cards.enable_wishlist",
-        "info": "t:settings.product_cards.enable_wishlist_info",
-        "default": true
-      },
-      {
-        "type": "checkbox",
-        "id": "wishlist_drawer",
-        "label": "t:settings.product_cards.wishlist_drawer",
-        "info": "t:settings.product_cards.wishlist_drawer_info",
-        "default": true
-      },
-      {
-        "type": "page",
-        "id": "wishlist_page",
-        "label": "t:settings.product_cards.wishlist_page",
-        "info": "t:settings.product_cards.wishlist_page_info"
       }
     ]
   },

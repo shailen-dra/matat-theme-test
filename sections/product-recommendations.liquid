@@ -1,0 +1,237 @@
+{% comment %}
+  Product recommendations for the product page: related products ("You may
+  also like") or complementary products ("Pairs well with", set up in the
+  Search & Discovery app). The page renders an empty shell; the section
+  loads its products from the Product Recommendations API when it nears the
+  viewport, and stays hidden when there are none.
+{% endcomment %}
+
+{%- liquid
+  assign columns = section.settings.columns_desktop
+  assign desktop_width = 100 | divided_by: columns
+  capture sizes
+    echo '(min-width: 990px) ' | append: desktop_width | append: 'vw, '
+    if section.settings.columns_mobile == '1'
+      echo '100vw'
+    else
+      echo '50vw'
+    endif
+  endcapture
+
+  assign has_products = false
+  if recommendations.performed and recommendations.products_count > 0
+    assign has_products = true
+  endif
+-%}
+
+<product-recommendations
+  class="recommendations section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent={{ section.settings.intent }}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+  {% unless has_products %}
+    hidden
+  {% endunless %}
+>
+  {%- if has_products -%}
+    {% render 'section-heading',
+      eyebrow: section.settings.eyebrow,
+      title: section.settings.title,
+      alignment: section.settings.heading_alignment
+    %}
+
+    <ul
+      class="product-grid"
+      role="list"
+      style="
+        --grid-columns: {{ columns }};
+        --grid-columns-mobile: {{ section.settings.columns_mobile }};
+      "
+    >
+      {%- for product in recommendations.products -%}
+        <li class="product-grid__item">
+          {% render 'product-card',
+            product: product,
+            ratio: section.settings.image_ratio,
+            show_secondary_image: section.settings.show_secondary_image,
+            show_vendor: section.settings.show_vendor,
+            sizes: sizes
+          %}
+        </li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</product-recommendations>
+
+{% javascript %}
+  /**
+   * Loads product recommendations when the section nears the viewport and
+   * shows the section only when there are products to recommend.
+   */
+  class ProductRecommendations extends HTMLElement {
+    connectedCallback() {
+      if (!this.hidden) return;
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          if (!entries.some((entry) => entry.isIntersecting)) return;
+          this.observer.disconnect();
+          this.load();
+        },
+        { rootMargin: '0px 0px 600px 0px' }
+      );
+      // A hidden element never intersects, so watch its section wrapper
+      this.observer.observe(this.parentElement);
+    }
+
+    disconnectedCallback() {
+      this.observer?.disconnect();
+    }
+
+    async load() {
+      try {
+        const response = await fetch(this.dataset.url);
+        if (!response.ok) return;
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const fresh = html.querySelector('product-recommendations');
+        if (!fresh || fresh.hidden) return;
+        this.innerHTML = fresh.innerHTML;
+        this.hidden = false;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
+  if (!customElements.get('product-recommendations')) {
+    customElements.define('product-recommendations', ProductRecommendations);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.product_recommendations.name",
+  "tag": "section",
+  "class": "recommendations-section",
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "intent",
+      "label": "t:sections.product_recommendations.intent",
+      "info": "t:sections.product_recommendations.intent_info",
+      "options": [
+        { "value": "related", "label": "t:sections.product_recommendations.related" },
+        { "value": "complementary", "label": "t:sections.product_recommendations.complementary" }
+      ],
+      "default": "related"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:sections.product_recommendations.eyebrow"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "You may also like"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "t:labels.alignment",
+      "options": [
+        { "value": "start", "label": "t:options.alignment.left" },
+        { "value": "center", "label": "t:options.alignment.center" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "t:sections.product_recommendations.products_to_show",
+      "min": 2,
+      "max": 10,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "t:labels.columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "t:labels.columns_mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "t:labels.image_ratio",
+      "options": [
+        { "value": "card--portrait", "label": "t:options.ratio.portrait" },
+        { "value": "card--square", "label": "t:options.ratio.square" },
+        { "value": "card--natural", "label": "t:options.size.adapt_to_image" }
+      ],
+      "default": "card--portrait"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "label": "t:sections.featured_collection.show_secondary_image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "t:sections.featured_collection.show_vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:sections.product_recommendations.tinted",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.product_recommendations.name"
+    }
+  ]
+}
+{% endschema %}

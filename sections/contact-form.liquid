@@ -1,0 +1,308 @@
+{% comment %}
+  Contact form: name, email, phone and message, with success and error
+  messages. Submissions go to the store's sender email.
+{% endcomment %}
+
+{%- liquid
+  assign form_id = 'ContactForm-' | append: section.id
+  assign field_id = 'Contact-' | append: section.id
+-%}
+
+<div
+  class="contact section"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="contact__inner">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="heading heading--h2 contact__heading">{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="rte contact__text">{{ section.settings.text }}</div>
+    {%- endif -%}
+
+    {%- form 'contact', id: form_id, class: 'contact__form' -%}
+      {%- if form.posted_successfully? -%}
+        <p class="contact__status contact__status--success" role="status" tabindex="-1" autofocus>
+          {% render 'icon', name: 'check' %}
+          {{ 'contact.success' | t }}
+        </p>
+      {%- elsif form.errors -%}
+        <div class="contact__status contact__status--error" role="alert" tabindex="-1" autofocus>
+          <p>{{ 'contact.error_heading' | t }}</p>
+          <ul>
+            {%- for field in form.errors -%}
+              <li>
+                {%- if field == 'form' -%}
+                  {{ form.errors.messages[field] }}
+                {%- else -%}
+                  <a href="#{{ field_id }}-{{ field }}">{{ form.errors.translated_fields[field] | capitalize }}</a>
+                  {{ form.errors.messages[field] }}
+                {%- endif -%}
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      <div class="contact__row">
+        <div class="field">
+          <label for="{{ field_id }}-name" class="field__label">{{ 'contact.name' | t }}</label>
+          <input
+            id="{{ field_id }}-name"
+            class="field__input"
+            type="text"
+            name="contact[{{ 'contact.name' | t }}]"
+            value="{{ form.name | default: customer.name | escape }}"
+            autocomplete="name"
+          >
+        </div>
+        <div class="field">
+          <label for="{{ field_id }}-email" class="field__label">
+            {{- 'contact.email' | t }} <span aria-hidden="true">*</span>
+          </label>
+          <input
+            id="{{ field_id }}-email"
+            class="field__input"
+            type="email"
+            name="contact[email]"
+            value="{{ form.email | default: customer.email | escape }}"
+            autocomplete="email"
+            spellcheck="false"
+            autocapitalize="off"
+            required
+            aria-required="true"
+            {% if form.errors contains 'email' %}
+              aria-invalid="true"
+              aria-describedby="{{ form_id }}-email-error"
+            {% endif %}
+          >
+          {%- if form.errors contains 'email' -%}
+            <p id="{{ form_id }}-email-error" class="field__error">
+              {{ form.errors.translated_fields.email | capitalize }}
+              {{ form.errors.messages.email }}
+            </p>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="{{ field_id }}-phone" class="field__label">{{ 'contact.phone' | t }}</label>
+        <input
+          id="{{ field_id }}-phone"
+          class="field__input"
+          type="tel"
+          name="contact[{{ 'contact.phone' | t }}]"
+          value="{{ form.phone | escape }}"
+          autocomplete="tel"
+          pattern="[0-9\-\+\s\(\)]*"
+        >
+      </div>
+
+      <div class="field">
+        <label for="{{ field_id }}-body" class="field__label">{{ 'contact.message' | t }}</label>
+        <textarea
+          id="{{ field_id }}-body"
+          class="field__input field__input--textarea"
+          name="contact[{{ 'contact.message' | t }}]"
+          rows="6"
+        >
+          {{- form.body -}}
+        </textarea>
+      </div>
+
+      <div class="contact__actions">
+        {% render 'button', label: section.settings.button_label, type: 'submit', style: 'primary', size: 'lg' %}
+        <p class="contact__required">{{ 'contact.required' | t }}</p>
+      </div>
+    {%- endform -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .contact__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .contact__text {
+    opacity: 0.8;
+  }
+
+  .contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-block-start: 0.75rem;
+  }
+
+  .contact__row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem 1.5rem;
+  }
+
+  .contact__required {
+    font-size: 0.8125rem;
+    opacity: 0.65;
+  }
+
+  .contact__status {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: var(--style-border-radius-inputs);
+    font-size: 0.9375rem;
+  }
+
+  .contact__status:focus {
+    outline: none;
+  }
+
+  .contact__status--success {
+    flex-direction: row;
+    align-items: center;
+    background-color: color-mix(in srgb, var(--color-accent) 12%, var(--color-background));
+  }
+
+  .contact__status--success .icon {
+    flex: none;
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--color-accent);
+  }
+
+  .contact__status--error {
+    border: 1px solid #b42318;
+    color: #b42318;
+  }
+
+  .contact__status--error ul {
+    margin: 0;
+    padding-inline-start: 1.25rem;
+  }
+
+  .contact__status--error a {
+    color: inherit;
+  }
+
+  /* Form fields, shared by theme forms */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .field__label {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .field__input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 30%, transparent);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+  }
+
+  .field__input:hover {
+    border-color: color-mix(in srgb, var(--color-foreground) 55%, transparent);
+  }
+
+  .field__input:focus-visible {
+    border-color: var(--color-foreground);
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+
+  .field__input[aria-invalid='true'] {
+    border-color: #b42318;
+  }
+
+  .field__input--textarea {
+    min-height: 9rem;
+    resize: vertical;
+  }
+
+  .field__error {
+    color: #b42318;
+    font-size: 0.8125rem;
+  }
+
+  @media (max-width: 749px) {
+    .contact__row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.contact_form.name",
+  "tag": "section",
+  "class": "contact-section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Get in touch"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "<p>Questions about sizing, care or an order? Send us a message and we'll reply within one business day.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:sections.contact_form.button_label",
+      "default": "Send message"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.contact_form.name"
+    }
+  ]
+}
+{% endschema %}

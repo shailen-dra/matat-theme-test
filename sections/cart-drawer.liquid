@@ -5,7 +5,7 @@
   by `cart-items` and `ThemeCart` in assets/product-components.js; this
   section is re-rendered with the Section Rendering API (`cart-drawer`).
 
-  Also holds the `.side-drawer` styles shared with the wishlist drawer.
+  Also holds the `.side-drawer` styles.
 {%- endcomment -%}
 
 {%- liquid
@@ -152,7 +152,7 @@
 </side-drawer>
 
 {% stylesheet %}
-  /* Side drawer shell, shared with the wishlist drawer */
+  /* Side drawer shell */
   .side-drawer {
     --side-drawer-from: 100%;
 
@@ -296,7 +296,7 @@
     opacity: 0.7;
   }
 
-  /* Drawer rows (cart and wishlist) */
+  /* Drawer rows */
   .drawer-items {
     list-style: none;
   }

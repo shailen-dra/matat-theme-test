@@ -28,6 +28,11 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+      <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
+    {%- endif -%}
+
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
@@ -54,11 +59,6 @@
 
     {%- if settings.cart_type == 'drawer' -%}
       {% section 'cart-drawer' %}
-    {%- endif -%}
-
-    {%- if settings.enable_wishlist and settings.wishlist_drawer -%}
-      {%- capture wishlist_url %}{% render 'wishlist-url' %}{% endcapture -%}
-      {% render 'wishlist-drawer', wishlist_url: wishlist_url %}
     {%- endif -%}
   </body>
 </html>

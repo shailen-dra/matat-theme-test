@@ -155,6 +155,10 @@
       "previous": "העמוד הקודם",
       "next": "העמוד הבא",
       "page": "עמוד {{ number }}"
+    },
+    "country": {
+      "label": "מדינה/אזור",
+      "update": "עדכון מדינה/אזור"
     }
   },
   "sections": {
@@ -238,20 +242,38 @@
       "added": "נוסף",
       "choose": "בחירת אפשרויות",
       "choose_label": "בחירת אפשרויות עבור {{ title }}"
+    },
+    "pickup": {
+      "available_html": "איסוף זמין ב<strong>{{ location }}</strong>",
+      "unavailable_html": "איסוף אינו זמין כרגע ב<strong>{{ location }}</strong>",
+      "check_other_stores": "בדיקת זמינות בחנויות אחרות",
+      "view_store": "פרטי החנות",
+      "drawer_title": "נקודות איסוף",
+      "close": "סגירה",
+      "location_available": "איסוף זמין",
+      "location_unavailable": "איסוף אינו זמין כרגע"
     }
   },
-  "wishlist": {
-    "title": "רשימת משאלות",
-    "add": "הוספת {{ title }} לרשימת המשאלות",
-    "remove": "הסרת {{ title }} מרשימת המשאלות",
-    "add_short": "הוספה לרשימת המשאלות",
-    "saved": "נשמר ברשימת המשאלות",
-    "summary": "{{ count }} שמורים",
-    "empty_title": "רשימת המשאלות ריקה",
-    "empty_text": "לחצו על הלב בכל תכשיט כדי לשמור אותו כאן להמשך.",
-    "empty_button": "להתחיל לגלות",
-    "no_js": "הפעילו JavaScript בדפדפן כדי לראות את הפריטים השמורים.",
-    "close": "סגירת רשימת המשאלות",
-    "view_all": "לכל רשימת המשאלות"
+  "contact": {
+    "success": "תודה שפניתם אלינו. נחזור אליכם בהקדם האפשרי.",
+    "error_heading": "נא לבדוק את הפרטים הבאים:",
+    "name": "שם",
+    "email": "אימייל",
+    "phone": "מספר טלפון",
+    "message": "הודעה",
+    "required": "* שדה חובה"
+  },
+  "predictive_search": {
+    "hint": "התוצאות מופיעות בזמן ההקלדה. השתמשו במקשי החצים כדי לעבור ביניהן.",
+    "status": {
+      "one": "תוצאה אחת עבור „{{ terms }}”",
+      "other": "{{ count }} תוצאות עבור „{{ terms }}”"
+    },
+    "no_results": "אין תוצאות עבור „{{ terms }}”",
+    "suggestions": "הצעות",
+    "collections": "קולקציות",
+    "pages": "דפים ומאמרים",
+    "products": "מוצרים",
+    "search_for": "חיפוש „{{ terms }}”"
   }
 }

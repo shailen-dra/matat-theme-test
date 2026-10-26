@@ -350,8 +350,12 @@
     "trust_badge": {
       "name": "Trust badge"
     },
-    "wishlist": {
-      "name": "Wishlist button"
+    "custom_liquid": {
+      "name": "Custom Liquid"
+    },
+    "pickup_availability": {
+      "name": "Pickup availability",
+      "info": "Shows the local pickup locations set up in Settings > Locations."
     }
   },
   "sections": {
@@ -384,7 +388,10 @@
       "show_border": "Show bottom border",
       "padding": "Vertical padding",
       "layout": "Desktop layout",
-      "layout_info": "On mobile the logo is always centered."
+      "layout_info": "On mobile the logo is always centered.",
+      "show_country": "Show country/region selector",
+      "show_country_info": "Shown when you sell to more than one country. Manage countries in Settings > Markets.",
+      "enable_predictive_search": "Enable predictive search"
     },
     "footer": {
       "first_column_wide": "Make first column wider",
@@ -456,11 +463,6 @@
     "quick_view": {
       "name": "Quick view"
     },
-    "wishlist": {
-      "name": "Wishlist",
-      "item": "Wishlist item",
-      "drawer_item": "Wishlist drawer item"
-    },
     "cart_drawer": {
       "name": "Cart drawer"
     },
@@ -477,24 +479,49 @@
       "suggestions_collection": "Suggested products collection",
       "suggestions_collection_info": "Defaults to all products.",
       "suggestions_count": "Number of suggested products"
+    },
+    "custom_liquid": {
+      "name": "Custom Liquid",
+      "liquid": "Custom Liquid",
+      "liquid_info": "Add app snippets or other Liquid code to create advanced customizations.",
+      "full_width": "Full width"
+    },
+    "page": {
+      "width": "Content width"
+    },
+    "contact_form": {
+      "name": "Contact form",
+      "button_label": "Button label"
+    },
+    "predictive_search": {
+      "name": "Predictive search"
+    },
+    "product_recommendations": {
+      "name": "Product recommendations",
+      "intent": "Recommendation type",
+      "intent_info": "Complementary products are set up per product in the Search & Discovery app. The section stays hidden when there's nothing to recommend.",
+      "related": "Related products",
+      "complementary": "Complementary products",
+      "eyebrow": "Eyebrow",
+      "products_to_show": "Maximum products to show",
+      "tinted": "Tinted background"
     }
   },
   "settings": {
     "product_cards": {
       "enable_quick_add": "Show quick add",
-      "enable_quick_add_info": "Single-option products are added straight to the cart; others open a quick view to choose options.",
-      "enable_wishlist": "Show wishlist",
-      "enable_wishlist_info": "Adds a heart to product cards and the header. Saved products are kept in the shopper's browser.",
-      "wishlist_page": "Wishlist page",
-      "wishlist_page_info": "A page using the \"wishlist\" template. Defaults to /pages/wishlist.",
-      "wishlist_drawer": "Open wishlist in a drawer",
-      "wishlist_drawer_info": "The header heart opens a side drawer instead of the wishlist page."
+      "enable_quick_add_info": "Single-option products are added straight to the cart; others open a quick view to choose options."
     },
     "cart": {
       "cart_type": "Cart type",
       "drawer": "Drawer",
       "page": "Page",
       "cart_type_info": "The drawer opens from the header bag and after adding to cart."
+    },
+    "favicon": {
+      "group": "Favicon",
+      "label": "Favicon image",
+      "info": "Displayed at 32 × 32px."
     }
   }
 }

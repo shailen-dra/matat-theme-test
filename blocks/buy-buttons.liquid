@@ -1,6 +1,6 @@
 {% doc %}
-  Renders the add-to-cart form: quantity, add to cart button and Shopify's
-  dynamic checkout buttons. Adds to the cart without leaving the page and
+  Renders the add-to-cart form: quantity, add to cart button, Shopify's
+  dynamic checkout buttons and the Shop Pay Installments banner. Adds to the cart without leaving the page and
   refreshes the header cart count; falls back to a normal form post without
   JavaScript.
 
@@ -61,6 +61,11 @@
         </div>
       {%- endif -%}
 
+      {%- # Shop Pay Installments banner; renders nothing when Shop Pay isn't enabled -%}
+      <div class="buy-buttons__installments" data-update="installments-{{ block.id }}">
+        {{ form | payment_terms }}
+      </div>
+
       <div class="buy-buttons__status" role="status" aria-live="polite">
         <p class="buy-buttons__message buy-buttons__message--success" hidden data-added-message>
           {% render 'icon', name: 'check' %}
@@ -107,6 +112,14 @@
   .buy-buttons__add[aria-busy='true'] {
     cursor: progress;
     opacity: 0.7;
+  }
+
+  .buy-buttons__installments:empty {
+    display: none;
+  }
+
+  .buy-buttons__installments {
+    font-size: 0.875rem;
   }
 
   .buy-buttons__dynamic--hidden {

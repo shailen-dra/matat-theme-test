@@ -40,6 +40,10 @@
           "type": "buy-buttons",
           "settings": {}
         },
+        "pickup": {
+          "type": "pickup-availability",
+          "settings": {}
+        },
         "highlights": {
           "type": "list",
           "settings": {
@@ -90,10 +94,6 @@
             "heading": "Shipping & returns",
             "content": "<p>Free insured shipping on all orders. Not quite right? Return unworn pieces within 30 days for a full refund.</p>"
           }
-        },
-        "wishlist": {
-          "type": "wishlist",
-          "settings": {}
         }
       },
       "block_order": [
@@ -102,7 +102,7 @@
         "price",
         "variant_picker",
         "buy_buttons",
-        "wishlist",
+        "pickup",
         "highlights",
         "description",
         "materials",
@@ -114,9 +114,27 @@
         "media_width": "product--media-default",
         "sticky_details": true
       }
+    },
+    "complementary": {
+      "type": "product-recommendations",
+      "settings": {
+        "intent": "complementary",
+        "title": "Pairs well with",
+        "padding_top": 24,
+        "padding_bottom": 48
+      }
+    },
+    "related": {
+      "type": "product-recommendations",
+      "settings": {
+        "intent": "related",
+        "title": "You may also like"
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "complementary",
+    "related"
   ]
 }

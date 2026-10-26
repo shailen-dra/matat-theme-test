@@ -1,0 +1,112 @@
+{% doc %}
+  Renders a country / currency selector when the store sells to more than
+  one country. A native select inside the localization form, submitted on
+  change (with a submit button for when JavaScript is off), so Shopify
+  redirects to the same page with the chosen country's currency.
+
+  @param {string} id - Unique id prefix for the select and its label
+
+  @example
+  {% render 'country-selector', id: 'FooterCountry' %}
+{% enddoc %}
+
+{%- if localization.available_countries.size > 1 -%}
+  <country-selector class="country-selector">
+    {%- form 'localization', class: 'country-selector__form' -%}
+      <label for="{{ id }}" class="visually-hidden">{{ 'general.country.label' | t }}</label>
+      <div class="country-selector__field">
+        <select id="{{ id }}" name="country_code" class="country-selector__select">
+          {%- for country in localization.available_countries -%}
+            <option
+              value="{{ country.iso_code }}"
+              {% if country.iso_code == localization.country.iso_code %}
+                selected
+              {% endif %}
+            >
+              {{- country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol -}})
+            </option>
+          {%- endfor -%}
+        </select>
+        {% render 'icon', name: 'chevron-down', class: 'country-selector__icon' %}
+      </div>
+      <button type="submit" class="country-selector__submit">{{ 'general.country.update' | t }}</button>
+    {%- endform -%}
+  </country-selector>
+{%- endif -%}
+
+{% stylesheet %}
+  .country-selector__form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .country-selector__field {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .country-selector__select {
+    max-width: 16rem;
+    min-height: 2.25rem;
+    padding: 0.25rem 1.5rem 0.25rem 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-size: 0.8125rem;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    appearance: none;
+  }
+
+  [dir='rtl'] .country-selector__select {
+    padding: 0.25rem 0 0.25rem 1.5rem;
+  }
+
+  .country-selector__select option {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  .country-selector__select:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .country-selector__icon {
+    position: absolute;
+    inset-inline-end: 0;
+    width: 0.875rem;
+    height: 0.875rem;
+    pointer-events: none;
+  }
+
+  .country-selector__submit {
+    padding: 0.25rem 0.5rem;
+    border: 1px solid currentcolor;
+    background: none;
+    color: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+
+  /* Submits on change once JavaScript has loaded */
+  country-selector:defined .country-selector__submit {
+    display: none;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  class CountrySelector extends HTMLElement {
+    connectedCallback() {
+      this.addEventListener('change', (event) => {
+        if (event.target.matches('select')) event.target.form.submit();
+      });
+    }
+  }
+
+  if (!customElements.get('country-selector')) {
+    customElements.define('country-selector', CountrySelector);
+  }
+{% endjavascript %}

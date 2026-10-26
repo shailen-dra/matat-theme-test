@@ -1,0 +1,31 @@
+{% doc %}
+  Renders merchant-provided Liquid or HTML inside any section that accepts
+  theme blocks, such as the product details. Also an insertion point for
+  apps that don't ship app blocks.
+
+  @example
+  {% content_for 'block', type: 'custom-liquid', id: 'custom-liquid' %}
+{% enddoc %}
+
+<div class="custom-liquid-block" {{ block.shopify_attributes }}>
+  {{ block.settings.custom_liquid }}
+</div>
+
+{% schema %}
+{
+  "name": "t:blocks.custom_liquid.name",
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "custom_liquid",
+      "label": "t:sections.custom_liquid.liquid",
+      "info": "t:sections.custom_liquid.liquid_info"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.custom_liquid.name"
+    }
+  ]
+}
+{% endschema %}

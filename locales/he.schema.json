@@ -350,8 +350,12 @@
     "trust_badge": {
       "name": "תג אמון"
     },
-    "wishlist": {
-      "name": "כפתור רשימת משאלות"
+    "custom_liquid": {
+      "name": "Liquid מותאם אישית"
+    },
+    "pickup_availability": {
+      "name": "זמינות לאיסוף",
+      "info": "מציג את נקודות האיסוף המקומי שהוגדרו בהגדרות > מיקומים."
     }
   },
   "sections": {
@@ -384,7 +388,10 @@
       "show_border": "הצגת קו תחתון",
       "padding": "ריפוד אנכי",
       "layout": "פריסה במחשב",
-      "layout_info": "במובייל הלוגו תמיד ממורכז."
+      "layout_info": "במובייל הלוגו תמיד ממורכז.",
+      "show_country": "הצגת בורר מדינה/אזור",
+      "show_country_info": "מוצג כשאתם מוכרים ליותר ממדינה אחת. ניהול מדינות בהגדרות > שווקים.",
+      "enable_predictive_search": "הפעלת חיפוש חזוי"
     },
     "footer": {
       "first_column_wide": "עמודה ראשונה רחבה יותר",
@@ -456,11 +463,6 @@
     "quick_view": {
       "name": "תצוגה מהירה"
     },
-    "wishlist": {
-      "name": "רשימת משאלות",
-      "item": "פריט ברשימת המשאלות",
-      "drawer_item": "פריט במגירת רשימת המשאלות"
-    },
     "cart_drawer": {
       "name": "מגירת סל הקניות"
     },
@@ -477,24 +479,49 @@
       "suggestions_collection": "קולקציית מוצרים מוצעים",
       "suggestions_collection_info": "ברירת המחדל היא כל המוצרים.",
       "suggestions_count": "מספר מוצרים מוצעים"
+    },
+    "custom_liquid": {
+      "name": "Liquid מותאם אישית",
+      "liquid": "Liquid מותאם אישית",
+      "liquid_info": "הוסיפו קטעי קוד של אפליקציות או קוד Liquid אחר להתאמות מתקדמות.",
+      "full_width": "רוחב מלא"
+    },
+    "page": {
+      "width": "רוחב התוכן"
+    },
+    "contact_form": {
+      "name": "טופס יצירת קשר",
+      "button_label": "תווית הכפתור"
+    },
+    "predictive_search": {
+      "name": "חיפוש חזוי"
+    },
+    "product_recommendations": {
+      "name": "המלצות מוצרים",
+      "intent": "סוג ההמלצה",
+      "intent_info": "מוצרים משלימים מוגדרים לכל מוצר באפליקציית Search & Discovery. המקטע מוסתר כשאין מה להמליץ.",
+      "related": "מוצרים קשורים",
+      "complementary": "מוצרים משלימים",
+      "eyebrow": "כותרת עליונה",
+      "products_to_show": "מספר מוצרים מרבי להצגה",
+      "tinted": "רקע צבעוני"
     }
   },
   "settings": {
     "product_cards": {
       "enable_quick_add": "הצגת הוספה מהירה",
-      "enable_quick_add_info": "מוצרים עם אפשרות אחת נוספים ישירות לסל; אחרים פותחים תצוגה מהירה לבחירת אפשרויות.",
-      "enable_wishlist": "הצגת רשימת משאלות",
-      "enable_wishlist_info": "מוסיף לב לכרטיסי המוצר ולכותרת. המוצרים השמורים נשמרים בדפדפן של הלקוח.",
-      "wishlist_page": "עמוד רשימת המשאלות",
-      "wishlist_page_info": "עמוד שמשתמש בתבנית \"wishlist\". ברירת המחדל: ‎/pages/wishlist.",
-      "wishlist_drawer": "פתיחת רשימת המשאלות במגירה",
-      "wishlist_drawer_info": "הלב שבכותרת פותח מגירה צדדית במקום את עמוד רשימת המשאלות."
+      "enable_quick_add_info": "מוצרים עם אפשרות אחת נוספים ישירות לסל; אחרים פותחים תצוגה מהירה לבחירת אפשרויות."
     },
     "cart": {
       "cart_type": "סוג סל הקניות",
       "drawer": "מגירה",
       "page": "עמוד",
       "cart_type_info": "המגירה נפתחת מסל הקניות שבכותרת ואחרי הוספה לסל."
+    },
+    "favicon": {
+      "group": "Favicon",
+      "label": "תמונת Favicon",
+      "info": "מוצג בגודל 32 × 32 פיקסלים."
     }
   }
 }

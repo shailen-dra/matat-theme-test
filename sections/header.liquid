@@ -185,22 +185,6 @@
         </div>
       {%- endif -%}
 
-      {%- if settings.enable_wishlist -%}
-        {%- capture wishlist_url %}{% render 'wishlist-url' %}{% endcapture -%}
-        <a
-          href="{{ wishlist_url }}"
-          class="header__icon header__wishlist"
-          {% if settings.wishlist_drawer %}
-            data-drawer-open="WishlistDrawer"
-            aria-haspopup="dialog"
-          {% endif %}
-        >
-          {% render 'icon', name: 'heart' %}
-          <wishlist-count class="header__cart-count" aria-hidden="true" hidden></wishlist-count>
-          <span class="visually-hidden">{{ 'wishlist.title' | t }}</span>
-        </a>
-      {%- endif -%}
-
       <a
         href="{{ routes.cart_url }}"
         class="header__icon header__cart"
@@ -291,6 +275,10 @@
           {{ 'header.account' | t }}
         </a>
       {%- endif -%}
+      {%- if section.settings.show_country -%}
+        {%- assign country_id = 'HeaderCountry-' | append: section.id -%}
+        {% render 'country-selector', id: country_id %}
+      {%- endif -%}
       {%- if section.settings.show_language -%}
         {% render 'language-switcher' %}
       {%- endif -%}
@@ -299,24 +287,36 @@
 
   {%- if section.settings.show_search -%}
     <dialog id="{{ search_id }}" class="search-modal" aria-label="{{ 'header.search' | t }}" scroll-lock>
-      <form action="{{ routes.search_url }}" method="get" role="search" class="search-modal__form">
-        <label for="{{ search_id }}-input" class="visually-hidden">{{ 'header.search' | t }}</label>
-        {% render 'icon', name: 'search' %}
-        <input
-          id="{{ search_id }}-input"
-          class="search-modal__input"
-          type="search"
-          name="q"
-          value="{{ search.terms | escape }}"
-          placeholder="{{ 'header.search_placeholder' | t }}"
-          autocomplete="off"
-        >
-        <input type="hidden" name="options[prefix]" value="last">
-        <button type="button" class="header__icon" data-dialog-close>
-          {% render 'icon', name: 'close' %}
-          <span class="visually-hidden">{{ 'header.close' | t }}</span>
-        </button>
-      </form>
+      <predictive-search
+        class="predictive-search"
+        data-url="{{ routes.predictive_search_url }}"
+        {% unless section.settings.enable_predictive_search %}
+          data-disabled
+        {% endunless %}
+      >
+        <form action="{{ routes.search_url }}" method="get" role="search" class="search-modal__form">
+          <label for="{{ search_id }}-input" class="visually-hidden">{{ 'header.search' | t }}</label>
+          {% render 'icon', name: 'search' %}
+          <input
+            id="{{ search_id }}-input"
+            class="search-modal__input"
+            type="search"
+            name="q"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'header.search_placeholder' | t }}"
+            autocomplete="off"
+            aria-describedby="{{ search_id }}-hint"
+          >
+          <input type="hidden" name="options[prefix]" value="last">
+          <button type="button" class="header__icon" data-dialog-close>
+            {% render 'icon', name: 'close' %}
+            <span class="visually-hidden">{{ 'header.close' | t }}</span>
+          </button>
+        </form>
+        <p id="{{ search_id }}-hint" class="visually-hidden">{{ 'predictive_search.hint' | t }}</p>
+        <p class="visually-hidden" role="status" data-predictive-live></p>
+        <div class="predictive-search__results" data-predictive-results hidden></div>
+      </predictive-search>
     </dialog>
   {%- endif -%}
 </header-component>
@@ -856,6 +856,7 @@
   .drawer__footer {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     justify-content: space-between;
     gap: 1rem;
     padding: 1.25rem var(--page-margin);
@@ -1099,6 +1100,105 @@
   if (!customElements.get('header-component')) {
     customElements.define('header-component', HeaderComponent);
   }
+
+  /**
+   * Predictive search in the header search dialog: shows products,
+   * suggested searches, collections, pages and articles while typing,
+   * rendered by the `predictive-search` section. Arrow keys move between the
+   * input and the results.
+   */
+  class PredictiveSearch extends HTMLElement {
+    connectedCallback() {
+      if (this.hasAttribute('data-disabled')) return;
+      this.input = this.querySelector('input[type="search"]');
+      this.results = this.querySelector('[data-predictive-results]');
+      this.live = this.querySelector('[data-predictive-live]');
+      this.cache = new Map();
+
+      this.input.addEventListener('input', this.onInput);
+      this.addEventListener('keydown', this.onKeydown);
+      this.closest('dialog')?.addEventListener('close', () => this.abortController?.abort());
+    }
+
+    get terms() {
+      return this.input.value.trim();
+    }
+
+    onInput = () => {
+      clearTimeout(this.timer);
+      if (!this.terms) {
+        this.clear();
+        return;
+      }
+      this.timer = setTimeout(() => this.search(this.terms), 250);
+    };
+
+    async search(terms) {
+      if (this.cache.has(terms)) {
+        this.show(this.cache.get(terms));
+        return;
+      }
+
+      this.abortController?.abort();
+      this.abortController = new AbortController();
+      this.setAttribute('aria-busy', 'true');
+
+      try {
+        const params = new URLSearchParams({
+          q: terms,
+          section_id: 'predictive-search',
+          'resources[type]': 'product,query,collection,page,article',
+          'resources[limit]': '4',
+          'resources[limit_scope]': 'each',
+          'resources[options][unavailable_products]': 'last',
+        });
+        const response = await fetch(`${this.dataset.url}?${params}`, { signal: this.abortController.signal });
+        if (!response.ok) throw new Error(response.status);
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const content = html.querySelector('[data-predictive-content]')?.outerHTML ?? '';
+        this.cache.set(terms, content);
+        if (terms === this.terms) this.show(content);
+      } catch (error) {
+        if (error.name !== 'AbortError') this.clear();
+      } finally {
+        this.removeAttribute('aria-busy');
+      }
+    }
+
+    show(content) {
+      this.results.innerHTML = content;
+      this.results.hidden = !content;
+      this.live.textContent = this.results.querySelector('[data-predictive-content]')?.dataset.status ?? '';
+    }
+
+    clear() {
+      this.abortController?.abort();
+      this.results.hidden = true;
+      this.results.replaceChildren();
+      this.live.textContent = '';
+    }
+
+    onKeydown = (event) => {
+      if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
+      if (this.results.hidden) return;
+      const links = [...this.results.querySelectorAll('a')];
+      if (!links.length) return;
+
+      event.preventDefault();
+      const index = links.indexOf(document.activeElement);
+      if (event.key === 'ArrowDown') {
+        links[Math.min(index + 1, links.length - 1)].focus();
+      } else if (index <= 0) {
+        this.input.focus();
+      } else {
+        links[index - 1].focus();
+      }
+    };
+  }
+
+  if (!customElements.get('predictive-search')) {
+    customElements.define('predictive-search', PredictiveSearch);
+  }
 {% endjavascript %}
 
 {% schema %}
@@ -1216,6 +1316,19 @@
       "type": "checkbox",
       "id": "show_search",
       "label": "t:sections.header.show_search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_predictive_search",
+      "label": "t:sections.header.enable_predictive_search",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country",
+      "label": "t:sections.header.show_country",
+      "info": "t:sections.header.show_country_info",
       "default": true
     },
     {

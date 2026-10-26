@@ -1,7 +1,7 @@
 {% doc %}
   Renders a product card: image (with an optional second image on hover),
-  sale / sold-out badge, wishlist heart, quick add button, vendor, title and
-  price. The wishlist and quick add follow the "Product cards" theme settings.
+  sale / sold-out badge, quick add button, vendor, title and
+  price. Quick add follows the "Product cards" theme settings.
 
   Without a `product` it renders a placeholder card using a demo image, so
   grids look complete on stores that have no products yet.
@@ -70,10 +70,6 @@
         <span class="card__badge">{{ 'product.sold_out' | t }}</span>
       {%- elsif on_sale -%}
         <span class="card__badge card__badge--sale">{{ 'product.price.sale_badge' | t }}</span>
-      {%- endif -%}
-
-      {%- if settings.enable_wishlist -%}
-        <div class="card__wishlist">{% render 'wishlist-button', product: product %}</div>
       {%- endif -%}
 
       {%- if settings.enable_quick_add -%}
@@ -193,13 +189,6 @@
     letter-spacing: 0.12em;
     line-height: 1;
     text-transform: uppercase;
-  }
-
-  .card__wishlist {
-    position: absolute;
-    top: 0.625rem;
-    inset-inline-end: 0.625rem;
-    z-index: 2;
   }
 
   .card__quick-add {

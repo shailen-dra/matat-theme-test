@@ -49,6 +49,11 @@
       </div>
 
       <div class="footer__utilities">
+        {%- if section.settings.show_country -%}
+          {%- assign country_id = 'FooterCountry-' | append: section.id -%}
+          {% render 'country-selector', id: country_id %}
+        {%- endif -%}
+
         {%- if section.settings.show_language -%}
           {% render 'language-switcher' %}
         {%- endif -%}
@@ -275,6 +280,13 @@
       "type": "checkbox",
       "id": "show_payment_icons",
       "label": "t:labels.show_payment_icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country",
+      "label": "t:sections.header.show_country",
+      "info": "t:sections.header.show_country_info",
       "default": true
     },
     {

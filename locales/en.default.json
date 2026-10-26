@@ -152,6 +152,10 @@
       "previous": "Previous page",
       "next": "Next page",
       "page": "Page {{ number }}"
+    },
+    "country": {
+      "label": "Country/region",
+      "update": "Update country/region"
     }
   },
   "sections": {
@@ -233,20 +237,38 @@
       "added": "Added",
       "choose": "Choose options",
       "choose_label": "Choose options for {{ title }}"
+    },
+    "pickup": {
+      "available_html": "Pickup available at <strong>{{ location }}</strong>",
+      "unavailable_html": "Pickup currently unavailable at <strong>{{ location }}</strong>",
+      "check_other_stores": "Check availability at other stores",
+      "view_store": "View store information",
+      "drawer_title": "Pickup locations",
+      "close": "Close",
+      "location_available": "Pickup available",
+      "location_unavailable": "Pickup currently unavailable"
     }
   },
-  "wishlist": {
-    "title": "Wishlist",
-    "add": "Add {{ title }} to wishlist",
-    "remove": "Remove {{ title }} from wishlist",
-    "add_short": "Add to wishlist",
-    "saved": "Saved to wishlist",
-    "summary": "{{ count }} saved",
-    "empty_title": "Your wishlist is empty",
-    "empty_text": "Tap the heart on any piece to save it here for later.",
-    "empty_button": "Start browsing",
-    "no_js": "Turn on JavaScript in your browser to see your saved pieces.",
-    "close": "Close wishlist",
-    "view_all": "View full wishlist"
+  "contact": {
+    "success": "Thanks for reaching out. We'll get back to you as soon as possible.",
+    "error_heading": "Please check the following:",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone number",
+    "message": "Message",
+    "required": "* Required field"
+  },
+  "predictive_search": {
+    "hint": "Results appear as you type. Use the arrow keys to move through them.",
+    "status": {
+      "one": "{{ count }} result for “{{ terms }}”",
+      "other": "{{ count }} results for “{{ terms }}”"
+    },
+    "no_results": "No results for “{{ terms }}”",
+    "suggestions": "Suggestions",
+    "collections": "Collections",
+    "pages": "Pages and articles",
+    "products": "Products",
+    "search_for": "Search for “{{ terms }}”"
   }
 }

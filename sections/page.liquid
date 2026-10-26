@@ -1,17 +1,75 @@
 {% comment %}
-  This section is used in the page template to render store pages like About us
-  or Contact us.
+  Page template section: the page title and its content, in a readable
+  column. Used for pages like About us, Shipping or Contact.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/page
 {% endcomment %}
 
-<h1>{{ page.title }}</h1>
+<div
+  class="page-content section"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="page-content__inner {{ section.settings.width }}">
+    <h1 class="heading heading--h1 page-content__title">{{ page.title | escape }}</h1>
+    {%- if page.content != blank -%}
+      <div class="rte page-content__body">{{ page.content }}</div>
+    {%- endif -%}
+  </div>
+</div>
 
-{{ page.content }}
+{% stylesheet %}
+  .page-content__inner {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    width: 100%;
+    max-width: 46rem;
+    margin-inline: auto;
+  }
+
+  .page-content--wide {
+    max-width: 64rem;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.page",
-  "settings": []
+  "class": "page-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "width",
+      "label": "t:sections.page.width",
+      "options": [
+        { "value": "page-content--narrow", "label": "t:options.page_width.narrow" },
+        { "value": "page-content--wide", "label": "t:options.page_width.wide" }
+      ],
+      "default": "page-content--narrow"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ]
 }
 {% endschema %}

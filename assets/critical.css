@@ -194,3 +194,104 @@ main:focus {
 :root {
   --icon-stroke-width: 1.25;
 }
+
+/**
+ * Rich text (page content, product and collection descriptions, articles and
+ * rich text settings), so merchant content looks the same on every template.
+ */
+.rte {
+  line-height: 1.7;
+}
+
+.rte > * + * {
+  margin-block-start: 0.75em;
+}
+
+.rte :is(h1, h2, h3, h4, h5, h6) {
+  margin-block-start: 1.5em;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight);
+  line-height: 1.2;
+}
+
+.rte > :first-child {
+  margin-block-start: 0;
+}
+
+.rte h1 {
+  font-size: clamp(1.875rem, 2vw + 1rem, 2.5rem);
+}
+
+.rte h2 {
+  font-size: clamp(1.5rem, 1.5vw + 1rem, 2rem);
+}
+
+.rte h3 {
+  font-size: clamp(1.25rem, 1vw + 0.875rem, 1.5rem);
+}
+
+.rte h4 {
+  font-size: 1.125rem;
+}
+
+.rte :is(h5, h6) {
+  font-family: var(--font-primary--family);
+  font-size: 0.8125rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.rte a {
+  color: inherit;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+
+.rte a:hover {
+  color: var(--color-accent);
+}
+
+.rte :is(ul, ol) {
+  padding-inline-start: 1.25em;
+}
+
+.rte li + li {
+  margin-block-start: 0.35em;
+}
+
+.rte blockquote {
+  margin-inline: 0;
+  padding-inline-start: 1.25em;
+  border-inline-start: 2px solid var(--color-accent);
+  font-family: var(--font-heading--family);
+  font-size: 1.25em;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.rte img {
+  height: auto;
+  border-radius: var(--style-border-radius-buttons);
+}
+
+.rte hr {
+  margin-block: 2em;
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--color-foreground) 15%, transparent);
+}
+
+.rte table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375em;
+}
+
+.rte :is(th, td) {
+  padding: 0.625em 0.75em;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+  text-align: start;
+}
+
+.rte iframe {
+  max-width: 100%;
+}

@@ -1,16 +1,16 @@
 /**
  * Components shared across pages: side drawers, the cart (drawer and cart
- * page line items), wishlist, quick add, collection and search filters, and
+ * page line items), quick add, collection and search filters, and
  * the product form, gallery, quantity input and variant syncing they rely on.
  *
  * These live in one asset (instead of `{% javascript %}` tags) because
  * Shopify only bundles a file's `{% javascript %}` on pages where that file
- * is rendered, while product cards, the quick view and the wishlist load this
+ * is rendered, while product cards, the quick view and the cart drawer load this
  * markup on any page. Loaded with `defer` from the layout, before the
  * compiled section scripts.
  */
 
-/* Side drawers (cart drawer, wishlist drawer) */
+/* Side drawers (cart drawer) */
 
 /**
  * A modal side panel built on <dialog>. Open it with any element that has
@@ -247,117 +247,6 @@ class CartItems extends HTMLElement {
 
 if (!customElements.get('cart-items')) {
   customElements.define('cart-items', CartItems);
-}
-
-/* Wishlist store, heart buttons and counters (snippets/wishlist-button.liquid) */
-
-/**
- * Wishlist store: product handles in localStorage, shared by every
- * wishlist button, counter and the wishlist page. Changes fire a
- * `wishlist:change` event on the document (also across browser tabs).
- */
-if (!window.Wishlist) {
-  const STORAGE_KEY = 'theme:wishlist';
-
-  window.Wishlist = {
-    get() {
-      try {
-        const items = JSON.parse(localStorage.getItem(STORAGE_KEY));
-        return Array.isArray(items) ? items : [];
-      } catch {
-        return [];
-      }
-    },
-
-    set(handles) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(handles));
-      } catch {
-        // Storage can be unavailable (private mode); the change still applies to this page
-      }
-      document.dispatchEvent(new CustomEvent('wishlist:change', { detail: { handles } }));
-    },
-
-    has(handle) {
-      return this.get().includes(handle);
-    },
-
-    toggle(handle) {
-      const handles = this.get();
-      const next = handles.includes(handle) ? handles.filter((h) => h !== handle) : [handle, ...handles];
-      this.set(next);
-      return next.includes(handle);
-    },
-
-    remove(handle) {
-      this.set(this.get().filter((h) => h !== handle));
-    },
-  };
-
-  window.addEventListener('storage', (event) => {
-    if (event.key === STORAGE_KEY) {
-      document.dispatchEvent(new CustomEvent('wishlist:change', { detail: { handles: window.Wishlist.get() } }));
-    }
-  });
-}
-
-class WishlistButton extends HTMLElement {
-  connectedCallback() {
-    this.button = this.querySelector('button');
-    this.button.addEventListener('click', this.onClick);
-    document.addEventListener('wishlist:change', this.sync);
-    this.sync();
-  }
-
-  disconnectedCallback() {
-    document.removeEventListener('wishlist:change', this.sync);
-  }
-
-  onClick = (event) => {
-    // Cards are links; keep the click on the button
-    event.preventDefault();
-    event.stopPropagation();
-    const saved = window.Wishlist.toggle(this.button.dataset.handle);
-    if (saved) {
-      this.button.classList.add('is-popping');
-      setTimeout(() => this.button.classList.remove('is-popping'), 250);
-    }
-  };
-
-  sync = () => {
-    const saved = window.Wishlist.has(this.button.dataset.handle);
-    this.button.setAttribute('aria-pressed', String(saved));
-    const label = saved ? this.button.dataset.labelRemove : this.button.dataset.labelAdd;
-    if (this.button.hasAttribute('aria-label')) this.button.setAttribute('aria-label', label);
-    const text = this.button.querySelector('[data-wishlist-text]');
-    if (text) text.textContent = saved ? text.dataset.textRemove : text.dataset.textAdd;
-  };
-}
-
-if (!customElements.get('wishlist-button')) {
-  customElements.define('wishlist-button', WishlistButton);
-}
-
-/** Shows the number of saved products, hidden while the wishlist is empty */
-class WishlistCount extends HTMLElement {
-  connectedCallback() {
-    document.addEventListener('wishlist:change', this.sync);
-    this.sync();
-  }
-
-  disconnectedCallback() {
-    document.removeEventListener('wishlist:change', this.sync);
-  }
-
-  sync = () => {
-    const count = window.Wishlist.get().length;
-    this.textContent = count;
-    this.hidden = count === 0;
-  };
-}
-
-if (!customElements.get('wishlist-count')) {
-  customElements.define('wishlist-count', WishlistCount);
 }
 
 /* Quantity input (snippets/quantity-input.liquid) */
