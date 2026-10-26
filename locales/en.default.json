@@ -15,9 +15,44 @@
   },
   "cart": {
     "checkout": "Checkout",
-    "title": "Cart",
+    "title": "Your cart",
     "update": "Update",
-    "remove": "Remove"
+    "remove": "Remove",
+    "item_count": {
+      "one": "{{ count }} item",
+      "other": "{{ count }} items"
+    },
+    "continue_shopping": "Continue shopping",
+    "columns": {
+      "product": "Product",
+      "quantity": "Quantity",
+      "total": "Total"
+    },
+    "remove_item": "Remove {{ title }}",
+    "discount": "Discounts",
+    "summary": "Order summary",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "taxes_included": "Taxes included. Shipping calculated at checkout.",
+    "taxes_excluded": "Taxes and shipping calculated at checkout.",
+    "duties_and_taxes_included": "Duties and taxes included. Shipping calculated at checkout.",
+    "note": {
+      "label": "Add a note or gift message",
+      "placeholder": "Engraving requests, gift messages…"
+    },
+    "empty": {
+      "title": "Your cart is empty",
+      "text": "Find a piece you'll treasure, made to be worn every day.",
+      "login_html": "Have an account? <a href=\"{{ link }}\">Log in</a> to check out faster."
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "stock": "We've added all the pieces we have in stock."
+    },
+    "drawer": {
+      "close": "Close cart",
+      "view_cart": "View cart"
+    }
   },
   "customers": {
     "login": {
@@ -28,7 +63,36 @@
     }
   },
   "collections": {
-    "title": "Collections"
+    "title": "Collections",
+    "eyebrow": "Collection",
+    "product_count": {
+      "one": "{{ count }} product",
+      "other": "{{ count }} products"
+    },
+    "sort": {
+      "label": "Sort by"
+    },
+    "filters": {
+      "title": "Filter",
+      "close": "Close filters",
+      "from": "From",
+      "to": "To",
+      "apply": "Apply filters",
+      "clear_all": "Clear all",
+      "active": "Active filters",
+      "remove": "Remove filter",
+      "view_results": {
+        "one": "View {{ count }} result",
+        "other": "View {{ count }} results"
+      }
+    },
+    "empty": {
+      "title": "Nothing here yet",
+      "text": "This collection is empty right now. Explore the rest of our pieces in the meantime.",
+      "button": "Shop all",
+      "filtered_title": "No matching pieces",
+      "filtered_text": "Try removing a filter or two to see more."
+    }
   },
   "gift_card": {
     "add_to_apple_wallet": "Add to Apple Wallet",
@@ -63,6 +127,12 @@
       "whatsapp": "WhatsApp",
       "x": "X (Twitter)",
       "empty": "Add your social media links in Theme settings → Social media."
+    },
+    "pagination": {
+      "label": "Pagination",
+      "previous": "Previous page",
+      "next": "Next page",
+      "page": "Page {{ number }}"
     }
   },
   "sections": {
@@ -131,6 +201,33 @@
     "card": {
       "from_price": "From {{ price }}",
       "placeholder_title": "Product title"
+    },
+    "quick_view": {
+      "full_details": "View full details",
+      "label": "Quick view",
+      "close": "Close",
+      "loading": "Loading"
+    },
+    "quick_add": {
+      "add": "Quick add",
+      "add_label": "Add {{ title }} to cart",
+      "added": "Added",
+      "choose": "Choose options",
+      "choose_label": "Choose options for {{ title }}"
     }
+  },
+  "wishlist": {
+    "title": "Wishlist",
+    "add": "Add {{ title }} to wishlist",
+    "remove": "Remove {{ title }} from wishlist",
+    "add_short": "Add to wishlist",
+    "saved": "Saved to wishlist",
+    "summary": "{{ count }} saved",
+    "empty_title": "Your wishlist is empty",
+    "empty_text": "Tap the heart on any piece to save it here for later.",
+    "empty_button": "Start browsing",
+    "no_js": "Turn on JavaScript in your browser to see your saved pieces.",
+    "close": "Close wishlist",
+    "view_all": "View full wishlist"
   }
 }

@@ -96,35 +96,3 @@
     outline-offset: -2px;
   }
 {% endstylesheet %}
-
-{% javascript %}
-  class QuantityInput extends HTMLElement {
-    connectedCallback() {
-      this.input = this.querySelector('input');
-      this.addEventListener('click', this.onClick);
-      this.input.addEventListener('change', this.updateButtons);
-      this.updateButtons();
-    }
-
-    onClick = (event) => {
-      const button = event.target.closest('[data-quantity-step]');
-      if (!button) return;
-      const previous = this.input.value;
-      Number(button.dataset.quantityStep) > 0 ? this.input.stepUp() : this.input.stepDown();
-      if (previous !== this.input.value) {
-        this.input.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    };
-
-    updateButtons = () => {
-      const value = Number(this.input.value);
-      const [decrease, increase] = this.querySelectorAll('[data-quantity-step]');
-      decrease.disabled = this.input.min !== '' && value <= Number(this.input.min);
-      increase.disabled = this.input.max !== '' && value >= Number(this.input.max);
-    };
-  }
-
-  if (!customElements.get('quantity-input')) {
-    customElements.define('quantity-input', QuantityInput);
-  }
-{% endjavascript %}

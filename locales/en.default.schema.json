@@ -48,7 +48,8 @@
       "whatsapp": "WhatsApp",
       "x": "X (Twitter)"
     },
-    "trust": "Trust"
+    "trust": "Trust",
+    "product_cards": "Product cards"
   },
   "labels": {
     "alignment": "Alignment",
@@ -348,6 +349,9 @@
     },
     "trust_badge": {
       "name": "Trust badge"
+    },
+    "wishlist": {
+      "name": "Wishlist button"
     }
   },
   "sections": {
@@ -426,6 +430,57 @@
     "featured_product": {
       "name": "Featured product",
       "product_info": "Product to show in this section."
+    },
+    "collection": {
+      "name": "Collection",
+      "intro": "Collection intro",
+      "show_description": "Show collection description",
+      "show_image": "Show collection image",
+      "products": "Products",
+      "products_per_page": "Products per page",
+      "filtering": "Filtering and sorting",
+      "enable_filtering": "Enable filtering",
+      "enable_filtering_info": "Customize filters with the Shopify Search & Discovery app.",
+      "enable_sorting": "Enable sorting"
+    },
+    "cart": {
+      "summary": "Order summary",
+      "show_note": "Show order note",
+      "show_additional_checkout_buttons": "Show dynamic checkout buttons",
+      "show_additional_checkout_buttons_info": "Such as Shop Pay or PayPal, when enabled in your payment settings.",
+      "summary_text": "Text below the checkout button",
+      "empty": "Empty cart",
+      "empty_collection": "Suggested products",
+      "empty_collection_info": "Shown when the cart is empty."
+    },
+    "quick_view": {
+      "name": "Quick view"
+    },
+    "wishlist": {
+      "name": "Wishlist",
+      "item": "Wishlist item",
+      "drawer_item": "Wishlist drawer item"
+    },
+    "cart_drawer": {
+      "name": "Cart drawer"
+    }
+  },
+  "settings": {
+    "product_cards": {
+      "enable_quick_add": "Show quick add",
+      "enable_quick_add_info": "Single-option products are added straight to the cart; others open a quick view to choose options.",
+      "enable_wishlist": "Show wishlist",
+      "enable_wishlist_info": "Adds a heart to product cards and the header. Saved products are kept in the shopper's browser.",
+      "wishlist_page": "Wishlist page",
+      "wishlist_page_info": "A page using the \"wishlist\" template. Defaults to /pages/wishlist.",
+      "wishlist_drawer": "Open wishlist in a drawer",
+      "wishlist_drawer_info": "The header heart opens a side drawer instead of the wishlist page."
+    },
+    "cart": {
+      "cart_type": "Cart type",
+      "drawer": "Drawer",
+      "page": "Page",
+      "cart_type_info": "The drawer opens from the header bag and after adding to cart."
     }
   }
 }

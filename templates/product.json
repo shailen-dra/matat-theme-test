@@ -90,6 +90,10 @@
             "heading": "Shipping & returns",
             "content": "<p>Free insured shipping on all orders. Not quite right? Return unworn pieces within 30 days for a full refund.</p>"
           }
+        },
+        "wishlist": {
+          "type": "wishlist",
+          "settings": {}
         }
       },
       "block_order": [
@@ -98,6 +102,7 @@
         "price",
         "variant_picker",
         "buy_buttons",
+        "wishlist",
         "highlights",
         "description",
         "materials",

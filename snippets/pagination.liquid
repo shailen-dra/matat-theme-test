@@ -1,0 +1,129 @@
+{% doc %}
+  Renders numbered pagination with previous / next arrows from a `paginate`
+  object. Renders nothing when there is a single page.
+
+  @param {paginate} paginate - The paginate object from a `{% paginate %}` tag
+  @param {string} [anchor] - Optional `#id` appended to each link, to land back on the results
+
+  @example
+  {% render 'pagination', paginate: paginate, anchor: '#ProductGrid' %}
+{% enddoc %}
+
+{%- if paginate.pages > 1 -%}
+  <nav class="pagination" aria-label="{{ 'general.pagination.label' | t }}">
+    <ul class="pagination__list" role="list">
+      <li>
+        {%- if paginate.previous -%}
+          <a href="{{ paginate.previous.url }}{{ anchor }}" class="pagination__item pagination__item--arrow">
+            {% render 'icon', name: 'chevron-left', class: 'pagination__icon' %}
+            <span class="visually-hidden">{{ 'general.pagination.previous' | t }}</span>
+          </a>
+        {%- else -%}
+          <span class="pagination__item pagination__item--arrow pagination__item--disabled" aria-hidden="true">
+            {% render 'icon', name: 'chevron-left', class: 'pagination__icon' %}
+          </span>
+        {%- endif -%}
+      </li>
+
+      {%- for part in paginate.parts -%}
+        <li>
+          {%- if part.is_link -%}
+            <a
+              href="{{ part.url }}{{ anchor }}"
+              class="pagination__item"
+              aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+            >
+              {{- part.title -}}
+            </a>
+          {%- elsif part.title == paginate.current_page -%}
+            <span
+              class="pagination__item pagination__item--current"
+              aria-current="page"
+              aria-label="{{ 'general.pagination.page' | t: number: part.title }}"
+            >
+              {{- part.title -}}
+            </span>
+          {%- else -%}
+            <span class="pagination__item pagination__item--gap">{{ part.title }}</span>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+
+      <li>
+        {%- if paginate.next -%}
+          <a href="{{ paginate.next.url }}{{ anchor }}" class="pagination__item pagination__item--arrow">
+            {% render 'icon', name: 'chevron-right', class: 'pagination__icon' %}
+            <span class="visually-hidden">{{ 'general.pagination.next' | t }}</span>
+          </a>
+        {%- else -%}
+          <span class="pagination__item pagination__item--arrow pagination__item--disabled" aria-hidden="true">
+            {% render 'icon', name: 'chevron-right', class: 'pagination__icon' %}
+          </span>
+        {%- endif -%}
+      </li>
+    </ul>
+  </nav>
+{%- endif -%}
+
+{% stylesheet %}
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-block-start: clamp(3rem, 5vw, 4.5rem);
+  }
+
+  .pagination__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pagination__item {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.75rem;
+    height: 2.75rem;
+    padding-inline: 0.5rem;
+    border: 1px solid transparent;
+    border-radius: var(--style-border-radius-buttons);
+    color: var(--color-foreground);
+    font-size: 0.9375rem;
+    text-decoration: none;
+    transition: border-color 0.2s ease;
+  }
+
+  a.pagination__item:hover {
+    border-color: color-mix(in srgb, var(--color-foreground) 25%, transparent);
+  }
+
+  a.pagination__item:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .pagination__item--current {
+    border-color: var(--color-foreground);
+  }
+
+  .pagination__item--disabled {
+    opacity: 0.3;
+  }
+
+  .pagination__item--gap {
+    min-width: 1.5rem;
+  }
+
+  .pagination__icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  [dir='rtl'] .pagination__icon {
+    transform: scaleX(-1);
+  }
+{% endstylesheet %}

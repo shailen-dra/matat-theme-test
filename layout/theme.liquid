@@ -31,6 +31,9 @@
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
+    {% # Shared product components; must run before the compiled section scripts %}
+    <script src="{{ 'product-components.js' | asset_url }}" defer></script>
+
     {{ content_for_header }}
   </head>
 
@@ -44,5 +47,18 @@
     </main>
 
     {% sections 'footer-group' %}
+
+    {%- if settings.enable_quick_add -%}
+      {% render 'quick-view-dialog' %}
+    {%- endif -%}
+
+    {%- if settings.cart_type == 'drawer' -%}
+      {% section 'cart-drawer' %}
+    {%- endif -%}
+
+    {%- if settings.enable_wishlist and settings.wishlist_drawer -%}
+      {%- capture wishlist_url %}{% render 'wishlist-url' %}{% endcapture -%}
+      {% render 'wishlist-drawer', wishlist_url: wishlist_url %}
+    {%- endif -%}
   </body>
 </html>

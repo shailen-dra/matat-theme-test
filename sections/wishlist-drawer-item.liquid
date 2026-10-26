@@ -1,0 +1,62 @@
+{%- comment -%}
+  One row of the wishlist drawer. Not added to templates: the drawer fetches
+  it per saved product with `/products/<handle>?section_id=wishlist-drawer-item`.
+{%- endcomment -%}
+
+{%- liquid
+  assign image = product.featured_media.preview_image
+  assign price_min = product.price_min | money
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+-%}
+
+<li class="drawer-item" data-wishlist-item="{{ product.handle }}">
+  <a href="{{ product.url }}" class="drawer-item__media" tabindex="-1" aria-hidden="true">
+    {%- if image != blank -%}
+      {{
+        image
+        | image_url: width: 240
+        | image_tag: widths: '96, 160, 240', sizes: '96px', loading: 'lazy', class: 'drawer-item__image', alt: ''
+      }}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'drawer-item__image drawer-item__placeholder' }}
+    {%- endif -%}
+  </a>
+
+  <div class="drawer-item__info">
+    <div class="drawer-item__top">
+      <h3 class="drawer-item__title">
+        <a href="{{ product.url }}">{{ product.title | escape }}</a>
+      </h3>
+      {% render 'wishlist-button', product: product %}
+    </div>
+
+    <p class="drawer-item__options">
+      {%- if product.price_varies -%}
+        {{ 'product.card.from_price' | t: price: price_min }}
+      {%- else -%}
+        {{ product.price | money }}
+      {%- endif -%}
+      {%- if on_sale %}
+        <s>{{ product.compare_at_price | money }}</s>
+      {%- endif -%}
+    </p>
+
+    <div class="drawer-item__actions">
+      {%- if product.available -%}
+        {% render 'quick-add', product: product %}
+      {%- else -%}
+        <span class="drawer-item__options">{{ 'product.sold_out' | t }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</li>
+
+{% schema %}
+{
+  "name": "t:sections.wishlist.drawer_item",
+  "settings": []
+}
+{% endschema %}

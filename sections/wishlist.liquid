@@ -1,0 +1,285 @@
+{%- comment -%}
+  Wishlist page. The saved product handles live in the shopper's browser
+  (see the `wishlist-button` snippet), so the cards are loaded here with
+  JavaScript, one `wishlist-item` section per product. Assign the
+  `page.wishlist` template to a page (handle `wishlist`) to use it.
+{%- endcomment -%}
+
+<wishlist-page
+  class="section full-width wishlist"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <header class="wishlist__header">
+    <div class="wishlist__heading">
+      <h1 class="heading heading--h1">{{ section.settings.title }}</h1>
+      <p
+        class="wishlist__count"
+        data-wishlist-summary
+        data-template="{{ 'wishlist.summary' | t: count: '[count]' | escape }}"
+      ></p>
+    </div>
+    {%- if section.settings.subtitle != blank -%}
+      <p class="wishlist__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+  </header>
+
+  <ul
+    class="product-grid wishlist__grid"
+    role="list"
+    style="
+      --grid-columns: {{ section.settings.columns_desktop }};
+      --grid-columns-mobile: {{ section.settings.columns_mobile }};
+    "
+    aria-busy="true"
+    data-wishlist-grid
+  ></ul>
+
+  <div class="wishlist__empty" data-wishlist-empty hidden>
+    <span class="wishlist__empty-icon">{% render 'icon', name: 'heart' %}</span>
+    <h2 class="heading heading--h3">{{ 'wishlist.empty_title' | t }}</h2>
+    <p class="wishlist__empty-text">{{ 'wishlist.empty_text' | t }}</p>
+    <a href="{{ routes.all_products_collection_url }}" class="button button--primary">
+      {{- 'wishlist.empty_button' | t -}}
+    </a>
+  </div>
+
+  <noscript>
+    <p class="wishlist__empty-text">{{ 'wishlist.no_js' | t }}</p>
+  </noscript>
+</wishlist-page>
+
+{% stylesheet %}
+  .wishlist__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-block-end: clamp(2rem, 4vw, 3rem);
+  }
+
+  .wishlist__heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+  }
+
+  .wishlist__count {
+    font-size: 0.9375rem;
+    opacity: 0.6;
+  }
+
+  .wishlist__subtitle {
+    max-width: 36rem;
+    opacity: 0.75;
+  }
+
+  .wishlist__grid:empty {
+    display: none;
+  }
+
+  .wishlist__grid .product-grid__item {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  .wishlist__grid .product-grid__item.is-removing {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+
+  .wishlist__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding-block: clamp(2rem, 6vw, 4rem);
+    text-align: center;
+  }
+
+  .wishlist__empty[hidden] {
+    display: none;
+  }
+
+  .wishlist__empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    margin-block-end: 0.5rem;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-foreground) 5%, var(--color-background));
+    color: var(--color-accent);
+  }
+
+  .wishlist__empty-icon .icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  .wishlist__empty-text {
+    max-width: 28rem;
+    margin-block-end: 0.75rem;
+    opacity: 0.7;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Renders the saved products on the wishlist page and keeps the grid in
+   * sync when products are removed (here or in another tab).
+   */
+  class WishlistPage extends HTMLElement {
+    connectedCallback() {
+      this.grid = this.querySelector('[data-wishlist-grid]');
+      this.empty = this.querySelector('[data-wishlist-empty]');
+      this.summary = this.querySelector('[data-wishlist-summary]');
+      document.addEventListener('wishlist:change', this.onChange);
+      this.render();
+    }
+
+    disconnectedCallback() {
+      document.removeEventListener('wishlist:change', this.onChange);
+    }
+
+    get handles() {
+      return window.Wishlist?.get() ?? [];
+    }
+
+    onChange = () => {
+      const handles = this.handles;
+      const shown = [...this.grid.querySelectorAll('[data-wishlist-item]')];
+      const added = handles.some((handle) => !shown.some((item) => item.dataset.wishlistItem === handle));
+
+      // Added from another tab: render again. Removed: fade the card out.
+      if (added) {
+        this.render();
+        return;
+      }
+      shown
+        .filter((item) => !handles.includes(item.dataset.wishlistItem))
+        .forEach((item) => {
+          item.classList.add('is-removing');
+          setTimeout(() => {
+            item.remove();
+            this.updateState();
+          }, 300);
+        });
+      this.updateSummary(handles.length);
+    };
+
+    async render() {
+      const handles = this.handles;
+      this.grid.setAttribute('aria-busy', 'true');
+      const root = window.Shopify?.routes?.root ?? '/';
+
+      const items = await Promise.all(
+        handles.map(async (handle) => {
+          try {
+            const response = await fetch(`${root}products/${encodeURIComponent(handle)}?section_id=wishlist-item`);
+            if (response.status === 404) return { handle, missing: true };
+            if (!response.ok) return { handle };
+            const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+            return { handle, item: html.querySelector('[data-wishlist-item]') };
+          } catch {
+            return { handle };
+          }
+        })
+      );
+
+      // Forget products that no longer exist
+      const missing = items.filter((entry) => entry.missing).map((entry) => entry.handle);
+      if (missing.length) window.Wishlist.set(handles.filter((handle) => !missing.includes(handle)));
+
+      this.grid.replaceChildren(...items.map((entry) => entry.item).filter(Boolean));
+      this.grid.removeAttribute('aria-busy');
+      this.updateState();
+    }
+
+    updateState() {
+      const count = this.grid.querySelectorAll('[data-wishlist-item]').length;
+      this.empty.hidden = count > 0;
+      this.updateSummary(count);
+    }
+
+    updateSummary(count) {
+      if (!this.summary) return;
+      this.summary.textContent = count === 0 ? '' : this.summary.dataset.template.replace('[count]', count);
+    }
+  }
+
+  if (!customElements.get('wishlist-page')) {
+    customElements.define('wishlist-page', WishlistPage);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.wishlist.name",
+  "class": "wishlist-section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Your wishlist"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "Pieces you've saved are kept on this device."
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "t:labels.columns_desktop",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "label": "t:labels.columns_mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2"
+    },
+    {
+      "type": "header",
+      "content": "t:labels.section"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.wishlist.name"
+    }
+  ]
+}
+{% endschema %}

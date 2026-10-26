@@ -1,0 +1,98 @@
+{%- comment -%}
+  Content of the quick view popup. Not added to templates: product cards
+  fetch it for a product with `/products/<handle>?section_id=quick-view`
+  and show it in the quick view dialog. Reuses the product page layout
+  (`product-info`) and its price, variant picker and buy buttons blocks, so
+  variant changes and adding to cart behave exactly like the product page.
+{%- endcomment -%}
+
+{%- capture blocks -%}
+  <p class="heading heading--eyebrow heading--accent">{{ product.vendor | escape }}</p>
+  <h2 class="heading heading--h3 quick-view__title">
+    <a href="{{ product.url }}">{{ product.title | escape }}</a>
+  </h2>
+  {% content_for 'block', type: 'price', id: 'quick-view-price' %}
+  {% content_for 'block', type: 'variant-picker', id: 'quick-view-variant-picker' %}
+  {% content_for 'block', type: 'buy-buttons', id: 'quick-view-buy-buttons' %}
+  <a href="{{ product.url }}" class="button button--link quick-view__details">
+    {{- 'product.quick_view.full_details' | t -}}
+  </a>
+{%- endcapture -%}
+
+<div class="quick-view">
+  {% render 'product-info', section: section, product: product, blocks: blocks %}
+</div>
+
+{% stylesheet %}
+  .quick-view .product {
+    --product-media-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding: 0;
+  }
+
+  .quick-view .product__media {
+    margin: 0;
+  }
+
+  .quick-view__title {
+    margin: 0;
+  }
+
+  .quick-view__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .quick-view__title a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.15em;
+  }
+
+  .quick-view__details {
+    align-self: flex-start;
+  }
+
+  @media (max-width: 989px) {
+    .quick-view .product {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.quick_view.name",
+  "settings": [
+    {
+      "type": "select",
+      "id": "gallery_layout",
+      "label": "t:general.layout",
+      "options": [
+        { "value": "product-gallery--carousel", "label": "t:options.gallery_layout.carousel" }
+      ],
+      "default": "product-gallery--carousel"
+    },
+    {
+      "type": "select",
+      "id": "media_ratio",
+      "label": "t:sections.product.media_ratio",
+      "options": [
+        { "value": "portrait", "label": "t:options.ratio.portrait" },
+        { "value": "square", "label": "t:options.ratio.square" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "range",
+      "id": "details_gap",
+      "label": "t:labels.gap",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    }
+  ]
+}
+{% endschema %}

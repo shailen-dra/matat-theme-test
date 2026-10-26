@@ -3,7 +3,7 @@
   `currentColor`, scale with `--icon-size` and use `--icon-stroke-width`.
 
   @param {string} name - Icon name: `menu`, `close`, `search`, `cart`, `account`, `chevron-down`, `chevron-left`, `chevron-right`,
-    `arrow`, `plus`, `minus`, `check`, `zoom`,
+    `arrow`, `plus`, `minus`, `check`, `zoom`, `filter`, `heart`,
     trust badges: `diamond`, `certificate`, `truck`, `returns`, `shield`, `gift`, `sparkle`, `hallmark`,
     or a social network: `instagram`, `facebook`, `pinterest`, `tiktok`, `youtube`, `whatsapp`, `x`
   @param {string} [class] - Extra classes for the `<svg>`
@@ -49,6 +49,10 @@
       <path d="M4.5 10h11"/>
     {%- when 'check' -%}
       <path d="M4.5 10.5l3.5 3.5 7.5-8"/>
+    {%- when 'filter' -%}
+      <path d="M3 6h8.5M15.5 6H17M3 14h1.5M8.5 14H17"/><circle cx="13.5" cy="6" r="2"/><circle cx="6.5" cy="14" r="2"/>
+    {%- when 'heart' -%}
+      <path d="M10 16.25s-6.25-3.75-6.25-8.5A3.5 3.5 0 0 1 10 5.6a3.5 3.5 0 0 1 6.25 2.15c0 4.75-6.25 8.5-6.25 8.5z"/>
     {%- when 'zoom' -%}
       <circle cx="8.75" cy="8.75" r="5.25"/><path d="M12.5 12.5L16.5 16.5M8.75 6.75v4M6.75 8.75h4"/>
     {%- when 'diamond' -%}

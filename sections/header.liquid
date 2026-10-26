@@ -185,7 +185,30 @@
         </div>
       {%- endif -%}
 
-      <a href="{{ routes.cart_url }}" class="header__icon header__cart">
+      {%- if settings.enable_wishlist -%}
+        {%- capture wishlist_url %}{% render 'wishlist-url' %}{% endcapture -%}
+        <a
+          href="{{ wishlist_url }}"
+          class="header__icon header__wishlist"
+          {% if settings.wishlist_drawer %}
+            data-drawer-open="WishlistDrawer"
+            aria-haspopup="dialog"
+          {% endif %}
+        >
+          {% render 'icon', name: 'heart' %}
+          <wishlist-count class="header__cart-count" aria-hidden="true" hidden></wishlist-count>
+          <span class="visually-hidden">{{ 'wishlist.title' | t }}</span>
+        </a>
+      {%- endif -%}
+
+      <a
+        href="{{ routes.cart_url }}"
+        class="header__icon header__cart"
+        {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
+          data-drawer-open="CartDrawer"
+          aria-haspopup="dialog"
+        {% endif %}
+      >
         {% render 'icon', name: 'cart' %}
         {%- if cart.item_count > 0 -%}
           <span class="header__cart-count" aria-hidden="true">{{ cart.item_count }}</span>

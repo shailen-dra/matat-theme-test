@@ -48,7 +48,8 @@
       "whatsapp": "WhatsApp",
       "x": "X (טוויטר)"
     },
-    "trust": "אמון"
+    "trust": "אמון",
+    "product_cards": "כרטיסי מוצר"
   },
   "labels": {
     "alignment": "יישור",
@@ -348,6 +349,9 @@
     },
     "trust_badge": {
       "name": "תג אמון"
+    },
+    "wishlist": {
+      "name": "כפתור רשימת משאלות"
     }
   },
   "sections": {
@@ -426,6 +430,57 @@
     "featured_product": {
       "name": "מוצר מומלץ",
       "product_info": "המוצר שיוצג באזור זה."
+    },
+    "collection": {
+      "name": "קולקציה",
+      "intro": "פתיח הקולקציה",
+      "show_description": "הצגת תיאור הקולקציה",
+      "show_image": "הצגת תמונת הקולקציה",
+      "products": "מוצרים",
+      "products_per_page": "מוצרים בעמוד",
+      "filtering": "סינון ומיון",
+      "enable_filtering": "הפעלת סינון",
+      "enable_filtering_info": "אפשר להתאים את המסננים באפליקציית Search & Discovery של Shopify.",
+      "enable_sorting": "הפעלת מיון"
+    },
+    "cart": {
+      "summary": "סיכום ההזמנה",
+      "show_note": "הצגת הערה להזמנה",
+      "show_additional_checkout_buttons": "הצגת כפתורי תשלום מהיר",
+      "show_additional_checkout_buttons_info": "כמו Shop Pay או PayPal, כשהם מופעלים בהגדרות התשלום.",
+      "summary_text": "טקסט מתחת לכפתור התשלום",
+      "empty": "סל ריק",
+      "empty_collection": "מוצרים מוצעים",
+      "empty_collection_info": "מוצג כשסל הקניות ריק."
+    },
+    "quick_view": {
+      "name": "תצוגה מהירה"
+    },
+    "wishlist": {
+      "name": "רשימת משאלות",
+      "item": "פריט ברשימת המשאלות",
+      "drawer_item": "פריט במגירת רשימת המשאלות"
+    },
+    "cart_drawer": {
+      "name": "מגירת סל הקניות"
+    }
+  },
+  "settings": {
+    "product_cards": {
+      "enable_quick_add": "הצגת הוספה מהירה",
+      "enable_quick_add_info": "מוצרים עם אפשרות אחת נוספים ישירות לסל; אחרים פותחים תצוגה מהירה לבחירת אפשרויות.",
+      "enable_wishlist": "הצגת רשימת משאלות",
+      "enable_wishlist_info": "מוסיף לב לכרטיסי המוצר ולכותרת. המוצרים השמורים נשמרים בדפדפן של הלקוח.",
+      "wishlist_page": "עמוד רשימת המשאלות",
+      "wishlist_page_info": "עמוד שמשתמש בתבנית \"wishlist\". ברירת המחדל: ‎/pages/wishlist.",
+      "wishlist_drawer": "פתיחת רשימת המשאלות במגירה",
+      "wishlist_drawer_info": "הלב שבכותרת פותח מגירה צדדית במקום את עמוד רשימת המשאלות."
+    },
+    "cart": {
+      "cart_type": "סוג סל הקניות",
+      "drawer": "מגירה",
+      "page": "עמוד",
+      "cart_type_info": "המגירה נפתחת מסל הקניות שבכותרת ואחרי הוספה לסל."
     }
   }
 }

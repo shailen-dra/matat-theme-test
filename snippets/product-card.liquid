@@ -1,6 +1,7 @@
 {% doc %}
   Renders a product card: image (with an optional second image on hover),
-  sale / sold-out badge, vendor, title and price.
+  sale / sold-out badge, wishlist heart, quick add button, vendor, title and
+  price. The wishlist and quick add follow the "Product cards" theme settings.
 
   Without a `product` it renders a placeholder card using a demo image, so
   grids look complete on stores that have no products yet.
@@ -45,30 +46,40 @@
 
 <article class="card {{ ratio }}{% if secondary_image != blank %} card--has-secondary{% endif %}">
   {%- if product != blank -%}
-    <a href="{{ product.url }}" class="card__media" style="{{ ratio_style }}" tabindex="-1" aria-hidden="true">
-      {%- if image != blank -%}
-        {{
-          image
-          | image_url: width: 1100
-          | image_tag: widths: '300, 450, 600, 750, 900, 1100', sizes: sizes, loading: loading, class: 'card__image', alt: ''
-        }}
-        {%- if secondary_image != blank -%}
+    <div class="card__media-wrap">
+      <a href="{{ product.url }}" class="card__media" style="{{ ratio_style }}" tabindex="-1" aria-hidden="true">
+        {%- if image != blank -%}
           {{
-            secondary_image
+            image
             | image_url: width: 1100
-            | image_tag: widths: '300, 450, 600, 750, 900, 1100', sizes: sizes, loading: 'lazy', class: 'card__image card__image--secondary', alt: ''
+            | image_tag: widths: '300, 450, 600, 750, 900, 1100', sizes: sizes, loading: loading, class: 'card__image', alt: ''
           }}
+          {%- if secondary_image != blank -%}
+            {{
+              secondary_image
+              | image_url: width: 1100
+              | image_tag: widths: '300, 450, 600, 750, 900, 1100', sizes: sizes, loading: 'lazy', class: 'card__image card__image--secondary', alt: ''
+            }}
+          {%- endif -%}
+        {%- else -%}
+          {{ 'product-1' | placeholder_svg_tag: 'card__image card__placeholder' }}
         {%- endif -%}
-      {%- else -%}
-        {{ 'product-1' | placeholder_svg_tag: 'card__image card__placeholder' }}
-      {%- endif -%}
-    </a>
+      </a>
 
-    {%- if product.available == false -%}
-      <span class="card__badge">{{ 'product.sold_out' | t }}</span>
-    {%- elsif on_sale -%}
-      <span class="card__badge card__badge--sale">{{ 'product.price.sale_badge' | t }}</span>
-    {%- endif -%}
+      {%- if product.available == false -%}
+        <span class="card__badge">{{ 'product.sold_out' | t }}</span>
+      {%- elsif on_sale -%}
+        <span class="card__badge card__badge--sale">{{ 'product.price.sale_badge' | t }}</span>
+      {%- endif -%}
+
+      {%- if settings.enable_wishlist -%}
+        <div class="card__wishlist">{% render 'wishlist-button', product: product %}</div>
+      {%- endif -%}
+
+      {%- if settings.enable_quick_add -%}
+        <div class="card__quick-add">{% render 'quick-add', product: product %}</div>
+      {%- endif -%}
+    </div>
 
     <div class="card__info">
       {%- if show_vendor -%}
@@ -131,6 +142,10 @@
     --card-ratio: 1;
   }
 
+  .card__media-wrap {
+    position: relative;
+  }
+
   .card__media {
     position: relative;
     display: block;
@@ -178,6 +193,41 @@
     letter-spacing: 0.12em;
     line-height: 1;
     text-transform: uppercase;
+  }
+
+  .card__wishlist {
+    position: absolute;
+    top: 0.625rem;
+    inset-inline-end: 0.625rem;
+    z-index: 2;
+  }
+
+  .card__quick-add {
+    position: absolute;
+    inset-inline: 0.75rem;
+    bottom: 0.75rem;
+    z-index: 2;
+  }
+
+  /* Pointer devices: the quick add bar slides in on hover / keyboard focus */
+  @media (hover: hover) {
+    .card__quick-add {
+      opacity: 0;
+      transform: translateY(0.5rem);
+      transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
+    }
+
+    .card:hover .card__quick-add,
+    .card__quick-add:focus-within {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (hover: none) {
+    .card__quick-add {
+      inset-inline-start: auto;
+    }
   }
 
   .card__badge--sale {

@@ -1,0 +1,200 @@
+{% doc %}
+  Renders the quick view dialog once per page. Product cards open it with
+  `document.querySelector('quick-view-dialog').open(productUrl, trigger)`;
+  it loads the `quick-view` section for that product and shows it in a modal.
+
+  @example
+  {% render 'quick-view-dialog' %}
+{% enddoc %}
+
+<quick-view-dialog>
+  <dialog class="quick-view-dialog" aria-label="{{ 'product.quick_view.label' | t }}" scroll-lock>
+    <button type="button" class="quick-view-dialog__close" data-quick-view-close>
+      {% render 'icon', name: 'close' %}
+      <span class="visually-hidden">{{ 'product.quick_view.close' | t }}</span>
+    </button>
+    <div class="quick-view-dialog__content" data-quick-view-content></div>
+    <div class="quick-view-dialog__loading" data-quick-view-loading hidden>
+      <span class="quick-view-dialog__spinner" aria-hidden="true"></span>
+      <span class="visually-hidden">{{ 'product.quick_view.loading' | t }}</span>
+    </div>
+  </dialog>
+</quick-view-dialog>
+
+{% stylesheet %}
+  .quick-view-dialog {
+    width: min(64rem, calc(100vw - 2rem));
+    max-width: none;
+    max-height: min(46rem, calc(100dvh - 2rem));
+    /* The CSS reset zeroes margins; restore the dialog's centering */
+    margin: auto;
+    padding: clamp(1.25rem, 3vw, 2.5rem);
+    border: 0;
+    border-radius: var(--style-border-radius-buttons);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .quick-view-dialog[open] {
+    animation: quick-view-in 0.3s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+  }
+
+  .quick-view-dialog::backdrop {
+    background-color: rgb(0 0 0 / 0.4);
+  }
+
+  .quick-view-dialog__close {
+    position: absolute;
+    top: 0.5rem;
+    inset-inline-end: 0.5rem;
+    z-index: 3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-background) 85%, transparent);
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+
+  .quick-view-dialog__close .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .quick-view-dialog__close:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+  }
+
+  /* Shopify's dynamic checkout buttons only initialise on page load */
+  .quick-view-dialog .buy-buttons__dynamic {
+    display: none;
+  }
+
+  .quick-view-dialog__loading {
+    display: grid;
+    place-items: center;
+    min-height: 20rem;
+  }
+
+  .quick-view-dialog__loading[hidden] {
+    display: none;
+  }
+
+  .quick-view-dialog__spinner {
+    width: 2rem;
+    height: 2rem;
+    border: 2px solid color-mix(in srgb, var(--color-foreground) 15%, transparent);
+    border-top-color: var(--color-accent);
+    border-radius: 50%;
+    animation: quick-view-spin 0.8s linear infinite;
+  }
+
+  @keyframes quick-view-in {
+    from {
+      opacity: 0;
+      transform: translateY(1rem);
+    }
+  }
+
+  @keyframes quick-view-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (max-width: 749px) {
+    /* Bottom sheet on phones */
+    .quick-view-dialog {
+      inset-block: auto 0;
+      width: 100%;
+      max-height: 92dvh;
+      margin: 0;
+      border-end-start-radius: 0;
+      border-end-end-radius: 0;
+    }
+
+    .quick-view-dialog[open] {
+      animation-name: quick-view-sheet-in;
+    }
+
+    @keyframes quick-view-sheet-in {
+      from {
+        transform: translateY(100%);
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quick-view-dialog[open] {
+      animation: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Loads the `quick-view` section for a product and shows it in a modal.
+   * The section contains the regular `product-info`, variant picker and
+   * buy buttons, so those keep working as on the product page.
+   */
+  class QuickViewDialog extends HTMLElement {
+    connectedCallback() {
+      this.dialog = this.querySelector('dialog');
+      this.content = this.querySelector('[data-quick-view-content]');
+      this.loading = this.querySelector('[data-quick-view-loading]');
+
+      this.querySelector('[data-quick-view-close]').addEventListener('click', () => this.dialog.close());
+      this.dialog.addEventListener('click', (event) => {
+        if (event.target === this.dialog) this.dialog.close();
+      });
+      this.dialog.addEventListener('close', this.onClose);
+    }
+
+    async open(productUrl, trigger) {
+      this.trigger = trigger;
+      this.abortController?.abort();
+      this.abortController = new AbortController();
+
+      this.content.replaceChildren();
+      this.loading.hidden = false;
+      if (!this.dialog.open) this.dialog.showModal();
+
+      try {
+        const url = new URL(productUrl, window.location.origin);
+        url.searchParams.set('section_id', 'quick-view');
+        const response = await fetch(url, { signal: this.abortController.signal });
+        if (!response.ok) throw new Error(`Quick view failed: ${response.status}`);
+
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const view = html.querySelector('.quick-view');
+        if (!view) throw new Error('Quick view markup missing');
+
+        this.content.replaceChildren(view);
+        this.loading.hidden = true;
+        this.content.querySelector('.quick-view__title a')?.focus({ preventScroll: true });
+      } catch (error) {
+        if (error.name === 'AbortError') return;
+        console.error(error);
+        // Fall back to the product page
+        window.location.href = productUrl;
+      }
+    }
+
+    onClose = () => {
+      this.abortController?.abort();
+      this.content.replaceChildren();
+      this.loading.hidden = true;
+      this.trigger?.focus({ preventScroll: true });
+    };
+  }
+
+  if (!customElements.get('quick-view-dialog')) {
+    customElements.define('quick-view-dialog', QuickViewDialog);
+  }
+{% endjavascript %}
