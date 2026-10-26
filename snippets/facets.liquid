@@ -3,10 +3,12 @@
   form: checkbox lists (with swatches), boolean filters and a price range.
   Filters are configured by the merchant in the Search & Discovery app.
 
-  @param {object} results - The `collection` or `search` object that has `filters`
+  @param {object} [results] - The `collection` or `search` object that has `filters` (without it, only the hidden fields render)
   @param {string} form_id - The id of the filter form (inputs elsewhere can join it with `form=`)
   @param {string} url - The form action, the results page URL
   @param {string} [sort_by] - The current sort order, kept when filtering
+  @param {string} [terms] - The search terms, kept when filtering search results
+  @param {string} [type] - The searched resource type (such as `product`), kept when filtering search results
 
   @example
   {% render 'facets', results: collection, form_id: 'FacetsForm', url: collection.url, sort_by: collection.sort_by %}
@@ -15,6 +17,13 @@
 <form id="{{ form_id }}" class="facets__form" action="{{ url }}" method="get" data-facets-form>
   {%- if sort_by != blank -%}
     <input type="hidden" name="sort_by" value="{{ sort_by }}">
+  {%- endif -%}
+  {%- if terms != blank -%}
+    <input type="hidden" name="q" value="{{ terms | escape }}">
+    <input type="hidden" name="options[prefix]" value="last">
+  {%- endif -%}
+  {%- if type != blank -%}
+    <input type="hidden" name="type" value="{{ type | escape }}">
   {%- endif -%}
 
   {%- for filter in results.filters -%}

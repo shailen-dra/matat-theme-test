@@ -1,0 +1,127 @@
+{% doc %}
+  Renders an article or page search result as a card that sits in the same
+  grid as product cards: the article image (or a monogram tile when there is
+  none), the result type, the title and a short excerpt, with the search
+  terms highlighted.
+
+  @param {object} result - The `article` or `page` search result
+  @param {string} [terms] - The search terms to highlight
+  @param {string} [ratio] - Image ratio class: `card--portrait` (default), `card--square` or `card--natural`
+  @param {string} [sizes] - The `sizes` attribute for the image
+  @param {string} [loading] - Image loading strategy (default `lazy`)
+
+  @example
+  {% render 'search-result-card', result: result, terms: search.terms %}
+{% enddoc %}
+
+{%- liquid
+  assign ratio = ratio | default: 'card--portrait'
+  assign sizes = sizes | default: '(min-width: 990px) 25vw, 50vw'
+  assign loading = loading | default: 'lazy'
+
+  assign image = null
+  if result.object_type == 'article'
+    assign image = result.image
+    assign type_label = 'search.types.article' | t
+    assign excerpt = result.excerpt | default: result.content
+  else
+    assign type_label = 'search.types.page' | t
+    assign excerpt = result.content
+  endif
+
+  assign excerpt = excerpt | strip_html | truncatewords: 20
+  assign title = result.title | escape
+  if terms != blank
+    assign title = title | highlight: terms | replace: 'class="highlight"', 'class="search-card__highlight"'
+    assign excerpt = excerpt | highlight: terms | replace: 'class="highlight"', 'class="search-card__highlight"'
+  endif
+
+  assign ratio_style = ''
+  if ratio == 'card--natural' and image != blank
+    assign ratio_style = '--card-ratio: ' | append: image.aspect_ratio
+  endif
+-%}
+
+<article class="card search-card {{ ratio }}">
+  <div class="card__media-wrap">
+    <a
+      href="{{ result.url }}"
+      class="card__media{% if image == blank %} search-card__tile{% endif %}"
+      style="{{ ratio_style }}"
+      tabindex="-1"
+      aria-hidden="true"
+    >
+      {%- if image != blank -%}
+        {{
+          image
+          | image_url: width: 1100
+          | image_tag: widths: '300, 450, 600, 750, 900, 1100', sizes: sizes, loading: loading, class: 'card__image', alt: ''
+        }}
+      {%- else -%}
+        <span class="search-card__monogram">{{ result.title | strip | slice: 0 }}</span>
+      {%- endif -%}
+    </a>
+    <span class="card__badge">{{ type_label }}</span>
+  </div>
+
+  <div class="card__info">
+    {%- if result.object_type == 'article' -%}
+      <p class="card__vendor">
+        {{- result.published_at | time_tag: format: 'date' -}}
+      </p>
+    {%- endif -%}
+    <h3 class="card__title">
+      <a href="{{ result.url }}" class="card__link">{{ title }}</a>
+    </h3>
+    {%- if excerpt != blank -%}
+      <p class="search-card__excerpt">{{ excerpt }}</p>
+    {%- endif -%}
+  </div>
+</article>
+
+{% stylesheet %}
+  .search-card__tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    background:
+      radial-gradient(circle at 30% 20%, color-mix(in srgb, var(--color-accent) 16%, transparent), transparent 60%),
+      color-mix(in srgb, var(--color-foreground) 5%, var(--color-background));
+  }
+
+  .search-card__monogram {
+    font-family: var(--font-heading--family);
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    font-weight: var(--font-heading--weight);
+    line-height: 1;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    transition: transform 0.9s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+
+  .search-card:hover .search-card__monogram {
+    transform: scale(1.08);
+  }
+
+  .search-card__excerpt {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.875rem;
+    line-height: 1.6;
+    opacity: 0.7;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .search-card__highlight {
+    font-weight: inherit;
+    background: linear-gradient(transparent 60%, color-mix(in srgb, var(--color-accent) 28%, transparent) 60%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .search-card__monogram {
+      transition: none;
+    }
+  }
+{% endstylesheet %}

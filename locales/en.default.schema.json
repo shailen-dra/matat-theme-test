@@ -463,6 +463,20 @@
     },
     "cart_drawer": {
       "name": "Cart drawer"
+    },
+    "search": {
+      "search_field": "Search field",
+      "popular_searches": "Popular searches",
+      "popular_searches_info": "Separate terms with commas. Shown before a search and when nothing is found.",
+      "show_type_tabs": "Show result type tabs",
+      "results": "Results",
+      "results_per_page": "Results per page",
+      "suggestions": "Suggestions",
+      "show_suggestions": "Show suggested products",
+      "show_suggestions_info": "Shown before a search and when nothing is found.",
+      "suggestions_collection": "Suggested products collection",
+      "suggestions_collection_info": "Defaults to all products.",
+      "suggestions_count": "Number of suggested products"
     }
   },
   "settings": {

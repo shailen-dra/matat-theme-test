@@ -108,10 +108,29 @@
   },
   "search": {
     "title": "Search",
-    "placeholder": "Search articles, pages, or products",
+    "placeholder": "Search for rings, necklaces, articles…",
     "submit": "Search",
-    "no_results_html": "No results found for {{ terms }}",
-    "results_for_html": "{{ count }} results found for {{ terms }}"
+    "landing_title": "What are you looking for?",
+    "results_title": "Results for “{{ terms }}”",
+    "result_count": {
+      "one": "{{ count }} result",
+      "other": "{{ count }} results"
+    },
+    "popular": "Popular searches",
+    "no_results_title": "Nothing found for “{{ terms }}”",
+    "no_results_text": "Check the spelling or try a more general word, like a material or a type of piece.",
+    "search_everything": "Search everything",
+    "suggestions_title": "You might like",
+    "suggestions_link": "Shop all",
+    "types": {
+      "label": "Result type",
+      "all_plural": "All",
+      "product_plural": "Products",
+      "article_plural": "Articles",
+      "page_plural": "Pages",
+      "article": "Article",
+      "page": "Page"
+    }
   },
   "general": {
     "language": {

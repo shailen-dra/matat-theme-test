@@ -111,10 +111,29 @@
   },
   "search": {
     "title": "חיפוש",
-    "placeholder": "חיפוש מאמרים, דפים או מוצרים",
+    "placeholder": "חיפוש טבעות, שרשראות, מאמרים…",
     "submit": "חיפוש",
-    "no_results_html": "לא נמצאו תוצאות עבור {{ terms }}",
-    "results_for_html": "נמצאו {{ count }} תוצאות עבור {{ terms }}"
+    "landing_title": "מה אתם מחפשים?",
+    "results_title": "תוצאות עבור „{{ terms }}”",
+    "result_count": {
+      "one": "תוצאה אחת",
+      "other": "{{ count }} תוצאות"
+    },
+    "popular": "חיפושים פופולריים",
+    "no_results_title": "לא נמצאו תוצאות עבור „{{ terms }}”",
+    "no_results_text": "בדקו את האיות או נסו מילה כללית יותר, כמו חומר או סוג תכשיט.",
+    "search_everything": "חיפוש בכל האתר",
+    "suggestions_title": "אולי תאהבו",
+    "suggestions_link": "לכל המוצרים",
+    "types": {
+      "label": "סוג תוצאה",
+      "all_plural": "הכול",
+      "product_plural": "מוצרים",
+      "article_plural": "מאמרים",
+      "page_plural": "דפים",
+      "article": "מאמר",
+      "page": "דף"
+    }
   },
   "general": {
     "language": {

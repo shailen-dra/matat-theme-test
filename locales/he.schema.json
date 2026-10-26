@@ -463,6 +463,20 @@
     },
     "cart_drawer": {
       "name": "מגירת סל הקניות"
+    },
+    "search": {
+      "search_field": "שדה חיפוש",
+      "popular_searches": "חיפושים פופולריים",
+      "popular_searches_info": "הפרידו בין מונחים בפסיקים. מוצג לפני חיפוש וכשאין תוצאות.",
+      "show_type_tabs": "הצגת לשוניות לפי סוג תוצאה",
+      "results": "תוצאות",
+      "results_per_page": "תוצאות בכל עמוד",
+      "suggestions": "הצעות",
+      "show_suggestions": "הצגת מוצרים מוצעים",
+      "show_suggestions_info": "מוצג לפני חיפוש וכשאין תוצאות.",
+      "suggestions_collection": "קולקציית מוצרים מוצעים",
+      "suggestions_collection_info": "ברירת המחדל היא כל המוצרים.",
+      "suggestions_count": "מספר מוצרים מוצעים"
     }
   },
   "settings": {
