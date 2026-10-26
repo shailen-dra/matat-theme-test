@@ -392,13 +392,11 @@
     },
     "product": {
       "name": "פרטי מוצר",
-      "product_info": "השאירו ריק בדפי מוצר כדי להציג את המוצר של אותו דף.",
       "gallery": "גלריית מדיה",
       "media_ratio": "יחס גובה-רוחב של המדיה",
       "media_width": "רוחב המדיה",
       "details": "פרטי המוצר",
-      "sticky_details": "השארת הפרטים גלויים בזמן גלילה",
-      "featured_preset": "מוצר מומלץ"
+      "sticky_details": "השארת הפרטים גלויים בזמן גלילה"
     },
     "collection_tiles": {
       "name": "אריחי קולקציות",
@@ -424,6 +422,10 @@
     },
     "trust_badges": {
       "name": "תגי אמון"
+    },
+    "featured_product": {
+      "name": "מוצר מומלץ",
+      "product_info": "המוצר שיוצג באזור זה."
     }
   }
 }

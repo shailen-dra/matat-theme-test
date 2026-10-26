@@ -392,13 +392,11 @@
     },
     "product": {
       "name": "Product information",
-      "product_info": "Leave empty on product pages to show that page's product.",
       "gallery": "Media gallery",
       "media_ratio": "Media aspect ratio",
       "media_width": "Media width",
       "details": "Product details",
-      "sticky_details": "Keep details visible while scrolling",
-      "featured_preset": "Featured product"
+      "sticky_details": "Keep details visible while scrolling"
     },
     "collection_tiles": {
       "name": "Collection tiles",
@@ -424,6 +422,10 @@
     },
     "trust_badges": {
       "name": "Trust badges"
+    },
+    "featured_product": {
+      "name": "Featured product",
+      "product_info": "Product to show in this section."
     }
   }
 }

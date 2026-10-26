@@ -1,0 +1,204 @@
+{% doc %}
+  Renders the product layout shared by the product page and featured product
+  sections: media gallery, block-driven details and variant syncing.
+
+  @param {section} section - The rendering section, for its id and layout settings
+  @param {product} product - The product to show
+  @param {string} blocks - The section's rendered blocks (`content_for 'blocks'`)
+  @param {boolean} [update_url] - Whether variant changes update the page URL
+
+  @example
+  {% capture blocks %}{% content_for 'blocks' %}{% endcapture %}
+  {% render 'product-info', section: section, product: product, blocks: blocks, update_url: true %}
+{% enddoc %}
+
+{%- liquid
+  assign variant = product.selected_or_first_available_variant
+
+  assign loading = 'lazy'
+  if section.index == 1
+    assign loading = 'eager'
+  endif
+
+  assign product_classes = 'product ' | append: section.settings.media_width
+  if section.settings.sticky_details
+    assign product_classes = product_classes | append: ' product--sticky'
+  endif
+-%}
+
+<product-info
+  class="{{ product_classes }}"
+  data-section-id="{{ section.id }}"
+  data-product-url="{{ product.url }}"
+  data-variant-id="{{ variant.id }}"
+  data-update-url="{{ update_url | default: false }}"
+  style="
+    --product-padding-top: {{ section.settings.padding_top }}px;
+    --product-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --product-details-gap: {{ section.settings.details_gap }}px;
+  "
+>
+  <div class="product__media">
+    {% render 'product-gallery',
+      product: product,
+      layout: section.settings.gallery_layout,
+      ratio: section.settings.media_ratio,
+      loading: loading,
+      id: section.id
+    %}
+  </div>
+
+  <div class="product__details">
+    <div class="product__details-inner">
+      {%- if product == blank and request.design_mode -%}
+        <p class="product__empty">{{ 'product.select_product' | t }}</p>
+      {%- endif -%}
+      {{ blocks }}
+    </div>
+  </div>
+</product-info>
+
+{% stylesheet %}
+  .product {
+    --product-media-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    display: grid;
+    grid-template-columns: var(--product-media-columns);
+    gap: clamp(2rem, 4vw, 5rem);
+    align-items: start;
+    padding-block: var(--product-padding-top) var(--product-padding-bottom);
+  }
+
+  .product--media-half {
+    --product-media-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .product--media-wide {
+    --product-media-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+
+  .product__details-inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--product-details-gap);
+  }
+
+  .product--sticky .product__details {
+    position: sticky;
+    top: calc(var(--header-height, 0px) + 1.5rem);
+  }
+
+  .product[aria-busy='true'] [data-update^='price'],
+  .product[aria-busy='true'] [data-update^='buy'] {
+    opacity: 0.55;
+    transition: opacity 0.2s ease;
+  }
+
+  .product__empty {
+    padding: 1rem 1.25rem;
+    border: 1px dashed color-mix(in srgb, var(--color-foreground) 30%, transparent);
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 989px) {
+    .product {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2rem;
+    }
+
+    .product--sticky .product__details {
+      position: static;
+    }
+  }
+
+  @media (max-width: 749px) {
+    /* The gallery bleeds to the screen edges on phones */
+    .product__media {
+      margin-inline: calc(var(--page-margin) * -1);
+    }
+
+    .product {
+      padding-block-start: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Keeps the product section in sync with the selected variant: re-renders
+   * the section for the chosen option values and swaps every element marked
+   * with `data-update`, so price, stock and buy buttons stay server-rendered.
+   */
+  class ProductInfo extends HTMLElement {
+    connectedCallback() {
+      this.addEventListener('change', this.onOptionChange);
+    }
+
+    disconnectedCallback() {
+      this.removeEventListener('change', this.onOptionChange);
+      this.abortController?.abort();
+    }
+
+    onOptionChange = (event) => {
+      const picker = event.target.closest('[data-variant-picker]');
+      if (!picker) return;
+
+      const selected = [...picker.querySelectorAll('input:checked, select')].map((input) =>
+        input.tagName === 'SELECT' ? input.selectedOptions[0] : input
+      );
+
+      // Combined listings: a value may belong to a sibling product
+      const targetUrl = event.target.tagName === 'SELECT'
+        ? event.target.selectedOptions[0]?.dataset.productUrl
+        : event.target.dataset.productUrl;
+      if (targetUrl && targetUrl !== this.dataset.productUrl) {
+        window.location.href = targetUrl;
+        return;
+      }
+
+      const optionValues = selected.map((el) => el.dataset.optionValueId).join(',');
+      this.renderVariant(optionValues, event.target.id);
+    };
+
+    async renderVariant(optionValues, focusId) {
+      this.abortController?.abort();
+      this.abortController = new AbortController();
+      this.setAttribute('aria-busy', 'true');
+
+      try {
+        const params = new URLSearchParams({ option_values: optionValues, section_id: this.dataset.sectionId });
+        const response = await fetch(`${this.dataset.productUrl}?${params}`, {
+          signal: this.abortController.signal,
+        });
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const next = html.querySelector(`product-info[data-section-id="${this.dataset.sectionId}"]`);
+        if (!next) return;
+
+        this.querySelectorAll('[data-update]').forEach((current) => {
+          const fresh = next.querySelector(`[data-update="${current.dataset.update}"]`);
+          if (!fresh) return;
+          // Only swap the gallery when the variant actually shows different media
+          if (current.dataset.featuredMediaId && current.dataset.featuredMediaId === fresh.dataset.featuredMediaId) return;
+          current.replaceWith(fresh);
+        });
+
+        if (focusId) document.getElementById(focusId)?.focus({ preventScroll: true });
+
+        const variantId = next.dataset.variantId;
+        this.dataset.variantId = variantId;
+        if (variantId && this.dataset.updateUrl === 'true') {
+          window.history.replaceState({}, '', `${this.dataset.productUrl}?variant=${variantId}`);
+        }
+
+        this.dispatchEvent(new CustomEvent('variant:change', { bubbles: true, detail: { variantId } }));
+      } catch (error) {
+        if (error.name !== 'AbortError') console.error(error);
+      } finally {
+        this.removeAttribute('aria-busy');
+      }
+    }
+  }
+
+  if (!customElements.get('product-info')) {
+    customElements.define('product-info', ProductInfo);
+  }
+{% endjavascript %}
