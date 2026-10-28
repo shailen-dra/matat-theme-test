@@ -505,6 +505,20 @@
       "eyebrow": "כותרת עליונה",
       "products_to_show": "מספר מוצרים מרבי להצגה",
       "tinted": "רקע צבעוני"
+    },
+    "blog": {
+      "articles_per_page": "כתבות בעמוד",
+      "show_tags": "הצגת סינון לפי נושא",
+      "show_image": "הצגת תמונה ראשית",
+      "show_date": "הצגת תאריך",
+      "show_author": "הצגת כותב",
+      "show_excerpt": "הצגת תקציר"
+    },
+    "collections_list": {
+      "show_count": "הצגת מספר המוצרים"
+    },
+    "password": {
+      "show_signup": "הצגת הרשמה במייל"
     }
   },
   "settings": {

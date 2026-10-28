@@ -131,6 +131,15 @@
     border-radius: var(--style-border-radius-buttons);
   }
 
+  .buy-buttons__dynamic .shopify-payment-button__button--unbranded {
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .buy-buttons__dynamic .shopify-payment-button__button--unbranded:hover:not([disabled]) {
+    background-color: color-mix(in srgb, var(--color-foreground) 85%, var(--color-background));
+  }
+
   .buy-buttons__message {
     display: flex;
     flex-wrap: wrap;

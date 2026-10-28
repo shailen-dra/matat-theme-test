@@ -13,6 +13,7 @@
   @param {boolean} [show_vendor] - Shows the vendor above the title
   @param {string} [sizes] - The `sizes` attribute for the image
   @param {string} [loading] - Image loading strategy (default `lazy`)
+  @param {string} [heading_tag] - Title element: `h3` (default), or `h2` when the grid sits directly under the page `h1`
 
   @example
   {% render 'product-card', product: product, show_secondary_image: true %}
@@ -81,9 +82,9 @@
       {%- if show_vendor -%}
         <p class="card__vendor">{{ product.vendor }}</p>
       {%- endif -%}
-      <h3 class="card__title">
+      <{{ heading_tag | default: 'h3' }} class="card__title">
         <a href="{{ product.url }}" class="card__link">{{ product.title }}</a>
-      </h3>
+      </{{ heading_tag | default: 'h3' }}>
       <p class="card__price">
         {%- if on_sale -%}
           <span class="visually-hidden">{{ 'product.price.sale' | t }}</span>
@@ -117,7 +118,7 @@
       >
     </div>
     <div class="card__info">
-      <h3 class="card__title">{{ 'product.card.placeholder_title' | t }}</h3>
+      <{{ heading_tag | default: 'h3' }} class="card__title">{{ 'product.card.placeholder_title' | t }}</{{ heading_tag | default: 'h3' }}>
       <p class="card__price">{{ 129000 | money }}</p>
     </div>
   {%- endif -%}
@@ -278,7 +279,7 @@
   }
 
   .card__price-compare {
-    opacity: 0.55;
+    opacity: 0.75;
   }
 
   [dir='rtl'] :is(.card__badge, .card__vendor) {

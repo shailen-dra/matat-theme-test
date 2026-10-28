@@ -1,23 +1,140 @@
 {% comment %}
   This section is used in the 404 template to render page shown when customers
-  enter an invalid store URL.
+  enter an invalid store URL: a short message, a search field and links back
+  into the store.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/404
 {% endcomment %}
 
-<h1>{{ '404.title' | t }}</h1>
+{%- liquid
+  assign search_id = 'NotFoundSearch-' | append: section.id
+  assign shop_label = '404.back_to_shopping' | t
+  assign home_label = '404.back_home' | t
+-%}
 
-<p>
-  {{ '404.not_found' | t }}
-</p>
+<div
+  class="not-found section"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="not-found__inner">
+    <p class="not-found__code" aria-hidden="true">{{ '404.title' | t }}</p>
+    <h1 class="heading heading--h2">{{ '404.not_found' | t }}</h1>
+    <p class="heading heading--subtitle">{{ '404.text' | t }}</p>
 
-<a href="{{ routes.all_products_collection_url }}">
-  {{ '404.back_to_shopping' | t }}
-</a>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="not-found__search">
+      <label for="{{ search_id }}" class="visually-hidden">{{ 'search.title' | t }}</label>
+      <input
+        id="{{ search_id }}"
+        class="field__input"
+        type="search"
+        name="q"
+        placeholder="{{ 'search.placeholder' | t }}"
+        autocomplete="off"
+      >
+      <button type="submit" class="not-found__search-button">
+        {% render 'icon', name: 'search' %}
+        <span class="visually-hidden">{{ 'search.submit' | t }}</span>
+      </button>
+    </form>
+
+    <div class="not-found__actions">
+      {% render 'button', label: shop_label, url: routes.all_products_collection_url %}
+      {% render 'button', label: home_label, url: routes.root_url, style: 'outline' %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .not-found__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 36rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+
+  .not-found__code {
+    color: var(--color-accent);
+    font-family: var(--font-heading--family);
+    font-size: clamp(5rem, 14vw, 9rem);
+    font-weight: var(--font-heading--weight);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  .not-found__search {
+    position: relative;
+    width: 100%;
+    margin-block-start: 1rem;
+  }
+
+  .not-found__search .field__input {
+    padding-inline-end: 3.25rem;
+  }
+
+  .not-found__search-button {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    border: 0;
+    background: none;
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+
+  .not-found__search-button .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .not-found__search-button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+  }
+
+  .not-found__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-block-start: 0.75rem;
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.404",
-  "settings": []
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 128
+    }
+  ]
 }
 {% endschema %}

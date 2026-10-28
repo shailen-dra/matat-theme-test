@@ -1,35 +1,329 @@
 {% comment %}
-  This section is used in the blog template to render the blog page listing all
-  articles within a blog.
+  Blog template section: the blog title, an optional topic filter built from
+  article tags, and a paginated grid of article cards.
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/blog
 {% endcomment %}
 
-<h1>{{ blog.title }}</h1>
+<div
+  class="blog section"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    --blog-columns: {{ section.settings.columns_desktop }};
+  "
+>
+  <header class="blog__header">
+    <h1 class="heading heading--h1">{{ blog.title | escape }}</h1>
 
-{% paginate blog.articles by 5 %}
-  {% for article in blog.articles %}
-    <div>
-      {% if article.image %}
-        {{ article.image | image_url: width: 1000 | image_tag }}
-      {% endif %}
-      <h2>
-        {{ article.title | link_to: article.url }}
-      </h2>
-      {% assign date = article.published_at | time_tag: format: 'date' %}
-      <p>{{ 'blog.article_metadata_html' | t: date: date, author: article.author }}</p>
-      <p>{{ article.excerpt }}</p>
-    </div>
-  {% endfor %}
+    {%- if section.settings.show_tags and blog.all_tags.size > 0 -%}
+      <nav class="blog__tags" aria-label="{{ 'blog.tags_label' | t }}">
+        <ul class="blog__tag-list" role="list">
+          <li>
+            <a
+              href="{{ blog.url }}"
+              class="blog__tag"
+              {% if current_tags == blank %}
+                aria-current="page"
+              {% endif %}
+            >
+              {{- 'blog.all_tags' | t -}}
+            </a>
+          </li>
+          {%- for tag in blog.all_tags -%}
+            <li>
+              <a
+                href="{{ blog.url }}/tagged/{{ tag | handleize }}"
+                class="blog__tag"
+                {% if current_tags contains tag %}
+                  aria-current="page"
+                {% endif %}
+              >
+                {{- tag | escape -}}
+              </a>
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+  </header>
 
-  {%- if paginate.pages > 1 -%}
-    {{- paginate | default_pagination -}}
-  {%- endif -%}
-{% endpaginate %}
+  {%- paginate blog.articles by section.settings.articles_per_page -%}
+    {%- if blog.articles.size > 0 -%}
+      <ul class="blog__grid" role="list">
+        {%- for article in blog.articles -%}
+          <li>
+            <article class="article-card">
+              {%- if section.settings.show_image and article.image -%}
+                <a href="{{ article.url }}" class="article-card__media" tabindex="-1" aria-hidden="true">
+                  {%- liquid
+                    if forloop.first and paginate.current_page == 1
+                      assign loading = 'eager'
+                    else
+                      assign loading = 'lazy'
+                    endif
+                  -%}
+                  {{
+                    article.image
+                    | image_url: width: 1200
+                    | image_tag:
+                      widths: '360, 540, 720, 900, 1200',
+                      sizes: '(min-width: 990px) calc(100vw / 3), (min-width: 750px) 50vw, 100vw',
+                      loading: loading,
+                      class: 'article-card__image',
+                      alt: ''
+                  }}
+                </a>
+              {%- endif -%}
+
+              <div class="article-card__content">
+                {%- if section.settings.show_date or section.settings.show_author -%}
+                  <p class="article-card__meta">
+                    {%- if section.settings.show_date -%}
+                      {{- article.published_at | time_tag: format: 'date' -}}
+                    {%- endif -%}
+                    {%- if section.settings.show_author -%}
+                      <span>{{ 'blog.by_author' | t: author: article.author }}</span>
+                    {%- endif -%}
+                  </p>
+                {%- endif -%}
+
+                <h2 class="heading heading--h3 article-card__title">
+                  <a href="{{ article.url }}">{{ article.title | escape }}</a>
+                </h2>
+
+                {%- if section.settings.show_excerpt -%}
+                  {%- assign excerpt = article.excerpt | default: article.content | strip_html | truncatewords: 26 -%}
+                  {%- if excerpt != blank -%}
+                    <p class="article-card__excerpt">{{ excerpt | strip_html }}</p>
+                  {%- endif -%}
+                {%- endif -%}
+              </div>
+            </article>
+          </li>
+        {%- endfor -%}
+      </ul>
+
+      {% render 'pagination', paginate: paginate %}
+    {%- else -%}
+      <p class="blog__empty">{{ 'blog.empty' | t }}</p>
+    {%- endif -%}
+  {%- endpaginate -%}
+</div>
+
+{% stylesheet %}
+  .blog__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.75rem;
+    margin-block-end: clamp(2.5rem, 5vw, 4rem);
+    text-align: center;
+  }
+
+  .blog__tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .blog__tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding: 0.5rem 1.125rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    border-radius: 999px;
+    color: var(--color-foreground);
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .blog__tag:hover {
+    border-color: var(--color-foreground);
+  }
+
+  .blog__tag[aria-current='page'] {
+    border-color: var(--color-foreground);
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .blog__tag:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .blog__grid {
+    display: grid;
+    grid-template-columns: repeat(var(--blog-columns), minmax(0, 1fr));
+    gap: clamp(2.5rem, 4vw, 3.5rem) clamp(1.25rem, 2.5vw, 2rem);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .blog__empty {
+    text-align: center;
+    opacity: 0.75;
+  }
+
+  .article-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    height: 100%;
+  }
+
+  .article-card__media {
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--style-border-radius-buttons);
+    background-color: color-mix(in srgb, var(--color-foreground) 5%, var(--color-background));
+  }
+
+  .article-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.9s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+
+  .article-card:hover .article-card__image {
+    transform: scale(1.04);
+  }
+
+  .article-card__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .article-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  .article-card__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .article-card__title a:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.2em;
+  }
+
+  .article-card__excerpt {
+    line-height: 1.65;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 989px) {
+    .blog__grid {
+      grid-template-columns: repeat(min(var(--blog-columns), 2), minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 749px) {
+    .blog__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .article-card__image {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
 
 {% schema %}
 {
   "name": "t:general.blog",
-  "settings": []
+  "settings": [
+    {
+      "type": "range",
+      "id": "articles_per_page",
+      "label": "t:sections.blog.articles_per_page",
+      "min": 3,
+      "max": 24,
+      "step": 3,
+      "default": 9
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "t:labels.columns_desktop",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" }
+      ],
+      "default": "3"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_tags",
+      "label": "t:sections.blog.show_tags",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "t:sections.blog.show_image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "t:sections.blog.show_date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "t:sections.blog.show_author",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "t:sections.blog.show_excerpt",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 96
+    }
+  ]
 }
 {% endschema %}

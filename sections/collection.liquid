@@ -238,7 +238,8 @@
                   show_secondary_image: section.settings.show_secondary_image,
                   show_vendor: section.settings.show_vendor,
                   sizes: sizes,
-                  loading: loading
+                  loading: loading,
+                  heading_tag: 'h2'
                 %}
               </li>
             {%- endfor -%}
@@ -356,7 +357,7 @@
 
   .collection__count {
     font-size: 0.875rem;
-    opacity: 0.65;
+    opacity: 0.75;
   }
 
   .collection__sort {
@@ -367,7 +368,7 @@
 
   .collection__sort-label {
     font-size: 0.875rem;
-    opacity: 0.65;
+    opacity: 0.75;
   }
 
   .collection__select {
@@ -633,7 +634,12 @@
     }
 
     .collection__sort-label {
-      display: none;
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
     }
 
     .collection__count {

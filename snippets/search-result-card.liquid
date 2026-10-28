@@ -9,6 +9,7 @@
   @param {string} [ratio] - Image ratio class: `card--portrait` (default), `card--square` or `card--natural`
   @param {string} [sizes] - The `sizes` attribute for the image
   @param {string} [loading] - Image loading strategy (default `lazy`)
+  @param {string} [heading_tag] - Title element: `h3` (default) or `h2`
 
   @example
   {% render 'search-result-card', result: result, terms: search.terms %}
@@ -70,9 +71,9 @@
         {{- result.published_at | time_tag: format: 'date' -}}
       </p>
     {%- endif -%}
-    <h3 class="card__title">
+    <{{ heading_tag | default: 'h3' }} class="card__title">
       <a href="{{ result.url }}" class="card__link">{{ title }}</a>
-    </h3>
+    </{{ heading_tag | default: 'h3' }}>
     {%- if excerpt != blank -%}
       <p class="search-card__excerpt">{{ excerpt }}</p>
     {%- endif -%}

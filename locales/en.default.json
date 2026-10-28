@@ -1,8 +1,10 @@
 {
   "404": {
     "title": "404",
-    "not_found": "Page not found.",
-    "back_to_shopping": "Back to shopping"
+    "not_found": "Page not found",
+    "back_to_shopping": "Back to shopping",
+    "text": "The page you're looking for has moved or no longer exists. Try a search, or head back to the shop.",
+    "back_home": "Back to home"
   },
   "blog": {
     "article_comments": "Comments",
@@ -11,7 +13,20 @@
     "comment_form_email": "Email",
     "comment_form_name": "Name",
     "comment_form_submit": "Post",
-    "comment_form_title": "Add a comment"
+    "comment_form_title": "Add a comment",
+    "tags_label": "Filter articles by topic",
+    "all_tags": "All",
+    "by_author": "By {{ author }}",
+    "empty": "No articles yet. Check back soon.",
+    "back_to_blog": "Back to {{ title }}",
+    "tagged": "Tagged",
+    "comments_count": {
+      "one": "{{ count }} comment",
+      "other": "{{ count }} comments"
+    },
+    "comment_posted": "Thanks, your comment was posted.",
+    "comment_moderated": "Thanks, your comment will appear once it's approved.",
+    "moderated_note": "Comments are approved before they appear."
   },
   "cart": {
     "checkout": "Checkout",
@@ -99,12 +114,24 @@
     "card": "Gift card",
     "expired": "This gift card has expired",
     "expires_on": "Expires on {{ expires_on }}",
-    "use_at_checkout": "Use this gift card at checkout"
+    "use_at_checkout": "Use this gift card at checkout",
+    "title": "Your gift card",
+    "initial_value": "Original value {{ value }}",
+    "copy_code": "Copy",
+    "copied": "Copied",
+    "qr_label": "QR code to redeem this gift card in store",
+    "shop_link": "Start shopping",
+    "print": "Print"
   },
   "password": {
     "title": "This shop is private",
     "password": "Password",
-    "enter": "Enter"
+    "enter": "Enter",
+    "signup_heading": "Be the first to know when we open",
+    "signup_submit": "Notify me",
+    "signup_success": "Thank you. We'll email you when we open.",
+    "enter_using_password": "Enter using password",
+    "admin_link_html": "Are you the store owner? <a href=\"/admin\">Log in here</a>"
   },
   "search": {
     "title": "Search",

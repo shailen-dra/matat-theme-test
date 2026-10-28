@@ -5,6 +5,13 @@
   if block_count < 1
     assign block_count = 1
   endif
+
+  # On a dark footer the accent is lightened so accent text stays readable
+  assign footer_accent = settings.accent_color
+  assign footer_brightness = section.settings.background_color | color_brightness
+  if footer_brightness < 128
+    assign footer_accent = settings.accent_color | color_lighten: 22
+  endif
 -%}
 
 <footer
@@ -12,6 +19,7 @@
   style="
     --color-background: {{ section.settings.background_color }};
     --color-foreground: {{ section.settings.text_color }};
+    --color-accent: {{ footer_accent }};
     --footer-columns: {{ block_count }};
     --footer-padding-top: {{ section.settings.padding_top }}px;
     --footer-padding-bottom: {{ section.settings.padding_bottom }}px;

@@ -505,6 +505,20 @@
       "eyebrow": "Eyebrow",
       "products_to_show": "Maximum products to show",
       "tinted": "Tinted background"
+    },
+    "blog": {
+      "articles_per_page": "Articles per page",
+      "show_tags": "Show topic filter",
+      "show_image": "Show featured image",
+      "show_date": "Show date",
+      "show_author": "Show author",
+      "show_excerpt": "Show excerpt"
+    },
+    "collections_list": {
+      "show_count": "Show product count"
+    },
+    "password": {
+      "show_signup": "Show email signup"
     }
   },
   "settings": {

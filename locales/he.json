@@ -1,8 +1,10 @@
 {
   "404": {
     "title": "404",
-    "not_found": "הדף לא נמצא.",
-    "back_to_shopping": "חזרה לחנות"
+    "not_found": "הדף לא נמצא",
+    "back_to_shopping": "חזרה לחנות",
+    "text": "הדף שחיפשת הועבר או שאינו קיים עוד. נסו לחפש, או חזרו לחנות.",
+    "back_home": "חזרה לדף הבית"
   },
   "blog": {
     "article_comments": "תגובות",
@@ -11,7 +13,20 @@
     "comment_form_email": "אימייל",
     "comment_form_name": "שם",
     "comment_form_submit": "פרסום",
-    "comment_form_title": "הוספת תגובה"
+    "comment_form_title": "הוספת תגובה",
+    "tags_label": "סינון כתבות לפי נושא",
+    "all_tags": "הכל",
+    "by_author": "מאת {{ author }}",
+    "empty": "אין עדיין כתבות. בקרו שוב בקרוב.",
+    "back_to_blog": "חזרה אל {{ title }}",
+    "tagged": "תגיות",
+    "comments_count": {
+      "one": "תגובה אחת",
+      "other": "{{ count }} תגובות"
+    },
+    "comment_posted": "תודה, התגובה שלך פורסמה.",
+    "comment_moderated": "תודה, התגובה שלך תופיע לאחר אישור.",
+    "moderated_note": "תגובות מתפרסמות לאחר אישור."
   },
   "cart": {
     "checkout": "לתשלום",
@@ -102,12 +117,24 @@
     "card": "כרטיס מתנה",
     "expired": "תוקף כרטיס המתנה פג",
     "expires_on": "בתוקף עד {{ expires_on }}",
-    "use_at_checkout": "ניתן לממש את כרטיס המתנה בתשלום"
+    "use_at_checkout": "ניתן לממש את כרטיס המתנה בתשלום",
+    "title": "כרטיס המתנה שלך",
+    "initial_value": "ערך מקורי {{ value }}",
+    "copy_code": "העתקה",
+    "copied": "הועתק",
+    "qr_label": "קוד QR למימוש כרטיס המתנה בחנות",
+    "shop_link": "להתחיל לקנות",
+    "print": "הדפסה"
   },
   "password": {
     "title": "החנות פרטית",
     "password": "סיסמה",
-    "enter": "כניסה"
+    "enter": "כניסה",
+    "signup_heading": "היו הראשונים לדעת כשנפתח",
+    "signup_submit": "עדכנו אותי",
+    "signup_success": "תודה. נשלח לך מייל כשנפתח.",
+    "enter_using_password": "כניסה עם סיסמה",
+    "admin_link_html": "בעלי החנות? <a href=\"/admin\">התחברו כאן</a>"
   },
   "search": {
     "title": "חיפוש",

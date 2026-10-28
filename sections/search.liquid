@@ -330,10 +330,12 @@
                       show_secondary_image: section.settings.show_secondary_image,
                       show_vendor: section.settings.show_vendor,
                       sizes: sizes,
-                      loading: loading
+                      loading: loading,
+                      heading_tag: 'h2'
                     %}
                   {%- else -%}
                     {% render 'search-result-card',
+                      heading_tag: 'h2',
                       result: result,
                       terms: terms,
                       ratio: section.settings.image_ratio,
