@@ -30,6 +30,7 @@
   class="{{ product_classes }}"
   data-section-id="{{ section.id }}"
   data-product-url="{{ product.url }}"
+  data-product-handle="{{ product.handle }}"
   data-variant-id="{{ variant.id }}"
   data-update-url="{{ update_url | default: false }}"
   style="
@@ -44,7 +45,8 @@
       layout: section.settings.gallery_layout,
       ratio: section.settings.media_ratio,
       loading: loading,
-      id: section.id
+      id: section.id,
+      zoom: section.settings.enable_zoom
     %}
   </div>
 

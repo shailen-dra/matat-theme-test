@@ -81,9 +81,41 @@
       "settings": {
         "show_payment_icons": true
       }
+    },
+    "newsletter_popup": {
+      "type": "newsletter-popup",
+      "blocks": {
+        "eyebrow": {
+          "type": "heading",
+          "settings": {
+            "text": "Join the list",
+            "style": "heading--eyebrow heading--accent",
+            "tag": "p"
+          }
+        },
+        "signup": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "10% off your first piece",
+            "text": "<p>Plus early access to new collections and private sales. No spam, unsubscribe anytime.</p>",
+            "form_style": "newsletter--boxed",
+            "button_label": "Subscribe"
+          }
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "signup"
+      ],
+      "settings": {
+        "enabled": true,
+        "delay": 8,
+        "frequency": 14
+      }
     }
   },
   "order": [
-    "footer"
+    "footer",
+    "newsletter_popup"
   ]
 }

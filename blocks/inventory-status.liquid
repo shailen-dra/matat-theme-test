@@ -1,0 +1,164 @@
+{% doc %}
+  Renders the selected variant's stock level: "Only 3 left" when stock runs
+  low, an optional "In stock" note, and a pre-order note when the variant
+  can be bought while out of stock. Updates with the variant picker. Shows
+  nothing for variants whose inventory isn't tracked.
+
+  @example
+  {% content_for 'block', type: 'inventory-status', id: 'inventory-status' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign threshold = block.settings.threshold
+  assign status = blank
+
+  if variant != blank and variant.inventory_management == 'shopify'
+    assign quantity = variant.inventory_quantity
+    if quantity > 0 and quantity <= threshold
+      assign status = 'low'
+    elsif quantity > threshold
+      if block.settings.show_in_stock
+        assign status = 'in_stock'
+      endif
+    elsif variant.available
+      assign status = 'backorder'
+    endif
+  endif
+
+  if status == 'low'
+    assign level = quantity | times: 100 | divided_by: threshold | at_least: 8
+  endif
+-%}
+
+<div class="inventory" data-update="inventory-{{ block.id }}" {{ block.shopify_attributes }}>
+  {%- case status -%}
+    {%- when 'low' -%}
+      <p class="inventory__status inventory__status--low">
+        <span class="inventory__dot" aria-hidden="true"></span>
+        {{ 'product.inventory.low_stock' | t: count: quantity }}
+      </p>
+      {%- if block.settings.show_bar -%}
+        <span class="inventory__bar" aria-hidden="true">
+          <span class="inventory__fill" style="--inventory-level: {{ level }}%;"></span>
+        </span>
+      {%- endif -%}
+    {%- when 'in_stock' -%}
+      <p class="inventory__status inventory__status--in-stock">
+        <span class="inventory__dot" aria-hidden="true"></span>
+        {{ 'product.inventory.in_stock' | t }}
+      </p>
+    {%- when 'backorder' -%}
+      <p class="inventory__status inventory__status--backorder">
+        <span class="inventory__dot" aria-hidden="true"></span>
+        {{ 'product.inventory.backorder' | t }}
+      </p>
+  {%- endcase -%}
+</div>
+
+{% stylesheet %}
+  .inventory:empty {
+    display: none;
+  }
+
+  .inventory {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .inventory__status {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-size: 0.875rem;
+  }
+
+  .inventory__dot {
+    position: relative;
+    flex-shrink: 0;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: var(--inventory-color);
+  }
+
+  .inventory__status--low {
+    --inventory-color: #c2410c;
+  }
+
+  .inventory__status--in-stock {
+    --inventory-color: #15803d;
+  }
+
+  .inventory__status--backorder {
+    --inventory-color: color-mix(in srgb, var(--color-foreground) 50%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .inventory__status--low .inventory__dot::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background-color: inherit;
+      animation: inventory-pulse 1.8s ease-out infinite;
+    }
+  }
+
+  @keyframes inventory-pulse {
+    to {
+      opacity: 0;
+      transform: scale(2.8);
+    }
+  }
+
+  .inventory__bar {
+    display: block;
+    width: 100%;
+    max-width: 16rem;
+    height: 3px;
+    overflow: hidden;
+    border-radius: 3px;
+    background-color: color-mix(in srgb, var(--color-foreground) 10%, transparent);
+  }
+
+  .inventory__fill {
+    display: block;
+    width: var(--inventory-level);
+    height: 100%;
+    background-color: #c2410c;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.inventory_status.name",
+  "settings": [
+    {
+      "type": "range",
+      "id": "threshold",
+      "label": "t:blocks.inventory_status.threshold",
+      "info": "t:blocks.inventory_status.threshold_info",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bar",
+      "label": "t:blocks.inventory_status.show_bar",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_in_stock",
+      "label": "t:blocks.inventory_status.show_in_stock",
+      "default": false
+    }
+  ],
+  "presets": [{ "name": "t:blocks.inventory_status.name" }]
+}
+{% endschema %}

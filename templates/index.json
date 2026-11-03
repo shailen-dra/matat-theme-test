@@ -584,6 +584,24 @@
         "padding_top": 64,
         "padding_bottom": 64
       }
+    },
+    "countdown": {
+      "type": "countdown",
+      "settings": {
+        "end_date": "2026-12-24",
+        "end_time": "18:00",
+        "expired_behavior": "hide",
+        "expired_text": "This drop has ended. Thank you!",
+        "eyebrow": "Limited edition",
+        "title": "The holiday drop <em>ends soon</em>",
+        "subtitle": "A small run of hand-finished pieces. Once they're gone, they're gone.",
+        "button_label": "Shop the drop",
+        "button_link": "shopify://collections/all",
+        "background": "#1a1a1a",
+        "foreground": "#f5f0e8",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
     }
   },
   "order": [
@@ -595,6 +613,7 @@
     "collage",
     "brand_story",
     "studio_video",
+    "countdown",
     "metal_tiles",
     "testimonials",
     "press",

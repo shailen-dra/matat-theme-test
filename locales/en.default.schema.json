@@ -377,6 +377,13 @@
       "engraving_tag": "Only for products tagged",
       "engraving_tag_info": "Leave blank to offer engraving on every product.",
       "show_gift_note": "Show gift note"
+    },
+    "inventory_status": {
+      "name": "Inventory status",
+      "threshold": "Low stock threshold",
+      "threshold_info": "Shows \"Only X left\" at or below this quantity. Needs inventory tracking.",
+      "show_bar": "Show stock bar",
+      "show_in_stock": "Show \"In stock\" above the threshold"
     }
   },
   "sections": {
@@ -428,7 +435,9 @@
       "media_ratio": "Media aspect ratio",
       "media_width": "Media width",
       "details": "Product details",
-      "sticky_details": "Keep details visible while scrolling"
+      "sticky_details": "Keep details visible while scrolling",
+      "enable_zoom": "Enable image zoom",
+      "enable_zoom_info": "Opens images full screen, where shoppers can zoom in."
     },
     "collection_tiles": {
       "name": "Collection tiles",
@@ -613,6 +622,28 @@
       "contact": "Contact prompt",
       "structured_data": "Add FAQ structured data",
       "structured_data_info": "Helps search engines show your questions in results. Use on one FAQ section per page."
+    },
+    "countdown": {
+      "name": "Countdown",
+      "end_date": "End date",
+      "end_date_info": "Format: YYYY-MM-DD. Uses your store's time zone.",
+      "end_time": "End time",
+      "end_time_info": "24-hour format, for example 18:00.",
+      "expired_behavior": "When the countdown ends",
+      "show_message": "Show a message",
+      "hide_section": "Hide the section",
+      "expired_text": "Ended message"
+    },
+    "recently_viewed": {
+      "name": "Recently viewed",
+      "card": "Recently viewed card"
+    },
+    "newsletter_popup": {
+      "name": "Newsletter popup",
+      "enabled": "Show popup",
+      "delay": "Show after",
+      "frequency": "Show again after",
+      "frequency_info": "Days to wait after a shopper closes the popup. Shoppers who subscribe won't see it again."
     }
   },
   "settings": {

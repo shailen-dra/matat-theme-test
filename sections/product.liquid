@@ -13,6 +13,31 @@
   </script>
 {%- endif -%}
 
+{% javascript %}
+  /* Remember this product for the recently viewed section (newest first, max 12) */
+  {
+  const rememberProduct = () => {
+    const info = document.querySelector('product-info[data-update-url="true"][data-product-handle]');
+    const handle = info?.dataset.productHandle;
+    if (!handle) return;
+    const key = 'theme:recently-viewed';
+    try {
+      const list = JSON.parse(localStorage.getItem(key)) || [];
+      const next = [handle, ...list.filter((item) => item !== handle)].slice(0, 12);
+      localStorage.setItem(key, JSON.stringify(next));
+    } catch {
+      /* Storage unavailable (private mode or blocked): nothing to remember */
+    }
+  };
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', rememberProduct);
+  } else {
+    rememberProduct();
+  }
+  }
+{% endjavascript %}
+
 {% schema %}
 {
   "name": "t:sections.product.name",
@@ -99,6 +124,13 @@
         }
       ],
       "default": "product--media-default"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_zoom",
+      "label": "t:sections.product.enable_zoom",
+      "info": "t:sections.product.enable_zoom_info",
+      "default": true
     },
     {
       "type": "header",

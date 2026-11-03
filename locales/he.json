@@ -233,6 +233,19 @@
     },
     "collage": {
       "shop_collection": "לקנייה"
+    },
+    "countdown": {
+      "ends_on": "מסתיים ב־{{ date }} בשעה {{ time }}",
+      "days": "ימים",
+      "hours": "שעות",
+      "minutes": "דקות",
+      "seconds": "שניות",
+      "set_date": "הגדירו תאריך סיום כדי להפעיל את הספירה לאחור."
+    },
+    "newsletter_popup": {
+      "label": "הרשמה לניוזלטר",
+      "no_thanks": "לא תודה",
+      "close": "סגירה"
     }
   },
   "header": {
@@ -335,6 +348,21 @@
       "characters_left": "נותרו {{ count }} תווים",
       "add_gift_note": "הוספת ברכה למתנה",
       "gift_note_label": "הברכה שלכם"
+    },
+    "lightbox": {
+      "label": "תמונות של {{ title }}",
+      "hint": "לחצו על תמונה כדי להגדיל",
+      "close": "סגירה",
+      "open": "הגדלת תמונה {{ index }}"
+    },
+    "inventory": {
+      "low_stock": {
+        "one": "נשאר רק 1",
+        "two": "נשארו רק 2",
+        "other": "נשארו רק {{ count }}"
+      },
+      "in_stock": "במלאי, מוכן למשלוח",
+      "backorder": "אזל מהמלאי, זמין בהזמנה מוקדמת"
     }
   },
   "contact": {

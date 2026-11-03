@@ -10,6 +10,7 @@
   @param {string} [ratio] - Media aspect ratio: `adapt`, `portrait` (default) or `square`
   @param {string} [loading] - Loading strategy for the first image: `eager` or `lazy` (default)
   @param {string} [id] - Unique id used to scope element ids (e.g. `section.id`)
+  @param {boolean} [zoom] - Adds zoom buttons that open the images in a full-screen viewer
 
   @example
   {% render 'product-gallery', product: product, layout: 'product-gallery--thumbnails', id: section.id %}
@@ -42,6 +43,8 @@
   else
     assign media_count = 4
   endif
+
+  assign image_index = 0
 -%}
 
 <product-gallery
@@ -94,6 +97,18 @@
                   alt: media_alt,
                   class: 'product-gallery__image'
               }}
+              {%- if zoom -%}
+                <button
+                  type="button"
+                  class="product-gallery__zoom"
+                  data-lightbox-open="{{ image_index }}"
+                  aria-haspopup="dialog"
+                >
+                  <span class="product-gallery__zoom-icon" aria-hidden="true">{% render 'icon', name: 'zoom' %}</span>
+                  <span class="visually-hidden">{{ 'product.lightbox.open' | t: index: forloop.index }}</span>
+                </button>
+                {%- assign image_index = image_index | plus: 1 -%}
+              {%- endif -%}
             {%- when 'video' -%}
               {{ media | video_tag: controls: true, playsinline: true, muted: true, loop: true, image_size: '1600x', class: 'product-gallery__video' }}
             {%- when 'external_video' -%}
@@ -163,6 +178,11 @@
       </ul>
     {%- endif -%}
   {%- endif -%}
+
+  {%- if zoom and product != blank and image_index > 0 -%}
+    {%- assign zoom_images = ordered_media | where: 'media_type', 'image' -%}
+    {% render 'product-lightbox', images: zoom_images, title: product.title %}
+  {%- endif -%}
 </product-gallery>
 
 {% stylesheet %}
@@ -185,6 +205,58 @@
     overflow: hidden;
     aspect-ratio: var(--media-ratio);
     background-color: color-mix(in srgb, var(--color-foreground) 4%, var(--color-background));
+  }
+
+  /* Zoom: the whole image is the button; the icon shows on hover and focus */
+  .product-gallery__zoom {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    width: 100%;
+    padding: 0.75rem;
+    border: 0;
+    background: none;
+    color: var(--color-foreground);
+    cursor: zoom-in;
+  }
+
+  .product-gallery__zoom-icon {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-background) 85%, transparent);
+    opacity: 0;
+    transform: scale(0.9);
+    transition:
+      opacity 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .product-gallery__zoom-icon .icon {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .product-gallery__zoom:hover .product-gallery__zoom-icon,
+  .product-gallery__zoom:focus-visible .product-gallery__zoom-icon {
+    opacity: 1;
+    transform: none;
+  }
+
+  .product-gallery__zoom:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: -2px;
+  }
+
+  @media (hover: none) {
+    .product-gallery__zoom-icon {
+      opacity: 1;
+      transform: none;
+    }
   }
 
   .product-gallery__item > :is(img, svg, video, iframe, model-viewer),

@@ -1,0 +1,22 @@
+{%- comment -%}
+  One product card for the recently viewed section. Not added to templates:
+  `recently-viewed` fetches it per product with
+  `/products/<handle>?section_id=recently-viewed-card`.
+{%- endcomment -%}
+
+<div data-recent-card="{{ product.handle }}">
+  {%- if product != blank and product.available -%}
+    {% render 'product-card',
+      product: product,
+      show_secondary_image: true,
+      sizes: '(min-width: 990px) 25vw, 50vw'
+    %}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.recently_viewed.card",
+  "settings": []
+}
+{% endschema %}

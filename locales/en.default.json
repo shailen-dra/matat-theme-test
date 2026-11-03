@@ -230,6 +230,19 @@
     },
     "collage": {
       "shop_collection": "Shop now"
+    },
+    "countdown": {
+      "ends_on": "Ends {{ date }} at {{ time }}",
+      "days": "Days",
+      "hours": "Hours",
+      "minutes": "Minutes",
+      "seconds": "Seconds",
+      "set_date": "Set an end date to start the countdown."
+    },
+    "newsletter_popup": {
+      "label": "Newsletter signup",
+      "no_thanks": "No thanks",
+      "close": "Close"
     }
   },
   "header": {
@@ -330,6 +343,20 @@
       "characters_left": "{{ count }} characters left",
       "add_gift_note": "Add a gift note",
       "gift_note_label": "Your message"
+    },
+    "lightbox": {
+      "label": "{{ title }} images",
+      "hint": "Click an image to zoom",
+      "close": "Close",
+      "open": "Zoom image {{ index }}"
+    },
+    "inventory": {
+      "low_stock": {
+        "one": "Only 1 left",
+        "other": "Only {{ count }} left"
+      },
+      "in_stock": "In stock, ready to ship",
+      "backorder": "Out of stock, available to pre-order"
     }
   },
   "contact": {

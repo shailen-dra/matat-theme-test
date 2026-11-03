@@ -1,0 +1,317 @@
+{%- comment -%}
+  Email signup popup, kept in the footer group so it's on every page. Opens
+  once after a delay, then stays away for the chosen number of days after
+  it's closed (and for good once the shopper subscribes). After the signup
+  form is submitted, it reopens to show the confirmation or error.
+{%- endcomment -%}
+
+{%- assign image = section.settings.image -%}
+
+<newsletter-popup
+  class="popup"
+  data-enabled="{{ section.settings.enabled }}"
+  data-delay="{{ section.settings.delay | times: 1000 }}"
+  data-days="{{ section.settings.frequency }}"
+>
+  <dialog
+    class="popup__dialog{% if image != blank %} popup__dialog--image{% endif %}"
+    aria-labelledby="PopupTitle-{{ section.id }}"
+    scroll-lock
+  >
+    {%- if image != blank -%}
+      <div class="popup__media">
+        {{
+          image
+          | image_url: width: 900
+          | image_tag: widths: '450, 700, 900', sizes: '(min-width: 750px) 22rem, 0px', loading: 'lazy', alt: '', class: 'popup__image'
+        }}
+      </div>
+    {%- endif -%}
+
+    <div class="popup__content">
+      <span id="PopupTitle-{{ section.id }}" class="visually-hidden">{{ 'sections.newsletter_popup.label' | t }}</span>
+      {% content_for 'blocks' %}
+      <button type="button" class="popup__dismiss" data-popup-close>
+        {{- 'sections.newsletter_popup.no_thanks' | t -}}
+      </button>
+    </div>
+
+    <button type="button" class="popup__close" data-popup-close>
+      {% render 'icon', name: 'close' %}
+      <span class="visually-hidden">{{ 'sections.newsletter_popup.close' | t }}</span>
+    </button>
+  </dialog>
+</newsletter-popup>
+
+{% stylesheet %}
+  .popup__dialog {
+    width: min(44rem, calc(100vw - 2rem));
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    padding: 0;
+    border: 0;
+    border-radius: var(--style-border-radius-buttons);
+    overflow: auto;
+    box-shadow: 0 24px 80px rgb(0 0 0 / 0.25);
+  }
+
+  .popup__dialog:not(.popup__dialog--image) {
+    width: min(30rem, calc(100vw - 2rem));
+  }
+
+  .popup__dialog[open] {
+    display: grid;
+    animation: popup-in 0.4s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+  }
+
+  .popup__dialog--image[open] {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+
+  .popup__dialog::backdrop {
+    background-color: rgb(0 0 0 / 0.4);
+  }
+
+  @keyframes popup-in {
+    from {
+      opacity: 0;
+      transform: translateY(16px) scale(0.98);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .popup__dialog[open] {
+      animation: none;
+    }
+  }
+
+  .popup__media {
+    position: relative;
+    min-height: 100%;
+  }
+
+  .popup__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .popup__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .popup__dismiss {
+    align-self: flex-start;
+    min-height: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: 0.8125rem;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+    opacity: 0.65;
+    cursor: pointer;
+  }
+
+  .popup__dismiss:hover {
+    opacity: 1;
+  }
+
+  .popup__close {
+    position: absolute;
+    top: 0.5rem;
+    inset-inline-end: 0.5rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-background) 80%, transparent);
+    color: var(--color-foreground);
+    cursor: pointer;
+  }
+
+  .popup__close .icon {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  :is(.popup__close, .popup__dismiss):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 749px) {
+    .popup__dialog--image[open] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .popup__media {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Newsletter popup. Opens after the delay unless it was closed within the
+   * last `days` days or the shopper already subscribed. Reopens right away
+   * after its own form was submitted, to show the result. In the theme
+   * editor it only opens while the section is selected.
+   */
+  class NewsletterPopup extends HTMLElement {
+    static storageKey = 'theme:newsletter-popup';
+
+    connectedCallback() {
+      this.dialog = this.querySelector('dialog');
+      this.dialog.addEventListener('click', this.onClick);
+      this.dialog.addEventListener('close', this.onClose);
+
+      if (window.Shopify?.designMode) {
+        const section = this.closest('.shopify-section');
+        document.addEventListener('shopify:section:select', (event) => {
+          if (event.target === section) this.open(true);
+        });
+        document.addEventListener('shopify:section:deselect', (event) => {
+          if (event.target === section) this.dialog.close();
+        });
+        return;
+      }
+
+      // After posting the signup form, the page reloads with the result inside
+      if (this.querySelector('.newsletter__message')) {
+        if (this.querySelector('.newsletter__message--success')) this.save({ subscribed: true });
+        this.open(true);
+        return;
+      }
+
+      if (this.dataset.enabled !== 'true' || !this.shouldShow()) return;
+      this.timer = setTimeout(() => this.open(), Number(this.dataset.delay) || 0);
+    }
+
+    disconnectedCallback() {
+      clearTimeout(this.timer);
+    }
+
+    read() {
+      try {
+        return JSON.parse(localStorage.getItem(NewsletterPopup.storageKey)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    save(data) {
+      try {
+        localStorage.setItem(NewsletterPopup.storageKey, JSON.stringify({ ...this.read(), ...data }));
+      } catch {
+        /* Storage unavailable: the popup may show again next visit */
+      }
+    }
+
+    shouldShow() {
+      const { subscribed, closedAt } = this.read();
+      if (subscribed) return false;
+      const days = Number(this.dataset.days) || 0;
+      return !closedAt || Date.now() - closedAt > days * 86400000;
+    }
+
+    open(force = false) {
+      // Never stack over another open dialog (cart drawer, quick view…)
+      if (!force && document.querySelector('dialog[open]')) {
+        this.timer = setTimeout(() => this.open(), 5000);
+        return;
+      }
+      if (!this.dialog.open) this.dialog.showModal();
+    }
+
+    onClick = (event) => {
+      if (event.target === this.dialog || event.target.closest('[data-popup-close]')) this.dialog.close();
+    };
+
+    onClose = () => {
+      if (!window.Shopify?.designMode) this.save({ closedAt: Date.now() });
+    };
+  }
+
+  if (!customElements.get('newsletter-popup')) {
+    customElements.define('newsletter-popup', NewsletterPopup);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.newsletter_popup.name",
+  "tag": "aside",
+  "class": "newsletter-popup-section",
+  "blocks": [{ "type": "@theme" }],
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enabled",
+      "label": "t:sections.newsletter_popup.enabled",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "label": "t:sections.newsletter_popup.delay",
+      "min": 0,
+      "max": 60,
+      "step": 1,
+      "unit": "s",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "frequency",
+      "label": "t:sections.newsletter_popup.frequency",
+      "info": "t:sections.newsletter_popup.frequency_info",
+      "min": 1,
+      "max": 60,
+      "step": 1,
+      "unit": "d",
+      "default": 14
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.newsletter_popup.name",
+      "category": "t:general.forms",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": { "text": "Join the list", "style": "heading--eyebrow heading--accent", "tag": "p" }
+        },
+        {
+          "type": "newsletter",
+          "settings": {
+            "heading": "10% off your first piece",
+            "text": "<p>Plus early access to new collections and private sales. No spam, unsubscribe anytime.</p>",
+            "form_style": "newsletter--boxed",
+            "button_label": "Subscribe"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

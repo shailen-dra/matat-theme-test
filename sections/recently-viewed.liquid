@@ -1,0 +1,176 @@
+{%- comment -%}
+  Products the shopper viewed recently, newest first. Product pages store
+  their handle in localStorage (see `sections/product.liquid`); this section
+  reads that list, skips the product being viewed, and fetches a card for
+  each from the `recently-viewed-card` section. Stays hidden until it has
+  something to show.
+{%- endcomment -%}
+
+<recently-viewed
+  class="recently-viewed"
+  data-limit="{{ section.settings.products_to_show }}"
+  data-current="{{ product.handle }}"
+  data-root="{{ routes.root_url }}"
+  {% unless request.design_mode %}
+    hidden
+  {% endunless %}
+>
+  <div
+    class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+    style="
+      --section-padding-top: {{ section.settings.padding_top }}px;
+      --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+    "
+  >
+    {% render 'section-heading',
+      eyebrow: section.settings.eyebrow,
+      title: section.settings.title,
+      alignment: 'center'
+    %}
+
+    <ul
+      class="product-grid"
+      role="list"
+      style="--grid-columns: {{ section.settings.products_to_show }}; --grid-columns-mobile: 2;"
+      data-grid
+    >
+      {%- if request.design_mode -%}
+        {%- assign demo_images = 'demo-layered-necklaces.jpg,demo-hoops.jpg,demo-rings-hand.jpg,demo-ginkgo-set.jpg,demo-flatlay.jpg' | split: ',' -%}
+        {%- for i in (1..section.settings.products_to_show) -%}
+          {%- assign demo_index = forloop.index0 | modulo: demo_images.size -%}
+          <li class="product-grid__item" data-placeholder>
+            {% render 'product-card', placeholder_image: demo_images[demo_index] %}
+          </li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+  </div>
+</recently-viewed>
+
+{% javascript %}
+  /**
+   * Recently viewed products: fetches a card per stored handle (in
+   * parallel, cached by the browser) and keeps the stored order. Products
+   * that were deleted or sold out are dropped from the list.
+   */
+  class RecentlyViewed extends HTMLElement {
+    static storageKey = 'theme:recently-viewed';
+
+    connectedCallback() {
+      this.load();
+    }
+
+    get handles() {
+      try {
+        return JSON.parse(localStorage.getItem(RecentlyViewed.storageKey)) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    async load() {
+      const limit = Number(this.dataset.limit) || 4;
+      const handles = this.handles.filter((handle) => handle !== this.dataset.current).slice(0, limit);
+      if (!handles.length) return;
+
+      const root = this.dataset.root.endsWith('/') ? this.dataset.root : `${this.dataset.root}/`;
+      const cards = await Promise.all(
+        handles.map(async (handle) => {
+          try {
+            const response = await fetch(`${root}products/${encodeURIComponent(handle)}?section_id=recently-viewed-card`);
+            if (!response.ok) return null;
+            const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+            const card = html.querySelector('[data-recent-card] > *');
+            return card ?? null;
+          } catch {
+            return null;
+          }
+        })
+      );
+
+      const found = cards.filter(Boolean);
+      if (!found.length) return;
+
+      const grid = this.querySelector('[data-grid]');
+      grid.replaceChildren(
+        ...found.map((card) => {
+          const item = document.createElement('li');
+          item.className = 'product-grid__item';
+          item.append(card);
+          return item;
+        })
+      );
+      this.hidden = false;
+    }
+  }
+
+  if (!customElements.get('recently-viewed')) {
+    customElements.define('recently-viewed', RecentlyViewed);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.recently_viewed.name",
+  "tag": "section",
+  "class": "recently-viewed-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Still thinking?"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Recently viewed"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "t:sections.featured_collection.products_to_show",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.recently_viewed.name",
+      "category": "t:general.product"
+    }
+  ]
+}
+{% endschema %}

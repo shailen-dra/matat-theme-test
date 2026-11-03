@@ -1,0 +1,317 @@
+{% doc %}
+  Renders the full-screen image viewer of the product gallery. Opened by the
+  gallery's zoom buttons (`data-lightbox-open`); shows every product image
+  in a swipeable row, and a click (or tap) on an image zooms it 2x, following
+  the pointer to pan. Images load only when the viewer opens.
+
+  @param {media[]} images - The product's image media, in gallery order
+  @param {string} title - Product title, for the dialog label
+
+  @example
+  {% assign images = ordered_media | where: 'media_type', 'image' %}
+  {% render 'product-lightbox', images: images, title: product.title %}
+{% enddoc %}
+
+<product-lightbox class="lightbox">
+  <dialog class="lightbox__dialog" aria-label="{{ 'product.lightbox.label' | t: title: title | escape }}" scroll-lock>
+    <div class="lightbox__track" data-lightbox-track>
+      {%- for image in images -%}
+        <figure class="lightbox__slide" data-lightbox-slide>
+          {{
+            image
+            | image_url: width: 3000
+            | image_tag:
+              widths: '800, 1200, 1600, 2200, 3000',
+              sizes: '100vw',
+              loading: 'lazy',
+              class: 'lightbox__image',
+              alt: image.alt
+          }}
+        </figure>
+      {%- endfor -%}
+    </div>
+
+    <div class="lightbox__bar">
+      <p class="lightbox__counter" dir="ltr" aria-live="polite">
+        <span data-lightbox-current>1</span> / {{ images.size }}
+      </p>
+      <p class="lightbox__hint">{{ 'product.lightbox.hint' | t }}</p>
+    </div>
+
+    <button type="button" class="lightbox__button lightbox__close" data-lightbox-close>
+      {% render 'icon', name: 'close' %}
+      <span class="visually-hidden">{{ 'product.lightbox.close' | t }}</span>
+    </button>
+
+    {%- if images.size > 1 -%}
+      <button type="button" class="lightbox__button lightbox__arrow lightbox__arrow--prev" data-lightbox-prev>
+        {% render 'icon', name: 'chevron-left' %}
+        <span class="visually-hidden">{{ 'product.gallery.previous' | t }}</span>
+      </button>
+      <button type="button" class="lightbox__button lightbox__arrow lightbox__arrow--next" data-lightbox-next>
+        {% render 'icon', name: 'chevron-right' %}
+        <span class="visually-hidden">{{ 'product.gallery.next' | t }}</span>
+      </button>
+    {%- endif -%}
+  </dialog>
+</product-lightbox>
+
+{% stylesheet %}
+  .lightbox__dialog {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    background-color: var(--color-background);
+  }
+
+  .lightbox__dialog::backdrop {
+    background-color: var(--color-background);
+  }
+
+  .lightbox__dialog[open] {
+    animation: lightbox-in 0.25s ease both;
+  }
+
+  @keyframes lightbox-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox__dialog[open] {
+      animation: none;
+    }
+  }
+
+  .lightbox__track {
+    display: flex;
+    height: 100%;
+    overflow-x: auto;
+    overscroll-behavior: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .lightbox__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .lightbox__slide {
+    display: grid;
+    flex: 0 0 100%;
+    place-items: center;
+    margin: 0;
+    overflow: hidden;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .lightbox__image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    cursor: zoom-in;
+    transform-origin: var(--zoom-x, 50%) var(--zoom-y, 50%);
+    transition: transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+
+  .lightbox__slide.is-zoomed .lightbox__image {
+    cursor: zoom-out;
+    transform: scale(2);
+  }
+
+  /* While zoomed the pointer pans, so the slide must not scroll away */
+  .lightbox__track:has(.is-zoomed) {
+    overflow: hidden;
+  }
+
+  .lightbox__bar {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 1rem;
+    pointer-events: none;
+    font-size: 0.8125rem;
+  }
+
+  .lightbox__hint {
+    opacity: 0.6;
+  }
+
+  .lightbox__button {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    border-radius: 50%;
+    background-color: color-mix(in srgb, var(--color-background) 85%, transparent);
+    color: var(--color-foreground);
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+  }
+
+  .lightbox__button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .lightbox__button .icon {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+
+  .lightbox__close {
+    top: 1rem;
+    inset-inline-end: 1rem;
+  }
+
+  .lightbox__arrow {
+    top: 50%;
+    translate: 0 -50%;
+  }
+
+  .lightbox__arrow--prev {
+    inset-inline-start: 1rem;
+  }
+
+  .lightbox__arrow--next {
+    inset-inline-end: 1rem;
+  }
+
+  [dir='rtl'] .lightbox__arrow .icon {
+    transform: scaleX(-1);
+  }
+
+  .lightbox__arrow:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+
+  @media (hover: none) {
+    .lightbox__arrow {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Full-screen product image viewer. Opens on the gallery's zoom buttons at
+   * the clicked image; arrows, arrow keys and swiping move between images,
+   * and clicking an image toggles a 2x zoom that pans with the pointer.
+   */
+  class ProductLightbox extends HTMLElement {
+    connectedCallback() {
+      this.dialog = this.querySelector('dialog');
+      this.track = this.querySelector('[data-lightbox-track]');
+      this.slides = [...this.querySelectorAll('[data-lightbox-slide]')];
+      this.counter = this.querySelector('[data-lightbox-current]');
+      this.prev = this.querySelector('[data-lightbox-prev]');
+      this.next = this.querySelector('[data-lightbox-next]');
+
+      this.gallery = this.closest('product-gallery') ?? this.parentElement;
+      this.gallery.addEventListener('click', this.onOpenClick);
+
+      this.prev?.addEventListener('click', () => this.goTo(this.index - 1));
+      this.next?.addEventListener('click', () => this.goTo(this.index + 1));
+      this.querySelector('[data-lightbox-close]')?.addEventListener('click', () => this.dialog.close());
+      this.track.addEventListener('scroll', this.onScroll, { passive: true });
+      this.track.addEventListener('click', this.onImageClick);
+      this.track.addEventListener('pointermove', this.onPointerMove);
+      this.dialog.addEventListener('keydown', this.onKeydown);
+      this.dialog.addEventListener('close', this.onClose);
+    }
+
+    disconnectedCallback() {
+      this.gallery?.removeEventListener('click', this.onOpenClick);
+    }
+
+    get isRtl() {
+      return getComputedStyle(this).direction === 'rtl';
+    }
+
+    get index() {
+      return Math.round(Math.abs(this.track.scrollLeft) / (this.track.clientWidth || 1));
+    }
+
+    onOpenClick = (event) => {
+      const opener = event.target.closest('[data-lightbox-open]');
+      if (!opener || this.contains(opener)) return;
+      this.trigger = opener;
+      this.dialog.showModal();
+      this.goTo(Number(opener.dataset.lightboxOpen) || 0, true);
+    };
+
+    goTo(index, instant = false) {
+      const target = Math.max(0, Math.min(index, this.slides.length - 1));
+      this.unzoom();
+      this.track.scrollTo({
+        left: target * this.track.clientWidth * (this.isRtl ? -1 : 1),
+        behavior: instant ? 'instant' : 'smooth',
+      });
+      this.update(target);
+    }
+
+    onScroll = () => {
+      cancelAnimationFrame(this.frame);
+      this.frame = requestAnimationFrame(() => this.update(this.index));
+    };
+
+    update(index) {
+      if (this.counter) this.counter.textContent = index + 1;
+      if (this.prev) this.prev.disabled = index === 0;
+      if (this.next) this.next.disabled = index === this.slides.length - 1;
+    }
+
+    onKeydown = (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      const forward = (event.key === 'ArrowRight') !== this.isRtl;
+      this.goTo(this.index + (forward ? 1 : -1));
+      event.preventDefault();
+    };
+
+    onImageClick = (event) => {
+      const slide = event.target.closest('[data-lightbox-slide]');
+      if (!slide || !event.target.matches('img')) return;
+      this.setOrigin(slide, event);
+      slide.classList.toggle('is-zoomed');
+    };
+
+    onPointerMove = (event) => {
+      const slide = event.target.closest('[data-lightbox-slide].is-zoomed');
+      if (slide && event.pointerType === 'mouse') this.setOrigin(slide, event);
+    };
+
+    setOrigin(slide, event) {
+      const rect = slide.getBoundingClientRect();
+      slide.style.setProperty('--zoom-x', `${((event.clientX - rect.left) / rect.width) * 100}%`);
+      slide.style.setProperty('--zoom-y', `${((event.clientY - rect.top) / rect.height) * 100}%`);
+    }
+
+    unzoom() {
+      this.slides.forEach((slide) => slide.classList.remove('is-zoomed'));
+    }
+
+    onClose = () => {
+      this.unzoom();
+      if (this.trigger?.isConnected) this.trigger.focus({ preventScroll: true });
+    };
+  }
+
+  if (!customElements.get('product-lightbox')) {
+    customElements.define('product-lightbox', ProductLightbox);
+  }
+{% endjavascript %}

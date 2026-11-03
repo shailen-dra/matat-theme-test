@@ -1,0 +1,385 @@
+{%- liquid
+  assign end_time = section.settings.end_time | default: '00:00'
+  assign end_string = section.settings.end_date | append: ' ' | append: end_time
+  # Dates are read in the store's time zone
+  assign end_epoch_string = end_string | date: '%s'
+  assign valid = false
+  if section.settings.end_date != blank and end_epoch_string != end_string
+    assign valid = true
+  endif
+  assign end_epoch = end_epoch_string | plus: 0
+  assign now_epoch = 'now' | date: '%s' | plus: 0
+  assign end_label = end_string | date: format: 'abbreviated_date'
+
+  assign expired = false
+  if valid and end_epoch <= now_epoch
+    assign expired = true
+  endif
+
+  assign hide = false
+  if valid == false and request.design_mode == false
+    assign hide = true
+  endif
+  if expired and section.settings.expired_behavior == 'hide' and request.design_mode == false
+    assign hide = true
+  endif
+
+  assign image = section.settings.image
+-%}
+
+{%- unless hide -%}
+  <div
+    class="section full-width countdown-section{% if image != blank %} countdown-section--image{% endif %}"
+    style="
+      --section-padding-top: {{ section.settings.padding_top }}px;
+      --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+      --countdown-bg: {{ section.settings.background }};
+      --countdown-fg: {{ section.settings.foreground }};
+    "
+  >
+    {%- if image != blank -%}
+      <div class="countdown-section__media" aria-hidden="true">
+        {{
+          image
+          | image_url: width: 2400
+          | image_tag:
+            widths: '750, 1100, 1500, 2000, 2400',
+            sizes: '100vw',
+            loading: 'lazy',
+            alt: '',
+            class: 'countdown-section__image'
+        }}
+      </div>
+    {%- endif -%}
+
+    <count-down
+      class="countdown"
+      {% if valid %}
+        data-end="{{ end_epoch | times: 1000 }}"
+      {% endif %}
+      data-hide-expired="{{ section.settings.expired_behavior }}"
+    >
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="heading heading--eyebrow countdown__eyebrow">{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h2 class="heading heading--h1 countdown__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+
+      <div class="countdown__clock" data-clock{% if expired %} hidden{% endif %}>
+        {%- if valid -%}
+          <p class="visually-hidden">
+            {{ 'sections.countdown.ends_on' | t: date: end_label, time: end_time }}
+          </p>
+        {%- endif -%}
+        <div class="countdown__units" aria-hidden="true">
+          {%- assign units = 'days,hours,minutes,seconds' | split: ',' -%}
+          {%- for unit in units -%}
+            {%- assign unit_key = 'sections.countdown.' | append: unit -%}
+            <div class="countdown__unit">
+              <span class="countdown__value" data-unit="{{ unit }}">00</span>
+              <span class="countdown__label">{{ unit_key | t }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <p class="countdown__expired" data-expired{% unless expired %} hidden{% endunless %}>
+        {{ section.settings.expired_text | escape }}
+      </p>
+
+      {%- if valid == false and request.design_mode -%}
+        <p class="countdown__notice">{{ 'sections.countdown.set_date' | t }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="countdown__subtitle">{{ section.settings.subtitle | escape }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        {% render 'button',
+          label: section.settings.button_label,
+          url: section.settings.button_link,
+          style: 'primary',
+          class: 'countdown__button'
+        %}
+      {%- endif -%}
+    </count-down>
+  </div>
+{%- endunless -%}
+
+{% stylesheet %}
+  .countdown-section {
+    --color-foreground: var(--countdown-fg);
+    --color-background: var(--countdown-bg);
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background-color: var(--countdown-bg);
+    color: var(--countdown-fg);
+  }
+
+  .countdown-section__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .countdown-section__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--countdown-bg);
+    opacity: 0.6;
+  }
+
+  .countdown-section__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .countdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    text-align: center;
+  }
+
+  .countdown__title {
+    margin: 0;
+  }
+
+  .countdown__units {
+    display: flex;
+    justify-content: center;
+    gap: clamp(0.5rem, 2vw, 1.5rem);
+    margin-block: 0.5rem;
+  }
+
+  .countdown__unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: clamp(4rem, 10vw, 6.5rem);
+    padding: clamp(0.75rem, 2vw, 1.25rem) 0.5rem;
+    border: 1px solid color-mix(in srgb, var(--countdown-fg) 20%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+  }
+
+  .countdown__value {
+    font-family: var(--font-heading--family);
+    font-size: clamp(2rem, 4vw + 1rem, 3.75rem);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  .countdown__label {
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+
+  [dir='rtl'] .countdown__label {
+    letter-spacing: 0;
+  }
+
+  .countdown__expired {
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.25rem, 1vw + 1rem, 1.75rem);
+  }
+
+  .countdown__subtitle {
+    max-width: 36rem;
+    opacity: 0.8;
+  }
+
+  .countdown__notice {
+    padding: 0.75rem 1rem;
+    border: 1px dashed currentcolor;
+    font-size: 0.875rem;
+  }
+
+  @media (max-width: 749px) {
+    .countdown__unit {
+      min-width: 0;
+      flex: 1;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Countdown: ticks every second to the end time (rendered in the store's
+   * time zone as a timestamp), then swaps to the "ended" message or hides
+   * the section. Only screen-reader text holds the end date; the ticking
+   * digits are hidden from assistive tech so they aren't announced.
+   */
+  class CountDown extends HTMLElement {
+    connectedCallback() {
+      this.end = Number(this.dataset.end);
+      if (!this.end) return;
+      this.values = Object.fromEntries(
+        [...this.querySelectorAll('[data-unit]')].map((el) => [el.dataset.unit, el])
+      );
+      this.tick();
+      this.timer = setInterval(this.tick, 1000);
+    }
+
+    disconnectedCallback() {
+      clearInterval(this.timer);
+    }
+
+    tick = () => {
+      const remaining = Math.max(0, this.end - Date.now());
+      const seconds = Math.floor(remaining / 1000);
+      const parts = {
+        days: Math.floor(seconds / 86400),
+        hours: Math.floor((seconds % 86400) / 3600),
+        minutes: Math.floor((seconds % 3600) / 60),
+        seconds: seconds % 60,
+      };
+      Object.entries(parts).forEach(([unit, value]) => {
+        if (this.values[unit]) this.values[unit].textContent = String(value).padStart(2, '0');
+      });
+
+      if (remaining === 0) {
+        clearInterval(this.timer);
+        if (this.dataset.hideExpired === 'hide' && !window.Shopify?.designMode) {
+          this.closest('.shopify-section')?.setAttribute('hidden', '');
+          return;
+        }
+        this.querySelector('[data-clock]')?.setAttribute('hidden', '');
+        this.querySelector('[data-expired]')?.removeAttribute('hidden');
+      }
+    };
+  }
+
+  if (!customElements.get('count-down')) {
+    customElements.define('count-down', CountDown);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.countdown.name",
+  "tag": "section",
+  "class": "countdown-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "end_date",
+      "label": "t:sections.countdown.end_date",
+      "info": "t:sections.countdown.end_date_info",
+      "placeholder": "2026-12-24"
+    },
+    {
+      "type": "text",
+      "id": "end_time",
+      "label": "t:sections.countdown.end_time",
+      "info": "t:sections.countdown.end_time_info",
+      "placeholder": "18:00",
+      "default": "00:00"
+    },
+    {
+      "type": "select",
+      "id": "expired_behavior",
+      "label": "t:sections.countdown.expired_behavior",
+      "options": [
+        { "value": "message", "label": "t:sections.countdown.show_message" },
+        { "value": "hide", "label": "t:sections.countdown.hide_section" }
+      ],
+      "default": "message"
+    },
+    {
+      "type": "text",
+      "id": "expired_text",
+      "label": "t:sections.countdown.expired_text",
+      "default": "This drop has ended. Thank you!"
+    },
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Limited edition"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "The holiday drop <em>ends soon</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "A small run of hand-finished pieces. Once they're gone, they're gone."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:labels.button_label",
+      "default": "Shop the drop"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:labels.link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "color",
+      "id": "background",
+      "label": "t:labels.background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "foreground",
+      "label": "t:labels.text_color",
+      "default": "#f5f0e8"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.countdown.name",
+      "category": "t:general.banners"
+    }
+  ]
+}
+{% endschema %}
