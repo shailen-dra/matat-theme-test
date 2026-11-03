@@ -340,21 +340,24 @@
           "type": "_hotspot",
           "settings": {
             "position_x": 28,
-            "position_y": 38
+            "position_y": 38,
+            "product": "architectural-sterling-silver-necklace"
           }
         },
         "hotspot_2": {
           "type": "_hotspot",
           "settings": {
             "position_x": 55,
-            "position_y": 62
+            "position_y": 62,
+            "product": "modern-steel-hoop-earrings"
           }
         },
         "hotspot_3": {
           "type": "_hotspot",
           "settings": {
             "position_x": 74,
-            "position_y": 30
+            "position_y": 30,
+            "product": "smoky-taupe-cuff-bracelet"
           }
         }
       },
