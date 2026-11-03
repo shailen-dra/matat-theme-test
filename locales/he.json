@@ -246,6 +246,9 @@
       "label": "הרשמה לניוזלטר",
       "no_thanks": "לא תודה",
       "close": "סגירה"
+    },
+    "before_after": {
+      "slider_label": "גררו כדי להשוות לפני ואחרי"
     }
   },
   "header": {

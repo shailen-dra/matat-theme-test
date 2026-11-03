@@ -40,6 +40,14 @@
     <script src="{{ 'product-components.js' | asset_url }}" defer></script>
 
     {{ content_for_header }}
+
+    {%- if settings.reveal_on_scroll and request.design_mode == false -%}
+      <script>
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+          document.documentElement.classList.add('js-reveal');
+        }
+      </script>
+    {%- endif -%}
   </head>
 
   <body>
@@ -59,6 +67,27 @@
 
     {%- if settings.cart_type == 'drawer' -%}
       {% section 'cart-drawer' %}
+    {%- endif -%}
+
+    {%- if settings.reveal_on_scroll and request.design_mode == false -%}
+      <script>
+        // Scroll reveal: sections below the first fade in as they enter the viewport
+        if (document.documentElement.classList.contains('js-reveal')) {
+          const revealObserver = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('is-revealed');
+                revealObserver.unobserve(entry.target);
+              });
+            },
+            { rootMargin: '0px 0px -10% 0px' }
+          );
+          document
+            .querySelectorAll('main > .shopify-section:not(:first-child)')
+            .forEach((section) => revealObserver.observe(section));
+        }
+      </script>
     {%- endif -%}
   </body>
 </html>

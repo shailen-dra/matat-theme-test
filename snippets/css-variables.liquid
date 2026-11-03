@@ -16,10 +16,35 @@
     --font-heading--weight: {{ settings.type_heading_font.weight }};
     --page-width: {{ settings.max_page_width }};
     --page-margin: {{ settings.min_page_margin }}px;
-    --color-background: {{ settings.background_color }};
-    --color-foreground: {{ settings.foreground_color }};
-    --color-accent: {{ settings.accent_color }};
+    --color-background: {{ settings.body_color_scheme.settings.background }};
+    --color-foreground: {{ settings.body_color_scheme.settings.foreground }};
+    --color-accent: {{ settings.body_color_scheme.settings.accent }};
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
     --style-border-radius-buttons: {{ settings.button_corner_radius }}px;
+  }
+
+  {% # Color schemes: sections apply one with `color-scheme color-<id>` %}
+  {%- for scheme in settings.color_schemes -%}
+    .color-{{ scheme.id }} {
+      --color-background: {{ scheme.settings.background }};
+      --color-foreground: {{ scheme.settings.foreground }};
+      --color-accent: {{ scheme.settings.accent }};
+      --color-background-gradient: {{ scheme.settings.background_gradient | default: 'none' }};
+    }
+  {%- endfor %}
+
+  .color-scheme {
+    background-color: var(--color-background);
+    background-image: var(--color-background-gradient);
+    color: var(--color-foreground);
+  }
+
+  .section.color-scheme {
+    background-color: var(--section-bg, var(--color-background));
+  }
+
+  /* A tint replaces the scheme's gradient */
+  .section--tinted.color-scheme {
+    background-image: none;
   }
 {% endstyle %}

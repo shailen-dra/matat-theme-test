@@ -7,10 +7,10 @@
   endif
 
   # On a dark footer the accent is lightened so accent text stays readable
-  assign footer_accent = settings.accent_color
+  assign footer_accent = settings.body_color_scheme.settings.accent
   assign footer_brightness = section.settings.background_color | color_brightness
   if footer_brightness < 128
-    assign footer_accent = settings.accent_color | color_lighten: 22
+    assign footer_accent = footer_accent | color_lighten: 22
   endif
 -%}
 

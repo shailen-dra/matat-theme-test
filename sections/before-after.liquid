@@ -1,0 +1,348 @@
+{%- liquid
+  assign before = section.settings.before_image
+  assign after = section.settings.after_image
+  assign slider_id = 'BeforeAfter-' | append: section.id
+
+  if after != blank
+    assign ratio = after.aspect_ratio
+  elsif before != blank
+    assign ratio = before.aspect_ratio
+  else
+    assign ratio = 1.5
+  endif
+-%}
+
+<div
+  class="section full-width color-scheme color-{{ section.settings.color_scheme }}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    alignment: 'center'
+  %}
+
+  <before-after
+    class="compare"
+    style="--compare-ratio: {{ ratio }}; --compare-position: {{ section.settings.start_position }}%;"
+  >
+    <div class="compare__frame">
+      <div class="compare__layer compare__layer--after">
+        {%- if after != blank -%}
+          {{
+            after
+            | image_url: width: 2000
+            | image_tag: widths: '550, 750, 1100, 1500, 2000', sizes: '(min-width: 990px) 80vw, 100vw', loading: 'lazy', class: 'compare__image', alt: after.alt
+          }}
+        {%- else -%}
+          <img
+            src="{{ 'demo-rings-hand.jpg' | asset_img_url: '1600x' }}"
+            width="1600"
+            height="1067"
+            alt=""
+            loading="lazy"
+            class="compare__image"
+          >
+        {%- endif -%}
+        {%- if section.settings.after_label != blank -%}
+          <span class="compare__label compare__label--after">{{ section.settings.after_label | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      <div class="compare__layer compare__layer--before" aria-hidden="true">
+        {%- if before != blank -%}
+          {{
+            before
+            | image_url: width: 2000
+            | image_tag: widths: '550, 750, 1100, 1500, 2000', sizes: '(min-width: 990px) 80vw, 100vw', loading: 'lazy', class: 'compare__image', alt: ''
+          }}
+        {%- else -%}
+          <img
+            src="{{ 'demo-rings-hand.jpg' | asset_img_url: '1600x' }}"
+            width="1600"
+            height="1067"
+            alt=""
+            loading="lazy"
+            class="compare__image compare__image--demo-before"
+          >
+        {%- endif -%}
+        {%- if section.settings.before_label != blank -%}
+          <span class="compare__label compare__label--before">{{ section.settings.before_label | escape }}</span>
+        {%- endif -%}
+      </div>
+
+      <span class="compare__handle" aria-hidden="true">
+        <span class="compare__grip">
+          {% render 'icon', name: 'chevron-left' %}
+          {% render 'icon', name: 'chevron-right' %}
+        </span>
+      </span>
+
+      <label for="{{ slider_id }}" class="visually-hidden">{{ 'sections.before_after.slider_label' | t }}</label>
+      <input
+        type="range"
+        id="{{ slider_id }}"
+        class="compare__range"
+        min="0"
+        max="100"
+        step="1"
+        value="{{ section.settings.start_position }}"
+        data-compare-range
+      >
+    </div>
+  </before-after>
+</div>
+
+{% stylesheet %}
+  .compare {
+    display: block;
+    max-width: 64rem;
+    width: 100%;
+    margin-inline: auto;
+  }
+
+  .compare__frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--compare-ratio);
+    border-radius: var(--style-border-radius-buttons);
+    background-color: color-mix(in srgb, var(--color-foreground) 6%, var(--color-background));
+    touch-action: pan-y;
+    user-select: none;
+  }
+
+  .compare__layer {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* The "before" image is revealed from the start edge up to the handle */
+  .compare__layer--before {
+    clip-path: inset(0 calc(100% - var(--compare-position)) 0 0);
+  }
+
+  [dir='rtl'] .compare__layer--before {
+    clip-path: inset(0 0 0 calc(100% - var(--compare-position)));
+  }
+
+  .compare__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Demo only: show the "before" as an unfinished, desaturated photo */
+  .compare__image--demo-before {
+    filter: grayscale(1) contrast(0.85) brightness(1.05);
+  }
+
+  .compare__label {
+    position: absolute;
+    top: 1rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    background-color: rgb(0 0 0 / 0.45);
+    color: #ffffff;
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+  }
+
+  [dir='rtl'] .compare__label {
+    letter-spacing: 0;
+  }
+
+  .compare__label--before {
+    inset-inline-start: 1rem;
+  }
+
+  .compare__label--after {
+    inset-inline-end: 1rem;
+  }
+
+  .compare__handle {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: var(--compare-position);
+    width: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 0 12px rgb(0 0 0 / 0.25);
+    translate: -50% 0;
+    pointer-events: none;
+  }
+
+  [dir='rtl'] .compare__handle {
+    translate: 50% 0;
+  }
+
+  .compare__grip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background-color: #ffffff;
+    color: #1a1a1a;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.2);
+    translate: -50% -50%;
+  }
+
+  .compare__grip .icon {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  /* The native range input does the dragging and keyboard control */
+  .compare__range {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: ew-resize;
+    appearance: none;
+  }
+
+  .compare__range::-webkit-slider-thumb {
+    width: 3rem;
+    height: 100vh;
+    appearance: none;
+  }
+
+  .compare__range::-moz-range-thumb {
+    width: 3rem;
+    height: 100vh;
+    border: 0;
+  }
+
+  .compare__frame:has(.compare__range:focus-visible) .compare__grip {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /* Before / after: mirror the range input into the CSS position variable */
+  class BeforeAfter extends HTMLElement {
+    connectedCallback() {
+      const range = this.querySelector('[data-compare-range]');
+      range?.addEventListener('input', () => {
+        this.style.setProperty('--compare-position', `${range.value}%`);
+      });
+    }
+  }
+
+  if (!customElements.get('before-after')) {
+    customElements.define('before-after', BeforeAfter);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.before_after.name",
+  "tag": "section",
+  "class": "before-after-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "image_picker",
+      "id": "before_image",
+      "label": "t:sections.before_after.before_image"
+    },
+    {
+      "type": "text",
+      "id": "before_label",
+      "label": "t:sections.before_after.before_label",
+      "default": "Before"
+    },
+    {
+      "type": "image_picker",
+      "id": "after_image",
+      "label": "t:sections.before_after.after_image",
+      "info": "t:sections.before_after.after_image_info"
+    },
+    {
+      "type": "text",
+      "id": "after_label",
+      "label": "t:sections.before_after.after_label",
+      "default": "After"
+    },
+    {
+      "type": "range",
+      "id": "start_position",
+      "label": "t:sections.before_after.start_position",
+      "min": 10,
+      "max": 90,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Restoration"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Polished back to <em>new</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "Drag to compare a well-loved piece before and after polishing."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.before_after.name",
+      "category": "t:general.banners"
+    }
+  ]
+}
+{% endschema %}

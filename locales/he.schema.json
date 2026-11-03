@@ -101,7 +101,8 @@
     "image_ratio": "יחס תמונה",
     "icon": "אייקון",
     "icon_size": "גודל אייקון",
-    "layout": "פריסה"
+    "layout": "פריסה",
+    "color_scheme": "ערכת צבעים"
   },
   "options": {
     "alignment": {
@@ -384,6 +385,14 @@
       "threshold_info": "מציג \"נשארו רק X\" בכמות הזו ומטה. דורש מעקב מלאי.",
       "show_bar": "הצגת פס מלאי",
       "show_in_stock": "הצגת \"במלאי\" מעל הסף"
+    },
+    "product_specs": {
+      "name": "מפרט מוצר",
+      "row": "פרט",
+      "value": "ערך",
+      "value_info": "חברו שדה מטא (metafield) של המוצר כדי שכל מוצר יציג ערך משלו. שורות בלי ערך מוסתרות.",
+      "style_lines": "קווים",
+      "style_boxed": "מסגרת"
     }
   },
   "sections": {
@@ -644,6 +653,20 @@
       "delay": "הצגה אחרי",
       "frequency": "הצגה חוזרת אחרי",
       "frequency_info": "מספר הימים להמתנה אחרי שהקונה סוגר את החלון. מי שנרשם לא יראה אותו שוב."
+    },
+    "before_after": {
+      "name": "לפני ואחרי",
+      "before_image": "תמונת לפני",
+      "before_label": "תווית לפני",
+      "after_image": "תמונת אחרי",
+      "after_image_info": "השתמשו בשתי תמונות באותו גודל ובאותו מסגור.",
+      "after_label": "תווית אחרי",
+      "start_position": "מיקום התחלתי"
+    },
+    "timeline": {
+      "name": "ציר זמן",
+      "item": "אבן דרך",
+      "date": "תאריך או שנה"
     }
   },
   "settings": {
@@ -667,6 +690,17 @@
       "group": "Favicon",
       "label": "תמונת Favicon",
       "info": "מוצג בגודל 32 × 32 פיקסלים."
+    },
+    "colors": {
+      "body_scheme": "ערכת הצבעים של העמוד",
+      "body_scheme_info": "משמשת לרקע ולטקסט של העמוד. כל סקשן יכול לבחור ערכה משלו.",
+      "background_gradient": "מעבר צבע ברקע",
+      "background_gradient_info": "מחליף את צבע הרקע בסקשנים שמשתמשים בערכה הזו."
+    },
+    "animations": {
+      "group": "אנימציות",
+      "reveal_on_scroll": "חשיפת סקשנים בגלילה",
+      "reveal_on_scroll_info": "הסקשנים נכנסים בהדרגה בזמן הגלילה. כבוי למי שמעדיף תנועה מופחתת, ובעורך העיצוב."
     }
   }
 }

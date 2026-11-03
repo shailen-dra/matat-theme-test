@@ -18,7 +18,7 @@
 -%}
 
 <div
-  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  class="section full-width color-scheme color-{{ section.settings.color_scheme }}{% if section.settings.tinted %} section--tinted{% endif %}"
   style="
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
@@ -95,6 +95,12 @@
   "tag": "section",
   "class": "featured-collection-section",
   "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
     {
       "type": "collection",
       "id": "collection",

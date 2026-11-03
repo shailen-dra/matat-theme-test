@@ -1,0 +1,39 @@
+{% doc %}
+  Renders one row of the product specs block: a label and a value. Connect
+  the value to a product metafield in the theme editor ("Connect dynamic
+  source") so each product shows its own details. Rows with no value are
+  hidden.
+
+  @example
+  {% content_for 'block', type: '_spec-row', id: 'metal' %}
+{% enddoc %}
+
+{%- assign value = block.settings.value | strip -%}
+{%- if value != blank -%}
+  <div class="specs__row" {{ block.shopify_attributes }}>
+    <dt class="specs__label">{{ block.settings.label | escape }}</dt>
+    <dd class="specs__value">{{ value }}</dd>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:blocks.product_specs.row",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:labels.label",
+      "default": "Metal"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "value",
+      "label": "t:blocks.product_specs.value",
+      "info": "t:blocks.product_specs.value_info",
+      "default": "14k recycled gold"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.product_specs.row" }]
+}
+{% endschema %}

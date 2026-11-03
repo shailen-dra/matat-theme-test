@@ -1,0 +1,246 @@
+<div
+  class="section full-width color-scheme color-{{ section.settings.color_scheme }}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    alignment: 'center'
+  %}
+
+  <ol class="timeline" role="list">
+    {% content_for 'blocks' %}
+  </ol>
+</div>
+
+{% stylesheet %}
+  .timeline {
+    --timeline-line: color-mix(in srgb, var(--color-foreground) 18%, transparent);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2rem, 5vw, 3.5rem);
+    max-width: 60rem;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* The vertical line through the markers */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    inset-block: 0.5rem;
+    inset-inline-start: 50%;
+    width: 1px;
+    background-color: var(--timeline-line);
+    translate: -50% 0;
+  }
+
+  [dir='rtl'] .timeline::before {
+    translate: 50% 0;
+  }
+
+  .timeline-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: clamp(2.5rem, 6vw, 5rem);
+  }
+
+  .timeline-item__marker {
+    position: absolute;
+    top: 0.375rem;
+    inset-inline-start: 50%;
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 2px solid var(--color-accent);
+    border-radius: 50%;
+    background-color: var(--color-background);
+    translate: -50% 0;
+  }
+
+  [dir='rtl'] .timeline-item__marker {
+    translate: 50% 0;
+  }
+
+  .timeline-item__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    grid-column: 1;
+    text-align: end;
+  }
+
+  /* Alternate sides */
+  .timeline-item:nth-child(even) .timeline-item__card {
+    grid-column: 2;
+    text-align: start;
+  }
+
+  .timeline-item__image {
+    width: 100%;
+    max-width: 22rem;
+    height: auto;
+    margin-block-end: 0.5rem;
+    margin-inline-start: auto;
+    border-radius: var(--style-border-radius-buttons);
+  }
+
+  .timeline-item:nth-child(even) .timeline-item__image {
+    margin-inline: 0 auto;
+  }
+
+  .timeline-item__date {
+    color: var(--color-accent);
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.5rem, 2vw + 1rem, 2.25rem);
+    line-height: 1;
+  }
+
+  .timeline-item__title {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 1.25rem;
+    font-weight: var(--font-heading--weight);
+  }
+
+  .timeline-item__title em {
+    color: var(--color-accent);
+  }
+
+  .timeline-item__text {
+    font-size: 0.9375rem;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 749px) {
+    .timeline::before {
+      inset-inline-start: 0.4375rem;
+    }
+
+    .timeline-item {
+      grid-template-columns: minmax(0, 1fr);
+      padding-inline-start: 2.25rem;
+    }
+
+    .timeline-item__marker {
+      inset-inline-start: 0.4375rem;
+    }
+
+    .timeline-item__card,
+    .timeline-item:nth-child(even) .timeline-item__card {
+      grid-column: 1;
+      text-align: start;
+    }
+
+    .timeline-item__image,
+    .timeline-item:nth-child(even) .timeline-item__image {
+      margin-inline: 0 auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.timeline.name",
+  "tag": "section",
+  "class": "timeline-section",
+  "blocks": [{ "type": "_timeline-item" }],
+  "max_blocks": 12,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Our story"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "From one bench <em>to many</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.timeline.name",
+      "category": "t:general.text",
+      "blocks": [
+        {
+          "type": "_timeline-item",
+          "settings": {
+            "date": "2016",
+            "title": "A bench in the spare room",
+            "text": "<p>The first rings were cast at a kitchen table, sold to friends and friends of friends.</p>"
+          }
+        },
+        {
+          "type": "_timeline-item",
+          "settings": {
+            "date": "2019",
+            "title": "All recycled gold",
+            "text": "<p>We moved every collection to recycled 14k and 18k gold and conflict-free stones.</p>"
+          }
+        },
+        {
+          "type": "_timeline-item",
+          "settings": {
+            "date": "2022",
+            "title": "Our first studio",
+            "text": "<p>A small workshop with room for a team of four goldsmiths and a showroom by appointment.</p>"
+          }
+        },
+        {
+          "type": "_timeline-item",
+          "settings": {
+            "date": "Today",
+            "title": "Made to be <em>kept</em>",
+            "text": "<p>Every piece is still finished by hand, and comes with a lifetime warranty.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

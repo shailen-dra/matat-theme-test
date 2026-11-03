@@ -101,7 +101,8 @@
     "image_ratio": "Image ratio",
     "icon": "Icon",
     "icon_size": "Icon size",
-    "layout": "Layout"
+    "layout": "Layout",
+    "color_scheme": "Color scheme"
   },
   "options": {
     "alignment": {
@@ -384,6 +385,14 @@
       "threshold_info": "Shows \"Only X left\" at or below this quantity. Needs inventory tracking.",
       "show_bar": "Show stock bar",
       "show_in_stock": "Show \"In stock\" above the threshold"
+    },
+    "product_specs": {
+      "name": "Product specs",
+      "row": "Spec",
+      "value": "Value",
+      "value_info": "Connect a product metafield so each product shows its own value. Rows with no value are hidden.",
+      "style_lines": "Lines",
+      "style_boxed": "Boxed"
     }
   },
   "sections": {
@@ -644,6 +653,20 @@
       "delay": "Show after",
       "frequency": "Show again after",
       "frequency_info": "Days to wait after a shopper closes the popup. Shoppers who subscribe won't see it again."
+    },
+    "before_after": {
+      "name": "Before and after",
+      "before_image": "Before image",
+      "before_label": "Before label",
+      "after_image": "After image",
+      "after_image_info": "Use two images of the same size and framing.",
+      "after_label": "After label",
+      "start_position": "Starting position"
+    },
+    "timeline": {
+      "name": "Timeline",
+      "item": "Milestone",
+      "date": "Date or year"
     }
   },
   "settings": {
@@ -667,6 +690,17 @@
       "group": "Favicon",
       "label": "Favicon image",
       "info": "Displayed at 32 × 32px."
+    },
+    "colors": {
+      "body_scheme": "Page color scheme",
+      "body_scheme_info": "Used for the page background and text. Sections can pick their own scheme.",
+      "background_gradient": "Background gradient",
+      "background_gradient_info": "Replaces the background color where sections use this scheme."
+    },
+    "animations": {
+      "group": "Animations",
+      "reveal_on_scroll": "Reveal sections on scroll",
+      "reveal_on_scroll_info": "Sections fade in as shoppers scroll. Turned off for shoppers who prefer reduced motion, and in the theme editor."
     }
   }
 }

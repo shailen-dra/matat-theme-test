@@ -11,6 +11,36 @@
   "current": {
     "social_instagram_link": "https://instagram.com/shopify",
     "social_pinterest_link": "https://pinterest.com/shopify",
-    "social_facebook_link": "https://facebook.com/shopify"
+    "social_facebook_link": "https://facebook.com/shopify",
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#FFFFFF",
+          "foreground": "#333333",
+          "accent": "#886B40"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#F6F1EA",
+          "foreground": "#2B2622",
+          "accent": "#886B40"
+        }
+      },
+      "scheme-3": {
+        "settings": {
+          "background": "#1A1A1A",
+          "foreground": "#F5F0E8",
+          "accent": "#C9A66B"
+        }
+      },
+      "scheme-4": {
+        "settings": {
+          "background": "#886B40",
+          "foreground": "#FFFFFF",
+          "accent": "#F5F0E8"
+        }
+      }
+    }
   }
 }

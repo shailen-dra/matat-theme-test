@@ -430,9 +430,10 @@
         "eyebrow": "Kind words",
         "title": "Loved, worn <em>and kept</em>",
         "columns_desktop": 3,
-        "tinted": true,
+        "tinted": false,
         "padding_top": 64,
-        "padding_bottom": 64
+        "padding_bottom": 64,
+        "color_scheme": "scheme-2"
       }
     },
     "press": {

@@ -127,22 +127,56 @@
     "name": "t:general.colors",
     "settings": [
       {
-        "type": "color",
-        "id": "background_color",
-        "default": "#FFFFFF",
-        "label": "t:labels.background"
+        "type": "color_scheme_group",
+        "id": "color_schemes",
+        "definition": [
+          {
+            "type": "color",
+            "id": "background",
+            "label": "t:labels.background",
+            "default": "#FFFFFF"
+          },
+          {
+            "type": "color_background",
+            "id": "background_gradient",
+            "label": "t:settings.colors.background_gradient",
+            "info": "t:settings.colors.background_gradient_info"
+          },
+          {
+            "type": "color",
+            "id": "foreground",
+            "label": "t:labels.foreground",
+            "default": "#333333"
+          },
+          {
+            "type": "color",
+            "id": "accent",
+            "label": "t:labels.accent",
+            "default": "#886B40"
+          }
+        ],
+        "role": {
+          "text": "foreground",
+          "background": {
+            "solid": "background",
+            "gradient": "background_gradient"
+          },
+          "links": "accent",
+          "icons": "accent",
+          "primary_button": "foreground",
+          "on_primary_button": "background",
+          "primary_button_border": "foreground",
+          "secondary_button": "background",
+          "on_secondary_button": "foreground",
+          "secondary_button_border": "foreground"
+        }
       },
       {
-        "type": "color",
-        "id": "foreground_color",
-        "default": "#333333",
-        "label": "t:labels.foreground"
-      },
-      {
-        "type": "color",
-        "id": "accent_color",
-        "default": "#886B40",
-        "label": "t:labels.accent"
+        "type": "color_scheme",
+        "id": "body_color_scheme",
+        "label": "t:settings.colors.body_scheme",
+        "info": "t:settings.colors.body_scheme_info",
+        "default": "scheme-1"
       },
       {
         "type": "range",
@@ -153,6 +187,18 @@
         "unit": "px",
         "label": "t:labels.input_corner_radius",
         "default": 4
+      }
+    ]
+  },
+  {
+    "name": "t:settings.animations.group",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "reveal_on_scroll",
+        "label": "t:settings.animations.reveal_on_scroll",
+        "info": "t:settings.animations.reveal_on_scroll_info",
+        "default": true
       }
     ]
   },

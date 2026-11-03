@@ -243,6 +243,9 @@
       "label": "Newsletter signup",
       "no_thanks": "No thanks",
       "close": "Close"
+    },
+    "before_after": {
+      "slider_label": "Drag to compare before and after"
     }
   },
   "header": {

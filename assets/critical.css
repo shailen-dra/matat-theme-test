@@ -295,3 +295,46 @@ main:focus {
 .rte iframe {
   max-width: 100%;
 }
+
+/** Scroll reveal (Theme settings → Animations). `js-reveal` is only set when
+ * JavaScript runs and the shopper doesn't prefer reduced motion. */
+.js-reveal main > .shopify-section:not(:first-child) {
+  transition:
+    opacity 0.8s ease,
+    translate 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+.js-reveal main > .shopify-section:not(:first-child, .is-revealed) {
+  opacity: 0;
+  translate: 0 2rem;
+}
+
+/* Cards and tiles inside a revealed section rise in one after another */
+.js-reveal .is-revealed :is(.product-grid__item, .collage-item, .badge, .testimonial) {
+  animation: reveal-rise 0.7s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+}
+
+.js-reveal .is-revealed :is(.product-grid__item, .badge):nth-child(2),
+.js-reveal .is-revealed .collage > :nth-child(2),
+.js-reveal .is-revealed .testimonials__track > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+
+.js-reveal .is-revealed :is(.product-grid__item, .badge):nth-child(3),
+.js-reveal .is-revealed .collage > :nth-child(3),
+.js-reveal .is-revealed .testimonials__track > :nth-child(3) {
+  animation-delay: 0.16s;
+}
+
+.js-reveal .is-revealed :is(.product-grid__item, .badge):nth-child(n + 4),
+.js-reveal .is-revealed .collage > :nth-child(n + 4),
+.js-reveal .is-revealed .testimonials__track > :nth-child(n + 4) {
+  animation-delay: 0.24s;
+}
+
+@keyframes reveal-rise {
+  from {
+    opacity: 0;
+    translate: 0 1.25rem;
+  }
+}

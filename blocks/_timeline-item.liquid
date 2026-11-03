@@ -1,0 +1,62 @@
+{% doc %}
+  Renders one milestone of the timeline section: a date or year, a title,
+  text and an optional image.
+
+  @example
+  {% content_for 'block', type: '_timeline-item', id: 'milestone-1' %}
+{% enddoc %}
+
+<li class="timeline-item" {{ block.shopify_attributes }}>
+  <span class="timeline-item__marker" aria-hidden="true"></span>
+
+  <div class="timeline-item__card">
+    {%- if block.settings.image != blank -%}
+      {{
+        block.settings.image
+        | image_url: width: 900
+        | image_tag: widths: '400, 600, 900', sizes: '(min-width: 990px) 30vw, 80vw', loading: 'lazy', class: 'timeline-item__image', alt: block.settings.image.alt
+      }}
+    {%- endif -%}
+    {%- if block.settings.date != blank -%}
+      <p class="timeline-item__date">{{ block.settings.date | escape }}</p>
+    {%- endif -%}
+    {%- if block.settings.title != blank -%}
+      <h3 class="timeline-item__title">{{ block.settings.title }}</h3>
+    {%- endif -%}
+    {%- if block.settings.text != blank -%}
+      <div class="timeline-item__text rte">{{ block.settings.text }}</div>
+    {%- endif -%}
+  </div>
+</li>
+
+{% schema %}
+{
+  "name": "t:sections.timeline.item",
+  "settings": [
+    {
+      "type": "text",
+      "id": "date",
+      "label": "t:sections.timeline.date",
+      "default": "2020"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "A milestone"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "<p>Tell the story of this moment.</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    }
+  ],
+  "presets": [{ "name": "t:sections.timeline.item" }]
+}
+{% endschema %}

@@ -122,6 +122,33 @@
             "show_bar": true,
             "show_in_stock": false
           }
+        },
+        "specs": {
+          "type": "product-specs",
+          "settings": {
+            "heading": "Details",
+            "style": "specs--lines"
+          },
+          "blocks": {
+            "type_row": {
+              "type": "_spec-row",
+              "settings": {
+                "label": "Type",
+                "value": "{{ closest.product.type }}"
+              }
+            },
+            "vendor_row": {
+              "type": "_spec-row",
+              "settings": {
+                "label": "Designer",
+                "value": "{{ closest.product.vendor }}"
+              }
+            }
+          },
+          "block_order": [
+            "type_row",
+            "vendor_row"
+          ]
         }
       },
       "block_order": [
@@ -137,6 +164,7 @@
         "pickup",
         "highlights",
         "description",
+        "specs",
         "materials",
         "shipping"
       ],
