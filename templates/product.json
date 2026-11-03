@@ -149,9 +149,28 @@
             "type_row",
             "vendor_row"
           ]
+        },
+        "breadcrumbs": {
+          "type": "breadcrumbs",
+          "settings": {
+            "fallback_collection": true
+          }
+        },
+        "back_in_stock": {
+          "type": "back-in-stock",
+          "settings": {
+            "preview_in_editor": true
+          }
+        },
+        "share": {
+          "type": "share",
+          "settings": {
+            "label": "Share"
+          }
         }
       },
       "block_order": [
+        "breadcrumbs",
         "vendor",
         "title",
         "price",
@@ -160,13 +179,15 @@
         "size_guide",
         "personalization",
         "buy_buttons",
+        "back_in_stock",
         "sticky_atc",
         "pickup",
         "highlights",
         "description",
         "specs",
         "materials",
-        "shipping"
+        "shipping",
+        "share"
       ],
       "settings": {
         "gallery_layout": "product-gallery--grid",

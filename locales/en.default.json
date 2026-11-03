@@ -194,7 +194,15 @@
     "country": {
       "label": "Country/region",
       "update": "Update country/region"
-    }
+    },
+    "share": {
+      "copied": "Link copied"
+    },
+    "breadcrumbs": {
+      "label": "Breadcrumbs",
+      "home": "Home"
+    },
+    "back_to_top": "Back to top"
   },
   "sections": {
     "hero": {
@@ -260,6 +268,10 @@
     "stores": {
       "directions": "Get directions",
       "opens_new_tab": "(opens in a new tab)"
+    },
+    "featured_blog": {
+      "placeholder_title": "Your article title",
+      "placeholder_excerpt": "Pick a blog in the theme editor to show its latest articles here."
     }
   },
   "header": {
@@ -375,6 +387,17 @@
       },
       "in_stock": "In stock, ready to ship",
       "backorder": "Out of stock, available to pre-order"
+    },
+    "back_in_stock": {
+      "heading": "Notify me when it's back",
+      "text": "Leave your email and we'll let you know as soon as it's available again.",
+      "subject": "Back in stock request: {{ title }}",
+      "product_field": "Product",
+      "variant_field": "Variant",
+      "link_field": "Link",
+      "body": "Please let me know when {{ title }} is back in stock.",
+      "submit": "Notify me",
+      "success": "Thanks! We'll email you when it's back."
     }
   },
   "contact": {

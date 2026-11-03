@@ -1,0 +1,166 @@
+{% doc %}
+  Renders a "Notify me when it's back" email form under the buy buttons
+  while the selected variant is sold out. It sends a contact form message to
+  the store with the product, variant and link, so the merchant can follow
+  up, no app needed. Updates with the variant picker.
+
+  @example
+  {% content_for 'block', type: 'back-in-stock', id: 'back-in-stock' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign form_id = 'BackInStock-' | append: block.id
+  assign email_id = 'BackInStockEmail-' | append: block.id
+
+  assign show = false
+  if variant != blank and variant.available == false
+    assign show = true
+  endif
+  if product != blank and request.design_mode and block.settings.preview_in_editor
+    assign show = true
+  endif
+
+  assign submit_label = 'product.back_in_stock.submit' | t
+
+  assign variant_title = ''
+  unless product.has_only_default_variant
+    assign variant_title = variant.title
+  endunless
+-%}
+
+<div class="restock" data-update="restock-{{ block.id }}" {{ block.shopify_attributes }}>
+  {%- form 'contact', id: form_id, class: 'restock__form' -%}
+    {%- if form.posted_successfully? -%}
+      <p class="restock__message restock__message--success" role="status">
+        {% render 'icon', name: 'check' %}
+        {{ 'product.back_in_stock.success' | t }}
+      </p>
+    {%- elsif show -%}
+      <p class="restock__heading">{{ 'product.back_in_stock.heading' | t }}</p>
+      <p class="restock__text">{{ 'product.back_in_stock.text' | t }}</p>
+
+      <input type="hidden" name="contact[subject]" value="{{ 'product.back_in_stock.subject' | t: title: product.title | escape }}">
+      <input type="hidden" name="contact[{{ 'product.back_in_stock.product_field' | t }}]" value="{{ product.title | escape }}">
+      {%- if variant_title != blank -%}
+        <input type="hidden" name="contact[{{ 'product.back_in_stock.variant_field' | t }}]" value="{{ variant_title | escape }}">
+      {%- endif -%}
+      <input type="hidden" name="contact[{{ 'product.back_in_stock.link_field' | t }}]" value="{{ shop.url }}{{ variant.url }}">
+      <input type="hidden" name="contact[body]" value="{{ 'product.back_in_stock.body' | t: title: product.title | escape }}">
+
+      <div class="restock__field">
+        <label for="{{ email_id }}" class="visually-hidden">{{ 'newsletter.email_label' | t }}</label>
+        <input
+          id="{{ email_id }}"
+          class="restock__input"
+          type="email"
+          name="contact[email]"
+          value="{{ customer.email }}"
+          placeholder="{{ 'newsletter.email_placeholder' | t }}"
+          autocomplete="email"
+          autocapitalize="off"
+          spellcheck="false"
+          required
+          {% if form.errors %}
+            aria-invalid="true" aria-describedby="{{ email_id }}-error"
+          {% endif %}
+        >
+        {% render 'button', label: submit_label, type: 'submit', style: 'outline' %}
+      </div>
+
+      {%- if form.errors -%}
+        <p id="{{ email_id }}-error" class="restock__message restock__message--error" role="alert">
+          {{ 'newsletter.error' | t }}
+        </p>
+      {%- endif -%}
+    {%- endif -%}
+  {%- endform -%}
+</div>
+
+{% stylesheet %}
+  .restock:not(:has(.restock__heading, .restock__message)) {
+    display: none;
+  }
+
+  .restock__form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 1.125rem 1.25rem;
+    border: 1px dashed color-mix(in srgb, var(--color-foreground) 25%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+  }
+
+  .restock__heading {
+    font-family: var(--font-heading--family);
+    font-size: 1.125rem;
+  }
+
+  .restock__text {
+    font-size: 0.875rem;
+    opacity: 0.75;
+  }
+
+  .restock__field {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .restock__input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 1rem;
+  }
+
+  .restock__input:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+
+  .restock__message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .restock__message .icon {
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-accent);
+  }
+
+  .restock__message--error {
+    color: #b42318;
+  }
+
+  @media (max-width: 479px) {
+    .restock__field {
+      flex-direction: column;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.back_in_stock.name",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:blocks.back_in_stock.info"
+    },
+    {
+      "type": "checkbox",
+      "id": "preview_in_editor",
+      "label": "t:blocks.back_in_stock.preview_in_editor",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "t:blocks.back_in_stock.name" }]
+}
+{% endschema %}

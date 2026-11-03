@@ -648,6 +648,21 @@
         "padding_top": 64,
         "padding_bottom": 64
       }
+    },
+    "journal": {
+      "type": "featured-blog",
+      "settings": {
+        "color_scheme": "scheme-1",
+        "articles_to_show": 3,
+        "show_image": true,
+        "show_date": true,
+        "show_excerpt": true,
+        "eyebrow": "The journal",
+        "title": "Stories from <em>the studio</em>",
+        "link_label": "Read the journal",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
@@ -664,6 +679,7 @@
     "testimonials",
     "press",
     "gallery",
+    "journal",
     "trust"
   ]
 }

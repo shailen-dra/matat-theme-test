@@ -1,0 +1,116 @@
+{% doc %}
+  Renders breadcrumbs for the product page: Home › collection › product. The
+  collection is the one the shopper came from, or else the product's first
+  collection. Adds BreadcrumbList structured data for search engines.
+
+  @example
+  {% content_for 'block', type: 'breadcrumbs', id: 'breadcrumbs' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = closest.product
+  assign crumb_collection = collection
+  if crumb_collection == blank and block.settings.fallback_collection
+    assign crumb_collection = product.collections.first
+  endif
+-%}
+
+{%- if product != blank -%}
+  <nav class="breadcrumbs" aria-label="{{ 'general.breadcrumbs.label' | t }}" {{ block.shopify_attributes }}>
+    <ol class="breadcrumbs__list" role="list">
+      <li class="breadcrumbs__item">
+        <a href="{{ routes.root_url }}" class="breadcrumbs__link">{{ 'general.breadcrumbs.home' | t }}</a>
+      </li>
+      {%- if crumb_collection != blank -%}
+        <li class="breadcrumbs__item">
+          <a href="{{ crumb_collection.url }}" class="breadcrumbs__link">{{ crumb_collection.title | escape }}</a>
+        </li>
+      {%- endif -%}
+      <li class="breadcrumbs__item">
+        <span aria-current="page">{{ product.title | escape }}</span>
+      </li>
+    </ol>
+  </nav>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": {{ 'general.breadcrumbs.home' | t | json }}, "item": {{ shop.url | append: routes.root_url | json }} }
+        {%- if crumb_collection != blank -%}
+          ,{ "@type": "ListItem", "position": 2, "name": {{ crumb_collection.title | json }}, "item": {{ shop.url | append: crumb_collection.url | json }} }
+          ,{ "@type": "ListItem", "position": 3, "name": {{ product.title | json }}, "item": {{ shop.url | append: product.url | json }} }
+        {%- else -%}
+          ,{ "@type": "ListItem", "position": 2, "name": {{ product.title | json }}, "item": {{ shop.url | append: product.url | json }} }
+        {%- endif -%}
+      ]
+    }
+  </script>
+{%- endif -%}
+
+{% stylesheet %}
+  .breadcrumbs__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.5rem;
+    margin: 0;
+    padding: 0;
+    font-size: 0.8125rem;
+    list-style: none;
+  }
+
+  .breadcrumbs__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .breadcrumbs__item + .breadcrumbs__item::before {
+    content: '/';
+    opacity: 0.35;
+  }
+
+  .breadcrumbs__item [aria-current] {
+    overflow: hidden;
+    max-width: 24ch;
+    opacity: 0.6;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .breadcrumbs__link {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.8;
+  }
+
+  .breadcrumbs__link:hover {
+    opacity: 1;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .breadcrumbs__link:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.breadcrumbs.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "fallback_collection",
+      "label": "t:blocks.breadcrumbs.fallback_collection",
+      "info": "t:blocks.breadcrumbs.fallback_collection_info",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "t:blocks.breadcrumbs.name" }]
+}
+{% endschema %}

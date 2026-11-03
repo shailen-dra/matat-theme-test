@@ -120,6 +120,12 @@
         "unit": "px",
         "label": "t:labels.page_margin",
         "default": 20
+      },
+      {
+        "type": "checkbox",
+        "id": "back_to_top",
+        "label": "t:settings.layout.back_to_top",
+        "default": true
       }
     ]
   },

@@ -1,0 +1,189 @@
+{%- liquid
+  assign blog = section.settings.blog
+  assign limit = section.settings.articles_to_show
+  assign link_url = blog.url
+  assign demo_images = 'demo-ginkgo-set.jpg,demo-rings-hand.jpg,demo-flatlay.jpg,demo-layered-necklaces.jpg' | split: ','
+-%}
+
+<div
+  class="section full-width color-scheme color-{{ section.settings.color_scheme }}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    link_label: section.settings.link_label,
+    link_url: link_url,
+    alignment: 'split'
+  %}
+
+  {%- comment -%} Reuses the blog page's article card styles (sections/blog.liquid) {%- endcomment -%}
+  <ul class="blog__grid" role="list" style="--blog-columns: {{ limit | at_most: 4 }};">
+    {%- if blog.articles_count > 0 -%}
+      {%- for article in blog.articles limit: limit -%}
+        <li>
+          <article class="article-card">
+            {%- if section.settings.show_image and article.image -%}
+              <a href="{{ article.url }}" class="article-card__media" tabindex="-1" aria-hidden="true">
+                {{
+                  article.image
+                  | image_url: width: 1200
+                  | image_tag:
+                    widths: '360, 540, 720, 900, 1200',
+                    sizes: '(min-width: 990px) calc(100vw / 3), (min-width: 750px) 50vw, 100vw',
+                    loading: 'lazy',
+                    class: 'article-card__image',
+                    alt: ''
+                }}
+              </a>
+            {%- endif -%}
+
+            <div class="article-card__content">
+              {%- if section.settings.show_date -%}
+                <p class="article-card__meta">{{ article.published_at | time_tag: format: 'date' }}</p>
+              {%- endif -%}
+              <h3 class="heading heading--h3 article-card__title">
+                <a href="{{ article.url }}">{{ article.title | escape }}</a>
+              </h3>
+              {%- if section.settings.show_excerpt -%}
+                {%- assign excerpt = article.excerpt | default: article.content | strip_html | truncatewords: 22 -%}
+                {%- if excerpt != blank -%}
+                  <p class="article-card__excerpt">{{ excerpt | strip_html }}</p>
+                {%- endif -%}
+              {%- endif -%}
+            </div>
+          </article>
+        </li>
+      {%- endfor -%}
+    {%- else -%}
+      {%- # Placeholder cards until a blog with articles is picked -%}
+      {%- for i in (1..limit) -%}
+        {%- assign demo_index = forloop.index0 | modulo: demo_images.size -%}
+        <li>
+          <article class="article-card">
+            {%- if section.settings.show_image -%}
+              <span class="article-card__media">
+                <img
+                  src="{{ demo_images[demo_index] | asset_img_url: '900x' }}"
+                  width="900"
+                  height="600"
+                  alt=""
+                  loading="lazy"
+                  class="article-card__image"
+                >
+              </span>
+            {%- endif -%}
+            <div class="article-card__content">
+              <h3 class="heading heading--h3 article-card__title">{{ 'sections.featured_blog.placeholder_title' | t }}</h3>
+              {%- if section.settings.show_excerpt -%}
+                <p class="article-card__excerpt">{{ 'sections.featured_blog.placeholder_excerpt' | t }}</p>
+              {%- endif -%}
+            </div>
+          </article>
+        </li>
+      {%- endfor -%}
+    {%- endif -%}
+  </ul>
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.featured_blog.name",
+  "tag": "section",
+  "class": "featured-blog-section",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "t:general.blog"
+    },
+    {
+      "type": "range",
+      "id": "articles_to_show",
+      "label": "t:sections.featured_blog.articles_to_show",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_image",
+      "label": "t:sections.blog.show_image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "t:sections.blog.show_date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_excerpt",
+      "label": "t:sections.blog.show_excerpt",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "The journal"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Stories from <em>the studio</em>"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "t:labels.link_label",
+      "default": "Read the journal"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.featured_blog.name",
+      "category": "t:general.text"
+    }
+  ]
+}
+{% endschema %}

@@ -69,6 +69,33 @@
       {% section 'cart-drawer' %}
     {%- endif -%}
 
+    {%- if settings.back_to_top -%}
+      <a href="#MainContent" class="back-to-top" data-back-to-top tabindex="-1" aria-hidden="true">
+        {% render 'icon', name: 'chevron-down' %}
+        <span class="visually-hidden">{{ 'general.back_to_top' | t }}</span>
+      </a>
+      <script>
+        (() => {
+          const button = document.querySelector('[data-back-to-top]');
+          if (!button) return;
+          const update = () => {
+            const visible = window.scrollY > window.innerHeight * 1.5;
+            button.classList.toggle('is-visible', visible);
+            button.toggleAttribute('aria-hidden', !visible);
+            button.tabIndex = visible ? 0 : -1;
+          };
+          window.addEventListener('scroll', update, { passive: true });
+          update();
+          button.addEventListener('click', (event) => {
+            event.preventDefault();
+            const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+            window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+            document.getElementById('MainContent')?.focus({ preventScroll: true });
+          });
+        })();
+      </script>
+    {%- endif -%}
+
     {%- if settings.reveal_on_scroll and request.design_mode == false -%}
       <script>
         // Scroll reveal: sections below the first fade in as they enter the viewport

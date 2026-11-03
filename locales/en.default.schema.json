@@ -393,6 +393,19 @@
       "value_info": "Connect a product metafield so each product shows its own value. Rows with no value are hidden.",
       "style_lines": "Lines",
       "style_boxed": "Boxed"
+    },
+    "back_in_stock": {
+      "name": "Back in stock request",
+      "info": "Shows an email form while the selected variant is sold out. Requests arrive as contact form emails with the product, variant and link.",
+      "preview_in_editor": "Always show in the theme editor"
+    },
+    "share": {
+      "name": "Share"
+    },
+    "breadcrumbs": {
+      "name": "Breadcrumbs",
+      "fallback_collection": "Use the product's first collection",
+      "fallback_collection_info": "When shoppers didn't arrive from a collection."
     }
   },
   "sections": {
@@ -690,6 +703,10 @@
       "hours": "Opening hours",
       "phone": "Phone",
       "button_link_info": "For example a booking page or your contact page."
+    },
+    "featured_blog": {
+      "name": "Blog posts",
+      "articles_to_show": "Articles to show"
     }
   },
   "settings": {
@@ -731,6 +748,9 @@
       "group": "Animations",
       "reveal_on_scroll": "Reveal sections on scroll",
       "reveal_on_scroll_info": "Sections fade in as shoppers scroll. Turned off for shoppers who prefer reduced motion, and in the theme editor."
+    },
+    "layout": {
+      "back_to_top": "Show back to top button"
     }
   }
 }
