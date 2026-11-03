@@ -1,0 +1,275 @@
+{%- liquid
+  assign count = section.blocks.size
+  assign columns = 2
+  if count > 3
+    assign columns = 3
+  endif
+-%}
+
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    alignment: 'center'
+  %}
+
+  <div
+    class="collage {{ section.settings.layout }} collage--count-{{ count }}"
+    style="
+      --collage-columns: {{ columns }};
+      --collage-row: {{ section.settings.row_height }}px;
+      --collage-gap: {{ section.settings.gap }}px;
+    "
+  >
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .collage {
+    display: grid;
+    grid-template-columns: repeat(var(--collage-columns), minmax(0, 1fr));
+    grid-auto-rows: var(--collage-row);
+    grid-auto-flow: row dense;
+    gap: var(--collage-gap);
+  }
+
+  /* One large feature tile, two rows tall */
+  .collage:not(.collage--count-1, .collage--count-2) > :first-child {
+    grid-row: span 2;
+  }
+
+  .collage--large-end:not(.collage--count-1, .collage--count-2) > :first-child {
+    grid-column-end: -1;
+  }
+
+  .collage--count-1 > * {
+    grid-column: 1 / -1;
+  }
+
+  .collage--count-1,
+  .collage--count-2 {
+    grid-auto-rows: calc(var(--collage-row) * 2);
+  }
+
+  /* Four tiles on three columns: the last one fills the gap */
+  .collage--count-4 > :last-child {
+    grid-column: span 2;
+  }
+
+  .collage-item {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: var(--style-border-radius-buttons);
+    background-color: color-mix(in srgb, var(--color-foreground) 6%, var(--color-background));
+    color: #ffffff;
+    text-decoration: none;
+    isolation: isolate;
+  }
+
+  .collage-item__media {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .collage-item__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    a.collage-item:hover .collage-item__image {
+      transform: scale(1.04);
+    }
+  }
+
+  a.collage-item:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .collage-item__label {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: clamp(1rem, 2.5vw, 1.75rem);
+    background: linear-gradient(to top, rgb(0 0 0 / 0.5), transparent);
+  }
+
+  .collage-item__title {
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.25rem, 1vw + 1rem, 1.75rem);
+    font-weight: var(--font-heading--weight);
+    line-height: 1.2;
+  }
+
+  .collage > :first-child .collage-item__title {
+    font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem);
+  }
+
+  .collage-item__caption {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  [dir='rtl'] .collage-item__caption {
+    letter-spacing: 0;
+  }
+
+  a.collage-item--collection .collage-item__caption::after {
+    content: ' →';
+  }
+
+  [dir='rtl'] a.collage-item--collection .collage-item__caption::after {
+    content: ' ←';
+  }
+
+  @media (max-width: 749px) {
+    .collage {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-auto-rows: calc(var(--collage-row) * 0.7);
+    }
+
+    /* Feature tile spans the full width on top */
+    .collage:not(.collage--count-1, .collage--count-2) > :first-child {
+      grid-column: 1 / -1;
+      grid-row: span 2;
+    }
+
+    .collage--count-4 > :last-child {
+      grid-column: auto;
+    }
+
+    .collage--count-4 > :nth-child(2) {
+      grid-column: 1 / -1;
+    }
+
+    .collage--count-2 > * {
+      grid-column: 1 / -1;
+    }
+
+    .collage--count-1,
+    .collage--count-2 {
+      grid-auto-rows: calc(var(--collage-row) * 1.2);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.collage.name",
+  "tag": "section",
+  "class": "collage-section",
+  "blocks": [{ "type": "_collage-item" }],
+  "max_blocks": 5,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:general.layout",
+      "options": [
+        { "value": "collage--large-start", "label": "t:sections.collage.large_start" },
+        { "value": "collage--large-end", "label": "t:sections.collage.large_end" }
+      ],
+      "default": "collage--large-start"
+    },
+    {
+      "type": "range",
+      "id": "row_height",
+      "label": "t:labels.height",
+      "min": 160,
+      "max": 480,
+      "step": 20,
+      "unit": "px",
+      "default": 300
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "t:labels.gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "The edit"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Pieces to <em>build on</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle"
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.collage.name",
+      "category": "t:general.collections",
+      "blocks": [
+        { "type": "_collage-item", "settings": { "title": "Necklaces", "link": "shopify://collections/all" } },
+        { "type": "_collage-item", "settings": { "title": "Earrings", "link": "shopify://collections/all" } },
+        { "type": "_collage-item", "settings": { "title": "Gift sets", "link": "shopify://collections/all" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -220,6 +220,16 @@
     "testimonials": {
       "rating": "Rated {{ rating }} out of 5",
       "label": "Customer testimonials"
+    },
+    "video": {
+      "default_title": "Video",
+      "play_title": "Play video: {{ title }}",
+      "pause": "Pause video",
+      "play": "Play video",
+      "empty": "Add a video or a YouTube or Vimeo link to show a play button."
+    },
+    "collage": {
+      "shop_collection": "Shop now"
     }
   },
   "header": {
@@ -311,6 +321,15 @@
       "step_1": "Wrap a strip of paper around the base of your finger.",
       "step_2": "Mark where the ends meet and measure the length in millimeters.",
       "step_3": "Match the length to the EU size above. Between sizes? Choose the larger one."
+    },
+    "personalization": {
+      "engraving_property": "Engraving",
+      "gift_note_property": "Gift note",
+      "add_engraving": "Add engraving",
+      "engraving_label": "Engraving text",
+      "characters_left": "{{ count }} characters left",
+      "add_gift_note": "Add a gift note",
+      "gift_note_label": "Your message"
     }
   },
   "contact": {

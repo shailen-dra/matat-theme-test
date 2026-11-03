@@ -1,0 +1,34 @@
+{% doc %}
+  Renders one message of the marquee section, optionally linked.
+
+  @example
+  {% content_for 'block', type: '_marquee-item', id: 'item-1' %}
+{% enddoc %}
+
+{%- if block.settings.link != blank -%}
+  <a href="{{ block.settings.link }}" class="marquee__item marquee__item--link" {{ block.shopify_attributes }}>
+    {{- block.settings.text -}}
+  </a>
+{%- else -%}
+  <span class="marquee__item" {{ block.shopify_attributes }}>{{ block.settings.text }}</span>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.marquee.item",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "Free insured shipping"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:labels.link"
+    }
+  ],
+  "presets": [{ "name": "t:sections.marquee.item" }]
+}
+{% endschema %}

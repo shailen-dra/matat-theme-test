@@ -1,0 +1,278 @@
+{% doc %}
+  Renders optional engraving and gift note fields on the product page. The
+  values are saved on the cart line as line item properties, so they show
+  in the cart, at checkout and on the order. The add to cart forms in the
+  same product section pick them up (see `ProductForm` in
+  assets/product-components.js).
+
+  @example
+  {% content_for 'block', type: 'product-personalization', id: 'personalization' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = closest.product
+
+  # Optionally limit engraving to tagged products
+  assign show_engraving = block.settings.show_engraving
+  if show_engraving and block.settings.engraving_tag != blank and request.design_mode == false
+    unless product.tags contains block.settings.engraving_tag
+      assign show_engraving = false
+    endunless
+  endif
+
+  assign engraving_name = 'product.personalization.engraving_property' | t
+  assign gift_note_name = 'product.personalization.gift_note_property' | t
+  assign engraving_id = 'Engraving-' | append: block.id
+  assign gift_note_id = 'GiftNote-' | append: block.id
+-%}
+
+{%- if product != blank -%}
+  {%- if show_engraving or block.settings.show_gift_note -%}
+    <product-personalization class="personalization" {{ block.shopify_attributes }}>
+      {%- if show_engraving -%}
+        <details class="personalization__option" data-option>
+          <summary class="personalization__summary">
+            <span class="personalization__check" aria-hidden="true">{% render 'icon', name: 'plus' %}</span>
+            <span>{{ 'product.personalization.add_engraving' | t }}</span>
+            {%- if block.settings.engraving_note != blank -%}
+              <span class="personalization__note">{{ block.settings.engraving_note | escape }}</span>
+            {%- endif -%}
+          </summary>
+          <div class="personalization__field">
+            <label for="{{ engraving_id }}" class="personalization__label">
+              {{- 'product.personalization.engraving_label' | t -}}
+            </label>
+            <input
+              type="text"
+              id="{{ engraving_id }}"
+              class="personalization__input"
+              name="properties[{{ engraving_name }}]"
+              maxlength="{{ block.settings.engraving_max }}"
+              autocomplete="off"
+              aria-describedby="{{ engraving_id }}-count"
+              data-product-property
+            >
+            <p id="{{ engraving_id }}-count" class="personalization__count" aria-live="polite" data-count>
+              {{- 'product.personalization.characters_left' | t: count: block.settings.engraving_max -}}
+            </p>
+          </div>
+        </details>
+      {%- endif -%}
+
+      {%- if block.settings.show_gift_note -%}
+        <details class="personalization__option" data-option>
+          <summary class="personalization__summary">
+            <span class="personalization__check" aria-hidden="true">{% render 'icon', name: 'plus' %}</span>
+            <span>{{ 'product.personalization.add_gift_note' | t }}</span>
+          </summary>
+          <div class="personalization__field">
+            <label for="{{ gift_note_id }}" class="personalization__label">
+              {{- 'product.personalization.gift_note_label' | t -}}
+            </label>
+            <textarea
+              id="{{ gift_note_id }}"
+              class="personalization__input personalization__textarea"
+              name="properties[{{ gift_note_name }}]"
+              maxlength="250"
+              rows="3"
+              aria-describedby="{{ gift_note_id }}-count"
+              data-product-property
+            ></textarea>
+            <p id="{{ gift_note_id }}-count" class="personalization__count" aria-live="polite" data-count>
+              {{- 'product.personalization.characters_left' | t: count: 250 -}}
+            </p>
+          </div>
+        </details>
+      {%- endif -%}
+
+      <template data-count-template>{{ 'product.personalization.characters_left' | t: count: '[count]' }}</template>
+    </product-personalization>
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .personalization {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .personalization__option {
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+    transition: border-color 0.2s ease;
+  }
+
+  .personalization__option[open] {
+    border-color: color-mix(in srgb, var(--color-foreground) 35%, transparent);
+  }
+
+  .personalization__summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 0.75rem;
+    min-height: 2.75rem;
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .personalization__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .personalization__summary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: var(--style-border-radius-buttons);
+  }
+
+  .personalization__check {
+    display: grid;
+    place-items: center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 30%, transparent);
+    border-radius: 50%;
+    transition:
+      transform 0.25s ease,
+      background-color 0.25s ease;
+  }
+
+  .personalization__check .icon {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .personalization__option[open] .personalization__check {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    color: var(--color-background);
+    transform: rotate(45deg);
+  }
+
+  .personalization__note {
+    margin-inline-start: auto;
+    font-size: 0.8125rem;
+    opacity: 0.65;
+  }
+
+  .personalization__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding: 0 0.875rem 0.875rem;
+  }
+
+  .personalization__label {
+    font-size: 0.8125rem;
+    opacity: 0.75;
+  }
+
+  .personalization__input {
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 1rem;
+  }
+
+  .personalization__input:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+
+  .personalization__textarea {
+    resize: vertical;
+  }
+
+  .personalization__count {
+    font-size: 0.75rem;
+    opacity: 0.6;
+    text-align: end;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Engraving and gift note fields: live "characters left" counters, and a
+   * closed option no longer sends its value (so shoppers can opt back out).
+   */
+  class ProductPersonalization extends HTMLElement {
+    connectedCallback() {
+      this.template = this.querySelector('[data-count-template]')?.innerHTML ?? '';
+      this.addEventListener('input', this.onInput);
+      this.querySelectorAll('[data-option]').forEach((option) => {
+        option.addEventListener('toggle', () => {
+          const input = option.querySelector('[data-product-property]');
+          if (!input) return;
+          input.disabled = !option.open;
+          if (option.open) input.focus();
+        });
+        const input = option.querySelector('[data-product-property]');
+        if (input) input.disabled = !option.open;
+      });
+    }
+
+    onInput = (event) => {
+      const input = event.target.closest('[data-product-property]');
+      if (!input) return;
+      const counter = input.parentElement.querySelector('[data-count]');
+      const left = Number(input.maxLength) - input.value.length;
+      if (counter) counter.textContent = this.template.replace('[count]', left);
+    };
+  }
+
+  if (!customElements.get('product-personalization')) {
+    customElements.define('product-personalization', ProductPersonalization);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:blocks.personalization.name",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_engraving",
+      "label": "t:blocks.personalization.show_engraving",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "engraving_max",
+      "label": "t:blocks.personalization.engraving_max",
+      "min": 5,
+      "max": 40,
+      "step": 1,
+      "default": 15,
+      "visible_if": "{{ block.settings.show_engraving }}"
+    },
+    {
+      "type": "text",
+      "id": "engraving_note",
+      "label": "t:blocks.personalization.engraving_note",
+      "info": "t:blocks.personalization.engraving_note_info",
+      "default": "Free",
+      "visible_if": "{{ block.settings.show_engraving }}"
+    },
+    {
+      "type": "text",
+      "id": "engraving_tag",
+      "label": "t:blocks.personalization.engraving_tag",
+      "info": "t:blocks.personalization.engraving_tag_info",
+      "visible_if": "{{ block.settings.show_engraving }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_gift_note",
+      "label": "t:blocks.personalization.show_gift_note",
+      "default": true
+    }
+  ],
+  "presets": [{ "name": "t:blocks.personalization.name" }]
+}
+{% endschema %}

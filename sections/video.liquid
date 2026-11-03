@@ -1,0 +1,473 @@
+{%- liquid
+  assign video = section.settings.video
+  assign video_url = section.settings.video_url
+  assign poster = section.settings.poster
+  assign background = false
+  if section.settings.background_mode and video != blank
+    assign background = true
+  endif
+
+  if poster == blank and video != blank
+    assign poster = video.preview_image
+  endif
+
+  assign has_video = false
+  if video != blank or video_url != blank
+    assign has_video = true
+  endif
+
+  assign title_text = section.settings.title | strip_html | escape
+  if title_text == blank
+    assign title_text = 'sections.video.default_title' | t
+  endif
+
+  assign classes = 'video-section ' | append: section.settings.ratio
+  if section.settings.full_width
+    assign classes = classes | append: ' video-section--full'
+  endif
+-%}
+
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    alignment: 'center'
+  %}
+
+  <video-player class="{{ classes }}"{% if background %} data-background{% endif %}>
+    <div class="video-section__frame">
+      {%- if background -%}
+        {{
+          video
+          | video_tag:
+            autoplay: true,
+            muted: true,
+            loop: true,
+            playsinline: true,
+            controls: false,
+            preload: 'metadata',
+            class: 'video-section__media',
+            image_size: '1600x'
+        }}
+        <button
+          type="button"
+          class="video-section__toggle"
+          data-toggle
+          aria-pressed="false"
+          aria-label="{{ 'sections.video.pause' | t | escape }}"
+          data-label-pause="{{ 'sections.video.pause' | t | escape }}"
+          data-label-play="{{ 'sections.video.play' | t | escape }}"
+        >
+          <svg class="video-section__icon-pause" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <path d="M7 5v10M13 5v10" />
+          </svg>
+          <svg class="video-section__icon-play" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <path d="M7 5l8 5-8 5z" />
+          </svg>
+        </button>
+      {%- else -%}
+        <div class="video-section__poster" data-poster>
+          {%- if poster != blank -%}
+            {{
+              poster
+              | image_url: width: 2400
+              | image_tag:
+                widths: '550, 750, 1100, 1500, 1800, 2400',
+                sizes: '(min-width: 990px) 90vw, 100vw',
+                loading: 'lazy',
+                class: 'video-section__media',
+                alt: ''
+            }}
+          {%- else -%}
+            <img
+              src="{{ 'demo-rings-hand.jpg' | asset_img_url: '1600x' }}"
+              srcset="
+                {{ 'demo-rings-hand.jpg' | asset_img_url: '750x' }} 750w,
+                {{ 'demo-rings-hand.jpg' | asset_img_url: '1100x' }} 1100w,
+                {{ 'demo-rings-hand.jpg' | asset_img_url: '1600x' }} 1600w
+              "
+              sizes="(min-width: 990px) 90vw, 100vw"
+              width="1600"
+              height="1067"
+              alt=""
+              class="video-section__media"
+              loading="lazy"
+            >
+          {%- endif -%}
+
+          {%- if has_video -%}
+            <button type="button" class="video-section__play" data-play>
+              <span class="video-section__play-circle" aria-hidden="true">
+                <svg viewBox="0 0 20 20" focusable="false"><path d="M7 4.5l9 5.5-9 5.5z" /></svg>
+              </span>
+              <span class="visually-hidden">{{ 'sections.video.play_title' | t: title: title_text }}</span>
+            </button>
+          {%- elsif request.design_mode -%}
+            <p class="video-section__empty">{{ 'sections.video.empty' | t }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- if has_video -%}
+          <template data-template>
+            {%- if video != blank -%}
+              {{
+                video
+                | video_tag:
+                  autoplay: true,
+                  controls: true,
+                  playsinline: true,
+                  class: 'video-section__media',
+                  image_size: '1600x'
+              }}
+            {%- elsif video_url.type == 'youtube' -%}
+              <iframe
+                class="video-section__media"
+                src="https://www.youtube-nocookie.com/embed/{{ video_url.id }}?autoplay=1&rel=0&playsinline=1"
+                title="{{ title_text }}"
+                allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                allowfullscreen
+              ></iframe>
+            {%- elsif video_url.type == 'vimeo' -%}
+              <iframe
+                class="video-section__media"
+                src="https://player.vimeo.com/video/{{ video_url.id }}?autoplay=1&dnt=1"
+                title="{{ title_text }}"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowfullscreen
+              ></iframe>
+            {%- endif -%}
+          </template>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+  </video-player>
+</div>
+
+{% stylesheet %}
+  .video-section {
+    display: block;
+  }
+
+  /* Span the section's full grid, edge to edge */
+  .section > .video-section--full {
+    grid-column: 1 / -1;
+  }
+
+  .video-section__frame {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: var(--video-ratio, 16 / 9);
+    border-radius: var(--style-border-radius-buttons);
+    background-color: color-mix(in srgb, var(--color-foreground) 8%, var(--color-background));
+  }
+
+  .video-section--full .video-section__frame {
+    border-radius: 0;
+  }
+
+  .video-ratio--wide {
+    --video-ratio: 16 / 9;
+  }
+
+  .video-ratio--cinema {
+    --video-ratio: 21 / 9;
+  }
+
+  .video-ratio--square {
+    --video-ratio: 1;
+  }
+
+  .video-ratio--portrait {
+    --video-ratio: 4 / 5;
+  }
+
+  @media (max-width: 749px) {
+    .video-ratio--cinema {
+      --video-ratio: 16 / 9;
+    }
+  }
+
+  .video-section__poster {
+    position: absolute;
+    inset: 0;
+  }
+
+  .video-section__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    object-fit: cover;
+  }
+
+  .video-section__play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.25), transparent 60%);
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .video-section__play-circle {
+    display: grid;
+    place-items: center;
+    width: clamp(4rem, 8vw, 5.5rem);
+    height: clamp(4rem, 8vw, 5.5rem);
+    border: 1px solid rgb(255 255 255 / 0.6);
+    border-radius: 50%;
+    background-color: rgb(255 255 255 / 0.15);
+    backdrop-filter: blur(8px);
+    transition:
+      transform 0.3s cubic-bezier(0.2, 0.6, 0.2, 1),
+      background-color 0.3s ease;
+  }
+
+  .video-section__play-circle svg {
+    width: 38%;
+    height: 38%;
+    margin-inline-start: 6%;
+    fill: currentcolor;
+  }
+
+  .video-section__play:hover .video-section__play-circle {
+    background-color: rgb(255 255 255 / 0.3);
+    transform: scale(1.06);
+  }
+
+  .video-section__play:focus-visible {
+    outline: none;
+  }
+
+  .video-section__play:focus-visible .video-section__play-circle {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+  }
+
+  .video-section__empty {
+    position: absolute;
+    inset-inline: 1rem;
+    bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--style-border-radius-buttons);
+    background-color: var(--color-background);
+    font-size: 0.875rem;
+    text-align: center;
+  }
+
+  .video-section__toggle {
+    position: absolute;
+    inset-inline-end: 1rem;
+    bottom: 1rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.35);
+    color: #ffffff;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+  }
+
+  .video-section__toggle:focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+  }
+
+  .video-section__toggle svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .video-section__icon-play {
+    display: none;
+    fill: currentcolor !important;
+  }
+
+  .video-section__toggle[aria-pressed='true'] .video-section__icon-pause {
+    display: none;
+  }
+
+  .video-section__toggle[aria-pressed='true'] .video-section__icon-play {
+    display: block;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Video section. Click-to-play: the poster swaps for the player (Shopify
+   * video, YouTube or Vimeo) only when the shopper asks for it, so nothing
+   * heavy loads up front. Background mode: a muted loop with a pause button
+   * that starts paused for shoppers who prefer reduced motion.
+   */
+  class VideoPlayer extends HTMLElement {
+    connectedCallback() {
+      this.querySelector('[data-play]')?.addEventListener('click', this.play);
+      this.toggle = this.querySelector('[data-toggle]');
+      this.toggle?.addEventListener('click', this.onToggle);
+
+      if (this.hasAttribute('data-background')) {
+        this.video = this.querySelector('video');
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) this.setPaused(true);
+      }
+    }
+
+    play = () => {
+      const template = this.querySelector('[data-template]');
+      const poster = this.querySelector('[data-poster]');
+      if (!template || !poster) return;
+      const player = template.content.firstElementChild?.cloneNode(true);
+      if (!player) return;
+      poster.replaceWith(player);
+      if (player.tagName === 'VIDEO') {
+        player.play?.().catch(() => {});
+      }
+      player.focus?.();
+    };
+
+    onToggle = () => {
+      this.setPaused(!this.video?.paused);
+    };
+
+    setPaused(paused) {
+      if (!this.video || !this.toggle) return;
+      if (paused) this.video.pause();
+      else this.video.play().catch(() => {});
+      this.toggle.setAttribute('aria-pressed', String(paused));
+      this.toggle.setAttribute('aria-label', paused ? this.toggle.dataset.labelPlay : this.toggle.dataset.labelPause);
+    }
+  }
+
+  if (!customElements.get('video-player')) {
+    customElements.define('video-player', VideoPlayer);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.video.name",
+  "tag": "section",
+  "class": "video-section-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "video",
+      "id": "video",
+      "label": "t:sections.video.video",
+      "info": "t:sections.video.video_info"
+    },
+    {
+      "type": "video_url",
+      "id": "video_url",
+      "label": "t:sections.video.video_url",
+      "accept": ["youtube", "vimeo"],
+      "info": "t:sections.video.video_url_info"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster",
+      "label": "t:sections.video.poster"
+    },
+    {
+      "type": "checkbox",
+      "id": "background_mode",
+      "label": "t:sections.video.background_mode",
+      "info": "t:sections.video.background_mode_info",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "ratio",
+      "label": "t:labels.image_ratio",
+      "options": [
+        { "value": "video-ratio--wide", "label": "16:9" },
+        { "value": "video-ratio--cinema", "label": "21:9" },
+        { "value": "video-ratio--square", "label": "t:options.ratio.square" },
+        { "value": "video-ratio--portrait", "label": "t:options.ratio.portrait" }
+      ],
+      "default": "video-ratio--wide"
+    },
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "t:labels.full_width",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "In the studio"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Every piece, <em>made by hand</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle"
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.video.name",
+      "category": "t:general.banners"
+    }
+  ]
+}
+{% endschema %}

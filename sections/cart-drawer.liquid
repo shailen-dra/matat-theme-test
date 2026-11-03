@@ -70,6 +70,15 @@
                       </p>
                     {%- endunless -%}
 
+                    {%- for property in item.properties -%}
+                      {%- assign property_first_char = property.first | slice: 0 -%}
+                      {%- if property.last != blank and property_first_char != '_' -%}
+                        <p class="drawer-item__options drawer-item__property">
+                          {{- property.first | escape }}: {{ property.last | escape -}}
+                        </p>
+                      {%- endif -%}
+                    {%- endfor -%}
+
                     {%- for discount in item.line_level_discount_allocations -%}
                       <p class="drawer-item__discount">
                         {{- discount.discount_application.title | escape }} (−{{ discount.amount | money -}})
@@ -411,6 +420,10 @@
   .drawer-item__discount {
     font-size: 0.8125rem;
     opacity: 0.65;
+  }
+
+  .drawer-item__property {
+    overflow-wrap: anywhere;
   }
 
   .drawer-item__discount {

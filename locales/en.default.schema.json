@@ -367,6 +367,16 @@
     "sticky_add_to_cart": {
       "name": "Sticky add to cart",
       "info": "A bar with the add to cart button appears at the bottom of the screen once shoppers scroll past the Buy buttons block."
+    },
+    "personalization": {
+      "name": "Personalization",
+      "show_engraving": "Show engraving",
+      "engraving_max": "Engraving character limit",
+      "engraving_note": "Engraving note",
+      "engraving_note_info": "Short note next to the option, for example \"Free\".",
+      "engraving_tag": "Only for products tagged",
+      "engraving_tag_info": "Leave blank to offer engraving on every product.",
+      "show_gift_note": "Show gift note"
     }
   },
   "sections": {
@@ -568,6 +578,41 @@
     },
     "cart_upsell": {
       "name": "Cart suggestions"
+    },
+    "marquee": {
+      "name": "Marquee",
+      "item": "Message",
+      "separator": "Separator",
+      "speed": "Loop duration",
+      "speed_info": "Higher is slower. The marquee pauses on hover and stays still for shoppers who prefer reduced motion.",
+      "reverse": "Reverse direction"
+    },
+    "video": {
+      "name": "Video",
+      "video": "Video",
+      "video_info": "Uploaded videos take priority over a video link.",
+      "video_url": "YouTube or Vimeo link",
+      "video_url_info": "Loads only when shoppers press play.",
+      "poster": "Cover image",
+      "background_mode": "Play as background",
+      "background_mode_info": "Uploaded videos only. Plays muted on a loop, with a pause button."
+    },
+    "collage": {
+      "name": "Collage",
+      "item": "Tile",
+      "content_type": "Content",
+      "image_info": "Optional for products and collections, which use their own image.",
+      "title_info": "Optional for products and collections, which use their own title.",
+      "large_start": "Large tile first",
+      "large_end": "Large tile last"
+    },
+    "faq": {
+      "name": "FAQ",
+      "layout_stacked": "Stacked",
+      "layout_split": "Side by side",
+      "contact": "Contact prompt",
+      "structured_data": "Add FAQ structured data",
+      "structured_data_info": "Helps search engines show your questions in results. Use on one FAQ section per page."
     }
   },
   "settings": {

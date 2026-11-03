@@ -1,0 +1,308 @@
+{%- liquid
+  assign has_contact = false
+  if section.settings.contact_label != blank and section.settings.contact_link != blank
+    assign has_contact = true
+  endif
+-%}
+
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="faq {{ section.settings.layout }}">
+    <div class="faq__intro">
+      {% render 'section-heading',
+        eyebrow: section.settings.eyebrow,
+        title: section.settings.title,
+        subtitle: section.settings.subtitle,
+        alignment: section.settings.heading_alignment
+      %}
+
+      {%- if has_contact -%}
+        <div class="faq__contact">
+          {%- if section.settings.contact_text != blank -%}
+            <p class="faq__contact-text">{{ section.settings.contact_text | escape }}</p>
+          {%- endif -%}
+          {% render 'button',
+            label: section.settings.contact_label,
+            url: section.settings.contact_link,
+            style: 'outline'
+          %}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="faq__items">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{%- comment -%} FAQ rich results: every question with an answer {%- endcomment -%}
+{%- if section.settings.structured_data -%}
+  {%- assign faq_started = false -%}
+  {%- capture faq_entries -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'accordion' and block.settings.heading != blank and block.settings.content != blank -%}
+        {%- unless faq_started -%}{%- assign faq_started = true -%}{%- else -%},{%- endunless -%}
+        {
+          "@type": "Question",
+          "name": {{ block.settings.heading | json }},
+          "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.content | json }} }
+        }
+      {%- endif -%}
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- if faq_started -%}
+    <script type="application/ld+json">
+      { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{{ faq_entries }}] }
+    </script>
+  {%- endif -%}
+{%- endif -%}
+
+{% stylesheet %}
+  .faq {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+
+  .faq--stacked {
+    max-width: 48rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .faq--split {
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+  }
+
+  .faq--split .faq__intro {
+    position: sticky;
+    top: calc(var(--header-height, 0px) + 2rem);
+  }
+
+  .faq__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .faq__intro .section-heading {
+    margin: 0;
+  }
+
+  .faq--stacked .faq__contact {
+    align-items: center;
+    text-align: center;
+  }
+
+  .faq__contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .faq__contact-text {
+    font-size: 0.9375rem;
+    opacity: 0.75;
+  }
+
+  /* The contact prompt reads best after the questions in the stacked layout */
+  .faq--stacked .faq__contact {
+    order: 2;
+  }
+
+  .faq--stacked .faq__intro {
+    display: contents;
+  }
+
+  .faq--stacked .faq__items {
+    order: 1;
+  }
+
+  .faq__items {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Category headings between groups of questions */
+  .faq__items > .heading {
+    margin-block: 2.5rem 0.75rem;
+  }
+
+  .faq__items > .heading:first-child {
+    margin-block-start: 0;
+  }
+
+  .faq__items > .accordion + .accordion {
+    margin-block-start: 0;
+  }
+
+  @media (max-width: 989px) {
+    .faq--split {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .faq--split .faq__intro {
+      position: static;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.faq.name",
+  "tag": "section",
+  "class": "faq-section",
+  "blocks": [{ "type": "accordion" }, { "type": "heading" }],
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:general.layout",
+      "options": [
+        { "value": "faq--stacked", "label": "t:sections.faq.layout_stacked" },
+        { "value": "faq--split", "label": "t:sections.faq.layout_split" }
+      ],
+      "default": "faq--split"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Help"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Questions, <em>answered</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "t:labels.alignment",
+      "options": [
+        { "value": "start", "label": "t:options.alignment.left" },
+        { "value": "center", "label": "t:options.alignment.center" }
+      ],
+      "default": "start"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.faq.contact"
+    },
+    {
+      "type": "text",
+      "id": "contact_text",
+      "label": "t:labels.text",
+      "default": "Still have a question?"
+    },
+    {
+      "type": "text",
+      "id": "contact_label",
+      "label": "t:labels.button_label",
+      "default": "Contact us"
+    },
+    {
+      "type": "url",
+      "id": "contact_link",
+      "label": "t:labels.link"
+    },
+    {
+      "type": "header",
+      "content": "t:general.settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "structured_data",
+      "label": "t:sections.faq.structured_data",
+      "info": "t:sections.faq.structured_data_info",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.faq.name",
+      "category": "t:general.text",
+      "blocks": [
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "What is your jewelry made of?",
+            "content": "<p>Every piece is made from recycled 14k or 18k gold, or 925 sterling silver. Stones are ethically sourced and conflict-free.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "How do I find my ring size?",
+            "content": "<p>Use the size guide on any ring page, or wrap a strip of paper around your finger and match its length to our chart. We resize for free within 30 days.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "How long does shipping take?",
+            "content": "<p>Orders ship within 2 business days, fully insured and gift-wrapped. Delivery usually takes 3–5 business days.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "Can I return or exchange a piece?",
+            "content": "<p>Yes. Unworn pieces can be returned or exchanged within 30 days. Engraved pieces are final sale.</p>"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "heading": "How should I care for my jewelry?",
+            "content": "<p>Remove jewelry before swimming or showering, store pieces separately in the pouch provided, and polish gently with a soft cloth.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,148 @@
+{% doc %}
+  Renders one tile of the collage section: an image, a product or a
+  collection, with its title overlaid and the whole tile linked.
+
+  @example
+  {% content_for 'block', type: '_collage-item', id: 'item-1' %}
+{% enddoc %}
+
+{%- liquid
+  assign kind = block.settings.content_type
+  assign product = block.settings.product
+  assign collection = block.settings.collection
+  assign image = block.settings.image
+  assign title = block.settings.title
+  assign caption = blank
+  assign url = block.settings.link
+
+  case kind
+    when 'product'
+      if product != blank
+        if image == blank
+          assign image = product.featured_media.preview_image
+        endif
+        if title == blank
+          assign title = product.title | escape
+        endif
+        assign caption = product.price | money
+        assign url = product.url
+      endif
+    when 'collection'
+      if collection != blank
+        if image == blank
+          assign image = collection.featured_image
+        endif
+        if title == blank
+          assign title = collection.title | escape
+        endif
+        assign caption = 'sections.collage.shop_collection' | t
+        assign url = collection.url
+      endif
+  endcase
+
+  assign demo_images = 'demo-layered-necklaces.jpg,demo-hoops.jpg,demo-ginkgo-set.jpg,demo-rings-hand.jpg,demo-flatlay.jpg' | split: ','
+  assign demo_index = section.blocks | find_index: 'id', block.id | default: 0 | modulo: 5
+  assign demo_image = demo_images[demo_index]
+
+  if url != blank
+    assign tag = 'a'
+  else
+    assign tag = 'div'
+  endif
+-%}
+
+<{{ tag }}
+  class="collage-item collage-item--{{ kind }}"
+  {% if url != blank %}
+    href="{{ url }}"
+  {% endif %}
+  {{ block.shopify_attributes }}
+>
+  <span class="collage-item__media">
+    {%- if image != blank -%}
+      {{
+        image
+        | image_url: width: 1600
+        | image_tag:
+          widths: '375, 550, 750, 1000, 1300, 1600',
+          sizes: '(min-width: 990px) 50vw, 100vw',
+          loading: 'lazy',
+          class: 'collage-item__image',
+          alt: ''
+      }}
+    {%- else -%}
+      <img
+        src="{{ demo_image | asset_img_url: '1100x' }}"
+        srcset="
+          {{ demo_image | asset_img_url: '550x' }} 550w,
+          {{ demo_image | asset_img_url: '1100x' }} 1100w
+        "
+        sizes="(min-width: 990px) 50vw, 100vw"
+        width="1100"
+        height="1100"
+        alt=""
+        class="collage-item__image"
+        loading="lazy"
+      >
+    {%- endif -%}
+  </span>
+
+  {%- if title != blank or caption != blank -%}
+    <span class="collage-item__label">
+      {%- if title != blank -%}
+        <span class="collage-item__title">{{ title }}</span>
+      {%- endif -%}
+      {%- if caption != blank -%}
+        <span class="collage-item__caption">{{ caption }}</span>
+      {%- endif -%}
+    </span>
+  {%- endif -%}
+</{{ tag }}>
+
+{% schema %}
+{
+  "name": "t:sections.collage.item",
+  "settings": [
+    {
+      "type": "select",
+      "id": "content_type",
+      "label": "t:sections.collage.content_type",
+      "options": [
+        { "value": "image", "label": "t:labels.image" },
+        { "value": "product", "label": "t:general.product" },
+        { "value": "collection", "label": "t:general.collection" }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:general.product"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "t:general.collection"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image",
+      "info": "t:sections.collage.image_info"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "info": "t:sections.collage.title_info"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:labels.link",
+      "visible_if": "{{ block.settings.content_type == 'image' }}"
+    }
+  ],
+  "presets": [{ "name": "t:sections.collage.item" }]
+}
+{% endschema %}

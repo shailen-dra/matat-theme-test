@@ -488,6 +488,13 @@ class ProductForm extends HTMLElement {
     button.setAttribute('aria-busy', 'true');
 
     const formData = new FormData(this.form);
+    // Personalization fields (engraving, gift note) live outside the form, in the same product section
+    (this.closest('product-info') ?? this.parentElement)
+      ?.querySelectorAll('[data-product-property]')
+      .forEach((input) => {
+        const value = input.value.trim();
+        if (!input.form && !input.disabled && input.name && value) formData.append(input.name, value);
+      });
     formData.append('sections', window.ThemeCart.sectionIds().join(','));
     formData.append('sections_url', window.location.pathname);
 

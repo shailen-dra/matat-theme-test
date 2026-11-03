@@ -105,6 +105,15 @@
         "sticky_atc": {
           "type": "sticky-add-to-cart",
           "settings": {}
+        },
+        "personalization": {
+          "type": "product-personalization",
+          "settings": {
+            "show_engraving": true,
+            "engraving_max": 15,
+            "engraving_note": "Free",
+            "show_gift_note": true
+          }
         }
       },
       "block_order": [
@@ -113,6 +122,7 @@
         "price",
         "variant_picker",
         "size_guide",
+        "personalization",
         "buy_buttons",
         "sticky_atc",
         "pickup",

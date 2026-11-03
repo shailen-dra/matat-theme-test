@@ -223,6 +223,16 @@
     "testimonials": {
       "rating": "דירוג {{ rating }} מתוך 5",
       "label": "המלצות לקוחות"
+    },
+    "video": {
+      "default_title": "וידאו",
+      "play_title": "הפעלת הסרטון: {{ title }}",
+      "pause": "השהיית הסרטון",
+      "play": "הפעלת הסרטון",
+      "empty": "הוסיפו סרטון או קישור YouTube או Vimeo כדי להציג כפתור הפעלה."
+    },
+    "collage": {
+      "shop_collection": "לקנייה"
     }
   },
   "header": {
@@ -316,6 +326,15 @@
       "step_1": "כרכו רצועת נייר סביב בסיס האצבע.",
       "step_2": "סמנו את נקודת המפגש ומדדו את האורך במילימטרים.",
       "step_3": "התאימו את האורך למידה האירופית בטבלה. בין שתי מידות? בחרו בגדולה."
+    },
+    "personalization": {
+      "engraving_property": "חריטה",
+      "gift_note_property": "ברכה למתנה",
+      "add_engraving": "הוספת חריטה",
+      "engraving_label": "טקסט לחריטה",
+      "characters_left": "נותרו {{ count }} תווים",
+      "add_gift_note": "הוספת ברכה למתנה",
+      "gift_note_label": "הברכה שלכם"
     }
   },
   "contact": {

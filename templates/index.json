@@ -476,14 +476,125 @@
         "padding_top": 48,
         "padding_bottom": 48
       }
+    },
+    "marquee": {
+      "type": "marquee",
+      "blocks": {
+        "item_1": {
+          "type": "_marquee-item",
+          "settings": {
+            "text": "Free insured shipping"
+          }
+        },
+        "item_2": {
+          "type": "_marquee-item",
+          "settings": {
+            "text": "Recycled 14k gold"
+          }
+        },
+        "item_3": {
+          "type": "_marquee-item",
+          "settings": {
+            "text": "Lifetime warranty"
+          }
+        },
+        "item_4": {
+          "type": "_marquee-item",
+          "settings": {
+            "text": "30-day returns"
+          }
+        },
+        "item_5": {
+          "type": "_marquee-item",
+          "settings": {
+            "text": "Free engraving"
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4",
+        "item_5"
+      ],
+      "settings": {
+        "size": "marquee--small",
+        "separator": "diamond",
+        "speed": 40,
+        "reverse": false,
+        "background": "#1a1a1a",
+        "foreground": "#f5f0e8",
+        "padding": 14
+      }
+    },
+    "collage": {
+      "type": "collage",
+      "blocks": {
+        "tile_1": {
+          "type": "_collage-item",
+          "settings": {
+            "content_type": "image",
+            "title": "Necklaces",
+            "link": "shopify://collections/all"
+          }
+        },
+        "tile_2": {
+          "type": "_collage-item",
+          "settings": {
+            "content_type": "image",
+            "title": "Earrings",
+            "link": "shopify://collections/all"
+          }
+        },
+        "tile_3": {
+          "type": "_collage-item",
+          "settings": {
+            "content_type": "image",
+            "title": "Gift sets",
+            "link": "shopify://collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3"
+      ],
+      "settings": {
+        "layout": "collage--large-start",
+        "row_height": 300,
+        "gap": 12,
+        "eyebrow": "The edit",
+        "title": "Pieces to <em>build on</em>",
+        "tinted": false,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "studio_video": {
+      "type": "video",
+      "settings": {
+        "ratio": "video-ratio--cinema",
+        "full_width": false,
+        "eyebrow": "In the studio",
+        "title": "Every piece, <em>made by hand</em>",
+        "background_mode": false,
+        "tinted": false,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
     "hero",
+    "marquee",
     "category_tiles",
     "featured_products",
     "shop_the_look",
+    "collage",
     "brand_story",
+    "studio_video",
     "metal_tiles",
     "testimonials",
     "press",
