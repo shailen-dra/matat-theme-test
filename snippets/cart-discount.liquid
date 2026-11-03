@@ -1,0 +1,270 @@
+{% doc %}
+  Renders the discount code field of the cart drawer and cart page, with
+  the codes already applied (and a note when one doesn't apply to this
+  cart). Codes are applied and removed with the Ajax Cart API, then every
+  cart view is re-rendered. Follows Theme settings → Cart → Discount codes.
+
+  @param {string} id - Unique id for the input
+
+  @example
+  {% render 'cart-discount', id: 'CartDrawer-Discount' %}
+{% enddoc %}
+
+{%- if settings.show_discount_code and cart.item_count > 0 -%}
+  {%- assign codes = cart.discount_codes | map: 'code' | join: ',' -%}
+  <cart-discount class="discount" data-codes="{{ codes | escape }}">
+    <details class="discount__details"{% if cart.discount_codes.size > 0 %} open{% endif %}>
+      <summary class="discount__summary">
+        {%- render 'icon', name: 'plus', class: 'discount__icon' -%}
+        {{ 'cart.discount_code.toggle' | t }}
+      </summary>
+
+      {%- # Not a <form>: on the cart page this sits inside the cart form -%}
+      <div class="discount__form">
+        <label for="{{ id }}" class="visually-hidden">{{ 'cart.discount_code.label' | t }}</label>
+        <input
+          type="text"
+          id="{{ id }}"
+          class="discount__input"
+          placeholder="{{ 'cart.discount_code.placeholder' | t }}"
+          autocomplete="off"
+          autocapitalize="characters"
+          spellcheck="false"
+          data-discount-input
+        >
+        <button type="button" class="button button--outline discount__apply" data-discount-apply>
+          {{- 'cart.discount_code.apply' | t -}}
+        </button>
+      </div>
+    </details>
+
+    {%- if cart.discount_codes.size > 0 -%}
+      <ul class="discount__codes" role="list">
+        {%- for discount_code in cart.discount_codes -%}
+          <li class="discount__code{% unless discount_code.applicable %} discount__code--invalid{% endunless %}">
+            <span class="discount__pill">
+              {{- discount_code.code | escape -}}
+              <button
+                type="button"
+                class="discount__remove"
+                data-discount-remove="{{ discount_code.code | escape }}"
+                aria-label="{{ 'cart.discount_code.remove' | t: code: discount_code.code | escape }}"
+              >
+                {%- render 'icon', name: 'close' -%}
+              </button>
+            </span>
+            {%- unless discount_code.applicable -%}
+              <span class="discount__note">{{ 'cart.discount_code.not_applicable' | t }}</span>
+            {%- endunless -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <p class="discount__error" role="alert" hidden data-discount-error data-fallback="{{ 'cart.errors.generic' | t | escape }}"></p>
+  </cart-discount>
+{%- endif -%}
+
+{% stylesheet %}
+  .discount {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .discount__summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.25rem;
+    font-size: 0.875rem;
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .discount__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .discount__summary:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .discount__icon {
+    width: 0.875rem;
+    height: 0.875rem;
+    transition: transform 0.2s ease;
+  }
+
+  .discount__details[open] .discount__icon {
+    transform: rotate(45deg);
+  }
+
+  .discount__form {
+    display: flex;
+    gap: 0.5rem;
+    margin-block-start: 0.375rem;
+  }
+
+  .discount__input {
+    flex: 1;
+    min-width: 0;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 1rem;
+    text-transform: uppercase;
+  }
+
+  .discount__input::placeholder {
+    text-transform: none;
+  }
+
+  .discount__input:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+
+  .discount[aria-busy='true'] .discount__apply {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .discount__codes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .discount__code {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .discount__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding-inline: 0.75rem 0.25rem;
+    border-radius: 999px;
+    background-color: color-mix(in srgb, var(--color-accent) 12%, var(--color-background));
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  .discount__code--invalid .discount__pill {
+    background-color: color-mix(in srgb, var(--color-foreground) 8%, var(--color-background));
+    text-decoration: line-through;
+  }
+
+  .discount__remove {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .discount__remove .icon {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+
+  .discount__remove:focus-visible {
+    outline: 2px solid var(--color-accent);
+  }
+
+  .discount__note,
+  .discount__error {
+    font-size: 0.75rem;
+  }
+
+  .discount__error {
+    color: #b42318;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Discount codes in the cart: applies a code (keeping ones already
+   * applied) or removes one with /cart/update.js, then refreshes every cart
+   * view. The re-rendered markup shows whether each code applies.
+   */
+  class CartDiscount extends HTMLElement {
+    connectedCallback() {
+      this.addEventListener('click', this.onClick);
+      this.querySelector('[data-discount-input]')?.addEventListener('keydown', (event) => {
+        if (event.key !== 'Enter') return;
+        // Keep Enter from submitting the surrounding cart form
+        event.preventDefault();
+        this.applyInput();
+      });
+    }
+
+    get codes() {
+      return (this.dataset.codes || '').split(',').filter(Boolean);
+    }
+
+    onClick = (event) => {
+      if (event.target.closest('[data-discount-apply]')) {
+        this.applyInput();
+        return;
+      }
+      const button = event.target.closest('[data-discount-remove]');
+      if (!button) return;
+      this.apply(this.codes.filter((code) => code !== button.dataset.discountRemove));
+    };
+
+    applyInput() {
+      const code = this.querySelector('[data-discount-input]')?.value.trim();
+      if (!code) return;
+      const codes = this.codes.filter((existing) => existing.toLowerCase() !== code.toLowerCase());
+      this.apply([...codes, code]);
+    }
+
+    async apply(codes) {
+      const error = this.querySelector('[data-discount-error]');
+      if (error) error.hidden = true;
+      this.setAttribute('aria-busy', 'true');
+      try {
+        const root = window.ThemeCart?.root ?? '/';
+        const response = await fetch(`${root}cart/update.js`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            discount: codes.join(','),
+            sections: window.ThemeCart?.sectionIds() ?? [],
+            sections_url: window.location.pathname,
+          }),
+        });
+        const data = await response.json();
+        if (!response.ok || data.status) throw new Error(data.description || data.message);
+        window.ThemeCart?.render(data.sections);
+        document.dispatchEvent(new CustomEvent('cart:update', { detail: { cart: data } }));
+      } catch (err) {
+        if (error) {
+          error.textContent = err.message || error.dataset.fallback;
+          error.hidden = false;
+        }
+      } finally {
+        this.removeAttribute('aria-busy');
+      }
+    }
+  }
+
+  if (!customElements.get('cart-discount')) {
+    customElements.define('cart-discount', CartDiscount);
+  }
+{% endjavascript %}

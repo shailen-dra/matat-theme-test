@@ -78,6 +78,14 @@
     "gift_wrap": {
       "label": "Add gift wrapping",
       "free": "Free"
+    },
+    "discount_code": {
+      "toggle": "Add a discount code",
+      "label": "Discount code",
+      "placeholder": "Discount code",
+      "apply": "Apply",
+      "remove": "Remove discount {{ code }}",
+      "not_applicable": "Not valid for this cart"
     }
   },
   "customers": {
@@ -412,6 +420,20 @@
       "subject": "Question about {{ title }}",
       "send": "Send question",
       "success": "Thanks! We'll get back to you by email soon."
+    },
+    "gift_card_recipient": {
+      "toggle": "Send as a gift to someone",
+      "email": "Recipient email",
+      "name": "Recipient name",
+      "message": "Message",
+      "send_on": "Send on",
+      "send_on_hint": "Leave empty to send right after checkout."
+    },
+    "delivery": {
+      "arrives": "Arrives {{ from }} – {{ to }}",
+      "order_within": "Order within {{ time }}",
+      "hours_minutes": "{{ hours }}h {{ minutes }}m",
+      "minutes": "{{ minutes }}m"
     }
   },
   "contact": {

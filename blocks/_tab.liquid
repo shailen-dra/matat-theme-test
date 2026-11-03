@@ -1,0 +1,49 @@
+{% doc %}
+  Renders one tab of the product tabs block: a title and its panel, filled
+  with the product description, custom text, and / or nested blocks.
+
+  @example
+  {% content_for 'block', type: '_tab', id: 'tab-1' %}
+{% enddoc %}
+
+{%- assign product = closest.product -%}
+
+<div class="tab" data-tab {{ block.shopify_attributes }}>
+  <h3 class="tab__heading" data-tab-heading>{{ block.settings.title | escape }}</h3>
+  <div class="tab__panel" data-tab-panel>
+    {%- if block.settings.show_description and product.description != blank -%}
+      <div class="rte">{{ product.description }}</div>
+    {%- endif -%}
+    {%- if block.settings.content != blank -%}
+      <div class="rte">{{ block.settings.content }}</div>
+    {%- endif -%}
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "t:blocks.product_tabs.tab",
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Details"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_description",
+      "label": "t:blocks.product_tabs.show_description",
+      "default": false
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "t:labels.text"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.product_tabs.tab" }]
+}
+{% endschema %}

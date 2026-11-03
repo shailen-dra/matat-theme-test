@@ -128,6 +128,7 @@
 
           <div class="side-drawer__footer" data-cart-totals>
             {% render 'gift-wrap', id: 'CartDrawer-GiftWrap' %}
+            {% render 'cart-discount', id: 'CartDrawer-Discount' %}
             {%- for discount in cart.cart_level_discount_applications -%}
               <p class="cart-drawer__row cart-drawer__row--discount">
                 <span>{{ discount.title | escape }}</span>

@@ -1,0 +1,169 @@
+{% doc %}
+  Renders the gift card recipient form inside a gift card's product form:
+  a "Send as a gift" checkbox that reveals recipient email, name, message
+  and send date. Saved as Shopify's gift card line item properties, so the
+  gift card is emailed to the recipient (on the chosen date).
+
+  @param {string} id - Unique id prefix (e.g. the block id)
+
+  @example
+  {% if product.gift_card? %}{% render 'gift-card-recipient', id: block.id %}{% endif %}
+{% enddoc %}
+
+{%- liquid
+  assign prefix = 'Recipient-' | append: id
+  assign today = 'now' | date: '%Y-%m-%d'
+-%}
+
+<gift-card-recipient class="recipient">
+  <input
+    type="checkbox"
+    id="{{ prefix }}-toggle"
+    class="recipient__toggle"
+    name="properties[__shopify_send_gift_card_to_recipient]"
+    value="true"
+    data-recipient-toggle
+  >
+  <label for="{{ prefix }}-toggle" class="recipient__toggle-label">
+    {%- render 'icon', name: 'gift', class: 'recipient__icon' -%}
+    {{ 'product.gift_card_recipient.toggle' | t }}
+  </label>
+
+  <div class="recipient__fields" data-recipient-fields hidden>
+    <label class="recipient__field">
+      <span>{{ 'product.gift_card_recipient.email' | t }} <span aria-hidden="true">*</span></span>
+      <input type="email" name="properties[Recipient email]" autocomplete="off" required disabled>
+    </label>
+    <label class="recipient__field">
+      <span>{{ 'product.gift_card_recipient.name' | t }}</span>
+      <input type="text" name="properties[Recipient name]" autocomplete="off" disabled>
+    </label>
+    <label class="recipient__field">
+      <span>{{ 'product.gift_card_recipient.message' | t }}</span>
+      <textarea name="properties[Message]" rows="3" maxlength="200" disabled></textarea>
+    </label>
+    <label class="recipient__field">
+      <span>{{ 'product.gift_card_recipient.send_on' | t }}</span>
+      <input type="date" name="properties[Send on]" min="{{ today }}" pattern="\d{4}-\d{2}-\d{2}" disabled>
+      <small class="recipient__hint">{{ 'product.gift_card_recipient.send_on_hint' | t }}</small>
+    </label>
+    <input type="hidden" name="properties[__shopify_offset]" value="" disabled data-recipient-offset>
+  </div>
+</gift-card-recipient>
+
+{% stylesheet %}
+  .recipient {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .recipient__toggle {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .recipient__toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    min-height: 2.75rem;
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+
+  .recipient__toggle-label::after {
+    content: '';
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-inline-start: auto;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 35%, transparent);
+    border-radius: 0.25rem;
+    background: var(--color-background) center / 0.75rem no-repeat;
+  }
+
+  .recipient__toggle:checked + .recipient__toggle-label::after {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 10.5l3.5 3.5 7.5-8'/%3E%3C/svg%3E");
+  }
+
+  .recipient__toggle:focus-visible + .recipient__toggle-label {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .recipient__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-accent);
+  }
+
+  .recipient__fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding: 1rem;
+    border-radius: var(--style-border-radius-buttons);
+    background-color: color-mix(in srgb, var(--color-foreground) 4%, var(--color-background));
+  }
+
+  .recipient__fields[hidden] {
+    display: none;
+  }
+
+  .recipient__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+  }
+
+  .recipient__field :is(input, textarea) {
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 1rem;
+  }
+
+  .recipient__field :is(input, textarea):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+
+  .recipient__hint {
+    opacity: 0.65;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Gift card recipient form: the fields are only enabled (and so only
+   * submitted) while "Send as a gift" is checked, and carry the shopper's
+   * time zone offset so the send date matches their calendar.
+   */
+  class GiftCardRecipient extends HTMLElement {
+    connectedCallback() {
+      this.toggle = this.querySelector('[data-recipient-toggle]');
+      this.fields = this.querySelector('[data-recipient-fields]');
+      this.toggle?.addEventListener('change', this.update);
+      const offset = this.querySelector('[data-recipient-offset]');
+      if (offset) offset.value = new Date().getTimezoneOffset();
+      this.update();
+    }
+
+    update = () => {
+      const on = Boolean(this.toggle?.checked);
+      this.fields.hidden = !on;
+      this.fields.querySelectorAll('input, textarea').forEach((input) => (input.disabled = !on));
+      if (on) this.fields.querySelector('input')?.focus();
+    };
+  }
+
+  if (!customElements.get('gift-card-recipient')) {
+    customElements.define('gift-card-recipient', GiftCardRecipient);
+  }
+{% endjavascript %}

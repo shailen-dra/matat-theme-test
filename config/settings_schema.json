@@ -282,6 +282,13 @@
         "info": "t:settings.cart.cart_type_info"
       },
       {
+        "type": "checkbox",
+        "id": "show_discount_code",
+        "label": "t:settings.cart.show_discount_code",
+        "info": "t:settings.cart.show_discount_code_info",
+        "default": true
+      },
+      {
         "type": "header",
         "content": "t:settings.cart.free_shipping"
       },

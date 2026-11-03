@@ -1,0 +1,76 @@
+{% doc %}
+  Renders a "Secure checkout" line with the store's accepted payment
+  methods (from Shopify payments settings). Fits under the buy buttons.
+
+  @example
+  {% content_for 'block', type: 'payment-icons', id: 'payment-icons' %}
+{% enddoc %}
+
+<div class="payments" {{ block.shopify_attributes }}>
+  {%- if block.settings.text != blank -%}
+    <p class="payments__text">
+      {%- render 'icon', name: 'shield', class: 'payments__icon' -%}
+      {{ block.settings.text | escape }}
+    </p>
+  {%- endif -%}
+  {%- if shop.enabled_payment_types.size > 0 -%}
+    <ul class="payments__list" role="list" aria-label="{{ 'footer.payment_methods' | t }}">
+      {%- for type in shop.enabled_payment_types -%}
+        <li>{{ type | payment_type_svg_tag: class: 'payments__method' }}</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .payments {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
+    text-align: center;
+  }
+
+  .payments__text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    opacity: 0.75;
+  }
+
+  .payments__icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .payments__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .payments__method {
+    width: 2.375rem;
+    height: auto;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.payment_icons.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "text",
+      "label": "t:labels.text",
+      "default": "Secure checkout"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.payment_icons.name" }]
+}
+{% endschema %}

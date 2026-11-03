@@ -1,0 +1,203 @@
+{% doc %}
+  Renders an estimated delivery window on the product page, for example
+  "Order within 3h 20m · Arrives Thu, Nov 6 – Mon, Nov 10". Counted in
+  business days from the shopper's local time, with a daily order cutoff.
+  It's an estimate shown to shoppers, not tied to shipping rates.
+
+  @example
+  {% content_for 'block', type: 'delivery-estimate', id: 'delivery-estimate' %}
+{% enddoc %}
+
+<delivery-estimate
+  class="delivery"
+  data-min="{{ block.settings.min_days }}"
+  data-max="{{ block.settings.max_days }}"
+  data-cutoff="{{ block.settings.cutoff_hour }}"
+  data-skip-weekends="{{ block.settings.skip_weekends }}"
+  data-weekend="{{ block.settings.weekend }}"
+  data-locale="{{ request.locale.iso_code }}"
+  data-arrives="{{ 'product.delivery.arrives' | t: from: '[from]', to: '[to]' | escape }}"
+  data-countdown="{{ 'product.delivery.order_within' | t: time: '[time]' | escape }}"
+  data-hours-minutes="{{ 'product.delivery.hours_minutes' | t: hours: '[h]', minutes: '[m]' | escape }}"
+  data-minutes="{{ 'product.delivery.minutes' | t: minutes: '[m]' | escape }}"
+  hidden
+  {{ block.shopify_attributes }}
+>
+  {%- render 'icon', name: 'truck', class: 'delivery__icon' -%}
+  <p class="delivery__text">
+    <span class="delivery__countdown" data-delivery-countdown></span>
+    <span data-delivery-window></span>
+  </p>
+</delivery-estimate>
+
+{% stylesheet %}
+  .delivery {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .delivery[hidden] {
+    display: none;
+  }
+
+  .delivery__icon {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: var(--color-accent);
+  }
+
+  .delivery__text {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.125rem 0.5rem;
+  }
+
+  .delivery__countdown {
+    font-weight: 500;
+  }
+
+  .delivery__countdown:empty {
+    display: none;
+  }
+
+  .delivery__countdown:not(:empty)::after {
+    content: ' ·';
+    font-weight: 400;
+    opacity: 0.5;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Estimated delivery: adds business days to today (or tomorrow, after
+   * the cutoff hour), skipping the weekend days chosen in the block, and
+   * shows a countdown to the cutoff while it's still possible to make it.
+   */
+  class DeliveryEstimate extends HTMLElement {
+    connectedCallback() {
+      this.render();
+      this.timer = setInterval(() => this.render(), 60000);
+    }
+
+    disconnectedCallback() {
+      clearInterval(this.timer);
+    }
+
+    get weekend() {
+      // "fri-sat" (Israel and much of the Middle East) or "sat-sun"
+      return this.dataset.weekend === 'fri-sat' ? [5, 6] : [6, 0];
+    }
+
+    isBusinessDay(date) {
+      return this.dataset.skipWeekends !== 'true' || !this.weekend.includes(date.getDay());
+    }
+
+    addBusinessDays(start, days) {
+      const date = new Date(start);
+      let added = 0;
+      while (added < days) {
+        date.setDate(date.getDate() + 1);
+        if (this.isBusinessDay(date)) added += 1;
+      }
+      return date;
+    }
+
+    render() {
+      const now = new Date();
+      const cutoff = Number(this.dataset.cutoff);
+      let shipDay = new Date(now);
+      const beforeCutoff = now.getHours() < cutoff && this.isBusinessDay(now);
+      if (!beforeCutoff) {
+        // Ships on the next business day
+        do {
+          shipDay.setDate(shipDay.getDate() + 1);
+        } while (!this.isBusinessDay(shipDay));
+      }
+
+      const from = this.addBusinessDays(shipDay, Number(this.dataset.min) || 0);
+      const to = this.addBusinessDays(shipDay, Math.max(Number(this.dataset.max) || 0, Number(this.dataset.min) || 0));
+      const format = new Intl.DateTimeFormat(this.dataset.locale, { weekday: 'short', month: 'short', day: 'numeric' });
+      const sameDay = from.toDateString() === to.toDateString();
+      const windowText = this.dataset.arrives
+        .replace('[from]', format.format(from))
+        .replace(sameDay ? /\s*[–-]\s*\[to\]/ : '[to]', sameDay ? '' : format.format(to));
+      this.querySelector('[data-delivery-window]').textContent = windowText;
+
+      const countdown = this.querySelector('[data-delivery-countdown]');
+      if (beforeCutoff) {
+        const end = new Date(now);
+        end.setHours(cutoff, 0, 0, 0);
+        const minutes = Math.max(1, Math.round((end - now) / 60000));
+        const time =
+          minutes >= 60
+            ? this.dataset.hoursMinutes.replace('[h]', Math.floor(minutes / 60)).replace('[m]', minutes % 60)
+            : this.dataset.minutes.replace('[m]', minutes);
+        countdown.textContent = this.dataset.countdown.replace('[time]', time);
+      } else {
+        countdown.textContent = '';
+      }
+      this.hidden = false;
+    }
+  }
+
+  if (!customElements.get('delivery-estimate')) {
+    customElements.define('delivery-estimate', DeliveryEstimate);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:blocks.delivery_estimate.name",
+  "settings": [
+    {
+      "type": "range",
+      "id": "min_days",
+      "label": "t:blocks.delivery_estimate.min_days",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "max_days",
+      "label": "t:blocks.delivery_estimate.max_days",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "cutoff_hour",
+      "label": "t:blocks.delivery_estimate.cutoff_hour",
+      "info": "t:blocks.delivery_estimate.cutoff_hour_info",
+      "min": 0,
+      "max": 23,
+      "step": 1,
+      "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "skip_weekends",
+      "label": "t:blocks.delivery_estimate.skip_weekends",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "weekend",
+      "label": "t:blocks.delivery_estimate.weekend",
+      "options": [
+        { "value": "fri-sat", "label": "t:blocks.delivery_estimate.fri_sat" },
+        { "value": "sat-sun", "label": "t:blocks.delivery_estimate.sat_sun" }
+      ],
+      "default": "fri-sat",
+      "visible_if": "{{ block.settings.skip_weekends }}"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.delivery_estimate.name" }]
+}
+{% endschema %}

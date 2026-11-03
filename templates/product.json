@@ -77,24 +77,6 @@
             "h3"
           ]
         },
-        "description": {
-          "type": "product-description",
-          "settings": {}
-        },
-        "materials": {
-          "type": "accordion",
-          "settings": {
-            "heading": "Materials & care",
-            "content": "<p>Solid 14k recycled gold. Remove before swimming and store separately in the pouch provided. Polish gently with a soft cloth.</p>"
-          }
-        },
-        "shipping": {
-          "type": "accordion",
-          "settings": {
-            "heading": "Shipping & returns",
-            "content": "<p>Free insured shipping on all orders. Not quite right? Return unworn pieces within 30 days for a full refund.</p>"
-          }
-        },
         "size_guide": {
           "type": "size-guide",
           "settings": {
@@ -179,6 +161,54 @@
           "settings": {
             "label": "Ask a question"
           }
+        },
+        "tabs": {
+          "type": "product-tabs",
+          "settings": {},
+          "blocks": {
+            "tab_description": {
+              "type": "_tab",
+              "settings": {
+                "title": "Description",
+                "show_description": true
+              }
+            },
+            "tab_materials": {
+              "type": "_tab",
+              "settings": {
+                "title": "Materials & care",
+                "content": "<p>Solid 14k recycled gold. Remove before swimming and store separately in the pouch provided. Polish gently with a soft cloth.</p>"
+              }
+            },
+            "tab_shipping": {
+              "type": "_tab",
+              "settings": {
+                "title": "Shipping & returns",
+                "content": "<p>Free insured shipping on all orders. Not quite right? Return unworn pieces within 30 days for a full refund.</p>"
+              }
+            }
+          },
+          "block_order": [
+            "tab_description",
+            "tab_materials",
+            "tab_shipping"
+          ]
+        },
+        "delivery": {
+          "type": "delivery-estimate",
+          "settings": {
+            "min_days": 3,
+            "max_days": 5,
+            "cutoff_hour": 14,
+            "skip_weekends": true,
+            "weekend": "fri-sat"
+          }
+        },
+        "payment_icons": {
+          "type": "payment-icons",
+          "settings": {
+            "text": "Secure checkout"
+          }
         }
       },
       "block_order": [
@@ -191,15 +221,15 @@
         "size_guide",
         "personalization",
         "buy_buttons",
+        "delivery",
+        "payment_icons",
         "back_in_stock",
         "sticky_atc",
         "bundle",
         "pickup",
         "highlights",
-        "description",
+        "tabs",
         "specs",
-        "materials",
-        "shipping",
         "ask_question",
         "share"
       ],

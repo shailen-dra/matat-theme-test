@@ -329,7 +329,9 @@
       "name": "Buy buttons",
       "show_quantity": "Show quantity selector",
       "show_dynamic_checkout": "Show dynamic checkout buttons",
-      "show_dynamic_checkout_info": "Shows the customer's preferred payment method, like Shop Pay or Apple Pay."
+      "show_dynamic_checkout_info": "Shows the customer's preferred payment method, like Shop Pay or Apple Pay.",
+      "show_gift_card_recipient": "Show gift card recipient form",
+      "show_gift_card_recipient_info": "On gift card products, lets shoppers send the gift card to someone by email, on a date they choose."
     },
     "product_description": {
       "name": "Product description"
@@ -414,6 +416,25 @@
     },
     "ask_question": {
       "name": "Ask a question"
+    },
+    "delivery_estimate": {
+      "name": "Delivery estimate",
+      "min_days": "Earliest delivery (business days)",
+      "max_days": "Latest delivery (business days)",
+      "cutoff_hour": "Same-day order cutoff (hour)",
+      "cutoff_hour_info": "Orders after this hour count from the next business day. Uses the shopper's local time.",
+      "skip_weekends": "Skip weekends",
+      "weekend": "Weekend days",
+      "fri_sat": "Friday and Saturday",
+      "sat_sun": "Saturday and Sunday"
+    },
+    "product_tabs": {
+      "name": "Product tabs",
+      "tab": "Tab",
+      "show_description": "Show product description"
+    },
+    "payment_icons": {
+      "name": "Payment icons"
     }
   },
   "sections": {
@@ -756,7 +777,9 @@
       "upsell_info": "Based on Shopify's product recommendations for the first item in the cart.",
       "gift_wrap": "Gift wrap",
       "gift_wrap_product": "Gift wrap product",
-      "gift_wrap_product_info": "Shows an \"Add gift wrapping\" checkbox in the cart that adds this product. Use a product with a single variant."
+      "gift_wrap_product_info": "Shows an \"Add gift wrapping\" checkbox in the cart that adds this product. Use a product with a single variant.",
+      "show_discount_code": "Show discount code field",
+      "show_discount_code_info": "In the cart drawer and on the cart page."
     },
     "favicon": {
       "group": "Favicon",

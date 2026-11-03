@@ -329,7 +329,9 @@
       "name": "כפתורי קנייה",
       "show_quantity": "הצגת בורר כמות",
       "show_dynamic_checkout": "הצגת כפתורי תשלום מהיר",
-      "show_dynamic_checkout_info": "מציג את אמצעי התשלום המועדף על הלקוח, כמו Shop Pay או Apple Pay."
+      "show_dynamic_checkout_info": "מציג את אמצעי התשלום המועדף על הלקוח, כמו Shop Pay או Apple Pay.",
+      "show_gift_card_recipient": "הצגת טופס מקבל כרטיס מתנה",
+      "show_gift_card_recipient_info": "במוצרי כרטיס מתנה, מאפשר לשלוח את הכרטיס באימייל למישהו אחר, בתאריך לבחירה."
     },
     "product_description": {
       "name": "תיאור המוצר"
@@ -414,6 +416,25 @@
     },
     "ask_question": {
       "name": "שאלו שאלה"
+    },
+    "delivery_estimate": {
+      "name": "הערכת זמן משלוח",
+      "min_days": "משלוח מוקדם ביותר (ימי עסקים)",
+      "max_days": "משלוח מאוחר ביותר (ימי עסקים)",
+      "cutoff_hour": "שעת סיום להזמנה באותו יום",
+      "cutoff_hour_info": "הזמנות אחרי השעה הזו נספרות מיום העסקים הבא. לפי השעה המקומית של הקונה.",
+      "skip_weekends": "דילוג על סופי שבוע",
+      "weekend": "ימי סוף השבוע",
+      "fri_sat": "שישי ושבת",
+      "sat_sun": "שבת וראשון"
+    },
+    "product_tabs": {
+      "name": "לשוניות מוצר",
+      "tab": "לשונית",
+      "show_description": "הצגת תיאור המוצר"
+    },
+    "payment_icons": {
+      "name": "אמצעי תשלום"
     }
   },
   "sections": {
@@ -756,7 +777,9 @@
       "upsell_info": "מבוסס על המלצות המוצרים של Shopify לפריט הראשון בעגלה.",
       "gift_wrap": "אריזת מתנה",
       "gift_wrap_product": "מוצר אריזת מתנה",
-      "gift_wrap_product_info": "מציג בעגלה תיבת סימון \"הוספת אריזת מתנה\" שמוסיפה את המוצר הזה. השתמשו במוצר עם וריאנט אחד."
+      "gift_wrap_product_info": "מציג בעגלה תיבת סימון \"הוספת אריזת מתנה\" שמוסיפה את המוצר הזה. השתמשו במוצר עם וריאנט אחד.",
+      "show_discount_code": "הצגת שדה קוד הנחה",
+      "show_discount_code_info": "במגירת העגלה ובעמוד העגלה."
     },
     "favicon": {
       "group": "Favicon",

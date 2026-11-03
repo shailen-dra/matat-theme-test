@@ -36,6 +36,10 @@
 {%- if product != blank -%}
   <product-form class="buy-buttons" {{ block.shopify_attributes }}>
     {%- form 'product', product, id: form_id, class: 'buy-buttons__form', novalidate: 'novalidate' -%}
+      {%- if product.gift_card? and block.settings.show_gift_card_recipient -%}
+        {% render 'gift-card-recipient', id: block.id %}
+      {%- endif -%}
+
       <div class="buy-buttons__row">
         {%- if block.settings.show_quantity -%}
           {% render 'quantity-input', id: quantity_id %}
@@ -196,6 +200,13 @@
       "id": "show_dynamic_checkout",
       "label": "t:blocks.buy_buttons.show_dynamic_checkout",
       "info": "t:blocks.buy_buttons.show_dynamic_checkout_info",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_gift_card_recipient",
+      "label": "t:blocks.buy_buttons.show_gift_card_recipient",
+      "info": "t:blocks.buy_buttons.show_gift_card_recipient_info",
       "default": true
     }
   ],

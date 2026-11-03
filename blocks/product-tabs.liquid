@@ -1,0 +1,209 @@
+{% doc %}
+  Renders product information as tabs (description, materials, shipping…).
+  Each tab is a nested block. Without JavaScript the tabs show one after
+  another with their headings.
+
+  @example
+  {% content_for 'block', type: 'product-tabs', id: 'tabs' %}
+{% enddoc %}
+
+<product-tabs class="tabs" {{ block.shopify_attributes }}>
+  <div class="tabs__list" role="tablist" data-tablist hidden></div>
+  <div class="tabs__panels">
+    {% content_for 'blocks' %}
+  </div>
+</product-tabs>
+
+{% stylesheet %}
+  .tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .tabs__list {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 15%, transparent);
+    scrollbar-width: none;
+  }
+
+  .tabs__list[hidden] {
+    display: none;
+  }
+
+  .tabs__button {
+    position: relative;
+    flex-shrink: 0;
+    padding: 0.75rem 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    cursor: pointer;
+  }
+
+  [dir='rtl'] .tabs__button {
+    letter-spacing: 0;
+  }
+
+  .tabs__button[aria-selected='true'] {
+    opacity: 1;
+  }
+
+  .tabs__button[aria-selected='true']::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 2px;
+    background-color: var(--color-accent);
+  }
+
+  .tabs__button:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .tab + .tab {
+    margin-block-start: 1.5rem;
+  }
+
+  .tabs.is-ready .tab + .tab {
+    margin-block-start: 0;
+  }
+
+  .tab__heading {
+    margin: 0 0 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .tabs.is-ready .tab__heading {
+    display: none;
+  }
+
+  .tab__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-size: 0.9375rem;
+  }
+
+  .tab__panel:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Product tabs: builds an accessible tablist from each tab's heading and
+   * shows one panel at a time. Arrow keys, Home and End move between tabs.
+   */
+  class ProductTabs extends HTMLElement {
+    connectedCallback() {
+      this.build();
+      this.addEventListener('shopify:block:select', (event) => {
+        const index = this.tabs.indexOf(event.target.closest('[data-tab]'));
+        if (index >= 0) this.select(index);
+      });
+    }
+
+    build() {
+      this.tabs = [...this.querySelectorAll(':scope > .tabs__panels > [data-tab]')];
+      this.list = this.querySelector('[data-tablist]');
+      if (!this.list || this.tabs.length === 0) return;
+      const uid = Math.random().toString(36).slice(2, 8);
+
+      this.buttons = this.tabs.map((tab, i) => {
+        const panel = tab.querySelector('[data-tab-panel]');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'tabs__button';
+        button.setAttribute('role', 'tab');
+        button.id = `Tab-${uid}-${i}`;
+        button.textContent = tab.querySelector('[data-tab-heading]')?.textContent.trim() ?? '';
+        button.setAttribute('aria-controls', `TabPanel-${uid}-${i}`);
+        panel.id = `TabPanel-${uid}-${i}`;
+        panel.setAttribute('role', 'tabpanel');
+        panel.setAttribute('aria-labelledby', button.id);
+        panel.tabIndex = 0;
+        button.addEventListener('click', () => this.select(i));
+        button.addEventListener('keydown', this.onKeydown);
+        return button;
+      });
+
+      this.list.replaceChildren(...this.buttons);
+      this.list.hidden = false;
+      this.classList.add('is-ready');
+      this.select(0, false);
+    }
+
+    select(index, focus = false) {
+      this.buttons?.forEach((button, i) => {
+        const active = i === index;
+        button.setAttribute('aria-selected', String(active));
+        button.tabIndex = active ? 0 : -1;
+        this.tabs[i].hidden = !active;
+        if (active && focus) button.focus();
+      });
+    }
+
+    onKeydown = (event) => {
+      const current = this.buttons.indexOf(event.currentTarget);
+      const rtl = getComputedStyle(this).direction === 'rtl';
+      const last = this.buttons.length - 1;
+      let next = null;
+      if (event.key === (rtl ? 'ArrowLeft' : 'ArrowRight')) next = current === last ? 0 : current + 1;
+      if (event.key === (rtl ? 'ArrowRight' : 'ArrowLeft')) next = current === 0 ? last : current - 1;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = last;
+      if (next === null) return;
+      event.preventDefault();
+      this.select(next, true);
+    };
+  }
+
+  if (!customElements.get('product-tabs')) {
+    customElements.define('product-tabs', ProductTabs);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:blocks.product_tabs.name",
+  "blocks": [{ "type": "_tab" }],
+  "settings": [],
+  "presets": [
+    {
+      "name": "t:blocks.product_tabs.name",
+      "blocks": [
+        { "type": "_tab", "settings": { "title": "Description", "show_description": true } },
+        {
+          "type": "_tab",
+          "settings": {
+            "title": "Materials & care",
+            "content": "<p>Solid 14k recycled gold. Remove before swimming and store separately in the pouch provided.</p>"
+          }
+        },
+        {
+          "type": "_tab",
+          "settings": {
+            "title": "Shipping & returns",
+            "content": "<p>Free insured shipping. Unworn pieces can be returned within 30 days.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

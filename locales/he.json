@@ -79,6 +79,14 @@
     "gift_wrap": {
       "label": "הוספת אריזת מתנה",
       "free": "חינם"
+    },
+    "discount_code": {
+      "toggle": "הוספת קוד הנחה",
+      "label": "קוד הנחה",
+      "placeholder": "קוד הנחה",
+      "apply": "החלה",
+      "remove": "הסרת ההנחה {{ code }}",
+      "not_applicable": "לא תקף לעגלה הזו"
     }
   },
   "customers": {
@@ -418,6 +426,20 @@
       "subject": "שאלה על {{ title }}",
       "send": "שליחת השאלה",
       "success": "תודה! נחזור אליכם באימייל בקרוב."
+    },
+    "gift_card_recipient": {
+      "toggle": "שליחה כמתנה למישהו אחר",
+      "email": "אימייל של מקבל המתנה",
+      "name": "שם מקבל המתנה",
+      "message": "הודעה",
+      "send_on": "תאריך שליחה",
+      "send_on_hint": "השאירו ריק כדי לשלוח מיד אחרי התשלום."
+    },
+    "delivery": {
+      "arrives": "יגיע {{ from }} – {{ to }}",
+      "order_within": "הזמינו בתוך {{ time }}",
+      "hours_minutes": "{{ hours }} ש׳ {{ minutes }} ד׳",
+      "minutes": "{{ minutes }} ד׳"
     }
   },
   "contact": {
