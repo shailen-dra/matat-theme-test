@@ -167,6 +167,18 @@
           "settings": {
             "label": "Share"
           }
+        },
+        "bundle": {
+          "type": "bundle",
+          "settings": {
+            "heading": "Complete the set"
+          }
+        },
+        "ask_question": {
+          "type": "ask-question",
+          "settings": {
+            "label": "Ask a question"
+          }
         }
       },
       "block_order": [
@@ -181,12 +193,14 @@
         "buy_buttons",
         "back_in_stock",
         "sticky_atc",
+        "bundle",
         "pickup",
         "highlights",
         "description",
         "specs",
         "materials",
         "shipping",
+        "ask_question",
         "share"
       ],
       "settings": {

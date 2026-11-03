@@ -1,0 +1,179 @@
+{% doc %}
+  Renders an "Ask a question" link on the product page that opens a side
+  drawer with a short contact form. The message reaches the store as a
+  contact form email that includes the product and its link. After sending,
+  the drawer reopens to confirm (or show what to fix).
+
+  @example
+  {% content_for 'block', type: 'ask-question', id: 'ask-question' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = closest.product
+  assign drawer_id = 'AskQuestion-' | append: block.id
+  assign form_id = 'AskQuestionForm-' | append: block.id
+  assign title_id = 'AskQuestionTitle-' | append: block.id
+  assign name_label = 'contact.name' | t
+  assign product_field = 'product.back_in_stock.product_field' | t
+  assign link_field = 'product.back_in_stock.link_field' | t
+  assign send_label = 'product.ask_question.send' | t
+-%}
+
+{%- if product != blank -%}
+  <div class="ask-question" {{ block.shopify_attributes }}>
+    <button
+      type="button"
+      class="size-guide__trigger"
+      data-drawer-open="{{ drawer_id }}"
+      aria-haspopup="dialog"
+      aria-controls="{{ drawer_id }}"
+    >
+      <svg class="icon size-guide__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+        <path d="M3 4.5h14v9H8l-4 3v-3H3z M7.5 8h5M7.5 10.5h3" />
+      </svg>
+      <span>{{ block.settings.label | escape }}</span>
+    </button>
+
+    <side-drawer id="{{ drawer_id }}">
+      <dialog class="side-drawer" aria-labelledby="{{ title_id }}" scroll-lock>
+        <div class="side-drawer__inner">
+          <div class="side-drawer__header">
+            <h2 id="{{ title_id }}" class="side-drawer__title">{{ block.settings.label | escape }}</h2>
+            <button type="button" class="side-drawer__close" data-drawer-close>
+              {% render 'icon', name: 'close' %}
+              <span class="visually-hidden">{{ 'cart.drawer.close' | t }}</span>
+            </button>
+          </div>
+
+          <div class="side-drawer__body ask-question__body">
+            {%- form 'contact', id: form_id, class: 'ask-question__form' -%}
+              {%- if form.posted_successfully? -%}
+                <p class="ask-question__message" role="status" data-reopen>
+                  {% render 'icon', name: 'check' %}
+                  {{ 'product.ask_question.success' | t }}
+                </p>
+              {%- else -%}
+                {%- if form.errors -%}
+                  <div class="ask-question__errors" role="alert" data-reopen>
+                    {{ form.errors | default_errors }}
+                  </div>
+                {%- endif -%}
+
+                <p class="ask-question__intro">{{ 'product.ask_question.intro' | t: title: product.title }}</p>
+
+                <input type="hidden" name="contact[subject]" value="{{ 'product.ask_question.subject' | t: title: product.title | escape }}">
+                <input type="hidden" name="contact[{{ product_field }}]" value="{{ product.title | escape }}">
+                <input type="hidden" name="contact[{{ link_field }}]" value="{{ shop.url }}{{ product.url }}">
+
+                <label class="ask-question__field">
+                  <span>{{ name_label }}</span>
+                  <input type="text" name="contact[{{ name_label }}]" value="{{ form.name }}" autocomplete="name">
+                </label>
+                <label class="ask-question__field">
+                  <span>{{ 'contact.email' | t }} <span aria-hidden="true">*</span></span>
+                  <input type="email" name="contact[email]" value="{{ form.email | default: customer.email }}" autocomplete="email" required>
+                </label>
+                <label class="ask-question__field">
+                  <span>{{ 'contact.message' | t }} <span aria-hidden="true">*</span></span>
+                  <textarea name="contact[body]" rows="5" required>{{ form.body }}</textarea>
+                </label>
+
+                {% render 'button', label: send_label, type: 'submit', style: 'primary', full_width: true %}
+              {%- endif -%}
+            {%- endform -%}
+          </div>
+        </div>
+      </dialog>
+    </side-drawer>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .ask-question__body {
+    padding-block: 1.5rem 2rem;
+  }
+
+  .ask-question__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .ask-question__intro {
+    font-size: 0.9375rem;
+    opacity: 0.8;
+  }
+
+  .ask-question__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
+  }
+
+  .ask-question__field :is(input, textarea) {
+    width: 100%;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 1rem;
+  }
+
+  .ask-question__field :is(input, textarea):focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+  }
+
+  .ask-question__field textarea {
+    resize: vertical;
+  }
+
+  .ask-question__message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .ask-question__message .icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--color-accent);
+  }
+
+  .ask-question__errors {
+    padding: 0.75rem 1rem;
+    border-inline-start: 2px solid #b42318;
+    color: #b42318;
+    font-size: 0.875rem;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /* After posting the question, reopen its drawer to show the result */
+  (() => {
+    const reopen = () => {
+      document.querySelectorAll('.ask-question [data-reopen]').forEach((message) => {
+        message.closest('side-drawer')?.show();
+      });
+    };
+    const start = () => customElements.whenDefined('side-drawer').then(reopen);
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+    else start();
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:blocks.ask_question.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "label",
+      "label": "t:labels.label",
+      "default": "Ask a question"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.ask_question.name" }]
+}
+{% endschema %}

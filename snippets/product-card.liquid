@@ -135,6 +135,65 @@
           {{ product.price | money }}
         {%- endif -%}
       </p>
+
+      {%- if settings.card_swatches -%}
+        {%- liquid
+          assign swatch_option = null
+          for option in product.options_with_values
+            assign option_name = option.name | downcase
+            if option_name contains 'color' or option_name contains 'colour' or option_name contains 'metal' or option_name contains 'צבע' or option_name contains 'מתכת'
+              assign swatch_option = option
+              break
+            endif
+          endfor
+        -%}
+        {%- if swatch_option and swatch_option.values.size > 1 -%}
+          <card-swatches class="card__swatches">
+            {%- for value in swatch_option.values limit: 5 -%}
+              {%- liquid
+                assign value_name = value.name | downcase
+                assign swatch_color = value.swatch.color
+                if swatch_color == blank
+                  if value_name contains 'rose'
+                    assign swatch_color = '#e3b4a0'
+                  elsif value_name contains 'gold' or value_name contains 'זהב'
+                    assign swatch_color = '#d4b06a'
+                  elsif value_name contains 'silver' or value_name contains 'platinum' or value_name contains 'white' or value_name contains 'כסף'
+                    assign swatch_color = '#cfd2d6'
+                  elsif value_name contains 'black'
+                    assign swatch_color = '#2a2a2a'
+                  else
+                    assign swatch_color = '#e8e2d8'
+                  endif
+                endif
+                assign swatch_media = value.variant.featured_media.preview_image
+              -%}
+              <button
+                type="button"
+                class="card__swatch"
+                style="--swatch-color: {{ swatch_color }};{% if value.swatch.image %} --swatch-image: url({{ value.swatch.image | image_url: width: 60 }});{% endif %}"
+                aria-label="{{ swatch_option.name | escape }}: {{ value.name | escape }}"
+                {% if forloop.first %}
+                  aria-pressed="true"
+                {% else %}
+                  aria-pressed="false"
+                {% endif %}
+                {% if value.variant %}
+                  data-url="{{ value.variant.url }}"
+                {% endif %}
+                {% if swatch_media %}
+                  data-src="{{ swatch_media | image_url: width: 900 }}"
+                  data-srcset="{{ swatch_media | image_url: width: 450 }} 450w, {{ swatch_media | image_url: width: 900 }} 900w"
+                {% endif %}
+              ></button>
+            {%- endfor -%}
+            {%- if swatch_option.values.size > 5 -%}
+              {%- assign more_values = swatch_option.values.size | minus: 5 -%}
+              <span class="card__swatch-more">+{{ more_values }}</span>
+            {%- endif -%}
+          </card-swatches>
+        {%- endif -%}
+      {%- endif -%}
     </div>
   {%- else -%}
     <div class="card__media">
@@ -344,4 +403,99 @@
       transition: none;
     }
   }
+
+  /* Metal / color swatches */
+  .card__swatches {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    margin-block-start: 0.25rem;
+  }
+
+  .card__swatch {
+    width: 1.375rem;
+    height: 1.375rem;
+    padding: 0;
+    border: 2px solid var(--color-background);
+    border-radius: 50%;
+    background: var(--swatch-image, none) center / cover, var(--swatch-color);
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--color-foreground) 20%, transparent);
+    cursor: pointer;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .card__swatch[aria-pressed='true'],
+  .card__swatch:hover {
+    box-shadow: 0 0 0 1px var(--color-foreground);
+  }
+
+  .card__swatch:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* While choosing a swatch, show its image rather than the hover image */
+  .card--has-secondary:has(.card__swatches:hover) .card__image--secondary {
+    opacity: 0;
+  }
+
+  .card__swatch-more {
+    font-size: 0.75rem;
+    opacity: 0.65;
+  }
 {% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Product card swatches: hovering or picking a metal / color shows that
+   * variant's image on the card, and the card links to that variant.
+   */
+  class CardSwatches extends HTMLElement {
+    connectedCallback() {
+      this.card = this.closest('.card');
+      this.image = this.card?.querySelector('.card__image:not(.card__image--secondary)');
+      this.links = this.card ? [...this.card.querySelectorAll('.card__media, .card__link')] : [];
+      this.original = this.image && { src: this.image.src, srcset: this.image.srcset };
+      this.addEventListener('click', this.onSelect);
+      this.addEventListener('pointerover', this.onPreview);
+      this.addEventListener('pointerleave', this.onLeave);
+    }
+
+    onPreview = (event) => {
+      const swatch = event.target.closest('.card__swatch');
+      if (swatch && event.pointerType === 'mouse') this.showImage(swatch);
+    };
+
+    onLeave = () => {
+      const selected = this.querySelector('.card__swatch[aria-pressed="true"]');
+      if (selected) this.showImage(selected);
+    };
+
+    onSelect = (event) => {
+      const swatch = event.target.closest('.card__swatch');
+      if (!swatch) return;
+      event.preventDefault();
+      this.querySelectorAll('.card__swatch').forEach((el) => el.setAttribute('aria-pressed', String(el === swatch)));
+      this.showImage(swatch);
+      if (swatch.dataset.url) this.links.forEach((link) => (link.href = swatch.dataset.url));
+    };
+
+    showImage(swatch) {
+      if (!this.image) return;
+      if (swatch.dataset.src) {
+        this.image.srcset = swatch.dataset.srcset;
+        this.image.src = swatch.dataset.src;
+      } else if (this.original) {
+        this.image.srcset = this.original.srcset;
+        this.image.src = this.original.src;
+      }
+    }
+  }
+
+  if (!customElements.get('card-swatches')) {
+    customElements.define('card-swatches', CardSwatches);
+  }
+{% endjavascript %}

@@ -1,0 +1,198 @@
+<div
+  class="section full-width color-scheme color-{{ section.settings.color_scheme }}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    alignment: 'center'
+  %}
+
+  <div class="comparison">
+    <table class="comparison__table">
+      <thead>
+        <tr>
+          <td class="comparison__corner"></td>
+          <th scope="col" class="comparison__head comparison__cell--highlight">{{ section.settings.column_1 | escape }}</th>
+          <th scope="col" class="comparison__head">{{ section.settings.column_2 | escape }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% content_for 'blocks' %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% stylesheet %}
+  .comparison {
+    max-width: 52rem;
+    width: 100%;
+    margin-inline: auto;
+    overflow-x: auto;
+  }
+
+  .comparison__table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .comparison__table :is(th, td) {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .comparison__feature {
+    font-weight: 400;
+    text-align: start !important;
+  }
+
+  .comparison__head {
+    font-family: var(--font-heading--family);
+    font-size: 1.125rem;
+    font-weight: var(--font-heading--weight);
+  }
+
+  /* The highlighted column reads as one raised card */
+  .comparison__cell--highlight {
+    background-color: color-mix(in srgb, var(--color-accent) 8%, var(--color-background));
+  }
+
+  thead .comparison__cell--highlight {
+    border-start-start-radius: var(--style-border-radius-buttons);
+    border-start-end-radius: var(--style-border-radius-buttons);
+    color: var(--color-accent);
+  }
+
+  tbody tr:last-child .comparison__cell--highlight {
+    border-end-start-radius: var(--style-border-radius-buttons);
+    border-end-end-radius: var(--style-border-radius-buttons);
+  }
+
+  tbody tr:last-child :is(th, td) {
+    border-bottom: 0;
+  }
+
+  .comparison__mark {
+    display: inline-grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+  }
+
+  .comparison__mark .icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .comparison__mark--yes {
+    background-color: var(--color-accent);
+    color: var(--color-background);
+  }
+
+  .comparison__mark--no {
+    color: color-mix(in srgb, var(--color-foreground) 45%, transparent);
+  }
+
+  @media (max-width: 749px) {
+    .comparison__table :is(th, td) {
+      padding: 0.875rem 0.625rem;
+      font-size: 0.875rem;
+    }
+
+    .comparison__head {
+      font-size: 0.9375rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.comparison.name",
+  "tag": "section",
+  "class": "comparison-section",
+  "blocks": [{ "type": "_comparison-row" }],
+  "max_blocks": 12,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Why it lasts"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Made to be <em>kept</em>, not replaced"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle"
+    },
+    {
+      "type": "text",
+      "id": "column_1",
+      "label": "t:sections.comparison.column_1",
+      "default": "Our jewelry"
+    },
+    {
+      "type": "text",
+      "id": "column_2",
+      "label": "t:sections.comparison.column_2",
+      "default": "Typical fashion jewelry"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.comparison.name",
+      "category": "t:general.trust",
+      "blocks": [
+        { "type": "_comparison-row", "settings": { "feature": "Solid gold, not plated", "value_1": "yes", "value_2": "no" } },
+        { "type": "_comparison-row", "settings": { "feature": "Safe for sensitive skin", "value_1": "yes", "value_2": "no" } },
+        { "type": "_comparison-row", "settings": { "feature": "Won't tarnish or fade", "value_1": "yes", "value_2": "no" } },
+        { "type": "_comparison-row", "settings": { "feature": "Finished by hand", "value_1": "yes", "value_2": "no" } },
+        { "type": "_comparison-row", "settings": { "feature": "Warranty", "value_1": "Lifetime", "value_2": "30 days" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

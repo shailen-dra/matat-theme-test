@@ -1,0 +1,321 @@
+{% doc %}
+  Renders "Complete the set" on the product page: this product plus up to
+  three complementary products (from Shopify's product recommendations,
+  set up in the Search & Discovery app), each with a checkbox, a running
+  total and one button that adds every checked item to the cart. Hidden
+  when the product has no complementary products.
+
+  @example
+  {% content_for 'block', type: 'bundle', id: 'bundle' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign main_id = 'BundleMain-' | append: block.id
+-%}
+
+{%- if product != blank -%}
+  <bundle-offer
+    class="bundle"
+    data-url="{{ routes.product_recommendations_url }}?product_id={{ product.id }}&limit=8&intent=complementary&section_id=bundle-offer"
+    data-currency="{{ cart.currency.iso_code }}"
+    data-locale="{{ request.locale.iso_code }}"
+    data-button-label="{{ 'product.bundle.add' | t: items: '[count]', total: '[total]' | escape }}"
+    hidden
+    {{ block.shopify_attributes }}
+  >
+    <p class="bundle__heading">{{ block.settings.heading | escape }}</p>
+
+    <ul class="bundle__list" role="list" data-bundle-list>
+      {%- # This product: updates with the variant picker -%}
+      <li class="bundle__item bundle__item--main" data-update="bundle-main-{{ block.id }}">
+        <input
+          type="checkbox"
+          id="{{ main_id }}"
+          class="bundle__checkbox"
+          {% if variant.available %}
+            checked
+          {% else %}
+            disabled
+          {% endif %}
+          data-variant-id="{{ variant.id }}"
+          data-price="{{ variant.price }}"
+        >
+        <label for="{{ main_id }}" class="bundle__label">
+          {%- if product.featured_media -%}
+            {{
+              product.featured_media.preview_image
+              | image_url: width: 160
+              | image_tag: widths: '64, 128, 160', sizes: '64px', loading: 'lazy', class: 'bundle__image', alt: ''
+            }}
+          {%- endif -%}
+          <span class="bundle__text">
+            <span class="bundle__title">{{ 'product.bundle.this_item' | t }}</span>
+            <span class="bundle__variant">
+              {{- product.title | escape -}}
+              {%- unless product.has_only_default_variant %} · {{ variant.title | escape }}{% endunless -%}
+            </span>
+          </span>
+          <span class="bundle__price">{{ variant.price | money }}</span>
+        </label>
+      </li>
+    </ul>
+
+    <button type="button" class="button button--primary button--full bundle__add" data-bundle-add>
+      <span data-bundle-label></span>
+    </button>
+    <p class="bundle__error" role="alert" hidden data-bundle-error data-fallback="{{ 'product.add_error' | t | escape }}"></p>
+  </bundle-offer>
+{%- endif -%}
+
+{% stylesheet %}
+  .bundle {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+  }
+
+  .bundle[hidden] {
+    display: none;
+  }
+
+  .bundle__heading {
+    font-family: var(--font-heading--family);
+    font-size: 1.25rem;
+  }
+
+  .bundle__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bundle__item {
+    position: relative;
+  }
+
+  .bundle__checkbox {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .bundle__label {
+    display: grid;
+    grid-template-columns: auto 3.5rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  /* Custom checkbox */
+  .bundle__label::before {
+    content: '';
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 35%, transparent);
+    border-radius: 0.25rem;
+    background: var(--color-background) center / 0.75rem no-repeat;
+  }
+
+  .bundle__checkbox:checked + .bundle__label {
+    border-color: color-mix(in srgb, var(--color-foreground) 30%, transparent);
+  }
+
+  .bundle__checkbox:checked + .bundle__label::before {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 10.5l3.5 3.5 7.5-8'/%3E%3C/svg%3E");
+  }
+
+  .bundle__checkbox:not(:checked) + .bundle__label {
+    opacity: 0.6;
+  }
+
+  .bundle__checkbox:disabled + .bundle__label {
+    cursor: not-allowed;
+  }
+
+  .bundle__checkbox:focus-visible + .bundle__label {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .bundle__image {
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: calc(var(--style-border-radius-buttons) * 0.75);
+    object-fit: cover;
+  }
+
+  .bundle__label:not(:has(.bundle__image)) {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .bundle__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  .bundle__title {
+    overflow: hidden;
+    font-size: 0.9375rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .bundle__variant {
+    overflow: hidden;
+    font-size: 0.8125rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    opacity: 0.65;
+  }
+
+  .bundle__price {
+    font-size: 0.875rem;
+  }
+
+  .bundle__add[aria-busy='true'] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .bundle__error {
+    color: #b42318;
+    font-size: 0.8125rem;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Complete the set: loads complementary products, keeps a running total
+   * of the checked items and adds them all to the cart in one request.
+   */
+  class BundleOffer extends HTMLElement {
+    connectedCallback() {
+      this.list = this.querySelector('[data-bundle-list]');
+      this.button = this.querySelector('[data-bundle-add]');
+      this.addEventListener('change', this.update);
+      this.button?.addEventListener('click', this.onAdd);
+      // The main row is replaced when the variant changes
+      this.observer = new MutationObserver(this.update);
+      this.observer.observe(this.list, { childList: true });
+      this.load();
+    }
+
+    disconnectedCallback() {
+      this.observer?.disconnect();
+    }
+
+    async load() {
+      try {
+        const response = await fetch(this.dataset.url);
+        if (!response.ok) return;
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const items = html.querySelectorAll('[data-bundle-addons] > .bundle__item');
+        if (!items.length) return;
+        this.list.append(...items);
+        this.hidden = false;
+        this.update();
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    get checked() {
+      return [...this.querySelectorAll('.bundle__checkbox:checked:not(:disabled)')];
+    }
+
+    format(cents) {
+      try {
+        return new Intl.NumberFormat(this.dataset.locale, { style: 'currency', currency: this.dataset.currency }).format(
+          cents / 100
+        );
+      } catch {
+        return (cents / 100).toFixed(2);
+      }
+    }
+
+    update = () => {
+      const items = this.checked;
+      const total = items.reduce((sum, input) => sum + Number(input.dataset.price || 0), 0);
+      const label = this.querySelector('[data-bundle-label]');
+      if (label) {
+        label.textContent = (this.dataset.buttonLabel || '')
+          .replace('[count]', items.length)
+          .replace('[total]', this.format(total));
+      }
+      if (this.button) this.button.disabled = items.length === 0;
+    };
+
+    onAdd = async () => {
+      const items = this.checked.map((input) => ({ id: Number(input.dataset.variantId), quantity: 1 }));
+      if (!items.length || this.button.getAttribute('aria-busy') === 'true') return;
+      const error = this.querySelector('[data-bundle-error]');
+      error.hidden = true;
+      this.button.setAttribute('aria-busy', 'true');
+
+      try {
+        const root = window.ThemeCart?.root ?? '/';
+        const response = await fetch(`${root}cart/add.js`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            items,
+            sections: window.ThemeCart?.sectionIds() ?? [],
+            sections_url: window.location.pathname,
+          }),
+        });
+        const data = await response.json();
+        if (!response.ok || data.status) throw new Error(data.description || data.message);
+        window.ThemeCart?.render(data.sections);
+        document.dispatchEvent(new CustomEvent('cart:update', { detail: { item: data } }));
+        window.ThemeCart?.openDrawer(this.button);
+      } catch (err) {
+        error.textContent = err.message || error.dataset.fallback;
+        error.hidden = false;
+      } finally {
+        this.button.removeAttribute('aria-busy');
+      }
+    };
+  }
+
+  if (!customElements.get('bundle-offer')) {
+    customElements.define('bundle-offer', BundleOffer);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:blocks.bundle.name",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "t:labels.heading",
+      "default": "Complete the set"
+    },
+    {
+      "type": "paragraph",
+      "content": "t:blocks.bundle.info"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.bundle.name" }]
+}
+{% endschema %}

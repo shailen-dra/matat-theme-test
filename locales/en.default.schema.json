@@ -406,6 +406,14 @@
       "name": "Breadcrumbs",
       "fallback_collection": "Use the product's first collection",
       "fallback_collection_info": "When shoppers didn't arrive from a collection."
+    },
+    "bundle": {
+      "name": "Complete the set",
+      "addons": "Complete the set products",
+      "info": "Shows complementary products set up in the Search & Discovery app. Hidden when a product has none."
+    },
+    "ask_question": {
+      "name": "Ask a question"
     }
   },
   "sections": {
@@ -500,7 +508,12 @@
       "filtering": "Filtering and sorting",
       "enable_filtering": "Enable filtering",
       "enable_filtering_info": "Customize filters with the Shopify Search & Discovery app.",
-      "enable_sorting": "Enable sorting"
+      "enable_sorting": "Enable sorting",
+      "promo": "Promo tile",
+      "promo_enabled": "Show promo tile",
+      "promo_enabled_info": "Shown in the product grid on the first page.",
+      "promo_position": "Position in grid",
+      "promo_wide": "Span two columns"
     },
     "cart": {
       "summary": "Order summary",
@@ -707,6 +720,16 @@
     "featured_blog": {
       "name": "Blog posts",
       "articles_to_show": "Articles to show"
+    },
+    "comparison": {
+      "name": "Comparison table",
+      "row": "Row",
+      "feature": "Feature",
+      "value_1": "First column value",
+      "value_2": "Second column value",
+      "value_info": "Type \"yes\" or \"no\" to show a check or a cross.",
+      "column_1": "First column heading",
+      "column_2": "Second column heading"
     }
   },
   "settings": {
@@ -716,7 +739,9 @@
       "badges": "Badges",
       "new_badge_days": "Show \"New\" badge for",
       "new_badge_days_info": "Days after a product is published. Set to 0 to turn off.",
-      "custom_badges_info": "Add custom badges with product tags that start with \"badge:\", for example badge:Bestseller. Up to two show per card."
+      "custom_badges_info": "Add custom badges with product tags that start with \"badge:\", for example badge:Bestseller. Up to two show per card.",
+      "card_swatches": "Show swatches",
+      "card_swatches_info": "For a \"Color\" or \"Metal\" option. Hovering a swatch shows that variant's image."
     },
     "cart": {
       "cart_type": "Cart type",

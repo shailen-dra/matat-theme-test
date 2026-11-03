@@ -1,0 +1,60 @@
+{% doc %}
+  Renders one row of the comparison table section. Type "yes" or "no" in a
+  value to show a check or a cross instead of text.
+
+  @example
+  {% content_for 'block', type: '_comparison-row', id: 'row-1' %}
+{% enddoc %}
+
+<tr class="comparison__row" {{ block.shopify_attributes }}>
+  <th scope="row" class="comparison__feature">{{ block.settings.feature | escape }}</th>
+  {%- assign values = block.settings.value_1 | append: '||' | append: block.settings.value_2 | split: '||' -%}
+  {%- for i in (0..1) -%}
+    {%- assign value = values[i] | strip -%}
+    {%- assign value_key = value | downcase -%}
+    <td class="comparison__cell{% if forloop.first %} comparison__cell--highlight{% endif %}">
+      {%- case value_key -%}
+        {%- when 'yes', 'true', '✓' -%}
+          <span class="comparison__mark comparison__mark--yes">
+            {%- render 'icon', name: 'check' -%}
+            <span class="visually-hidden">{{ 'sections.comparison.yes' | t }}</span>
+          </span>
+        {%- when 'no', 'false', '✗', '' -%}
+          <span class="comparison__mark comparison__mark--no">
+            {%- render 'icon', name: 'close' -%}
+            <span class="visually-hidden">{{ 'sections.comparison.no' | t }}</span>
+          </span>
+        {%- else -%}
+          {{ value | escape }}
+      {%- endcase -%}
+    </td>
+  {%- endfor -%}
+</tr>
+
+{% schema %}
+{
+  "name": "t:sections.comparison.row",
+  "settings": [
+    {
+      "type": "text",
+      "id": "feature",
+      "label": "t:sections.comparison.feature",
+      "default": "Solid gold, not plated"
+    },
+    {
+      "type": "text",
+      "id": "value_1",
+      "label": "t:sections.comparison.value_1",
+      "info": "t:sections.comparison.value_info",
+      "default": "yes"
+    },
+    {
+      "type": "text",
+      "id": "value_2",
+      "label": "t:sections.comparison.value_2",
+      "default": "no"
+    }
+  ],
+  "presets": [{ "name": "t:sections.comparison.row" }]
+}
+{% endschema %}

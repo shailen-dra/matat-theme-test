@@ -11,7 +11,15 @@
   "sections": {
     "main": {
       "type": "collection",
-      "settings": {}
+      "settings": {
+        "promo_enabled": true,
+        "promo_position": 3,
+        "promo_wide": true,
+        "promo_eyebrow": "Gifting",
+        "promo_heading": "Wrapped and ready to give",
+        "promo_button_label": "Shop gifts",
+        "promo_link": "shopify://collections/all"
+      }
     }
   },
   "order": [

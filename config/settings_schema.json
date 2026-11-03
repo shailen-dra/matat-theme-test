@@ -234,6 +234,13 @@
         "default": true
       },
       {
+        "type": "checkbox",
+        "id": "card_swatches",
+        "label": "t:settings.product_cards.card_swatches",
+        "info": "t:settings.product_cards.card_swatches_info",
+        "default": true
+      },
+      {
         "type": "header",
         "content": "t:settings.product_cards.badges"
       },

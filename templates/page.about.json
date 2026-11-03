@@ -102,11 +102,73 @@
         "padding_top": 64,
         "padding_bottom": 64
       }
+    },
+    "comparison": {
+      "type": "comparison",
+      "blocks": {
+        "row_1": {
+          "type": "_comparison-row",
+          "settings": {
+            "feature": "Solid gold, not plated",
+            "value_1": "yes",
+            "value_2": "no"
+          }
+        },
+        "row_2": {
+          "type": "_comparison-row",
+          "settings": {
+            "feature": "Safe for sensitive skin",
+            "value_1": "yes",
+            "value_2": "no"
+          }
+        },
+        "row_3": {
+          "type": "_comparison-row",
+          "settings": {
+            "feature": "Won't tarnish or fade",
+            "value_1": "yes",
+            "value_2": "no"
+          }
+        },
+        "row_4": {
+          "type": "_comparison-row",
+          "settings": {
+            "feature": "Finished by hand",
+            "value_1": "yes",
+            "value_2": "no"
+          }
+        },
+        "row_5": {
+          "type": "_comparison-row",
+          "settings": {
+            "feature": "Warranty",
+            "value_1": "Lifetime",
+            "value_2": "30 days"
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "row_5"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "eyebrow": "Why it lasts",
+        "title": "Made to be <em>kept</em>, not replaced",
+        "column_1": "Our jewelry",
+        "column_2": "Typical fashion jewelry",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
     "main",
     "timeline",
+    "comparison",
     "before_after",
     "stores"
   ]

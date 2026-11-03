@@ -1,0 +1,135 @@
+{% doc %}
+  Renders the promo tile placed inside the collection product grid: an
+  image (or color) with a heading, text and a call to action. Settings come
+  from the collection section's "Promo tile" group.
+
+  @param {object} promo - The collection section's settings
+
+  @example
+  {% render 'promo-tile', promo: section.settings %}
+{% enddoc %}
+
+{%- liquid
+  assign image = promo.promo_image
+  if promo.promo_link != blank
+    assign tag = 'a'
+  else
+    assign tag = 'div'
+  endif
+-%}
+
+<{{ tag }}
+  class="promo-tile{% if image != blank %} promo-tile--image{% endif %}"
+  {% if promo.promo_link != blank %}
+    href="{{ promo.promo_link }}"
+  {% endif %}
+>
+  {%- if image != blank -%}
+    {{
+      image
+      | image_url: width: 1200
+      | image_tag: widths: '400, 600, 900, 1200', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy', class: 'promo-tile__image', alt: ''
+    }}
+  {%- endif -%}
+  <span class="promo-tile__content">
+    {%- if promo.promo_eyebrow != blank -%}
+      <span class="promo-tile__eyebrow">{{ promo.promo_eyebrow | escape }}</span>
+    {%- endif -%}
+    {%- if promo.promo_heading != blank -%}
+      <span class="promo-tile__heading">{{ promo.promo_heading }}</span>
+    {%- endif -%}
+    {%- if promo.promo_button_label != blank and promo.promo_link != blank -%}
+      <span class="promo-tile__cta">{{ promo.promo_button_label | escape }}</span>
+    {%- endif -%}
+  </span>
+</{{ tag }}>
+
+{% stylesheet %}
+  .product-grid__item--promo {
+    display: flex;
+  }
+
+  .product-grid__item--promo-wide {
+    grid-column: span 2;
+  }
+
+  .promo-tile {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: flex-end;
+    min-height: 20rem;
+    overflow: hidden;
+    isolation: isolate;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    border-radius: var(--style-border-radius-buttons);
+    background-color: var(--color-accent);
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .promo-tile__image {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+
+  .promo-tile--image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.55), transparent 65%);
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    a.promo-tile:hover .promo-tile__image {
+      transform: scale(1.04);
+    }
+  }
+
+  a.promo-tile:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .promo-tile__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .promo-tile__eyebrow {
+    font-size: 0.6875rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.9;
+  }
+
+  .promo-tile__heading {
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.5rem, 1.5vw + 1rem, 2.25rem);
+    line-height: 1.15;
+  }
+
+  .promo-tile__cta {
+    margin-block-start: 0.25rem;
+    font-size: 0.8125rem;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+
+  [dir='rtl'] .promo-tile__eyebrow {
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 749px) {
+    .product-grid__item--promo-wide {
+      grid-column: 1 / -1;
+    }
+  }
+{% endstylesheet %}

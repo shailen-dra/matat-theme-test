@@ -224,7 +224,19 @@
               --grid-columns-mobile: {{ section.settings.columns_mobile }};
             "
           >
+            {%- liquid
+              assign show_promo = false
+              if section.settings.promo_enabled and paginate.current_page == 1
+                assign show_promo = true
+              endif
+              assign promo_position = section.settings.promo_position | at_most: collection.products.size
+            -%}
             {%- for product in collection.products -%}
+              {%- if show_promo and forloop.index == promo_position -%}
+                <li class="product-grid__item product-grid__item--promo{% if section.settings.promo_wide %} product-grid__item--promo-wide{% endif %}">
+                  {% render 'promo-tile', promo: section.settings %}
+                </li>
+              {%- endif -%}
               {%- liquid
                 assign loading = 'lazy'
                 if forloop.index <= columns
@@ -739,6 +751,65 @@
       "id": "show_vendor",
       "label": "t:sections.featured_collection.show_vendor",
       "default": false
+    },
+    {
+      "type": "header",
+      "content": "t:sections.collection.promo"
+    },
+    {
+      "type": "checkbox",
+      "id": "promo_enabled",
+      "label": "t:sections.collection.promo_enabled",
+      "info": "t:sections.collection.promo_enabled_info",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "promo_position",
+      "label": "t:sections.collection.promo_position",
+      "min": 1,
+      "max": 12,
+      "step": 1,
+      "default": 3,
+      "visible_if": "{{ section.settings.promo_enabled }}"
+    },
+    {
+      "type": "checkbox",
+      "id": "promo_wide",
+      "label": "t:sections.collection.promo_wide",
+      "default": true,
+      "visible_if": "{{ section.settings.promo_enabled }}"
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "text",
+      "id": "promo_eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Gifting",
+      "visible_if": "{{ section.settings.promo_enabled }}"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "promo_heading",
+      "label": "t:labels.heading",
+      "default": "Wrapped and ready to give",
+      "visible_if": "{{ section.settings.promo_enabled }}"
+    },
+    {
+      "type": "text",
+      "id": "promo_button_label",
+      "label": "t:labels.button_label",
+      "default": "Shop gifts",
+      "visible_if": "{{ section.settings.promo_enabled }}"
+    },
+    {
+      "type": "url",
+      "id": "promo_link",
+      "label": "t:labels.link"
     },
     {
       "type": "header",

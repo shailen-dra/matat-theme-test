@@ -406,6 +406,14 @@
       "name": "פירורי לחם",
       "fallback_collection": "שימוש בקולקציה הראשונה של המוצר",
       "fallback_collection_info": "כשהקונים לא הגיעו מקולקציה."
+    },
+    "bundle": {
+      "name": "השלימו את הסט",
+      "addons": "מוצרי השלימו את הסט",
+      "info": "מציג מוצרים משלימים שהוגדרו באפליקציית Search & Discovery. מוסתר כשאין למוצר כאלה."
+    },
+    "ask_question": {
+      "name": "שאלו שאלה"
     }
   },
   "sections": {
@@ -500,7 +508,12 @@
       "filtering": "סינון ומיון",
       "enable_filtering": "הפעלת סינון",
       "enable_filtering_info": "אפשר להתאים את המסננים באפליקציית Search & Discovery של Shopify.",
-      "enable_sorting": "הפעלת מיון"
+      "enable_sorting": "הפעלת מיון",
+      "promo": "אריח קידום",
+      "promo_enabled": "הצגת אריח קידום",
+      "promo_enabled_info": "מוצג ברשת המוצרים בעמוד הראשון.",
+      "promo_position": "מיקום ברשת",
+      "promo_wide": "פריסה על שתי עמודות"
     },
     "cart": {
       "summary": "סיכום ההזמנה",
@@ -707,6 +720,16 @@
     "featured_blog": {
       "name": "כתבות בלוג",
       "articles_to_show": "מספר כתבות"
+    },
+    "comparison": {
+      "name": "טבלת השוואה",
+      "row": "שורה",
+      "feature": "מאפיין",
+      "value_1": "ערך בעמודה הראשונה",
+      "value_2": "ערך בעמודה השנייה",
+      "value_info": "כתבו \"yes\" או \"no\" כדי להציג וי או איקס.",
+      "column_1": "כותרת העמודה הראשונה",
+      "column_2": "כותרת העמודה השנייה"
     }
   },
   "settings": {
@@ -716,7 +739,9 @@
       "badges": "תגיות",
       "new_badge_days": "הצגת תגית \"חדש\" למשך",
       "new_badge_days_info": "ימים מפרסום המוצר. 0 לכיבוי.",
-      "custom_badges_info": "הוסיפו תגיות מותאמות עם תגיות מוצר שמתחילות ב־\"badge:\", לדוגמה badge:רב מכר. עד שתיים בכל כרטיס."
+      "custom_badges_info": "הוסיפו תגיות מותאמות עם תגיות מוצר שמתחילות ב־\"badge:\", לדוגמה badge:רב מכר. עד שתיים בכל כרטיס.",
+      "card_swatches": "הצגת דוגמיות צבע",
+      "card_swatches_info": "לאפשרות \"צבע\" או \"מתכת\" (Color / Metal). מעבר על דוגמית מציג את תמונת הווריאנט."
     },
     "cart": {
       "cart_type": "סוג סל הקניות",

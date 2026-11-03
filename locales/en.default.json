@@ -272,6 +272,10 @@
     "featured_blog": {
       "placeholder_title": "Your article title",
       "placeholder_excerpt": "Pick a blog in the theme editor to show its latest articles here."
+    },
+    "comparison": {
+      "yes": "Yes",
+      "no": "No"
     }
   },
   "header": {
@@ -398,6 +402,16 @@
       "body": "Please let me know when {{ title }} is back in stock.",
       "submit": "Notify me",
       "success": "Thanks! We'll email you when it's back."
+    },
+    "bundle": {
+      "this_item": "This item",
+      "add": "Add {{ items }} to cart · {{ total }}"
+    },
+    "ask_question": {
+      "intro": "Have a question about {{ title }}? We usually reply within one business day.",
+      "subject": "Question about {{ title }}",
+      "send": "Send question",
+      "success": "Thanks! We'll get back to you by email soon."
     }
   },
   "contact": {

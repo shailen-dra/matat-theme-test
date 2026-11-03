@@ -1,0 +1,60 @@
+{%- comment -%}
+  Add-on rows of the "Complete the set" block. Not added to templates: the
+  block fetches it from the product recommendations endpoint with
+  `intent=complementary` (set up in the Search & Discovery app). Leaves out
+  sold out products and ones already in the cart.
+{%- endcomment -%}
+
+{%- liquid
+  assign cart_product_ids = cart.items | map: 'product_id'
+  assign shown = 0
+-%}
+
+<div data-bundle-addons>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    {%- for product in recommendations.products -%}
+      {%- if shown >= 3 -%}
+        {%- break -%}
+      {%- endif -%}
+      {%- if product.available == false or cart_product_ids contains product.id or product.id == settings.gift_wrap_product.id -%}
+        {%- continue -%}
+      {%- endif -%}
+      {%- assign shown = shown | plus: 1 -%}
+      {%- assign variant = product.selected_or_first_available_variant -%}
+      {%- assign input_id = 'BundleAddon-' | append: product.id -%}
+      <li class="bundle__item">
+        <input
+          type="checkbox"
+          id="{{ input_id }}"
+          class="bundle__checkbox"
+          checked
+          data-variant-id="{{ variant.id }}"
+          data-price="{{ variant.price }}"
+        >
+        <label for="{{ input_id }}" class="bundle__label">
+          {%- if product.featured_media -%}
+            {{
+              product.featured_media.preview_image
+              | image_url: width: 160
+              | image_tag: widths: '64, 128, 160', sizes: '64px', loading: 'lazy', class: 'bundle__image', alt: ''
+            }}
+          {%- endif -%}
+          <span class="bundle__text">
+            <span class="bundle__title">{{ product.title | escape }}</span>
+            {%- unless product.has_only_default_variant -%}
+              <span class="bundle__variant">{{ variant.title | escape }}</span>
+            {%- endunless -%}
+          </span>
+          <span class="bundle__price">{{ variant.price | money }}</span>
+        </label>
+      </li>
+    {%- endfor -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:blocks.bundle.addons",
+  "settings": []
+}
+{% endschema %}
