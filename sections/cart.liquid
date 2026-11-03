@@ -171,6 +171,7 @@
           <h2 id="CartSummary-{{ section.id }}" class="cart__summary-title">{{ 'cart.summary' | t }}</h2>
 
           <div data-cart-totals>
+            {% render 'free-shipping-bar' %}
             <dl class="cart__totals">
               <div class="cart__row">
                 <dt>{{ 'cart.subtotal' | t }}</dt>
@@ -535,6 +536,10 @@
     font-family: var(--font-heading--family);
     font-size: clamp(1.375rem, 1vw + 1rem, 1.75rem);
     font-weight: var(--font-heading--weight);
+  }
+
+  .cart__summary .shipping-bar {
+    margin-block-end: 1.25rem;
   }
 
   .cart__totals {

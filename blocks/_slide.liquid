@@ -1,0 +1,328 @@
+{% doc %}
+  Renders one slide of the slideshow section: a full-bleed image (with an
+  optional mobile crop), a tinted overlay and any nested content blocks
+  (headings, buttons, tags…) positioned over it.
+
+  @example
+  {% content_for 'block', type: '_slide', id: 'slide-1' %}
+{% enddoc %}
+
+{%- liquid
+  assign image = block.settings.image
+  assign image_mobile = block.settings.image_mobile
+
+  assign text_brightness = block.settings.text_color | color_brightness
+  if text_brightness > 128
+    assign contrast_color = '#111111'
+  else
+    assign contrast_color = '#ffffff'
+  endif
+
+  assign loading = 'lazy'
+  assign fetchpriority = 'auto'
+  if section.index == 1 and block.index == 1
+    assign loading = 'eager'
+    assign fetchpriority = 'high'
+  endif
+
+  assign image_style = 'object-position: ' | append: image.presentation.focal_point | append: ';'
+
+  assign demo_images = 'demo-hero.jpg,demo-rings-hand.jpg,demo-ginkgo-set.jpg,demo-flatlay.jpg' | split: ','
+  assign demo_index = block.index | default: 1 | minus: 1 | modulo: 4
+  assign demo_image = demo_images[demo_index]
+-%}
+
+<div
+  class="slide {{ block.settings.content_position_x }} {{ block.settings.content_position_y }}"
+  role="group"
+  aria-roledescription="{{ 'sections.slideshow.slide' | t | escape }}"
+  data-slide
+  style="
+    --slide-fg: {{ block.settings.text_color }};
+    --slide-bg: {{ contrast_color }};
+    --slide-overlay-color: {{ block.settings.overlay_color }};
+    --slide-overlay-opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};
+  "
+  {{ block.shopify_attributes }}
+>
+  <div class="slide__media">
+    {%- if image -%}
+      <picture>
+        {%- if image_mobile -%}
+          <source
+            media="(max-width: 749px)"
+            srcset="
+              {{ image_mobile | image_url: width: 550 }} 550w,
+              {{ image_mobile | image_url: width: 750 }} 750w,
+              {{ image_mobile | image_url: width: 1100 }} 1100w,
+              {{ image_mobile | image_url: width: 1500 }} 1500w
+            "
+            sizes="100vw"
+            width="{{ image_mobile.width }}"
+            height="{{ image_mobile.height }}"
+          >
+        {%- endif -%}
+        {{
+          image
+          | image_url: width: 3000
+          | image_tag:
+            widths: '550, 750, 1100, 1500, 2000, 2500, 3000',
+            sizes: '100vw',
+            loading: loading,
+            fetchpriority: fetchpriority,
+            class: 'slide__image',
+            style: image_style,
+            alt: image.alt
+        }}
+      </picture>
+    {%- else -%}
+      <img
+        src="{{ demo_image | asset_img_url: '1500x' }}"
+        srcset="
+          {{ demo_image | asset_img_url: '750x' }} 750w,
+          {{ demo_image | asset_img_url: '1100x' }} 1100w,
+          {{ demo_image | asset_img_url: '1500x' }} 1500w,
+          {{ demo_image | asset_img_url: '2000x' }} 2000w
+        "
+        sizes="100vw"
+        width="2000"
+        height="1333"
+        alt=""
+        class="slide__image"
+        loading="{{ loading }}"
+        fetchpriority="{{ fetchpriority }}"
+      >
+    {%- endif -%}
+  </div>
+
+  <div class="slide__overlay" aria-hidden="true"></div>
+
+  <div class="slide__inner">
+    <div class="slide__content">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .slide {
+    position: relative;
+    display: grid;
+    grid-template-areas: 'stack';
+    flex: 0 0 100%;
+    min-height: inherit;
+    overflow: hidden;
+    isolation: isolate;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .slide > * {
+    grid-area: stack;
+  }
+
+  .slide__media {
+    position: relative;
+    z-index: -2;
+    background-color: color-mix(in srgb, var(--color-foreground) 6%, var(--color-background));
+  }
+
+  .slide__media picture {
+    display: contents;
+  }
+
+  .slide__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .slide__overlay {
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--slide-overlay-color);
+    opacity: var(--slide-overlay-opacity);
+  }
+
+  .slide__inner {
+    display: grid;
+    grid-template-columns: var(--content-grid);
+    padding-block: calc(4rem + var(--hero-offset, 0px)) 5rem;
+  }
+
+  .slide__content {
+    --color-foreground: var(--slide-fg);
+    --color-background: var(--slide-bg);
+
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: var(--slide-justify);
+    gap: 1.25rem;
+    width: 100%;
+    max-width: 40rem;
+    color: var(--color-foreground);
+    text-align: var(--slide-text-align);
+  }
+
+  .slide--x-left {
+    --slide-justify: flex-start;
+    --slide-text-align: start;
+  }
+
+  .slide--x-center {
+    --slide-justify: center;
+    --slide-text-align: center;
+  }
+
+  .slide--x-right {
+    --slide-justify: flex-end;
+    --slide-text-align: end;
+  }
+
+  .slide--x-left .slide__content {
+    justify-self: start;
+  }
+
+  .slide--x-center .slide__content {
+    justify-self: center;
+  }
+
+  .slide--x-right .slide__content {
+    justify-self: end;
+  }
+
+  .slide--y-top .slide__content {
+    align-self: start;
+  }
+
+  .slide--y-center .slide__content {
+    align-self: center;
+  }
+
+  .slide--y-bottom .slide__content {
+    align-self: end;
+  }
+
+  /* Content rises in as its slide becomes active */
+  @media (prefers-reduced-motion: no-preference) {
+    .slide__content > * {
+      transition:
+        opacity 0.7s ease,
+        transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
+    }
+
+    .slideshow.is-ready .slide:not(.is-active) .slide__content > * {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .slide.is-active .slide__content > :nth-child(2) {
+      transition-delay: 0.1s;
+    }
+
+    .slide.is-active .slide__content > :nth-child(3) {
+      transition-delay: 0.2s;
+    }
+
+    .slide.is-active .slide__content > :nth-child(n + 4) {
+      transition-delay: 0.3s;
+    }
+  }
+
+  @media (max-width: 749px) {
+    .slide__inner {
+      padding-block: calc(3rem + var(--hero-offset, 0px)) 4.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.slideshow.slide",
+  "blocks": [{ "type": "@theme" }],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "t:sections.hero.image_mobile",
+      "info": "t:sections.hero.image_mobile_info"
+    },
+    {
+      "type": "select",
+      "id": "content_position_x",
+      "label": "t:sections.hero.position_x",
+      "options": [
+        { "value": "slide--x-left", "label": "t:options.alignment.left" },
+        { "value": "slide--x-center", "label": "t:options.alignment.center" },
+        { "value": "slide--x-right", "label": "t:options.alignment.right" }
+      ],
+      "default": "slide--x-left"
+    },
+    {
+      "type": "select",
+      "id": "content_position_y",
+      "label": "t:sections.hero.position_y",
+      "options": [
+        { "value": "slide--y-top", "label": "t:options.vertical.top" },
+        { "value": "slide--y-center", "label": "t:options.vertical.center" },
+        { "value": "slide--y-bottom", "label": "t:options.vertical.bottom" }
+      ],
+      "default": "slide--y-bottom"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "t:labels.text_color",
+      "info": "t:sections.hero.text_color_info",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.hero.overlay"
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "t:labels.color",
+      "default": "#000000"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "t:labels.opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "default": 25
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.slideshow.slide",
+      "blocks": [
+        {
+          "type": "heading",
+          "settings": { "text": "New arrivals", "style": "heading--eyebrow", "tag": "p" }
+        },
+        {
+          "type": "heading",
+          "settings": { "text": "Slide heading", "style": "heading--display", "tag": "h2" }
+        },
+        {
+          "type": "button",
+          "settings": { "label": "Shop now", "style": "primary" }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

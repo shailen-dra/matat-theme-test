@@ -225,11 +225,33 @@ class CartItems extends HTMLElement {
         const current = this.querySelector(selector);
         if (next && current) current.replaceWith(next);
       });
+      this.updateShippingBar(fresh);
+
+      // Suggestions refresh themselves on `cart:update`; keep their source product current
+      const upsell = this.querySelector('cart-upsell');
+      const freshUpsell = fresh.querySelector('cart-upsell');
+      if (upsell && freshUpsell) upsell.dataset.productId = freshUpsell.dataset.productId;
     } else {
       this.querySelector('[data-cart-content]')?.replaceWith(freshContent);
     }
 
     if (focusId) document.getElementById(focusId)?.focus({ preventScroll: true });
+  }
+
+  /** Updates the free shipping bar in place so its progress animates */
+  updateShippingBar(fresh) {
+    const next = fresh.querySelector('.cart-drawer__body > [data-cart-shipping]');
+    const current = this.querySelector('.cart-drawer__body > [data-cart-shipping]');
+    if (!next && !current) return;
+    if (!next || !current) {
+      if (current) current.remove();
+      else this.querySelector('.cart-drawer__body')?.prepend(next);
+      return;
+    }
+    current.className = next.className;
+    current.querySelector('.shipping-bar__text').innerHTML = next.querySelector('.shipping-bar__text').innerHTML;
+    const fill = next.querySelector('.shipping-bar__fill');
+    current.querySelector('.shipping-bar__fill')?.setAttribute('style', fill?.getAttribute('style') ?? '');
   }
 
   resetQuantity(line) {

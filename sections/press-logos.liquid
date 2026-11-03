@@ -1,0 +1,116 @@
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="press">
+    {%- if section.settings.title != blank -%}
+      <p class="heading heading--eyebrow press__title">{{ section.settings.title | escape }}</p>
+    {%- endif -%}
+
+    <div class="press__logos" style="--press-logo-height: {{ section.settings.logo_height }}px;">
+      {% content_for 'blocks' %}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .press {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  .press__title {
+    margin: 0;
+    text-align: center;
+  }
+
+  .press__logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem clamp(2rem, 6vw, 5rem);
+    width: 100%;
+  }
+
+  @media (max-width: 749px) {
+    .press__logos {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.press_logos.name",
+  "tag": "section",
+  "class": "press-logos-section",
+  "blocks": [{ "type": "_logo" }],
+  "max_blocks": 8,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "As seen in"
+    },
+    {
+      "type": "range",
+      "id": "logo_height",
+      "label": "t:sections.press_logos.logo_height",
+      "min": 16,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.press_logos.name",
+      "category": "t:general.trust",
+      "blocks": [
+        { "type": "_logo", "settings": { "name": "The Edit" } },
+        { "type": "_logo", "settings": { "name": "Atelier Weekly" } },
+        { "type": "_logo", "settings": { "name": "Maison" } },
+        { "type": "_logo", "settings": { "name": "Journal" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

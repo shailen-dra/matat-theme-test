@@ -356,6 +356,17 @@
     "pickup_availability": {
       "name": "Pickup availability",
       "info": "Shows the local pickup locations set up in Settings > Locations."
+    },
+    "size_guide": {
+      "name": "Size guide",
+      "show_ring_chart": "Show ring size chart",
+      "page_info": "Adds the page's content to the size guide.",
+      "only_sized_products": "Only show on products with sizes",
+      "only_sized_products_info": "Shows the link only when the product has a \"Size\" option. Always shown in the theme editor."
+    },
+    "sticky_add_to_cart": {
+      "name": "Sticky add to cart",
+      "info": "A bar with the add to cart button appears at the bottom of the screen once shoppers scroll past the Buy buttons block."
     }
   },
   "sections": {
@@ -519,6 +530,44 @@
     },
     "password": {
       "show_signup": "Show email signup"
+    },
+    "slideshow": {
+      "name": "Slideshow",
+      "slide": "Slide",
+      "show_arrows": "Show arrows",
+      "autoplay": "Auto-rotate slides",
+      "autoplay_info": "Pauses on hover and focus. Shoppers can also pause it, and it never auto-rotates for shoppers who prefer reduced motion.",
+      "autoplay_speed": "Change slides every"
+    },
+    "shop_the_look": {
+      "name": "Shop the look",
+      "hotspot": "Hotspot",
+      "position_x": "Horizontal position",
+      "position_y": "Vertical position",
+      "image_info": "Add a hotspot for each product, then move it over the piece in the photo."
+    },
+    "testimonials": {
+      "name": "Testimonials",
+      "testimonial": "Testimonial",
+      "quote": "Quote",
+      "rating_label": "Star rating",
+      "author": "Author",
+      "detail": "Detail",
+      "detail_info": "For example \"Verified buyer\". Hidden when a product is selected.",
+      "product": "Reviewed product",
+      "product_info": "Links the testimonial to the product.",
+      "photo": "Photo"
+    },
+    "press_logos": {
+      "name": "Press logos",
+      "logo": "Logo",
+      "image_info": "Shown in grayscale. Use a transparent PNG or SVG.",
+      "publication": "Publication name",
+      "publication_info": "Used as the image's alt text, or shown as text when there's no image.",
+      "logo_height": "Logo height"
+    },
+    "cart_upsell": {
+      "name": "Cart suggestions"
     }
   },
   "settings": {
@@ -530,7 +579,13 @@
       "cart_type": "Cart type",
       "drawer": "Drawer",
       "page": "Page",
-      "cart_type_info": "The drawer opens from the header bag and after adding to cart."
+      "cart_type_info": "The drawer opens from the header bag and after adding to cart.",
+      "free_shipping": "Free shipping bar",
+      "free_shipping_threshold": "Free shipping threshold",
+      "free_shipping_threshold_info": "Order total for free shipping, in your store's currency. Set to 0 to hide the bar. It doesn't change your shipping rates.",
+      "upsell": "Suggestions",
+      "upsell_enable": "Show product suggestions in cart drawer",
+      "upsell_info": "Based on Shopify's product recommendations for the first item in the cart."
     },
     "favicon": {
       "group": "Favicon",

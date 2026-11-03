@@ -1,0 +1,313 @@
+{%- liquid
+  assign region_label = section.settings.title | strip_html
+  if region_label == blank
+    assign region_label = 'sections.testimonials.label' | t
+  endif
+-%}
+
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    alignment: 'center'
+  %}
+
+  <testimonial-slider
+    class="testimonials"
+    style="--testimonials-columns: {{ section.settings.columns_desktop }};"
+  >
+    <div
+      class="testimonials__track"
+      data-track
+      tabindex="0"
+      role="region"
+      aria-label="{{ region_label | escape }}"
+    >
+      {% content_for 'blocks' %}
+    </div>
+
+    {%- if section.blocks.size > 1 -%}
+      <div class="testimonials__nav" data-nav>
+        <button type="button" class="testimonials__arrow" data-prev aria-label="{{ 'sections.slideshow.previous' | t | escape }}">
+          {% render 'icon', name: 'chevron-left' %}
+        </button>
+        <button type="button" class="testimonials__arrow" data-next aria-label="{{ 'sections.slideshow.next' | t | escape }}">
+          {% render 'icon', name: 'chevron-right' %}
+        </button>
+      </div>
+    {%- endif -%}
+  </testimonial-slider>
+</div>
+
+{% stylesheet %}
+  .testimonials {
+    --testimonials-gap: clamp(1rem, 2vw, 1.5rem);
+
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .testimonials__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc(
+      (100% - var(--testimonials-gap) * (var(--testimonials-columns) - 1)) / var(--testimonials-columns)
+    );
+    gap: var(--testimonials-gap);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .testimonials__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .testimonials__track:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .testimonials__track {
+      scroll-behavior: smooth;
+    }
+  }
+
+  .testimonials__track > * {
+    scroll-snap-align: start;
+  }
+
+  .testimonials__nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  /* Arrows only when there is something to scroll to */
+  .testimonials:not(.is-scrollable) .testimonials__nav {
+    display: none;
+  }
+
+  .testimonials__arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 18%, transparent);
+    border-radius: 50%;
+    background: var(--color-background);
+    color: inherit;
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      opacity 0.2s ease;
+  }
+
+  .testimonials__arrow:hover:not(:disabled) {
+    border-color: var(--color-foreground);
+  }
+
+  .testimonials__arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .testimonials__arrow:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .testimonials__arrow .icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  [dir='rtl'] .testimonials__arrow .icon {
+    transform: scaleX(-1);
+  }
+
+  @media (max-width: 989px) {
+    .testimonials {
+      --testimonials-columns: 2 !important;
+    }
+  }
+
+  @media (max-width: 749px) {
+    /* One card and a peek of the next */
+    .testimonials__track {
+      grid-auto-columns: 85%;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Testimonials row: native horizontal scroll with snap points, plus
+   * previous / next buttons that page by one card and disable at the ends.
+   */
+  class TestimonialSlider extends HTMLElement {
+    connectedCallback() {
+      this.track = this.querySelector('[data-track]');
+      this.prev = this.querySelector('[data-prev]');
+      this.next = this.querySelector('[data-next]');
+      this.prev?.addEventListener('click', () => this.page(-1));
+      this.next?.addEventListener('click', () => this.page(1));
+      this.track.addEventListener('scroll', this.update, { passive: true });
+      this.resizeObserver = new ResizeObserver(this.update);
+      this.resizeObserver.observe(this.track);
+      this.addEventListener('shopify:block:select', (event) => {
+        event.target.scrollIntoView({ block: 'nearest', inline: 'start' });
+      });
+      this.update();
+    }
+
+    disconnectedCallback() {
+      this.resizeObserver?.disconnect();
+    }
+
+    get isRtl() {
+      return getComputedStyle(this).direction === 'rtl';
+    }
+
+    /** Scrolls by one card in the reading direction */
+    page(direction) {
+      const card = this.track.firstElementChild;
+      if (!card) return;
+      const gap = parseFloat(getComputedStyle(this.track).columnGap) || 0;
+      const step = (card.getBoundingClientRect().width + gap) * direction * (this.isRtl ? -1 : 1);
+      this.track.scrollBy({ left: step });
+    }
+
+    update = () => {
+      const max = this.track.scrollWidth - this.track.clientWidth;
+      // RTL scroll positions run from 0 to -max
+      const position = Math.abs(this.track.scrollLeft);
+      this.classList.toggle('is-scrollable', max > 1);
+      if (this.prev) this.prev.disabled = position <= 1;
+      if (this.next) this.next.disabled = position >= max - 1;
+    };
+  }
+
+  if (!customElements.get('testimonial-slider')) {
+    customElements.define('testimonial-slider', TestimonialSlider);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.testimonials.name",
+  "tag": "section",
+  "class": "testimonials-section",
+  "blocks": [{ "type": "_testimonial" }],
+  "max_blocks": 12,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Kind words"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Loved, worn <em>and kept</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "t:labels.columns_desktop",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.testimonials.name",
+      "category": "t:general.trust",
+      "blocks": [
+        {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>The ring is even more beautiful in person. I haven't taken it off since it arrived.</p>",
+            "author": "Maya R.",
+            "detail": "Verified buyer"
+          }
+        },
+        {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>Beautifully packaged and arrived in two days. It made the perfect anniversary gift.</p>",
+            "author": "Daniel K.",
+            "detail": "Verified buyer"
+          }
+        },
+        {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>Delicate enough for every day, and the gold hasn't faded at all after months of wear.</p>",
+            "author": "Noa L.",
+            "detail": "Verified buyer"
+          }
+        },
+        {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>They resized my ring for free within a week. Customer care you rarely see anymore.</p>",
+            "author": "Shira B.",
+            "detail": "Verified buyer"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

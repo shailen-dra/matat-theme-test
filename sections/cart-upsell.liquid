@@ -1,0 +1,44 @@
+{%- comment -%}
+  Product suggestions shown in the cart drawer. Not added to templates: the
+  drawer's `cart-upsell` element fetches it from the product recommendations
+  endpoint (`/recommendations/products?product_id=…&section_id=cart-upsell`)
+  for the first product in the cart. Products already in the cart and sold
+  out products are left out. Its styles and the `cart-upsell` element live
+  in sections/cart-drawer.liquid.
+{%- endcomment -%}
+
+{%- liquid
+  assign cart_product_ids = cart.items | map: 'product_id'
+  assign shown = 0
+-%}
+
+<div data-upsell-content>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    {%- capture rows -%}
+      {%- for product in recommendations.products -%}
+        {%- if shown >= 3 -%}
+          {%- break -%}
+        {%- endif -%}
+        {%- if cart_product_ids contains product.id or product.available == false -%}
+          {%- continue -%}
+        {%- endif -%}
+        {%- assign shown = shown | plus: 1 -%}
+        <li>{% render 'product-row', product: product %}</li>
+      {%- endfor -%}
+    {%- endcapture -%}
+
+    {%- if shown > 0 -%}
+      <h3 class="cart-upsell__title">{{ 'cart.upsell.title' | t }}</h3>
+      <ul class="cart-upsell__list" role="list">
+        {{ rows }}
+      </ul>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.cart_upsell.name",
+  "settings": []
+}
+{% endschema %}

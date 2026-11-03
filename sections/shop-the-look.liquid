@@ -1,0 +1,286 @@
+{%- liquid
+  assign image = section.settings.image
+  assign image_style = 'object-position: ' | append: image.presentation.focal_point
+  assign placeholders = 'demo-hoops.jpg,demo-layered-necklaces.jpg,demo-rings-hand.jpg,demo-ginkgo-set.jpg' | split: ','
+-%}
+
+<div
+  class="section full-width{% if section.settings.tinted %} section--tinted{% endif %}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <shop-the-look class="look {{ section.settings.image_position }}">
+    <div class="look__media">
+      <div class="look__image-wrap">
+        {%- if image != blank -%}
+          {{
+            image
+            | image_url: width: 2000
+            | image_tag:
+              widths: '550, 750, 1000, 1300, 1600, 2000',
+              sizes: '(min-width: 990px) 60vw, 100vw',
+              loading: 'lazy',
+              class: 'look__image',
+              style: image_style,
+              alt: image.alt
+          }}
+        {%- else -%}
+          <img
+            src="{{ 'demo-flatlay.jpg' | asset_img_url: '1300x' }}"
+            srcset="
+              {{ 'demo-flatlay.jpg' | asset_img_url: '750x' }} 750w,
+              {{ 'demo-flatlay.jpg' | asset_img_url: '1300x' }} 1300w,
+              {{ 'demo-flatlay.jpg' | asset_img_url: '1600x' }} 1600w
+            "
+            sizes="(min-width: 990px) 60vw, 100vw"
+            width="1600"
+            height="1067"
+            alt="{{ 'sections.shop_the_look.demo_image_alt' | t | escape }}"
+            class="look__image"
+            loading="lazy"
+          >
+        {%- endif -%}
+      </div>
+
+      <div class="look__hotspots">
+        {% content_for 'blocks' %}
+      </div>
+    </div>
+
+    <div class="look__content">
+      {% render 'section-heading',
+        eyebrow: section.settings.eyebrow,
+        title: section.settings.title,
+        subtitle: section.settings.subtitle,
+        alignment: 'start',
+        title_style: 'heading--h2'
+      %}
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="look__list" role="list">
+          {%- for block in section.blocks -%}
+            {%- assign row_id = 'LookItem-' | append: block.id -%}
+            {%- assign placeholder_index = forloop.index0 | modulo: 4 -%}
+            <li>
+              {% render 'product-row',
+                product: block.settings.product,
+                placeholder_image: placeholders[placeholder_index],
+                id: row_id,
+                block_id: block.id
+              %}
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </shop-the-look>
+</div>
+
+{% stylesheet %}
+  .look {
+    --look-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+
+    display: grid;
+    grid-template-columns: var(--look-columns);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 5rem);
+  }
+
+  .look--image-right {
+    --look-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  }
+
+  .look--image-right .look__media {
+    order: 2;
+  }
+
+  .look__media {
+    position: relative;
+  }
+
+  .look__image-wrap {
+    overflow: hidden;
+    border-radius: var(--style-border-radius-buttons);
+    background-color: color-mix(in srgb, var(--color-foreground) 6%, var(--color-background));
+  }
+
+  .look__image {
+    width: 100%;
+    height: auto;
+  }
+
+  .look__hotspots {
+    position: absolute;
+    inset: 0;
+  }
+
+  .look__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .look__content .section-heading {
+    margin: 0;
+  }
+
+  .look__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 989px) {
+    .look,
+    .look--image-right {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .look--image-right .look__media {
+      order: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Shop the look: links each hotspot to its row in the product list.
+   * Clicking a hotspot highlights the row and brings it into view; hovering
+   * or focusing a row highlights its hotspot.
+   */
+  class ShopTheLook extends HTMLElement {
+    connectedCallback() {
+      this.addEventListener('click', this.onClick);
+      this.addEventListener('pointerover', this.onRowHover);
+      this.addEventListener('focusin', this.onRowHover);
+      this.addEventListener('pointerleave', () => this.setActive(null));
+      this.addEventListener('shopify:block:select', (event) => this.setActive(event.target.dataset.hotspot));
+    }
+
+    onClick = (event) => {
+      const hotspot = event.target.closest('[data-hotspot]');
+      if (!hotspot) return;
+      const id = hotspot.dataset.hotspot;
+      this.setActive(id);
+      const row = this.querySelector(`[data-look-item="${id}"]`);
+      const rect = row?.getBoundingClientRect();
+      if (rect && (rect.top < 0 || rect.bottom > window.innerHeight)) {
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        row.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' });
+      }
+    };
+
+    onRowHover = (event) => {
+      const row = event.target.closest?.('[data-look-item]');
+      if (row) this.setActive(row.dataset.lookItem);
+    };
+
+    setActive(id) {
+      this.querySelectorAll('[data-hotspot]').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.hotspot === id);
+      });
+      this.querySelectorAll('[data-look-item]').forEach((el) => {
+        el.classList.toggle('is-active', el.dataset.lookItem === id);
+      });
+    }
+  }
+
+  if (!customElements.get('shop-the-look')) {
+    customElements.define('shop-the-look', ShopTheLook);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.shop_the_look.name",
+  "tag": "section",
+  "class": "shop-the-look-section",
+  "blocks": [{ "type": "_hotspot" }],
+  "max_blocks": 8,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image",
+      "info": "t:sections.shop_the_look.image_info"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "t:sections.image_with_text.image_position",
+      "options": [
+        { "value": "look--image-left", "label": "t:options.alignment.left" },
+        { "value": "look--image-right", "label": "t:options.alignment.right" }
+      ],
+      "default": "look--image-left"
+    },
+    {
+      "type": "header",
+      "content": "t:general.content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Shop the look"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Stacked for <em>everyday</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "Tap the dots to see each piece in this look."
+    },
+    {
+      "type": "checkbox",
+      "id": "tinted",
+      "label": "t:labels.tinted_background",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shop_the_look.name",
+      "category": "t:general.product",
+      "blocks": [
+        { "type": "_hotspot", "settings": { "position_x": 28, "position_y": 38 } },
+        { "type": "_hotspot", "settings": { "position_x": 55, "position_y": 62 } },
+        { "type": "_hotspot", "settings": { "position_x": 74, "position_y": 30 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

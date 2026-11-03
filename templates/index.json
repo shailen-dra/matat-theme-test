@@ -332,14 +332,154 @@
         "padding_top": 56,
         "padding_bottom": 56
       }
+    },
+    "shop_the_look": {
+      "type": "shop-the-look",
+      "blocks": {
+        "hotspot_1": {
+          "type": "_hotspot",
+          "settings": {
+            "position_x": 28,
+            "position_y": 38
+          }
+        },
+        "hotspot_2": {
+          "type": "_hotspot",
+          "settings": {
+            "position_x": 55,
+            "position_y": 62
+          }
+        },
+        "hotspot_3": {
+          "type": "_hotspot",
+          "settings": {
+            "position_x": 74,
+            "position_y": 30
+          }
+        }
+      },
+      "block_order": [
+        "hotspot_1",
+        "hotspot_2",
+        "hotspot_3"
+      ],
+      "settings": {
+        "eyebrow": "Shop the look",
+        "title": "Stacked for <em>everyday</em>",
+        "subtitle": "Tap the dots to see each piece in this look.",
+        "image_position": "look--image-left",
+        "tinted": false,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_1": {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>The ring is even more beautiful in person. I haven't taken it off since it arrived.</p>",
+            "rating": 5,
+            "author": "Maya R.",
+            "detail": "Verified buyer"
+          }
+        },
+        "testimonial_2": {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>Beautifully packaged and arrived in two days. It made the perfect anniversary gift.</p>",
+            "rating": 5,
+            "author": "Daniel K.",
+            "detail": "Verified buyer"
+          }
+        },
+        "testimonial_3": {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>Delicate enough for every day, and the gold hasn't faded at all after months of wear.</p>",
+            "rating": 5,
+            "author": "Noa L.",
+            "detail": "Verified buyer"
+          }
+        },
+        "testimonial_4": {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>They resized my ring for free within a week. Customer care you rarely see anymore.</p>",
+            "rating": 5,
+            "author": "Shira B.",
+            "detail": "Verified buyer"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3",
+        "testimonial_4"
+      ],
+      "settings": {
+        "eyebrow": "Kind words",
+        "title": "Loved, worn <em>and kept</em>",
+        "columns_desktop": 3,
+        "tinted": true,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "press": {
+      "type": "press-logos",
+      "blocks": {
+        "logo_1": {
+          "type": "_logo",
+          "settings": {
+            "name": "The Edit"
+          }
+        },
+        "logo_2": {
+          "type": "_logo",
+          "settings": {
+            "name": "Atelier Weekly"
+          }
+        },
+        "logo_3": {
+          "type": "_logo",
+          "settings": {
+            "name": "Maison"
+          }
+        },
+        "logo_4": {
+          "type": "_logo",
+          "settings": {
+            "name": "Journal"
+          }
+        }
+      },
+      "block_order": [
+        "logo_1",
+        "logo_2",
+        "logo_3",
+        "logo_4"
+      ],
+      "settings": {
+        "title": "As seen in",
+        "logo_height": 32,
+        "tinted": false,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     }
   },
   "order": [
     "hero",
     "category_tiles",
     "featured_products",
+    "shop_the_look",
     "brand_story",
     "metal_tiles",
+    "testimonials",
+    "press",
     "trust"
   ]
 }

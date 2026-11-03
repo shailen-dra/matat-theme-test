@@ -67,6 +67,13 @@
     "drawer": {
       "close": "Close cart",
       "view_cart": "View cart"
+    },
+    "free_shipping": {
+      "remaining_html": "You're <strong>{{ amount }}</strong> away from free shipping",
+      "unlocked": "You've unlocked free shipping"
+    },
+    "upsell": {
+      "title": "You may also like"
     }
   },
   "customers": {
@@ -194,6 +201,25 @@
     },
     "image_with_text": {
       "demo_image_alt": "Gold ginkgo leaf necklace and earrings laid on linen"
+    },
+    "slideshow": {
+      "carousel": "carousel",
+      "label": "Featured highlights",
+      "slide": "slide",
+      "slide_of": "Slide {{ index }} of {{ count }}",
+      "pause": "Pause slideshow",
+      "play": "Play slideshow",
+      "previous": "Previous",
+      "next": "Next",
+      "go_to": "Go to slide {{ index }}"
+    },
+    "shop_the_look": {
+      "hotspot_label": "Show {{ title }}",
+      "demo_image_alt": "Gold jewelry arranged on linen"
+    },
+    "testimonials": {
+      "rating": "Rated {{ rating }} out of 5",
+      "label": "Customer testimonials"
     }
   },
   "header": {
@@ -274,6 +300,17 @@
       "close": "Close",
       "location_available": "Pickup available",
       "location_unavailable": "Pickup currently unavailable"
+    },
+    "size_guide": {
+      "close": "Close size guide",
+      "rings_title": "Ring sizes",
+      "us": "US",
+      "uk": "UK",
+      "eu": "EU",
+      "diameter": "Diameter (mm)",
+      "step_1": "Wrap a strip of paper around the base of your finger.",
+      "step_2": "Mark where the ends meet and measure the length in millimeters.",
+      "step_3": "Match the length to the EU size above. Between sizes? Choose the larger one."
     }
   },
   "contact": {

@@ -1,0 +1,266 @@
+{% doc %}
+  Renders a bar fixed to the bottom of the screen with the product, the
+  selected variant's price and an add to cart button. It slides in once the
+  main buy buttons scroll out of view and stays in sync with the variant
+  picker. Add it to the product page next to the Buy buttons block.
+
+  @example
+  {% content_for 'block', type: 'sticky-add-to-cart', id: 'sticky-add-to-cart' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = closest.product
+  assign variant = product.selected_or_first_available_variant
+  assign form_id = 'StickyForm-' | append: block.id
+
+  if variant == blank
+    assign button_label = 'product.unavailable' | t
+  elsif variant.available == false
+    assign button_label = 'product.sold_out' | t
+  else
+    assign button_label = 'product.add_to_cart' | t
+  endif
+
+  assign button_attributes = 'name="add" data-add-to-cart'
+  if variant == blank or variant.available == false
+    assign button_attributes = button_attributes | append: ' disabled'
+  endif
+-%}
+
+{%- if product != blank -%}
+  <sticky-add-to-cart class="sticky-atc" inert {{ block.shopify_attributes }}>
+    <product-form class="sticky-atc__bar">
+      {%- form 'product', product, id: form_id, class: 'sticky-atc__form', novalidate: 'novalidate' -%}
+        <div class="sticky-atc__product">
+          {%- if product.featured_media -%}
+            {{
+              product.featured_media.preview_image
+              | image_url: width: 160
+              | image_tag: widths: '56, 112, 160', sizes: '56px', loading: 'lazy', class: 'sticky-atc__image', alt: ''
+            }}
+          {%- endif -%}
+          <div class="sticky-atc__text" data-update="sticky-info-{{ block.id }}">
+            <p class="sticky-atc__title">{{ product.title | escape }}</p>
+            <p class="sticky-atc__meta">
+              {%- unless product.has_only_default_variant -%}
+                <span class="sticky-atc__variant">{{ variant.title | escape }}</span>
+              {%- endunless -%}
+              <span class="sticky-atc__price">
+                {%- if variant.compare_at_price > variant.price -%}
+                  <span class="visually-hidden">{{ 'product.price.sale' | t }}</span>
+                {%- endif -%}
+                {{ variant.price | money }}
+                {%- if variant.compare_at_price > variant.price -%}
+                  <span class="visually-hidden">{{ 'product.price.regular' | t }}</span>
+                  <s class="sticky-atc__compare">{{ variant.compare_at_price | money }}</s>
+                {%- endif -%}
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <div class="sticky-atc__submit" data-update="sticky-buy-{{ block.id }}">
+          <input type="hidden" name="id" value="{{ variant.id }}">
+          {% render 'button',
+            label: button_label,
+            type: 'submit',
+            style: 'primary',
+            class: 'sticky-atc__button',
+            attributes: button_attributes
+          %}
+        </div>
+      {%- endform -%}
+      <p
+        class="visually-hidden"
+        role="status"
+        hidden
+        data-added-message
+      >
+        {{ 'product.added_to_cart' | t }}
+      </p>
+      <p
+        class="sticky-atc__error"
+        role="alert"
+        hidden
+        data-error-message
+        data-fallback="{{ 'product.add_error' | t | escape }}"
+      ></p>
+    </product-form>
+  </sticky-add-to-cart>
+{%- endif -%}
+
+{% stylesheet %}
+  .sticky-atc {
+    position: fixed;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 20;
+    display: block;
+    padding: 0.75rem var(--page-margin) calc(0.75rem + env(safe-area-inset-bottom));
+    border-top: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    background-color: color-mix(in srgb, var(--color-background) 94%, transparent);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 -8px 30px rgb(0 0 0 / 0.06);
+    transform: translateY(110%);
+    transition:
+      transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1),
+      visibility 0s linear 0.35s;
+    visibility: hidden;
+  }
+
+  .sticky-atc.is-visible {
+    transform: none;
+    transition-delay: 0s;
+    visibility: visible;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sticky-atc {
+      transition: none;
+    }
+  }
+
+  .sticky-atc__bar {
+    display: block;
+    max-width: calc(var(--page-width) - var(--page-margin) * 2);
+    margin-inline: auto;
+  }
+
+  .sticky-atc__form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .sticky-atc__product {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+    min-width: 0;
+  }
+
+  .sticky-atc__image {
+    flex-shrink: 0;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: calc(var(--style-border-radius-buttons) * 0.75);
+    object-fit: cover;
+  }
+
+  .sticky-atc__text {
+    min-width: 0;
+  }
+
+  .sticky-atc__title {
+    overflow: hidden;
+    font-family: var(--font-heading--family);
+    font-size: 1.0625rem;
+    font-weight: var(--font-heading--weight);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .sticky-atc__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  .sticky-atc__variant {
+    opacity: 0.65;
+  }
+
+  .sticky-atc__compare {
+    margin-inline-start: 0.375rem;
+    opacity: 0.5;
+  }
+
+  .sticky-atc__submit {
+    flex-shrink: 0;
+  }
+
+  .sticky-atc__button[aria-busy='true'] {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .sticky-atc__error {
+    margin-block-start: 0.5rem;
+    color: #b42318;
+    font-size: 0.8125rem;
+    text-align: end;
+  }
+
+  @media (max-width: 749px) {
+    .sticky-atc__image,
+    .sticky-atc__variant {
+      display: none;
+    }
+
+    .sticky-atc__title {
+      font-size: 0.9375rem;
+    }
+
+    .sticky-atc__button {
+      padding-inline: 1.25rem;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Shows the sticky add to cart bar while the product's main buy buttons
+   * are scrolled above the viewport. The add to cart itself is handled by
+   * the shared `product-form` element, and variant changes update the bar
+   * through `product-info`'s `data-update` swaps.
+   */
+  class StickyAddToCart extends HTMLElement {
+    connectedCallback() {
+      const productInfo = this.closest('product-info');
+      this.target = [...(productInfo ?? document).querySelectorAll('.buy-buttons')].find((el) => !this.contains(el));
+      if (!this.target) return;
+
+      this.observer = new IntersectionObserver(([entry]) => {
+        // Only once the buttons have scrolled up and out, not before reaching them
+        this.toggle(!entry.isIntersecting && entry.boundingClientRect.bottom < 0);
+      });
+      this.observer.observe(this.target);
+
+      this.addEventListener('shopify:block:select', () => this.toggle(true, true));
+      this.addEventListener('shopify:block:deselect', () => {
+        this.editorLocked = false;
+      });
+    }
+
+    disconnectedCallback() {
+      this.observer?.disconnect();
+    }
+
+    toggle(visible, lock = false) {
+      if (lock) this.editorLocked = true;
+      if (this.editorLocked && !visible) return;
+      this.classList.toggle('is-visible', visible);
+      this.inert = !visible;
+      document.body.classList.toggle('has-sticky-atc', visible);
+    }
+  }
+
+  if (!customElements.get('sticky-add-to-cart')) {
+    customElements.define('sticky-add-to-cart', StickyAddToCart);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:blocks.sticky_add_to_cart.name",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "t:blocks.sticky_add_to_cart.info"
+    }
+  ],
+  "presets": [{ "name": "t:blocks.sticky_add_to_cart.name" }]
+}
+{% endschema %}

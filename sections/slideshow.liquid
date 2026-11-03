@@ -1,0 +1,531 @@
+<slide-show
+  class="slideshow full-width {{ section.settings.height }}"
+  role="region"
+  aria-roledescription="{{ 'sections.slideshow.carousel' | t | escape }}"
+  aria-label="{{ 'sections.slideshow.label' | t | escape }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-speed="{{ section.settings.autoplay_speed | times: 1000 }}"
+  data-slide-label="{{ 'sections.slideshow.slide_of' | t: index: '[index]', count: '[count]' | escape }}"
+>
+  <div class="slideshow__track" data-track>
+    {% content_for 'blocks' %}
+  </div>
+
+  {%- if section.blocks.size > 1 -%}
+    <div class="slideshow__controls">
+      {%- if section.settings.autoplay -%}
+        <button
+          type="button"
+          class="slideshow__button slideshow__pause"
+          data-pause
+          aria-pressed="false"
+          aria-label="{{ 'sections.slideshow.pause' | t | escape }}"
+          data-label-pause="{{ 'sections.slideshow.pause' | t | escape }}"
+          data-label-play="{{ 'sections.slideshow.play' | t | escape }}"
+        >
+          <svg class="slideshow__pause-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <path d="M7 5v10M13 5v10" />
+          </svg>
+          <svg class="slideshow__play-icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+            <path d="M7 5l8 5-8 5z" />
+          </svg>
+        </button>
+      {%- endif -%}
+
+      {%- if section.settings.show_arrows -%}
+        <button type="button" class="slideshow__button slideshow__arrow" data-prev aria-label="{{ 'sections.slideshow.previous' | t | escape }}">
+          {% render 'icon', name: 'chevron-left' %}
+        </button>
+      {%- endif -%}
+
+      <div class="slideshow__dots">
+        {%- for block in section.blocks -%}
+          <button
+            type="button"
+            class="slideshow__dot"
+            data-dot="{{ forloop.index0 }}"
+            aria-label="{{ 'sections.slideshow.go_to' | t: index: forloop.index | escape }}"
+            {% if forloop.first %}
+              aria-current="true"
+            {% endif %}
+          >
+            <span class="slideshow__dot-bar"></span>
+          </button>
+        {%- endfor -%}
+      </div>
+
+      {%- if section.settings.show_arrows -%}
+        <button type="button" class="slideshow__button slideshow__arrow" data-next aria-label="{{ 'sections.slideshow.next' | t | escape }}">
+          {% render 'icon', name: 'chevron-right' %}
+        </button>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</slide-show>
+
+{% stylesheet %}
+  .slideshow {
+    --slideshow-controls-fg: #ffffff;
+
+    position: relative;
+    display: block;
+  }
+
+  .slideshow--small {
+    min-height: 50svh;
+  }
+
+  .slideshow--medium {
+    min-height: 70svh;
+  }
+
+  .slideshow--large {
+    min-height: 85svh;
+  }
+
+  .slideshow--full {
+    min-height: 100svh;
+  }
+
+  .slideshow__track {
+    display: flex;
+    min-height: inherit;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .slideshow__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .slideshow__track {
+      scroll-behavior: smooth;
+    }
+  }
+
+  /* Clear the transparent header when the slideshow is the first section */
+  body:has(.header--transparent) main > .shopify-section:first-child .slideshow {
+    --hero-offset: var(--header-height, 5rem);
+  }
+
+  /* Controls */
+  .slideshow__controls {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--slideshow-controls-fg);
+    pointer-events: none;
+  }
+
+  .slideshow__controls > * {
+    pointer-events: auto;
+  }
+
+  .slideshow__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.18);
+    color: inherit;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background-color 0.2s ease;
+  }
+
+  .slideshow__button:hover {
+    background: rgb(0 0 0 / 0.35);
+  }
+
+  .slideshow__button:focus-visible,
+  .slideshow__dot:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 2px;
+  }
+
+  .slideshow__button svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .slideshow__play-icon {
+    fill: currentcolor !important;
+  }
+
+  [dir='rtl'] .slideshow__arrow svg {
+    transform: scaleX(-1);
+  }
+
+  .slideshow__pause .slideshow__play-icon,
+  .slideshow__pause[aria-pressed='true'] .slideshow__pause-icon {
+    display: none;
+  }
+
+  .slideshow__pause[aria-pressed='true'] .slideshow__play-icon {
+    display: block;
+  }
+
+  .slideshow__dots {
+    display: flex;
+    align-items: center;
+  }
+
+  .slideshow__dot {
+    display: inline-flex;
+    align-items: center;
+    height: 2.75rem;
+    padding: 0 0.375rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .slideshow__dot-bar {
+    position: relative;
+    display: block;
+    width: 1.75rem;
+    height: 2px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: color-mix(in srgb, currentcolor 40%, transparent);
+    transition: width 0.3s ease;
+  }
+
+  .slideshow__dot[aria-current='true'] .slideshow__dot-bar {
+    width: 3rem;
+  }
+
+  /* Progress fill on the active dot while autoplaying */
+  .slideshow__dot-bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentcolor;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  [dir='rtl'] .slideshow__dot-bar::after {
+    transform-origin: right;
+  }
+
+  .slideshow__dot[aria-current='true'] .slideshow__dot-bar::after {
+    transform: scaleX(1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .slideshow.is-playing .slideshow__dot[aria-current='true'] .slideshow__dot-bar::after {
+      animation: slideshow-progress var(--slideshow-speed, 6s) linear both;
+    }
+  }
+
+  @keyframes slideshow-progress {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  @media (max-width: 749px) {
+    .slideshow__arrow {
+      display: none;
+    }
+
+    .slideshow--small,
+    .slideshow--medium {
+      min-height: 60svh;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Slideshow: a scroll-snapping track (so swiping works natively) with
+   * arrows, dots and optional autoplay. Autoplay pauses on hover, keyboard
+   * focus, when off-screen or the tab is hidden, and with the pause button;
+   * it never starts when the shopper prefers reduced motion.
+   */
+  class SlideShow extends HTMLElement {
+    connectedCallback() {
+      this.track = this.querySelector('[data-track]');
+      this.slides = [...this.querySelectorAll('[data-slide]')];
+      this.dots = [...this.querySelectorAll('[data-dot]')];
+      this.pauseButton = this.querySelector('[data-pause]');
+      this.index = 0;
+      this.speed = Number(this.dataset.speed) || 6000;
+      this.style.setProperty('--slideshow-speed', `${this.speed}ms`);
+
+      const label = this.dataset.slideLabel || '';
+      this.slides.forEach((slide, i) => {
+        slide.setAttribute('aria-label', label.replace('[index]', i + 1).replace('[count]', this.slides.length));
+      });
+
+      this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      this.userPaused = this.reducedMotion;
+      this.autoplay = this.dataset.autoplay === 'true' && this.slides.length > 1;
+      if (this.autoplay && this.reducedMotion) this.setPausedButton(true);
+
+      this.slideObserver = new IntersectionObserver(this.onSlideIntersect, { root: this.track, threshold: 0.6 });
+      this.slides.forEach((slide) => this.slideObserver.observe(slide));
+
+      this.viewObserver = new IntersectionObserver(([entry]) => {
+        this.inView = entry.isIntersecting;
+        this.updatePlayback();
+      }, { threshold: 0.4 });
+      this.viewObserver.observe(this);
+
+      this.addEventListener('click', this.onClick);
+      this.addEventListener('mouseenter', this.onHover);
+      this.addEventListener('mouseleave', this.onHover);
+      this.addEventListener('focusin', this.onFocus);
+      this.addEventListener('focusout', this.onFocus);
+      this.addEventListener('keydown', this.onKeydown);
+      this.addEventListener('shopify:block:select', this.onBlockSelect);
+      this.addEventListener('shopify:block:deselect', this.onBlockDeselect);
+      document.addEventListener('visibilitychange', this.updatePlayback);
+
+      this.setActive(0);
+      this.classList.add('is-ready');
+    }
+
+    disconnectedCallback() {
+      this.stop();
+      this.slideObserver?.disconnect();
+      this.viewObserver?.disconnect();
+      document.removeEventListener('visibilitychange', this.updatePlayback);
+    }
+
+    onSlideIntersect = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) this.setActive(this.slides.indexOf(entry.target));
+      });
+    };
+
+    setActive(index) {
+      if (index < 0) return;
+      const changed = index !== this.index;
+      this.index = index;
+      this.slides.forEach((slide, i) => {
+        const active = i === index;
+        slide.classList.toggle('is-active', active);
+        // Keep keyboard focus out of slides that are off-screen
+        slide.inert = !active;
+      });
+      this.dots.forEach((dot, i) => dot.setAttribute('aria-current', String(i === index)));
+      if (changed) this.restart();
+    }
+
+    goTo(index) {
+      const count = this.slides.length;
+      const target = this.slides[((index % count) + count) % count];
+      if (!target) return;
+      // Physical delta works the same in left-to-right and right-to-left
+      const delta = target.getBoundingClientRect().left - this.track.getBoundingClientRect().left;
+      this.track.scrollBy({ left: delta, behavior: this.reducedMotion ? 'auto' : 'smooth' });
+    }
+
+    next() {
+      this.goTo(this.index + 1);
+    }
+
+    previous() {
+      this.goTo(this.index - 1);
+    }
+
+    onClick = (event) => {
+      const isRtl = getComputedStyle(this).direction === 'rtl';
+      if (event.target.closest('[data-next]')) isRtl ? this.previous() : this.next();
+      else if (event.target.closest('[data-prev]')) isRtl ? this.next() : this.previous();
+      else if (event.target.closest('[data-dot]')) this.goTo(Number(event.target.closest('[data-dot]').dataset.dot));
+      else if (event.target.closest('[data-pause]')) {
+        this.userPaused = !this.userPaused;
+        this.setPausedButton(this.userPaused);
+        this.updatePlayback();
+      }
+    };
+
+    onKeydown = (event) => {
+      if (event.target.closest('input, textarea, select')) return;
+      const isRtl = getComputedStyle(this).direction === 'rtl';
+      if (event.key === 'ArrowRight') isRtl ? this.previous() : this.next();
+      else if (event.key === 'ArrowLeft') isRtl ? this.next() : this.previous();
+    };
+
+    onHover = (event) => {
+      this.hovered = event.type === 'mouseenter';
+      this.updatePlayback();
+    };
+
+    onFocus = () => {
+      // focusout fires before focus moves, so check on the next frame
+      requestAnimationFrame(() => {
+        this.focused = this.contains(document.activeElement) && document.activeElement !== this.pauseButton;
+        this.updatePlayback();
+      });
+    };
+
+    onBlockSelect = (event) => {
+      this.editorPaused = true;
+      this.goTo(this.slides.indexOf(event.target.closest('[data-slide]') ?? event.target));
+      this.updatePlayback();
+    };
+
+    onBlockDeselect = () => {
+      this.editorPaused = false;
+      this.updatePlayback();
+    };
+
+    setPausedButton(paused) {
+      if (!this.pauseButton) return;
+      this.pauseButton.setAttribute('aria-pressed', String(paused));
+      this.pauseButton.setAttribute(
+        'aria-label',
+        paused ? this.pauseButton.dataset.labelPlay : this.pauseButton.dataset.labelPause
+      );
+    }
+
+    updatePlayback = () => {
+      const shouldPlay =
+        this.autoplay &&
+        !this.userPaused &&
+        !this.hovered &&
+        !this.focused &&
+        !this.editorPaused &&
+        this.inView &&
+        !document.hidden;
+      if (shouldPlay && !this.timer) this.start();
+      else if (!shouldPlay && this.timer) this.stop();
+    };
+
+    start() {
+      this.classList.add('is-playing');
+      this.timer = setTimeout(() => {
+        this.timer = null;
+        this.next();
+      }, this.speed);
+    }
+
+    stop() {
+      clearTimeout(this.timer);
+      this.timer = null;
+      this.classList.remove('is-playing');
+    }
+
+    /** Restart the countdown (and the progress bar) whenever the slide changes */
+    restart() {
+      if (!this.timer && !this.classList.contains('is-playing')) {
+        this.updatePlayback();
+        return;
+      }
+      this.stop();
+      // Force the progress animation to restart from zero
+      void this.offsetWidth;
+      this.updatePlayback();
+    }
+  }
+
+  if (!customElements.get('slide-show')) {
+    customElements.define('slide-show', SlideShow);
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "t:sections.slideshow.name",
+  "tag": "section",
+  "class": "slideshow-section",
+  "blocks": [{ "type": "_slide" }],
+  "max_blocks": 6,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "select",
+      "id": "height",
+      "label": "t:labels.height",
+      "options": [
+        { "value": "slideshow--small", "label": "t:options.size.small" },
+        { "value": "slideshow--medium", "label": "t:options.size.medium" },
+        { "value": "slideshow--large", "label": "t:options.size.large" },
+        { "value": "slideshow--full", "label": "t:options.size.full_screen" }
+      ],
+      "default": "slideshow--large"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_arrows",
+      "label": "t:sections.slideshow.show_arrows",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "t:sections.slideshow.autoplay",
+      "info": "t:sections.slideshow.autoplay_info",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "autoplay_speed",
+      "label": "t:sections.slideshow.autoplay_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "default": 6,
+      "visible_if": "{{ section.settings.autoplay }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.slideshow.name",
+      "category": "t:general.banners",
+      "blocks": [
+        {
+          "type": "_slide",
+          "blocks": [
+            { "type": "heading", "settings": { "text": "The autumn edit", "style": "heading--eyebrow", "tag": "p" } },
+            { "type": "heading", "settings": { "text": "Jewelry made to be <em>kept</em>", "style": "heading--display", "tag": "h2" } },
+            { "type": "button", "settings": { "label": "Shop the collection", "link": "shopify://collections/all", "style": "primary" } }
+          ]
+        },
+        {
+          "type": "_slide",
+          "settings": { "content_position_x": "slide--x-center", "content_position_y": "slide--y-center" },
+          "blocks": [
+            { "type": "heading", "settings": { "text": "Layer it up", "style": "heading--eyebrow", "tag": "p" } },
+            { "type": "heading", "settings": { "text": "Necklaces for every neckline", "style": "heading--display", "tag": "h2" } },
+            { "type": "button", "settings": { "label": "Shop necklaces", "link": "shopify://collections/all", "style": "primary" } }
+          ]
+        },
+        {
+          "type": "_slide",
+          "settings": { "content_position_x": "slide--x-right" },
+          "blocks": [
+            { "type": "heading", "settings": { "text": "Gifting", "style": "heading--eyebrow", "tag": "p" } },
+            { "type": "heading", "settings": { "text": "Wrapped, insured and on its way", "style": "heading--display", "tag": "h2" } },
+            { "type": "button", "settings": { "label": "Find a gift", "link": "shopify://collections/all", "style": "primary" } }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

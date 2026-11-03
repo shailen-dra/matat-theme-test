@@ -1,0 +1,168 @@
+{% doc %}
+  Renders one hotspot of the shop the look section: a pulsing dot placed on
+  the image that highlights its product in the section's product list.
+
+  @example
+  {% content_for 'block', type: '_hotspot', id: 'hotspot-1' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = block.settings.product
+  if product != blank
+    assign product_title = product.title | escape
+  else
+    assign product_title = 'product.card.placeholder_title' | t
+  endif
+-%}
+
+<button
+  type="button"
+  class="hotspot"
+  style="--hotspot-x: {{ block.settings.position_x }}%; --hotspot-y: {{ block.settings.position_y }}%;"
+  data-hotspot="{{ block.id }}"
+  aria-controls="LookItem-{{ block.id }}"
+  aria-label="{{ 'sections.shop_the_look.hotspot_label' | t: title: product_title }}"
+  {{ block.shopify_attributes }}
+>
+  <span class="hotspot__dot" aria-hidden="true"></span>
+  <span class="hotspot__label" aria-hidden="true">{{ product_title }}</span>
+</button>
+
+{% stylesheet %}
+  .hotspot {
+    position: absolute;
+    inset-inline-start: var(--hotspot-x);
+    top: var(--hotspot-y);
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    translate: -50% -50%;
+  }
+
+  [dir='rtl'] .hotspot {
+    translate: 50% -50%;
+  }
+
+  .hotspot__dot {
+    position: relative;
+    width: 1.125rem;
+    height: 1.125rem;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    background-color: rgb(255 255 255 / 0.35);
+    box-shadow: 0 2px 10px rgb(0 0 0 / 0.25);
+    backdrop-filter: blur(4px);
+    transition:
+      transform 0.25s ease,
+      background-color 0.25s ease;
+  }
+
+  .hotspot__dot::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border: 1px solid #ffffff;
+    border-radius: 50%;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hotspot__dot::after {
+      animation: hotspot-pulse 2.4s ease-out infinite;
+    }
+  }
+
+  @keyframes hotspot-pulse {
+    0% {
+      opacity: 0.9;
+      transform: scale(1);
+    }
+
+    80%,
+    100% {
+      opacity: 0;
+      transform: scale(2.4);
+    }
+  }
+
+  .hotspot:hover .hotspot__dot,
+  .hotspot.is-active .hotspot__dot {
+    transform: scale(1.25);
+    background-color: var(--color-accent);
+  }
+
+  .hotspot:focus-visible {
+    outline: none;
+  }
+
+  .hotspot:focus-visible .hotspot__dot {
+    outline: 2px solid #ffffff;
+    outline-offset: 4px;
+  }
+
+  /* Product name tooltip on hover (pointer devices only) */
+  .hotspot__label {
+    position: absolute;
+    bottom: calc(100% - 0.25rem);
+    left: 50%;
+    padding: 0.375rem 0.75rem;
+    border-radius: var(--style-border-radius-buttons);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 0.8125rem;
+    white-space: nowrap;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 0.12);
+    opacity: 0;
+    pointer-events: none;
+    translate: -50% 4px;
+    transition:
+      opacity 0.2s ease,
+      translate 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .hotspot:is(:hover, :focus-visible, .is-active) .hotspot__label {
+      opacity: 1;
+      translate: -50% 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.shop_the_look.hotspot",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:general.product"
+    },
+    {
+      "type": "range",
+      "id": "position_x",
+      "label": "t:sections.shop_the_look.position_x",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "position_y",
+      "label": "t:sections.shop_the_look.position_y",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 50
+    }
+  ],
+  "presets": [{ "name": "t:sections.shop_the_look.hotspot" }]
+}
+{% endschema %}

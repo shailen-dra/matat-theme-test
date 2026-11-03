@@ -1,0 +1,93 @@
+{% doc %}
+  Renders the free shipping progress bar of the cart drawer and cart page:
+  how much more to spend for free shipping, or that it's unlocked. Uses the
+  "Free shipping threshold" theme setting (in the store currency); renders
+  nothing when the threshold is 0 or the cart is empty.
+
+  @example
+  {% render 'free-shipping-bar' %}
+{% enddoc %}
+
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | times: 100
+-%}
+
+{%- if threshold > 0 and cart.item_count > 0 -%}
+  {%- liquid
+    assign total = cart.total_price
+    assign remaining = threshold | minus: total
+    assign progress = total | times: 100 | divided_by: threshold | at_most: 100
+  -%}
+  <div class="shipping-bar{% if remaining <= 0 %} shipping-bar--unlocked{% endif %}" data-cart-shipping>
+    <p class="shipping-bar__text">
+      {%- if remaining > 0 -%}
+        {%- assign remaining_money = remaining | money -%}
+        {{ 'cart.free_shipping.remaining_html' | t: amount: remaining_money }}
+      {%- else -%}
+        {% render 'icon', name: 'truck', class: 'shipping-bar__icon' %}
+        {{ 'cart.free_shipping.unlocked' | t }}
+      {%- endif -%}
+    </p>
+    <div class="shipping-bar__track" aria-hidden="true">
+      <span class="shipping-bar__fill" style="--shipping-progress: {{ progress }}%;"></span>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .shipping-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    padding: 0.875rem 1rem;
+    border-radius: var(--style-border-radius-buttons);
+    background-color: color-mix(in srgb, var(--color-accent) 8%, var(--color-background));
+    font-size: 0.875rem;
+  }
+
+  .shipping-bar__text {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .shipping-bar__text strong {
+    font-weight: 600;
+  }
+
+  .shipping-bar__icon {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    color: var(--color-accent);
+  }
+
+  .shipping-bar__track {
+    height: 4px;
+    overflow: hidden;
+    border-radius: 4px;
+    background-color: color-mix(in srgb, var(--color-foreground) 10%, transparent);
+  }
+
+  .shipping-bar__fill {
+    display: block;
+    width: var(--shipping-progress);
+    height: 100%;
+    border-radius: inherit;
+    background-color: var(--color-accent);
+    transition: width 0.5s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .shipping-bar--unlocked .shipping-bar__icon {
+      animation: shipping-bar-pop 0.5s cubic-bezier(0.2, 0.6, 0.2, 1.4) both;
+    }
+  }
+
+  @keyframes shipping-bar-pop {
+    from {
+      transform: scale(0.4);
+      opacity: 0;
+    }
+  }
+{% endstylesheet %}

@@ -202,6 +202,28 @@
         ],
         "default": "drawer",
         "info": "t:settings.cart.cart_type_info"
+      },
+      {
+        "type": "header",
+        "content": "t:settings.cart.free_shipping"
+      },
+      {
+        "type": "number",
+        "id": "free_shipping_threshold",
+        "label": "t:settings.cart.free_shipping_threshold",
+        "info": "t:settings.cart.free_shipping_threshold_info",
+        "default": 150
+      },
+      {
+        "type": "header",
+        "content": "t:settings.cart.upsell"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_upsell",
+        "label": "t:settings.cart.upsell_enable",
+        "info": "t:settings.cart.upsell_info",
+        "default": true
       }
     ]
   },

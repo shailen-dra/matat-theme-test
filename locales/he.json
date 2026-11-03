@@ -68,6 +68,13 @@
     "drawer": {
       "close": "סגירת הסל",
       "view_cart": "לצפייה בסל"
+    },
+    "free_shipping": {
+      "remaining_html": "עוד <strong>{{ amount }}</strong> למשלוח חינם",
+      "unlocked": "קיבלתם משלוח חינם"
+    },
+    "upsell": {
+      "title": "אולי יעניין אותך גם"
     }
   },
   "customers": {
@@ -197,6 +204,25 @@
     },
     "image_with_text": {
       "demo_image_alt": "שרשרת ועגילי זהב בצורת עלי גינקו על בד פשתן"
+    },
+    "slideshow": {
+      "carousel": "קרוסלה",
+      "label": "מבחר מומלץ",
+      "slide": "שקופית",
+      "slide_of": "שקופית {{ index }} מתוך {{ count }}",
+      "pause": "השהיית המצגת",
+      "play": "הפעלת המצגת",
+      "previous": "הקודם",
+      "next": "הבא",
+      "go_to": "מעבר לשקופית {{ index }}"
+    },
+    "shop_the_look": {
+      "hotspot_label": "הצגת {{ title }}",
+      "demo_image_alt": "תכשיטי זהב מונחים על פשתן"
+    },
+    "testimonials": {
+      "rating": "דירוג {{ rating }} מתוך 5",
+      "label": "המלצות לקוחות"
     }
   },
   "header": {
@@ -279,6 +305,17 @@
       "close": "סגירה",
       "location_available": "איסוף זמין",
       "location_unavailable": "איסוף אינו זמין כרגע"
+    },
+    "size_guide": {
+      "close": "סגירת מדריך המידות",
+      "rings_title": "מידות טבעות",
+      "us": "ארה״ב",
+      "uk": "בריטניה",
+      "eu": "אירופה",
+      "diameter": "קוטר (מ״מ)",
+      "step_1": "כרכו רצועת נייר סביב בסיס האצבע.",
+      "step_2": "סמנו את נקודת המפגש ומדדו את האורך במילימטרים.",
+      "step_3": "התאימו את האורך למידה האירופית בטבלה. בין שתי מידות? בחרו בגדולה."
     }
   },
   "contact": {

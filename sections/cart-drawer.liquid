@@ -30,80 +30,92 @@
         </div>
 
         {%- if cart.item_count > 0 -%}
-          <ul class="side-drawer__body drawer-items" role="list" data-cart-items>
-            {%- for item in cart.items -%}
-              <li class="drawer-item" data-line="{{ forloop.index }}">
-                <a href="{{ item.url }}" class="drawer-item__media" tabindex="-1" aria-hidden="true">
-                  {%- if item.image != blank -%}
-                    {{
-                      item.image
-                      | image_url: width: 240
-                      | image_tag: widths: '96, 160, 240', sizes: '96px', loading: 'lazy', class: 'drawer-item__image', alt: ''
-                    }}
-                  {%- else -%}
-                    {{ 'product-1' | placeholder_svg_tag: 'drawer-item__image drawer-item__placeholder' }}
-                  {%- endif -%}
-                </a>
+          <div class="side-drawer__body cart-drawer__body">
+            {% render 'free-shipping-bar' %}
 
-                <div class="drawer-item__info">
-                  <div class="drawer-item__top">
-                    <h3 class="drawer-item__title">
-                      <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
-                    </h3>
-                    <p class="drawer-item__price">
-                      {%- if item.original_line_price > item.final_line_price -%}
-                        <s class="drawer-item__compare">{{ item.original_line_price | money }}</s>
-                      {%- endif -%}
-                      <span>{{ item.final_line_price | money }}</span>
-                    </p>
+            <ul class="drawer-items" role="list" data-cart-items>
+              {%- for item in cart.items -%}
+                <li class="drawer-item" data-line="{{ forloop.index }}">
+                  <a href="{{ item.url }}" class="drawer-item__media" tabindex="-1" aria-hidden="true">
+                    {%- if item.image != blank -%}
+                      {{
+                        item.image
+                        | image_url: width: 240
+                        | image_tag: widths: '96, 160, 240', sizes: '96px', loading: 'lazy', class: 'drawer-item__image', alt: ''
+                      }}
+                    {%- else -%}
+                      {{ 'product-1' | placeholder_svg_tag: 'drawer-item__image drawer-item__placeholder' }}
+                    {%- endif -%}
+                  </a>
+
+                  <div class="drawer-item__info">
+                    <div class="drawer-item__top">
+                      <h3 class="drawer-item__title">
+                        <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
+                      </h3>
+                      <p class="drawer-item__price">
+                        {%- if item.original_line_price > item.final_line_price -%}
+                          <s class="drawer-item__compare">{{ item.original_line_price | money }}</s>
+                        {%- endif -%}
+                        <span>{{ item.final_line_price | money }}</span>
+                      </p>
+                    </div>
+
+                    {%- unless item.product.has_only_default_variant -%}
+                      <p class="drawer-item__options">
+                        {%- for option in item.options_with_values -%}
+                          {{ option.value | escape }}
+                          {%- unless forloop.last %} · {% endunless -%}
+                        {%- endfor -%}
+                      </p>
+                    {%- endunless -%}
+
+                    {%- for discount in item.line_level_discount_allocations -%}
+                      <p class="drawer-item__discount">
+                        {{- discount.discount_application.title | escape }} (−{{ discount.amount | money -}})
+                      </p>
+                    {%- endfor -%}
+
+                    <div class="drawer-item__actions">
+                      {%- assign quantity_id = 'CartDrawer-Quantity-' | append: forloop.index -%}
+                      {% render 'quantity-input',
+                        id: quantity_id,
+                        name: 'updates[]',
+                        value: item.quantity,
+                        min: 0,
+                        form: form_id
+                      %}
+                      <a
+                        href="{{ item.url_to_remove }}"
+                        class="drawer-item__remove"
+                        data-cart-remove
+                        aria-label="{{ 'cart.remove_item' | t: title: item.product.title | escape }}"
+                      >
+                        {{- 'cart.remove' | t -}}
+                      </a>
+                    </div>
+
+                    <p
+                      class="drawer-item__error"
+                      role="alert"
+                      data-cart-error
+                      data-fallback="{{ 'cart.errors.generic' | t | escape }}"
+                      data-stock-message="{{ 'cart.errors.stock' | t | escape }}"
+                      hidden
+                    ></p>
                   </div>
+                </li>
+              {%- endfor -%}
+            </ul>
 
-                  {%- unless item.product.has_only_default_variant -%}
-                    <p class="drawer-item__options">
-                      {%- for option in item.options_with_values -%}
-                        {{ option.value | escape }}
-                        {%- unless forloop.last %} · {% endunless -%}
-                      {%- endfor -%}
-                    </p>
-                  {%- endunless -%}
-
-                  {%- for discount in item.line_level_discount_allocations -%}
-                    <p class="drawer-item__discount">
-                      {{- discount.discount_application.title | escape }} (−{{ discount.amount | money -}})
-                    </p>
-                  {%- endfor -%}
-
-                  <div class="drawer-item__actions">
-                    {%- assign quantity_id = 'CartDrawer-Quantity-' | append: forloop.index -%}
-                    {% render 'quantity-input',
-                      id: quantity_id,
-                      name: 'updates[]',
-                      value: item.quantity,
-                      min: 0,
-                      form: form_id
-                    %}
-                    <a
-                      href="{{ item.url_to_remove }}"
-                      class="drawer-item__remove"
-                      data-cart-remove
-                      aria-label="{{ 'cart.remove_item' | t: title: item.product.title | escape }}"
-                    >
-                      {{- 'cart.remove' | t -}}
-                    </a>
-                  </div>
-
-                  <p
-                    class="drawer-item__error"
-                    role="alert"
-                    data-cart-error
-                    data-fallback="{{ 'cart.errors.generic' | t | escape }}"
-                    data-stock-message="{{ 'cart.errors.stock' | t | escape }}"
-                    hidden
-                  ></p>
-                </div>
-              </li>
-            {%- endfor -%}
-          </ul>
+            {%- if settings.cart_upsell -%}
+              <cart-upsell
+                class="cart-upsell"
+                data-product-id="{{ cart.items.first.product_id }}"
+                data-url="{{ routes.product_recommendations_url }}"
+              ></cart-upsell>
+            {%- endif -%}
+          </div>
 
           <div class="side-drawer__footer" data-cart-totals>
             {%- for discount in cart.cart_level_discount_applications -%}
@@ -296,8 +308,21 @@
     opacity: 0.7;
   }
 
+  .cart-drawer__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-block: 1rem 1.5rem;
+  }
+
+  .cart-drawer__body .cart-upsell {
+    margin-block-start: 1rem;
+  }
+
   /* Drawer rows */
   .drawer-items {
+    margin: 0;
+    padding: 0;
     list-style: none;
   }
 
@@ -468,7 +493,101 @@
       animation: none;
     }
   }
+
+  /* Suggestions (sections/cart-upsell.liquid) */
+  .cart-upsell {
+    display: block;
+  }
+
+  .cart-upsell:not(:has(.cart-upsell__list)) {
+    display: none;
+  }
+
+  .cart-upsell__title {
+    margin: 0 0 0.875rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  [dir='rtl'] .cart-upsell__title {
+    letter-spacing: 0;
+  }
+
+  .cart-upsell__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .cart-upsell .product-row {
+    grid-template-columns: 3.5rem minmax(0, 1fr) auto;
+    padding: 0.5rem;
+  }
+
+  .cart-upsell .product-row__title {
+    font-size: 0.9375rem;
+  }
+
+  .cart-upsell .product-row__price {
+    font-size: 0.8125rem;
+  }
 {% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Cart drawer suggestions. Loads recommendations for the first product in
+   * the cart (rendered by the `cart-upsell` section) and refreshes them when
+   * the cart changes, so products just added drop out of the list.
+   */
+  class CartUpsell extends HTMLElement {
+    connectedCallback() {
+      document.addEventListener('cart:update', this.onCartUpdate);
+      this.load();
+    }
+
+    disconnectedCallback() {
+      document.removeEventListener('cart:update', this.onCartUpdate);
+      this.abortController?.abort();
+    }
+
+    onCartUpdate = () => {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => this.load(), 150);
+    };
+
+    async load() {
+      const productId = this.dataset.productId;
+      if (!productId) return;
+      this.abortController?.abort();
+      this.abortController = new AbortController();
+
+      try {
+        const params = new URLSearchParams({
+          product_id: productId,
+          limit: '8',
+          intent: this.dataset.intent || 'related',
+          section_id: 'cart-upsell',
+        });
+        const response = await fetch(`${this.dataset.url}?${params}`, { signal: this.abortController.signal });
+        if (!response.ok) return;
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const content = html.querySelector('[data-upsell-content]');
+        if (content) this.innerHTML = content.innerHTML;
+      } catch (error) {
+        if (error.name !== 'AbortError') console.error(error);
+      }
+    }
+  }
+
+  if (!customElements.get('cart-upsell')) {
+    customElements.define('cart-upsell', CartUpsell);
+  }
+{% endjavascript %}
 
 {% schema %}
 {

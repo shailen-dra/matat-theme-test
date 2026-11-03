@@ -94,6 +94,17 @@
             "heading": "Shipping & returns",
             "content": "<p>Free insured shipping on all orders. Not quite right? Return unworn pieces within 30 days for a full refund.</p>"
           }
+        },
+        "size_guide": {
+          "type": "size-guide",
+          "settings": {
+            "label": "Size guide",
+            "show_ring_chart": true
+          }
+        },
+        "sticky_atc": {
+          "type": "sticky-add-to-cart",
+          "settings": {}
         }
       },
       "block_order": [
@@ -101,7 +112,9 @@
         "title",
         "price",
         "variant_picker",
+        "size_guide",
         "buy_buttons",
+        "sticky_atc",
         "pickup",
         "highlights",
         "description",

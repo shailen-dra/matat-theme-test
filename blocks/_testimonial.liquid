@@ -1,0 +1,188 @@
+{% doc %}
+  Renders one customer quote of the testimonials section: star rating,
+  quote, author with an optional photo, and an optional reviewed product.
+
+  @example
+  {% content_for 'block', type: '_testimonial', id: 'testimonial-1' %}
+{% enddoc %}
+
+{%- liquid
+  assign rating = block.settings.rating
+  assign product = block.settings.product
+-%}
+
+<figure class="testimonial" {{ block.shopify_attributes }}>
+  {%- if rating > 0 -%}
+    <div class="testimonial__rating" role="img" aria-label="{{ 'sections.testimonials.rating' | t: rating: rating | escape }}">
+      {%- for i in (1..5) -%}
+        <svg
+          class="testimonial__star{% if i > rating %} testimonial__star--empty{% endif %}"
+          viewBox="0 0 20 20"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <path d="M10 1.8l2.47 5.2 5.68.68-4.2 3.9 1.1 5.62L10 14.4l-5.05 2.8 1.1-5.62-4.2-3.9 5.68-.68z" />
+        </svg>
+      {%- endfor -%}
+    </div>
+  {%- endif -%}
+
+  {%- if block.settings.quote != blank -%}
+    <blockquote class="testimonial__quote">
+      {{ block.settings.quote }}
+    </blockquote>
+  {%- endif -%}
+
+  <figcaption class="testimonial__author">
+    {%- if block.settings.image != blank -%}
+      {{
+        block.settings.image
+        | image_url: width: 120, height: 120, crop: 'center'
+        | image_tag: loading: 'lazy', class: 'testimonial__avatar', alt: ''
+      }}
+    {%- endif -%}
+    <span class="testimonial__meta">
+      {%- if block.settings.author != blank -%}
+        <span class="testimonial__name">{{ block.settings.author | escape }}</span>
+      {%- endif -%}
+      {%- if product != blank -%}
+        <a class="testimonial__product" href="{{ product.url }}">{{ product.title | escape }}</a>
+      {%- elsif block.settings.detail != blank -%}
+        <span class="testimonial__detail">{{ block.settings.detail | escape }}</span>
+      {%- endif -%}
+    </span>
+  </figcaption>
+</figure>
+
+{% stylesheet %}
+  .testimonial {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    height: 100%;
+    margin: 0;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+    background-color: var(--color-background);
+  }
+
+  .testimonial__rating {
+    display: flex;
+    gap: 0.25rem;
+    color: var(--color-accent);
+  }
+
+  .testimonial__star {
+    width: 1rem;
+    height: 1rem;
+    fill: currentcolor;
+  }
+
+  .testimonial__star--empty {
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 1.25;
+    opacity: 0.5;
+  }
+
+  .testimonial__quote {
+    flex: 1;
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.125rem, 0.5vw + 1rem, 1.375rem);
+    font-weight: var(--font-heading--weight);
+    line-height: 1.5;
+  }
+
+  .testimonial__quote > * {
+    margin: 0;
+  }
+
+  .testimonial__author {
+    display: flex;
+    align-items: center;
+    gap: 0.875rem;
+  }
+
+  .testimonial__avatar {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  .testimonial__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    font-size: 0.875rem;
+  }
+
+  .testimonial__name {
+    font-weight: 500;
+  }
+
+  .testimonial__detail,
+  .testimonial__product {
+    color: inherit;
+    opacity: 0.65;
+  }
+
+  .testimonial__product {
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.2em;
+  }
+
+  .testimonial__product:hover {
+    opacity: 1;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.testimonials.testimonial",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "quote",
+      "label": "t:sections.testimonials.quote",
+      "default": "<p>The ring is even more beautiful in person. I haven't taken it off since it arrived.</p>"
+    },
+    {
+      "type": "range",
+      "id": "rating",
+      "label": "t:sections.testimonials.rating_label",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "default": 5
+    },
+    {
+      "type": "text",
+      "id": "author",
+      "label": "t:sections.testimonials.author",
+      "default": "Customer name"
+    },
+    {
+      "type": "text",
+      "id": "detail",
+      "label": "t:sections.testimonials.detail",
+      "info": "t:sections.testimonials.detail_info",
+      "default": "Verified buyer"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:sections.testimonials.product",
+      "info": "t:sections.testimonials.product_info"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:sections.testimonials.photo"
+    }
+  ],
+  "presets": [{ "name": "t:sections.testimonials.testimonial" }]
+}
+{% endschema %}
