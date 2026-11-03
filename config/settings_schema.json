@@ -226,6 +226,25 @@
         "label": "t:settings.product_cards.enable_quick_add",
         "info": "t:settings.product_cards.enable_quick_add_info",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:settings.product_cards.badges"
+      },
+      {
+        "type": "range",
+        "id": "new_badge_days",
+        "label": "t:settings.product_cards.new_badge_days",
+        "info": "t:settings.product_cards.new_badge_days_info",
+        "min": 0,
+        "max": 90,
+        "step": 5,
+        "unit": "d",
+        "default": 30
+      },
+      {
+        "type": "paragraph",
+        "content": "t:settings.product_cards.custom_badges_info"
       }
     ]
   },
@@ -270,6 +289,16 @@
         "label": "t:settings.cart.upsell_enable",
         "info": "t:settings.cart.upsell_info",
         "default": true
+      },
+      {
+        "type": "header",
+        "content": "t:settings.cart.gift_wrap"
+      },
+      {
+        "type": "product",
+        "id": "gift_wrap_product",
+        "label": "t:settings.cart.gift_wrap_product",
+        "info": "t:settings.cart.gift_wrap_product_info"
       }
     ]
   },

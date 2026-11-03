@@ -75,6 +75,10 @@
     },
     "upsell": {
       "title": "אולי יעניין אותך גם"
+    },
+    "gift_wrap": {
+      "label": "הוספת אריזת מתנה",
+      "free": "חינם"
     }
   },
   "customers": {
@@ -249,6 +253,16 @@
     },
     "before_after": {
       "slider_label": "גררו כדי להשוות לפני ואחרי"
+    },
+    "announcement_bar": {
+      "label": "הודעות"
+    },
+    "shoppable_gallery": {
+      "view_post": "צפייה בפוסט"
+    },
+    "stores": {
+      "directions": "הוראות הגעה",
+      "opens_new_tab": "(נפתח בכרטיסייה חדשה)"
     }
   },
   "header": {
@@ -307,7 +321,8 @@
     },
     "card": {
       "from_price": "החל מ-{{ price }}",
-      "placeholder_title": "שם המוצר"
+      "placeholder_title": "שם המוצר",
+      "new_badge": "חדש"
     },
     "quick_view": {
       "full_details": "לכל פרטי המוצר",

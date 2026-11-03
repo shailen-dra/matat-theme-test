@@ -74,6 +74,10 @@
     },
     "upsell": {
       "title": "You may also like"
+    },
+    "gift_wrap": {
+      "label": "Add gift wrapping",
+      "free": "Free"
     }
   },
   "customers": {
@@ -246,6 +250,16 @@
     },
     "before_after": {
       "slider_label": "Drag to compare before and after"
+    },
+    "announcement_bar": {
+      "label": "Announcements"
+    },
+    "shoppable_gallery": {
+      "view_post": "View post"
+    },
+    "stores": {
+      "directions": "Get directions",
+      "opens_new_tab": "(opens in a new tab)"
     }
   },
   "header": {
@@ -302,7 +316,8 @@
     },
     "card": {
       "from_price": "From {{ price }}",
-      "placeholder_title": "Product title"
+      "placeholder_title": "Product title",
+      "new_badge": "New"
     },
     "quick_view": {
       "full_details": "View full details",

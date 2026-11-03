@@ -76,11 +76,38 @@
         "padding_top": 64,
         "padding_bottom": 64
       }
+    },
+    "stores": {
+      "type": "stores",
+      "blocks": {
+        "store_1": {
+          "type": "_store",
+          "settings": {
+            "name": "Flagship studio",
+            "address": "12 Example Street\nTel Aviv",
+            "hours": "<p>Sun–Thu 10:00–19:00<br>Fri 10:00–14:00</p>",
+            "button_label": "Book an appointment",
+            "button_link": "/pages/contact"
+          }
+        }
+      },
+      "block_order": [
+        "store_1"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "eyebrow": "Visit us",
+        "title": "Try it on <em>in person</em>",
+        "subtitle": "Book a private appointment for engagement rings, sizing and custom pieces.",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
     "main",
     "timeline",
-    "before_after"
+    "before_after",
+    "stores"
   ]
 }

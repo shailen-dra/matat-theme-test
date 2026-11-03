@@ -1,0 +1,170 @@
+<div
+  class="section full-width color-scheme color-{{ section.settings.color_scheme }}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    alignment: 'center'
+  %}
+
+  <div class="stores" style="--stores-columns: {{ section.blocks.size | at_least: 1 | at_most: 3 }};">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .stores {
+    display: grid;
+    grid-template-columns: repeat(var(--stores-columns), minmax(0, 1fr));
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+
+  .stores:has(> :only-child) {
+    max-width: 36rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .store-card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+    background-color: var(--color-background);
+  }
+
+  .store-card__image {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+  }
+
+  .store-card__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: clamp(1.25rem, 3vw, 1.75rem);
+  }
+
+  .store-card__name {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-size: 1.5rem;
+    font-weight: var(--font-heading--weight);
+  }
+
+  .store-card__address {
+    font-style: normal;
+    line-height: 1.6;
+  }
+
+  .store-card__map,
+  .store-card__phone {
+    color: inherit;
+    font-size: 0.875rem;
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-underline-offset: 0.25em;
+  }
+
+  .store-card__map:hover,
+  .store-card__phone:hover {
+    color: var(--color-accent);
+  }
+
+  .store-card__hours {
+    font-size: 0.875rem;
+    opacity: 0.8;
+  }
+
+  .store-card__button {
+    margin-block-start: auto;
+  }
+
+  @media (max-width: 989px) {
+    .stores {
+      grid-template-columns: repeat(min(var(--stores-columns), 2), minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 749px) {
+    .stores {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.stores.name",
+  "tag": "section",
+  "class": "stores-section",
+  "blocks": [{ "type": "_store" }],
+  "max_blocks": 9,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "Visit us"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Try it on <em>in person</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle",
+      "default": "Book a private appointment for engagement rings, sizing and custom pieces."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.stores.name",
+      "category": "t:general.text",
+      "blocks": [{ "type": "_store" }]
+    }
+  ]
+}
+{% endschema %}

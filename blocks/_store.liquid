@@ -1,0 +1,107 @@
+{% doc %}
+  Renders one store of the store locations section: photo, name, address
+  with a map link, opening hours, phone and an appointment button.
+
+  @example
+  {% content_for 'block', type: '_store', id: 'store-1' %}
+{% enddoc %}
+
+{%- liquid
+  assign address = block.settings.address | strip
+  assign map_query = address | strip_newlines | url_encode
+  assign phone_digits = block.settings.phone | remove: ' ' | remove: '-' | remove: '(' | remove: ')'
+-%}
+
+<article class="store-card" {{ block.shopify_attributes }}>
+  {%- if block.settings.image != blank -%}
+    {{
+      block.settings.image
+      | image_url: width: 1200
+      | image_tag: widths: '400, 600, 900, 1200', sizes: '(min-width: 990px) 33vw, 100vw', loading: 'lazy', class: 'store-card__image', alt: block.settings.image.alt
+    }}
+  {%- endif -%}
+
+  <div class="store-card__body">
+    <h3 class="store-card__name">{{ block.settings.name | escape }}</h3>
+
+    {%- if address != blank -%}
+      <address class="store-card__address">{{ address | escape | newline_to_br }}</address>
+      <a
+        class="store-card__map"
+        href="https://www.google.com/maps/search/?api=1&query={{ map_query }}"
+        target="_blank"
+        rel="noopener"
+      >
+        {{- 'sections.stores.directions' | t -}}
+        <span class="visually-hidden">{{ 'sections.stores.opens_new_tab' | t }}</span>
+      </a>
+    {%- endif -%}
+
+    {%- if block.settings.hours != blank -%}
+      <div class="store-card__hours rte">{{ block.settings.hours }}</div>
+    {%- endif -%}
+
+    {%- if block.settings.phone != blank -%}
+      <a class="store-card__phone" href="tel:{{ phone_digits }}">{{ block.settings.phone | escape }}</a>
+    {%- endif -%}
+
+    {%- if block.settings.button_label != blank and block.settings.button_link != blank -%}
+      {% render 'button',
+        label: block.settings.button_label,
+        url: block.settings.button_link,
+        style: 'outline',
+        class: 'store-card__button'
+      %}
+    {%- endif -%}
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "t:sections.stores.store",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "text",
+      "id": "name",
+      "label": "t:sections.stores.name_label",
+      "default": "Flagship studio"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "t:sections.stores.address",
+      "info": "t:sections.stores.address_info",
+      "default": "12 Example Street\nTel Aviv"
+    },
+    {
+      "type": "richtext",
+      "id": "hours",
+      "label": "t:sections.stores.hours",
+      "default": "<p>Sun–Thu 10:00–19:00<br>Fri 10:00–14:00</p>"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "t:sections.stores.phone"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "t:labels.button_label",
+      "default": "Book an appointment"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "t:labels.link",
+      "info": "t:sections.stores.button_link_info"
+    }
+  ],
+  "presets": [{ "name": "t:sections.stores.store" }]
+}
+{% endschema %}

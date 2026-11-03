@@ -603,6 +603,51 @@
         "padding_top": 80,
         "padding_bottom": 80
       }
+    },
+    "gallery": {
+      "type": "shoppable-gallery",
+      "blocks": {
+        "photo_1": {
+          "type": "_gallery-image",
+          "settings": {}
+        },
+        "photo_2": {
+          "type": "_gallery-image",
+          "settings": {}
+        },
+        "photo_3": {
+          "type": "_gallery-image",
+          "settings": {}
+        },
+        "photo_4": {
+          "type": "_gallery-image",
+          "settings": {}
+        },
+        "photo_5": {
+          "type": "_gallery-image",
+          "settings": {}
+        },
+        "photo_6": {
+          "type": "_gallery-image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "photo_1",
+        "photo_2",
+        "photo_3",
+        "photo_4",
+        "photo_5",
+        "photo_6"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "eyebrow": "As worn by you",
+        "title": "Shop the <em>feed</em>",
+        "columns": 6,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
   "order": [
@@ -618,6 +663,7 @@
     "metal_tiles",
     "testimonials",
     "press",
+    "gallery",
     "trust"
   ]
 }

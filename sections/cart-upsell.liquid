@@ -19,7 +19,7 @@
         {%- if shown >= 3 -%}
           {%- break -%}
         {%- endif -%}
-        {%- if cart_product_ids contains product.id or product.available == false -%}
+        {%- if cart_product_ids contains product.id or product.available == false or product.id == settings.gift_wrap_product.id -%}
           {%- continue -%}
         {%- endif -%}
         {%- assign shown = shown | plus: 1 -%}

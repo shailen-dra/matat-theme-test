@@ -1,0 +1,165 @@
+{% doc %}
+  Renders the "Add gift wrapping" checkbox of the cart drawer and cart page.
+  Uses the product picked in Theme settings → Cart → Gift wrap: checking the
+  box adds one of it to the cart, unchecking removes it. Renders nothing
+  when no product is set, it's sold out, or the cart only holds gift wrap.
+
+  @param {string} id - Unique id for the checkbox
+
+  @example
+  {% render 'gift-wrap', id: 'CartDrawer-GiftWrap' %}
+{% enddoc %}
+
+{%- liquid
+  assign wrap = settings.gift_wrap_product
+  assign wrap_variant = wrap.selected_or_first_available_variant
+  assign wrap_quantity = 0
+  if wrap != blank
+    assign wrap_quantity = cart | item_count_for_variant: wrap_variant.id
+  endif
+  assign other_items = cart.item_count | minus: wrap_quantity
+-%}
+
+{%- if wrap != blank and wrap_variant.available and other_items > 0 -%}
+  <gift-wrap class="gift-wrap" data-variant-id="{{ wrap_variant.id }}">
+    <input
+      type="checkbox"
+      id="{{ id }}"
+      class="gift-wrap__input"
+      {% if wrap_quantity > 0 %}
+        checked
+      {% endif %}
+    >
+    <label for="{{ id }}" class="gift-wrap__label">
+      <span class="gift-wrap__icon" aria-hidden="true">{% render 'icon', name: 'gift' %}</span>
+      <span class="gift-wrap__text">
+        {{- 'cart.gift_wrap.label' | t -}}
+        <span class="gift-wrap__price">
+          {%- if wrap_variant.price > 0 -%}
+            +{{ wrap_variant.price | money }}
+          {%- else -%}
+            {{ 'cart.gift_wrap.free' | t }}
+          {%- endif -%}
+        </span>
+      </span>
+    </label>
+  </gift-wrap>
+{%- endif -%}
+
+{% stylesheet %}
+  .gift-wrap {
+    display: block;
+  }
+
+  .gift-wrap__input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .gift-wrap__label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 15%, transparent);
+    border-radius: var(--style-border-radius-buttons);
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease;
+  }
+
+  .gift-wrap__label::after {
+    content: '';
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-inline-start: auto;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 35%, transparent);
+    border-radius: 0.25rem;
+    background: var(--color-background) center / 0.75rem no-repeat;
+  }
+
+  .gift-wrap__input:checked + .gift-wrap__label {
+    border-color: var(--color-accent);
+    background-color: color-mix(in srgb, var(--color-accent) 6%, var(--color-background));
+  }
+
+  .gift-wrap__input:checked + .gift-wrap__label::after {
+    border-color: var(--color-accent);
+    background-color: var(--color-accent);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4.5 10.5l3.5 3.5 7.5-8'/%3E%3C/svg%3E");
+  }
+
+  .gift-wrap__input:focus-visible + .gift-wrap__label {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .gift-wrap[aria-busy='true'] .gift-wrap__label {
+    opacity: 0.6;
+    cursor: progress;
+  }
+
+  .gift-wrap__icon {
+    display: grid;
+    color: var(--color-accent);
+  }
+
+  .gift-wrap__icon .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .gift-wrap__price {
+    margin-inline-start: 0.375rem;
+    opacity: 0.65;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Gift wrap checkbox: adds or removes the gift wrap product with the Ajax
+   * Cart API, then refreshes every cart view like a quantity change does.
+   */
+  class GiftWrap extends HTMLElement {
+    connectedCallback() {
+      this.input = this.querySelector('input');
+      this.input?.addEventListener('change', this.onChange);
+    }
+
+    onChange = async () => {
+      const id = Number(this.dataset.variantId);
+      const root = window.ThemeCart?.root ?? '/';
+      const sections = window.ThemeCart?.sectionIds() ?? [];
+      this.setAttribute('aria-busy', 'true');
+
+      try {
+        const response = await fetch(`${root}cart/${this.input.checked ? 'add' : 'change'}.js`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(
+            this.input.checked
+              ? { items: [{ id, quantity: 1 }], sections, sections_url: window.location.pathname }
+              : { id: String(id), quantity: 0, sections, sections_url: window.location.pathname }
+          ),
+        });
+        const data = await response.json();
+        if (!response.ok || data.status) throw new Error(data.description || data.message);
+        window.ThemeCart?.render(data.sections);
+        document.dispatchEvent(new CustomEvent('cart:update', { detail: { cart: data } }));
+      } catch (error) {
+        console.error(error);
+        this.input.checked = !this.input.checked;
+      } finally {
+        this.removeAttribute('aria-busy');
+      }
+    };
+  }
+
+  if (!customElements.get('gift-wrap')) {
+    customElements.define('gift-wrap', GiftWrap);
+  }
+{% endjavascript %}

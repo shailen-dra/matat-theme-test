@@ -172,6 +172,7 @@
 
           <div data-cart-totals>
             {% render 'free-shipping-bar' %}
+            {% render 'gift-wrap', id: 'CartPage-GiftWrap' %}
             <dl class="cart__totals">
               <div class="cart__row">
                 <dt>{{ 'cart.subtotal' | t }}</dt>
@@ -538,7 +539,7 @@
     font-weight: var(--font-heading--weight);
   }
 
-  .cart__summary .shipping-bar {
+  .cart__summary :is(.shipping-bar, .gift-wrap) {
     margin-block-end: 1.25rem;
   }
 

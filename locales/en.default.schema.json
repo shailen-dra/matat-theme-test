@@ -667,12 +667,39 @@
       "name": "Timeline",
       "item": "Milestone",
       "date": "Date or year"
+    },
+    "announcement_bar": {
+      "name": "Announcement bar",
+      "announcement": "Announcement",
+      "speed": "Change every"
+    },
+    "shoppable_gallery": {
+      "name": "Shoppable gallery",
+      "tile": "Photo",
+      "product_info": "Links the photo to the product and shows its name and price on hover. Uses the product image if no photo is set.",
+      "link_info": "Used when no product is selected, for example a link to the post.",
+      "handle": "Social handle",
+      "profile_url": "Profile link"
+    },
+    "stores": {
+      "name": "Store locations",
+      "store": "Store",
+      "name_label": "Name",
+      "address": "Address",
+      "address_info": "Also used for the \"Get directions\" map link.",
+      "hours": "Opening hours",
+      "phone": "Phone",
+      "button_link_info": "For example a booking page or your contact page."
     }
   },
   "settings": {
     "product_cards": {
       "enable_quick_add": "Show quick add",
-      "enable_quick_add_info": "Single-option products are added straight to the cart; others open a quick view to choose options."
+      "enable_quick_add_info": "Single-option products are added straight to the cart; others open a quick view to choose options.",
+      "badges": "Badges",
+      "new_badge_days": "Show \"New\" badge for",
+      "new_badge_days_info": "Days after a product is published. Set to 0 to turn off.",
+      "custom_badges_info": "Add custom badges with product tags that start with \"badge:\", for example badge:Bestseller. Up to two show per card."
     },
     "cart": {
       "cart_type": "Cart type",
@@ -684,7 +711,10 @@
       "free_shipping_threshold_info": "Order total for free shipping, in your store's currency. Set to 0 to hide the bar. It doesn't change your shipping rates.",
       "upsell": "Suggestions",
       "upsell_enable": "Show product suggestions in cart drawer",
-      "upsell_info": "Based on Shopify's product recommendations for the first item in the cart."
+      "upsell_info": "Based on Shopify's product recommendations for the first item in the cart.",
+      "gift_wrap": "Gift wrap",
+      "gift_wrap_product": "Gift wrap product",
+      "gift_wrap_product_info": "Shows an \"Add gift wrapping\" checkbox in the cart that adds this product. Use a product with a single variant."
     },
     "favicon": {
       "group": "Favicon",

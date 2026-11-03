@@ -1,0 +1,266 @@
+{%- liquid
+  assign handle = section.settings.handle | strip
+  assign profile_url = section.settings.profile_url
+-%}
+
+<div
+  class="section full-width color-scheme color-{{ section.settings.color_scheme }}"
+  style="
+    --section-padding-top: {{ section.settings.padding_top }}px;
+    --section-padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  {%- capture handle_link -%}
+    {%- if handle != blank and profile_url != blank -%}
+      <a href="{{ profile_url }}" class="gallery__handle" target="_blank" rel="noopener">{{ handle | escape }}</a>
+    {%- elsif handle != blank -%}
+      <span class="gallery__handle">{{ handle | escape }}</span>
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {% render 'section-heading',
+    eyebrow: section.settings.eyebrow,
+    title: section.settings.title,
+    subtitle: section.settings.subtitle,
+    alignment: 'center'
+  %}
+
+  {%- if handle_link != blank -%}
+    <p class="gallery__handle-row">{{ handle_link }}</p>
+  {%- endif -%}
+
+  <div class="gallery" style="--gallery-columns: {{ section.settings.columns }};">
+    {% content_for 'blocks' %}
+  </div>
+</div>
+
+{% stylesheet %}
+  .gallery__handle-row {
+    margin-block: -1rem 2rem;
+    text-align: center;
+  }
+
+  .gallery__handle {
+    color: var(--color-accent);
+    font-family: var(--font-heading--family);
+    font-size: 1.25rem;
+    text-decoration: none;
+  }
+
+  a.gallery__handle:hover {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(var(--gallery-columns), minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .gallery-tile {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 1;
+    border-radius: calc(var(--style-border-radius-buttons) * 0.75);
+    background-color: color-mix(in srgb, var(--color-foreground) 6%, var(--color-background));
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  .gallery-tile__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+
+  .gallery-tile__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    padding: 1rem;
+    background-color: rgb(0 0 0 / 0.45);
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .gallery-tile__icon .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .gallery-tile__title {
+    font-family: var(--font-heading--family);
+    font-size: 1.0625rem;
+    line-height: 1.25;
+  }
+
+  .gallery-tile__price {
+    font-size: 0.8125rem;
+    opacity: 0.85;
+  }
+
+  @media (hover: hover) {
+    a.gallery-tile:hover .gallery-tile__overlay,
+    a.gallery-tile:focus-visible .gallery-tile__overlay {
+      opacity: 1;
+    }
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    a.gallery-tile:hover .gallery-tile__image {
+      transform: scale(1.05);
+    }
+  }
+
+  /* Touch screens: a small cart badge marks shoppable photos */
+  @media (hover: none) {
+    .gallery-tile__overlay {
+      inset: auto 0.5rem 0.5rem auto;
+      padding: 0.5rem;
+      border-radius: 50%;
+      opacity: 1;
+    }
+
+    .gallery-tile__title,
+    .gallery-tile__price {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    [dir='rtl'] .gallery-tile__overlay {
+      inset: auto auto 0.5rem 0.5rem;
+    }
+  }
+
+  a.gallery-tile:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 749px) {
+    /* A swipeable row of tiles */
+    .gallery {
+      grid-template-columns: none;
+      grid-auto-flow: column;
+      grid-auto-columns: 42%;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      margin-inline: calc(var(--page-margin) * -1);
+      padding-inline: var(--page-margin);
+      scroll-padding-inline: var(--page-margin);
+    }
+
+    .gallery::-webkit-scrollbar {
+      display: none;
+    }
+
+    .gallery > * {
+      scroll-snap-align: start;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:sections.shoppable_gallery.name",
+  "tag": "section",
+  "class": "shoppable-gallery-section",
+  "blocks": [{ "type": "_gallery-image" }],
+  "max_blocks": 12,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:labels.color_scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "t:labels.eyebrow",
+      "default": "As worn by you"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "t:labels.heading",
+      "default": "Shop the <em>feed</em>"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "t:labels.subtitle"
+    },
+    {
+      "type": "text",
+      "id": "handle",
+      "label": "t:sections.shoppable_gallery.handle",
+      "placeholder": "@yourstore"
+    },
+    {
+      "type": "url",
+      "id": "profile_url",
+      "label": "t:sections.shoppable_gallery.profile_url"
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "label": "t:labels.columns_desktop",
+      "min": 3,
+      "max": 6,
+      "step": 1,
+      "default": 6
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "t:labels.padding_top",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "t:labels.padding_bottom",
+      "min": 0,
+      "max": 160,
+      "step": 4,
+      "unit": "px",
+      "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:sections.shoppable_gallery.name",
+      "category": "t:general.product",
+      "blocks": [
+        { "type": "_gallery-image" },
+        { "type": "_gallery-image" },
+        { "type": "_gallery-image" },
+        { "type": "_gallery-image" },
+        { "type": "_gallery-image" },
+        { "type": "_gallery-image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

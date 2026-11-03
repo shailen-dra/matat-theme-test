@@ -1,0 +1,91 @@
+{% doc %}
+  Renders one tile of the shoppable gallery: a square photo that links to a
+  product (showing its name and price on hover) or to any page.
+
+  @example
+  {% content_for 'block', type: '_gallery-image', id: 'image-1' %}
+{% enddoc %}
+
+{%- liquid
+  assign product = block.settings.product
+  assign url = block.settings.link
+  if product != blank
+    assign url = product.url
+  endif
+
+  assign image = block.settings.image
+  if image == blank and product != blank
+    assign image = product.featured_media.preview_image
+  endif
+
+  assign demo_images = 'demo-rings-hand.jpg,demo-layered-necklaces.jpg,demo-hoops.jpg,demo-ginkgo-set.jpg,demo-flatlay.jpg,demo-hero-mobile.jpg' | split: ','
+  assign demo_index = section.blocks | find_index: 'id', block.id | default: 0 | modulo: 6
+  assign demo_image = demo_images[demo_index]
+
+  if url != blank
+    assign tag = 'a'
+  else
+    assign tag = 'div'
+  endif
+-%}
+
+<{{ tag }}
+  class="gallery-tile"
+  {% if url != blank %}
+    href="{{ url }}"
+  {% endif %}
+  {{ block.shopify_attributes }}
+>
+  {%- if image != blank -%}
+    {{
+      image
+      | image_url: width: 800, height: 800, crop: 'center'
+      | image_tag: widths: '300, 450, 600, 800', sizes: '(min-width: 990px) 17vw, 45vw', loading: 'lazy', class: 'gallery-tile__image', alt: image.alt
+    }}
+  {%- else -%}
+    <img
+      src="{{ demo_image | asset_img_url: '600x600', crop: 'center' }}"
+      width="600"
+      height="600"
+      alt=""
+      loading="lazy"
+      class="gallery-tile__image"
+    >
+  {%- endif -%}
+
+  {%- if product != blank -%}
+    <span class="gallery-tile__overlay">
+      <span class="gallery-tile__icon" aria-hidden="true">{% render 'icon', name: 'cart' %}</span>
+      <span class="gallery-tile__title">{{ product.title | escape }}</span>
+      <span class="gallery-tile__price">{{ product.price | money }}</span>
+    </span>
+  {%- elsif url != blank -%}
+    <span class="visually-hidden">{{ 'sections.shoppable_gallery.view_post' | t }}</span>
+  {%- endif -%}
+</{{ tag }}>
+
+{% schema %}
+{
+  "name": "t:sections.shoppable_gallery.tile",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "t:general.product",
+      "info": "t:sections.shoppable_gallery.product_info"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "t:labels.link",
+      "info": "t:sections.shoppable_gallery.link_info"
+    }
+  ],
+  "presets": [{ "name": "t:sections.shoppable_gallery.tile" }]
+}
+{% endschema %}
