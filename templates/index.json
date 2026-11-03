@@ -382,10 +382,11 @@
         "testimonial_1": {
           "type": "_testimonial",
           "settings": {
-            "quote": "<p>The ring is even more beautiful in person. I haven't taken it off since it arrived.</p>",
+            "quote": "<p>The necklace is even more beautiful in person. I haven't taken it off since it arrived.</p>",
             "rating": 5,
             "author": "Maya R.",
-            "detail": "Verified buyer"
+            "detail": "Verified buyer",
+            "product": "soft-taupe-pendant-necklace"
           }
         },
         "testimonial_2": {
@@ -394,7 +395,8 @@
             "quote": "<p>Beautifully packaged and arrived in two days. It made the perfect anniversary gift.</p>",
             "rating": 5,
             "author": "Daniel K.",
-            "detail": "Verified buyer"
+            "detail": "Verified buyer",
+            "product": "oversized-architectural-hoop-earrings"
           }
         },
         "testimonial_3": {
@@ -403,16 +405,18 @@
             "quote": "<p>Delicate enough for every day, and the gold hasn't faded at all after months of wear.</p>",
             "rating": 5,
             "author": "Noa L.",
-            "detail": "Verified buyer"
+            "detail": "Verified buyer",
+            "product": "matte-finish-necklace"
           }
         },
         "testimonial_4": {
           "type": "_testimonial",
           "settings": {
-            "quote": "<p>They resized my ring for free within a week. Customer care you rarely see anymore.</p>",
+            "quote": "<p>They adjusted my bracelet for free within a week. Customer care you rarely see anymore.</p>",
             "rating": 5,
             "author": "Shira B.",
-            "detail": "Verified buyer"
+            "detail": "Verified buyer",
+            "product": "mist-grey-bar-bracelet"
           }
         }
       },
