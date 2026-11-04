@@ -111,7 +111,8 @@
         "enabled": true,
         "delay": 8,
         "frequency": 14
-      }
+      },
+      "disabled": true
     }
   },
   "order": [
