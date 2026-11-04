@@ -671,7 +671,8 @@
         "title": "Stories from <em>the studio</em>",
         "link_label": "Read the journal",
         "padding_top": 64,
-        "padding_bottom": 64
+        "padding_bottom": 64,
+        "blog": "news"
       }
     }
   },
