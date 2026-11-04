@@ -29,43 +29,9 @@
       "block_order": [
         "mega_catalog"
       ]
-    },
-    "announcement_bar": {
-      "type": "announcement-bar",
-      "blocks": {
-        "message_1": {
-          "type": "_announcement",
-          "settings": {
-            "text": "Free insured shipping on orders over $150"
-          }
-        },
-        "message_2": {
-          "type": "_announcement",
-          "settings": {
-            "text": "Free engraving on every piece"
-          }
-        },
-        "message_3": {
-          "type": "_announcement",
-          "settings": {
-            "text": "30-day returns and exchanges"
-          }
-        }
-      },
-      "block_order": [
-        "message_1",
-        "message_2",
-        "message_3"
-      ],
-      "settings": {
-        "color_scheme": "scheme-3",
-        "speed": 5
-      },
-      "disabled": true
     }
   },
   "order": [
-    "announcement_bar",
     "header"
   ]
 }
