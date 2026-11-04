@@ -63,9 +63,13 @@
           {%- for block in section.blocks -%}
             {%- assign row_id = 'LookItem-' | append: block.id -%}
             {%- assign placeholder_index = forloop.index0 | modulo: 4 -%}
-            <li>
+            {%- comment -%}
+              Placeholder row; replaced by the hotspot block's own row (see blocks/_hotspot.liquid)
+              because theme block product settings aren't available here.
+            {%- endcomment -%}
+            <li data-look-slot="{{ block.id }}">
               {% render 'product-row',
-                product: block.settings.product,
+                product: blank,
                 placeholder_image: placeholders[placeholder_index],
                 id: row_id,
                 block_id: block.id
@@ -155,11 +159,34 @@
    */
   class ShopTheLook extends HTMLElement {
     connectedCallback() {
+      this.syncRows();
+      const hotspots = this.querySelector('.look__hotspots');
+      if (hotspots) {
+        this.observer = new MutationObserver(() => this.syncRows());
+        this.observer.observe(hotspots, { childList: true, subtree: true });
+      }
       this.addEventListener('click', this.onClick);
       this.addEventListener('pointerover', this.onRowHover);
       this.addEventListener('focusin', this.onRowHover);
       this.addEventListener('pointerleave', () => this.setActive(null));
       this.addEventListener('shopify:block:select', (event) => this.setActive(event.target.dataset.hotspot));
+    }
+
+    disconnectedCallback() {
+      this.observer?.disconnect();
+    }
+
+    /**
+     * Moves each hotspot block's product row into the list slot at the same
+     * position. Matched by order: block ids from `section.blocks` differ from
+     * the ids theme blocks see for themselves.
+     */
+    syncRows() {
+      const slots = this.querySelectorAll('[data-look-slot]');
+      this.querySelectorAll('[data-hotspot]').forEach((hotspot, index) => {
+        const template = this.querySelector(`template[data-look-row="${hotspot.dataset.hotspot}"]`);
+        if (template && slots[index]) slots[index].replaceChildren(template.content.cloneNode(true));
+      });
     }
 
     onClick = (event) => {

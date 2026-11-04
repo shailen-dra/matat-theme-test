@@ -28,6 +28,17 @@
   <span class="hotspot__label" aria-hidden="true">{{ product_title }}</span>
 </button>
 
+{%- comment -%}
+  Theme block resource settings aren't exposed through `section.blocks`, so the
+  block renders its own list row; the shop-the-look element moves it into place.
+{%- endcomment -%}
+{%- if product != blank -%}
+  {%- assign row_id = 'LookItem-' | append: block.id -%}
+  <template data-look-row="{{ block.id }}">
+    {%- render 'product-row', product: product, id: row_id, block_id: block.id -%}
+  </template>
+{%- endif -%}
+
 {% stylesheet %}
   .hotspot {
     position: absolute;
