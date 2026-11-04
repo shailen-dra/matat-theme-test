@@ -103,6 +103,24 @@
     outline: 2px solid var(--color-accent);
     outline-offset: 4px;
   }
+
+  /* Small screens: tabs share the row equally and long labels wrap, so none are cut off */
+  @media (max-width: 749px) {
+    .tabs__list {
+      gap: 0.5rem;
+    }
+
+    .tabs__button {
+      display: flex;
+      flex: 1 1 auto;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6875rem;
+      letter-spacing: 0.08em;
+      line-height: 1.4;
+      text-align: center;
+    }
+  }
 {% endstylesheet %}
 
 {% javascript %}
