@@ -292,7 +292,7 @@
     "search": "Search",
     "search_placeholder": "Search rings, necklaces, earrings…",
     "account": "Account",
-    "view_all": "Shop all {{ title }}",
+    "view_all": "View all",
     "cart_count": {
       "one": "Cart, {{ count }} item",
       "other": "Cart, {{ count }} items"
