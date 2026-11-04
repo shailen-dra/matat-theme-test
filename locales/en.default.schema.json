@@ -715,11 +715,6 @@
       "item": "Milestone",
       "date": "Date or year"
     },
-    "announcement_bar": {
-      "name": "Announcement bar",
-      "announcement": "Announcement",
-      "speed": "Change every"
-    },
     "shoppable_gallery": {
       "name": "Shoppable gallery",
       "tile": "Photo",
