@@ -39,6 +39,7 @@
     style="
       --grid-columns: {{ columns }};
       --grid-columns-mobile: {{ section.settings.columns_mobile }};
+      {% if columns == 4 %}--grid-columns-tablet: 2;{% endif %}
     "
   >
     {%- if collection.products_count > 0 -%}
@@ -77,7 +78,8 @@
 
   @media (max-width: 989px) {
     .product-grid {
-      grid-template-columns: repeat(min(var(--grid-columns), 3), minmax(0, 1fr));
+      /* Sections can set --grid-columns-tablet (e.g. 2 for a row of 4, avoiding a lone card) */
+      grid-template-columns: repeat(var(--grid-columns-tablet, min(var(--grid-columns), 3)), minmax(0, 1fr));
     }
   }
 

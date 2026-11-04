@@ -142,6 +142,13 @@
       translate: -50% 0;
     }
   }
+
+  /* Touch screens never show the tooltip; drop it so it can't widen the page near the edges */
+  @media (hover: none) {
+    .hotspot__label {
+      display: none;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

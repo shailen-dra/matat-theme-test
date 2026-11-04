@@ -743,6 +743,17 @@
     }
   }
 
+  /* Small phones: the text logo takes the flexible middle column and scales down so the icons stay on screen */
+  @media (max-width: 389px) {
+    .header .header__inner {
+      grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+
+    .header__shop-name {
+      font-size: min(1.25rem, (100vw - 11rem) / 10);
+    }
+  }
+
   /* Mobile drawer */
   .drawer {
     --drawer-from: -100%;

@@ -234,7 +234,8 @@
 
   @media (max-width: 989px) {
     .blog__grid {
-      grid-template-columns: repeat(min(var(--blog-columns), 2), minmax(0, 1fr));
+      /* Sections can set --blog-columns-tablet (e.g. 3 for a row of 3, avoiding a lone card) */
+      grid-template-columns: repeat(var(--blog-columns-tablet, min(var(--blog-columns), 2)), minmax(0, 1fr));
     }
   }
 

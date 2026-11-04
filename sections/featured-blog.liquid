@@ -21,7 +21,7 @@
   %}
 
   {%- comment -%} Reuses the blog page's article card styles (sections/blog.liquid) {%- endcomment -%}
-  <ul class="blog__grid" role="list" style="--blog-columns: {{ limit | at_most: 4 }};">
+  <ul class="blog__grid" role="list" style="--blog-columns: {{ limit | at_most: 4 }};{% if limit == 3 %} --blog-columns-tablet: 3;{% endif %}">
     {%- if blog.articles_count > 0 -%}
       {%- for article in blog.articles limit: limit -%}
         <li>

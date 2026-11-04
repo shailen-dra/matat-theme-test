@@ -48,6 +48,7 @@
       style="
         --grid-columns: {{ columns }};
         --grid-columns-mobile: {{ section.settings.columns_mobile }};
+        {% if columns == 4 %}--grid-columns-tablet: 2;{% endif %}
       "
     >
       {%- for product in recommendations.products -%}

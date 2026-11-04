@@ -237,6 +237,18 @@
       padding-block: calc(3rem + var(--hero-offset, 0px)) 4.5rem;
     }
   }
+
+  /* The accent is tuned for light backgrounds; blend it with the slide text color so it stays legible over photos */
+  .slide__content .heading em {
+    color: color-mix(in srgb, var(--color-accent) 55%, var(--slide-fg));
+  }
+
+  /* Tablets: keep the text to one side of the photo instead of running across it */
+  @media (min-width: 750px) and (max-width: 1199px) {
+    .slide__content {
+      max-width: min(40rem, 60%);
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

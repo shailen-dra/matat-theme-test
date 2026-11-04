@@ -92,6 +92,9 @@
   .product--sticky .product__details {
     position: sticky;
     top: calc(var(--header-height, 0px) + 1.5rem);
+    /* Sticky creates a stacking context that also holds the fixed sticky add to cart bar;
+       lift it above later sections (and the footer) but keep it under the header (20) */
+    z-index: 19;
   }
 
   .product[aria-busy='true'] [data-update^='price'],

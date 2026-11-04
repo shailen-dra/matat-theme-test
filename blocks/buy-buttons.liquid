@@ -107,6 +107,26 @@
     height: 100%;
   }
 
+  /* Small phones: tighter quantity box and button padding so the row fits the screen */
+  @media (max-width: 389px) {
+    .buy-buttons__row {
+      gap: 0.5rem;
+    }
+
+    .buy-buttons__row .quantity__button {
+      width: 2.25rem;
+    }
+
+    .buy-buttons__row .quantity__input {
+      width: 2rem;
+    }
+
+    .buy-buttons__row .buy-buttons__add {
+      min-width: 0;
+      padding-inline: 0.75rem;
+    }
+  }
+
   .buy-buttons__add:disabled {
     opacity: 0.45;
     cursor: not-allowed;

@@ -261,7 +261,7 @@
             alignment: 'split',
             title_style: 'heading--h3'
           %}
-          <ul class="product-grid" role="list" style="--grid-columns: 4; --grid-columns-mobile: 2;">
+          <ul class="product-grid" role="list" style="--grid-columns: 4; --grid-columns-tablet: 2; --grid-columns-mobile: 2;">
             {%- for product in suggestions.products limit: 4 -%}
               <li class="product-grid__item">
                 {% render 'product-card',
