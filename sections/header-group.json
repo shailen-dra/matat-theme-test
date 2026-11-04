@@ -60,7 +60,8 @@
       "settings": {
         "color_scheme": "scheme-3",
         "speed": 5
-      }
+      },
+      "disabled": true
     }
   },
   "order": [
