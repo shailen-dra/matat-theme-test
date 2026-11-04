@@ -1,6 +1,7 @@
 {% doc %}
   Renders breadcrumbs for the product page: Home › collection › product. The
-  collection is the one the shopper came from, or else the product's first
+  collection is the one the shopper came from, or else the collection matching
+  the product type (e.g. "Rings" → /collections/rings), or else its first
   collection. Adds BreadcrumbList structured data for search engines.
 
   @example
@@ -11,7 +12,13 @@
   assign product = closest.product
   assign crumb_collection = collection
   if crumb_collection == blank and block.settings.fallback_collection
-    assign crumb_collection = product.collections.first
+    if product.type != blank
+      assign type_handle = product.type | handleize
+      assign crumb_collection = product.collections | where: 'handle', type_handle | first
+    endif
+    if crumb_collection == blank
+      assign crumb_collection = product.collections.first
+    endif
   endif
 -%}
 

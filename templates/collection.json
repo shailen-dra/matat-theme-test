@@ -18,7 +18,8 @@
         "promo_eyebrow": "Gifting",
         "promo_heading": "Wrapped and ready to give",
         "promo_button_label": "Shop gifts",
-        "promo_link": "shopify://collections/gifts-under-150"
+        "promo_link": "shopify://collections/gifts-under-150",
+        "promo_image": "shopify://shop_images/collage-gift-set.jpg"
       }
     }
   },

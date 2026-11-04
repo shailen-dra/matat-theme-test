@@ -84,6 +84,11 @@
     gap: var(--product-details-gap);
   }
 
+  /* Let blocks be the flex items, so blocks with nothing to show don't add an empty gap */
+  .product__details-inner > .shopify-block {
+    display: contents;
+  }
+
   .product--sticky .product__details {
     position: sticky;
     top: calc(var(--header-height, 0px) + 1.5rem);

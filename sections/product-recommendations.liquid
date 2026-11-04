@@ -65,6 +65,13 @@
   {%- endif -%}
 </product-recommendations>
 
+{% stylesheet %}
+  /* `.section` sets display: grid, which would otherwise keep the empty section's padding visible */
+  product-recommendations[hidden] {
+    display: none;
+  }
+{% endstylesheet %}
+
 {% javascript %}
   /**
    * Loads product recommendations when the section nears the viewport and

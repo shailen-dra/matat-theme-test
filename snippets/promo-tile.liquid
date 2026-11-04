@@ -53,6 +53,11 @@
     grid-column: span 2;
   }
 
+  /* Let the next product fill the hole a wide tile leaves when it doesn't fit the row */
+  .product-grid:has(> .product-grid__item--promo-wide) {
+    grid-auto-flow: row dense;
+  }
+
   .promo-tile {
     position: relative;
     display: flex;

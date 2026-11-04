@@ -55,7 +55,7 @@
             "h1": {
               "type": "_list-item",
               "settings": {
-                "text": "Recycled 14k gold, made to last"
+                "text": "Recycled precious metals, made to last"
               }
             },
             "h2": {
@@ -169,7 +169,7 @@
               "type": "_tab",
               "settings": {
                 "title": "Materials & care",
-                "content": "<p>Solid 14k recycled gold. Remove before swimming and store separately in the pouch provided. Polish gently with a soft cloth.</p>"
+                "content": "<p>Crafted from recycled precious metals and responsibly sourced materials. Store each piece on its own in the pouch or box provided, keep it away from water and perfume, and polish gently with a soft cloth.</p>"
               }
             },
             "tab_shipping": {

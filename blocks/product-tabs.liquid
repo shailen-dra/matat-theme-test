@@ -71,11 +71,12 @@
     outline-offset: 2px;
   }
 
-  .tab + .tab {
+  /* Tabs sit inside Shopify's block wrappers, so space the wrappers */
+  .tabs__panels > * + * {
     margin-block-start: 1.5rem;
   }
 
-  .tabs.is-ready .tab + .tab {
+  .tabs.is-ready .tabs__panels > * + * {
     margin-block-start: 0;
   }
 
@@ -119,7 +120,7 @@
     }
 
     build() {
-      this.tabs = [...this.querySelectorAll(':scope > .tabs__panels > [data-tab]')];
+      this.tabs = [...this.querySelectorAll(':scope > .tabs__panels [data-tab]')];
       this.list = this.querySelector('[data-tablist]');
       if (!this.list || this.tabs.length === 0) return;
       const uid = Math.random().toString(36).slice(2, 8);
