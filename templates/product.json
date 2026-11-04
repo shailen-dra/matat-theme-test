@@ -112,13 +112,6 @@
             "style": "specs--lines"
           },
           "blocks": {
-            "type_row": {
-              "type": "_spec-row",
-              "settings": {
-                "label": "Type",
-                "value": "{{ closest.product.type }}"
-              }
-            },
             "vendor_row": {
               "type": "_spec-row",
               "settings": {
@@ -128,7 +121,6 @@
             }
           },
           "block_order": [
-            "type_row",
             "vendor_row"
           ]
         },
