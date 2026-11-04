@@ -56,7 +56,7 @@
               "type": "button",
               "settings": {
                 "label": "Shop the collection",
-                "link": "shopify://collections/all",
+                "link": "shopify://collections/new-arrivals",
                 "style": "primary"
               }
             },
@@ -89,25 +89,29 @@
         "tile_1": {
           "type": "_collection-tile",
           "settings": {
-            "title": "Rings"
+            "title": "Rings",
+            "collection": "rings"
           }
         },
         "tile_2": {
           "type": "_collection-tile",
           "settings": {
-            "title": "Necklaces"
+            "title": "Necklaces",
+            "collection": "necklaces"
           }
         },
         "tile_3": {
           "type": "_collection-tile",
           "settings": {
-            "title": "Earrings"
+            "title": "Earrings",
+            "collection": "earrings"
           }
         },
         "tile_4": {
           "type": "_collection-tile",
           "settings": {
-            "title": "Bracelets"
+            "title": "Bracelets",
+            "collection": "bracelets"
           }
         }
       },
@@ -143,7 +147,9 @@
         "image_ratio": "card--portrait",
         "show_secondary_image": true,
         "padding_top": 40,
-        "padding_bottom": 96
+        "padding_bottom": 96,
+        "collection": "bestsellers",
+        "link_url": "shopify://collections/bestsellers"
       }
     },
     "brand_story": {
@@ -235,7 +241,8 @@
           "settings": {
             "title": "Yellow gold",
             "caption": "18k · 14k",
-            "swatch": "linear-gradient(135deg, rgba(240, 214, 140, 1) 0%, rgba(201, 158, 74, 1) 50%, rgba(232, 200, 120, 1) 100%)"
+            "swatch": "linear-gradient(135deg, rgba(240, 214, 140, 1) 0%, rgba(201, 158, 74, 1) 50%, rgba(232, 200, 120, 1) 100%)",
+            "collection": "yellow-gold"
           }
         },
         "metal_2": {
@@ -243,7 +250,8 @@
           "settings": {
             "title": "Rose gold",
             "caption": "18k",
-            "swatch": "linear-gradient(135deg, rgba(240, 196, 176, 1) 0%, rgba(196, 130, 108, 1) 50%, rgba(232, 182, 160, 1) 100%)"
+            "swatch": "linear-gradient(135deg, rgba(240, 196, 176, 1) 0%, rgba(196, 130, 108, 1) 50%, rgba(232, 182, 160, 1) 100%)",
+            "collection": "rose-gold"
           }
         },
         "metal_3": {
@@ -251,7 +259,8 @@
           "settings": {
             "title": "Sterling silver",
             "caption": "925",
-            "swatch": "linear-gradient(135deg, rgba(236, 238, 240, 1) 0%, rgba(168, 172, 178, 1) 50%, rgba(220, 222, 226, 1) 100%)"
+            "swatch": "linear-gradient(135deg, rgba(236, 238, 240, 1) 0%, rgba(168, 172, 178, 1) 50%, rgba(220, 222, 226, 1) 100%)",
+            "collection": "sterling-silver"
           }
         },
         "metal_4": {
@@ -259,7 +268,8 @@
           "settings": {
             "title": "Platinum",
             "caption": "950",
-            "swatch": "linear-gradient(135deg, rgba(222, 224, 228, 1) 0%, rgba(140, 146, 156, 1) 50%, rgba(200, 204, 210, 1) 100%)"
+            "swatch": "linear-gradient(135deg, rgba(222, 224, 228, 1) 0%, rgba(140, 146, 156, 1) 50%, rgba(200, 204, 210, 1) 100%)",
+            "collection": "platinum"
           }
         }
       },
@@ -537,7 +547,7 @@
           "settings": {
             "content_type": "image",
             "title": "Necklaces",
-            "link": "shopify://collections/all"
+            "link": "shopify://collections/necklaces"
           }
         },
         "tile_2": {
@@ -545,7 +555,7 @@
           "settings": {
             "content_type": "image",
             "title": "Earrings",
-            "link": "shopify://collections/all"
+            "link": "shopify://collections/earrings"
           }
         },
         "tile_3": {
@@ -553,7 +563,7 @@
           "settings": {
             "content_type": "image",
             "title": "Gift sets",
-            "link": "shopify://collections/all"
+            "link": "shopify://collections/jewelry-boxes"
           }
         }
       },
@@ -597,7 +607,7 @@
         "title": "The holiday drop <em>ends soon</em>",
         "subtitle": "A small run of hand-finished pieces. Once they're gone, they're gone.",
         "button_label": "Shop the drop",
-        "button_link": "shopify://collections/all",
+        "button_link": "shopify://collections/new-arrivals",
         "background": "#1a1a1a",
         "foreground": "#f5f0e8",
         "padding_top": 80,
