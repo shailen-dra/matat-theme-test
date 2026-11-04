@@ -111,6 +111,8 @@
       "close": "Close filters",
       "from": "From",
       "to": "To",
+      "min_price": "Minimum price",
+      "max_price": "Maximum price",
       "apply": "Apply filters",
       "clear_all": "Clear all",
       "active": "Active filters",

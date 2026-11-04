@@ -56,7 +56,44 @@
               assign range_max = filter.range_max | money_without_currency | replace: ',', ''
               assign min_value = filter.min_value.value | money_without_currency | replace: ',', ''
               assign max_value = filter.max_value.value | money_without_currency | replace: ',', ''
+              assign slider_max = filter.range_max | divided_by: 100.0 | ceil
+              assign slider_max_value = 1000
+              if filter.max_value.value != null
+                assign slider_max_value = 0
+              endif
             -%}
+            {%- comment -%}
+              Handles move along a 0–1000 track on a cubic price scale, so the
+              lower prices get most of the track; price-range sets their positions.
+            {%- endcomment -%}
+            <price-range class="facet__range" data-max-price="{{ slider_max }}">
+            {%- if slider_max > 0 -%}
+              <div class="facet__slider">
+                <span class="facet__slider-track" aria-hidden="true">
+                  <span class="facet__slider-fill" data-range-fill></span>
+                </span>
+                <input
+                  type="range"
+                  class="facet__slider-input"
+                  min="0"
+                  max="1000"
+                  step="1"
+                  value="0"
+                  aria-label="{{ 'collections.filters.min_price' | t | escape }}"
+                  data-range-min
+                >
+                <input
+                  type="range"
+                  class="facet__slider-input"
+                  min="0"
+                  max="1000"
+                  step="1"
+                  value="{{ slider_max_value }}"
+                  aria-label="{{ 'collections.filters.max_price' | t | escape }}"
+                  data-range-max
+                >
+              </div>
+            {%- endif -%}
             <div class="facet__price">
               <label class="facet__price-field">
                 <span class="facet__price-label">{{ 'collections.filters.from' | t }}</span>
@@ -98,6 +135,7 @@
                 </span>
               </label>
             </div>
+            </price-range>
 
           {%- else -%}
             <ul class="facet__list" role="list">
@@ -371,4 +409,187 @@
   [dir='rtl'] .facet__label {
     letter-spacing: 0;
   }
+
+  /* Price range slider: two range inputs stacked on one track */
+  .facet__range {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .facet__slider {
+    --thumb-size: 1.125rem;
+
+    position: relative;
+    height: var(--thumb-size);
+    margin-inline: calc(var(--thumb-size) / 2);
+  }
+
+  .facet__slider-track {
+    position: absolute;
+    inset-inline: calc(var(--thumb-size) / -2);
+    top: 50%;
+    height: 2px;
+    border-radius: 2px;
+    background-color: color-mix(in srgb, var(--color-foreground) 18%, transparent);
+    translate: 0 -50%;
+  }
+
+  .facet__slider-fill {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc(var(--thumb-size) / 2 + (100% - var(--thumb-size)) * var(--range-start, 0));
+    inset-inline-end: calc(var(--thumb-size) / 2 + (100% - var(--thumb-size)) * (1 - var(--range-end, 1)));
+    background-color: var(--color-foreground);
+  }
+
+  .facet__slider-input {
+    position: absolute;
+    inset-inline: calc(var(--thumb-size) / -2);
+    top: 0;
+    width: calc(100% + var(--thumb-size));
+    height: var(--thumb-size);
+    margin: 0;
+    background: none;
+    pointer-events: none;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .facet__slider-input::-webkit-slider-runnable-track {
+    background: none;
+  }
+
+  .facet__slider-input::-moz-range-track {
+    background: none;
+  }
+
+  .facet__slider-input::-webkit-slider-thumb {
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    border: 2px solid var(--color-foreground);
+    border-radius: 50%;
+    background-color: var(--color-background);
+    cursor: grab;
+    pointer-events: auto;
+    -webkit-appearance: none;
+  }
+
+  .facet__slider-input::-moz-range-thumb {
+    width: var(--thumb-size);
+    height: var(--thumb-size);
+    box-sizing: border-box;
+    border: 2px solid var(--color-foreground);
+    border-radius: 50%;
+    background-color: var(--color-background);
+    cursor: grab;
+    pointer-events: auto;
+  }
+
+  .facet__slider-input:active::-webkit-slider-thumb {
+    cursor: grabbing;
+  }
+
+  .facet__slider-input:focus-visible::-webkit-slider-thumb {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .facet__slider-input:focus-visible::-moz-range-thumb {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
 {% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Price range slider: keeps two range inputs in sync with the From/To price
+   * fields. Moving a handle writes the price field and fires its `input`
+   * event, so the collection filters re-render through the usual debounce.
+   * Positions map to prices on a cubic curve so most of the track covers the
+   * lower, more common prices; prices round to friendly steps.
+   */
+  class PriceRange extends HTMLElement {
+    static STEPS = 1000;
+    static CURVE = 3;
+
+    connectedCallback() {
+      this.minRange = this.querySelector('[data-range-min]');
+      this.maxRange = this.querySelector('[data-range-max]');
+      const fields = this.querySelectorAll('[data-facets-price]');
+      this.minField = fields[0];
+      this.maxField = fields[1];
+      this.maxPrice = Number(this.dataset.maxPrice) || 0;
+      if (!this.minRange || !this.maxRange || !this.minField || !this.maxField || !this.maxPrice) return;
+
+      this.addEventListener('input', this.onInput);
+      this.syncFromFields();
+      // The filters controller may restore typed values after a re-render
+      requestAnimationFrame(() => this.syncFromFields());
+    }
+
+    /** Slider position (0–STEPS) to a rounded price */
+    toPrice(position) {
+      const price = this.maxPrice * (position / PriceRange.STEPS) ** PriceRange.CURVE;
+      const step = price < 100 ? 5 : price < 1000 ? 10 : 50;
+      return Math.min(this.maxPrice, Math.round(price / step) * step);
+    }
+
+    /** Price to a slider position (0–STEPS) */
+    toPosition(price) {
+      const ratio = Math.min(Math.max(price / this.maxPrice, 0), 1);
+      return Math.round(ratio ** (1 / PriceRange.CURVE) * PriceRange.STEPS);
+    }
+
+    onInput = (event) => {
+      const target = event.target;
+      if (target === this.minRange || target === this.maxRange) {
+        let low = Number(this.minRange.value);
+        let high = Number(this.maxRange.value);
+        if (low > high) {
+          if (target === this.minRange) low = high;
+          else high = low;
+          this.minRange.value = low;
+          this.maxRange.value = high;
+        }
+        const lowPrice = this.toPrice(low);
+        const highPrice = this.toPrice(high);
+        this.minField.value = low > 0 ? lowPrice : '';
+        this.maxField.value = high < PriceRange.STEPS ? highPrice : '';
+        this.minRange.setAttribute('aria-valuetext', this.format(low > 0 ? lowPrice : 0));
+        this.maxRange.setAttribute('aria-valuetext', this.format(highPrice));
+        this.updateFill();
+        // Let the filters controller pick up the change
+        (target === this.minRange ? this.minField : this.maxField).dispatchEvent(
+          new Event('input', { bubbles: true })
+        );
+      } else if (target === this.minField || target === this.maxField) {
+        this.syncFromFields();
+      }
+    };
+
+    syncFromFields() {
+      const low = this.minField.value === '' ? 0 : Number(this.minField.value);
+      const high = this.maxField.value === '' ? this.maxPrice : Number(this.maxField.value);
+      this.minRange.value = this.toPosition(low);
+      this.maxRange.value = this.toPosition(high);
+      this.minRange.setAttribute('aria-valuetext', this.format(low));
+      this.maxRange.setAttribute('aria-valuetext', this.format(Math.min(high, this.maxPrice)));
+      this.updateFill();
+    }
+
+    format(price) {
+      const symbol = this.querySelector('.facet__price-input [aria-hidden]')?.textContent.trim() ?? '';
+      return `${symbol}${price}`;
+    }
+
+    updateFill() {
+      this.style.setProperty('--range-start', Number(this.minRange.value) / PriceRange.STEPS);
+      this.style.setProperty('--range-end', Number(this.maxRange.value) / PriceRange.STEPS);
+    }
+  }
+
+  if (!customElements.get('price-range')) {
+    customElements.define('price-range', PriceRange);
+  }
+{% endjavascript %}
