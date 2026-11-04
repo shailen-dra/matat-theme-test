@@ -545,25 +545,28 @@
         "tile_1": {
           "type": "_collage-item",
           "settings": {
-            "content_type": "image",
-            "title": "Necklaces",
-            "link": "shopify://collections/necklaces"
+            "content_type": "collection",
+            "collection": "necklaces",
+            "image": "shopify://shop_images/collage-layered-necklaces.jpg",
+            "title": "Necklaces"
           }
         },
         "tile_2": {
           "type": "_collage-item",
           "settings": {
-            "content_type": "image",
-            "title": "Earrings",
-            "link": "shopify://collections/earrings"
+            "content_type": "collection",
+            "collection": "earrings",
+            "image": "shopify://shop_images/collage-hoops.jpg",
+            "title": "Earrings"
           }
         },
         "tile_3": {
           "type": "_collage-item",
           "settings": {
-            "content_type": "image",
-            "title": "Gift sets",
-            "link": "shopify://collections/jewelry-boxes"
+            "content_type": "collection",
+            "collection": "jewelry-boxes",
+            "image": "shopify://shop_images/collage-gift-set.jpg",
+            "title": "Gifts and keepsakes"
           }
         }
       },
