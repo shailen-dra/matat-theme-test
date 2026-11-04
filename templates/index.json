@@ -9,79 +9,207 @@
  */
 {
   "sections": {
-    "hero": {
-      "type": "hero",
+    "hero_slideshow": {
+      "type": "slideshow",
       "blocks": {
-        "eyebrow": {
-          "type": "heading",
+        "slide_1": {
+          "type": "_slide",
           "settings": {
-            "text": "The autumn edit",
-            "style": "heading--eyebrow",
-            "tag": "p"
-          }
-        },
-        "title": {
-          "type": "heading",
-          "settings": {
-            "text": "Jewelry made to be <em>kept</em>",
-            "style": "heading--display",
-            "tag": "h1"
-          }
-        },
-        "subtitle": {
-          "type": "heading",
-          "settings": {
-            "text": "Fine pieces in recycled gold, designed to be worn every day and passed on.",
-            "style": "heading--subtitle",
-            "tag": "p",
-            "max_width": 44
-          }
-        },
-        "tags": {
-          "type": "tags",
-          "settings": {
-            "tags": "Handcrafted, 18k gold, Ethically sourced",
-            "style": "outline",
-            "size": "sm"
-          }
-        },
-        "buttons": {
-          "type": "group",
-          "settings": {
-            "layout_direction": "group--horizontal",
-            "gap": 20
+            "image": "shopify://shop_images/slide-autumn-edit.jpg",
+            "image_mobile": "shopify://shop_images/slide-autumn-edit-mobile.jpg",
+            "content_position_x": "slide--x-left",
+            "content_position_y": "slide--y-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 20
           },
           "blocks": {
-            "button_primary": {
-              "type": "button",
+            "eyebrow": {
+              "type": "heading",
               "settings": {
-                "label": "Shop the collection",
-                "link": "shopify://collections/new-arrivals",
-                "style": "primary"
+                "text": "The autumn edit",
+                "style": "heading--eyebrow",
+                "tag": "p"
               }
             },
-            "button_link": {
+            "title": {
+              "type": "heading",
+              "settings": {
+                "text": "Jewelry made to be <em>kept</em>",
+                "style": "heading--display",
+                "tag": "h1"
+              }
+            },
+            "subtitle": {
+              "type": "heading",
+              "settings": {
+                "text": "Fine pieces in recycled gold, designed to be worn every day and passed on.",
+                "style": "heading--subtitle",
+                "tag": "p",
+                "max_width": 44
+              }
+            },
+            "tags": {
+              "type": "tags",
+              "settings": {
+                "tags": "Handcrafted, 18k gold, Ethically sourced",
+                "style": "outline",
+                "size": "sm"
+              }
+            },
+            "buttons": {
+              "type": "group",
+              "settings": {
+                "layout_direction": "group--horizontal",
+                "gap": 20
+              },
+              "blocks": {
+                "button_primary": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Shop the collection",
+                    "link": "shopify://collections/new-arrivals",
+                    "style": "primary"
+                  }
+                },
+                "button_link": {
+                  "type": "button",
+                  "settings": {
+                    "label": "Our story",
+                    "style": "link"
+                  }
+                }
+              },
+              "block_order": [
+                "button_primary",
+                "button_link"
+              ]
+            }
+          },
+          "block_order": [
+            "eyebrow",
+            "title",
+            "subtitle",
+            "tags",
+            "buttons"
+          ]
+        },
+        "slide_2": {
+          "type": "_slide",
+          "settings": {
+            "image": "shopify://shop_images/collage-gift-set.jpg",
+            "content_position_x": "slide--x-left",
+            "content_position_y": "slide--y-bottom",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 35
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "heading",
+              "settings": {
+                "text": "Gifting season",
+                "style": "heading--eyebrow",
+                "tag": "p"
+              }
+            },
+            "title": {
+              "type": "heading",
+              "settings": {
+                "text": "Wrapped, insured and on its way",
+                "style": "heading--display",
+                "tag": "h2"
+              }
+            },
+            "subtitle": {
+              "type": "heading",
+              "settings": {
+                "text": "Thoughtful pieces under $150, gift-wrapped as standard.",
+                "style": "heading--subtitle",
+                "tag": "p",
+                "max_width": 40
+              }
+            },
+            "button": {
               "type": "button",
               "settings": {
-                "label": "Our story",
-                "style": "link"
+                "label": "Shop gifts under $150",
+                "link": "shopify://collections/gifts-under-150",
+                "style": "primary"
               }
             }
           },
           "block_order": [
-            "button_primary",
-            "button_link"
+            "eyebrow",
+            "title",
+            "subtitle",
+            "button"
+          ]
+        },
+        "slide_3": {
+          "type": "_slide",
+          "settings": {
+            "image": "shopify://shop_images/slide-flatlay.jpg",
+            "content_position_x": "slide--x-left",
+            "content_position_y": "slide--y-center",
+            "text_color": "#ffffff",
+            "overlay_color": "#000000",
+            "overlay_opacity": 40
+          },
+          "blocks": {
+            "eyebrow": {
+              "type": "heading",
+              "settings": {
+                "text": "New arrivals",
+                "style": "heading--eyebrow",
+                "tag": "p"
+              }
+            },
+            "title": {
+              "type": "heading",
+              "settings": {
+                "text": "Layer it, <em>stack it</em>",
+                "style": "heading--display",
+                "tag": "h2"
+              }
+            },
+            "subtitle": {
+              "type": "heading",
+              "settings": {
+                "text": "Fresh chains, charms and rings, made to be worn together.",
+                "style": "heading--subtitle",
+                "tag": "p",
+                "max_width": 40
+              }
+            },
+            "button": {
+              "type": "button",
+              "settings": {
+                "label": "Shop new arrivals",
+                "link": "shopify://collections/new-arrivals",
+                "style": "primary"
+              }
+            }
+          },
+          "block_order": [
+            "eyebrow",
+            "title",
+            "subtitle",
+            "button"
           ]
         }
       },
       "block_order": [
-        "eyebrow",
-        "title",
-        "subtitle",
-        "tags",
-        "buttons"
+        "slide_1",
+        "slide_2",
+        "slide_3"
       ],
-      "settings": {}
+      "settings": {
+        "height": "slideshow--large",
+        "show_arrows": true,
+        "autoplay": true,
+        "autoplay_speed": 6
+      }
     },
     "category_tiles": {
       "type": "collection-tiles",
@@ -622,27 +750,45 @@
       "blocks": {
         "photo_1": {
           "type": "_gallery-image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/feed-rings-hand.jpg",
+            "product": "radiance-stackable-rings-set-brushed-gold"
+          }
         },
         "photo_2": {
           "type": "_gallery-image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/collage-layered-necklaces.jpg",
+            "product": "collar-de-cadena-bano-de-oro"
+          }
         },
         "photo_3": {
           "type": "_gallery-image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/collage-hoops.jpg",
+            "product": "gilded-gold-statement-hoop-earrings"
+          }
         },
         "photo_4": {
           "type": "_gallery-image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/collage-gift-set.jpg",
+            "product": "soft-taupe-pendant-necklace"
+          }
         },
         "photo_5": {
           "type": "_gallery-image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/slide-flatlay.jpg",
+            "product": "gold-plated-cuban-link-chain-necklace"
+          }
         },
         "photo_6": {
           "type": "_gallery-image",
-          "settings": {}
+          "settings": {
+            "image": "shopify://shop_images/slide-autumn-edit-mobile.jpg",
+            "product": "pulseira-de-charms-banhada-a-ouro"
+          }
         }
       },
       "block_order": [
@@ -680,7 +826,7 @@
     }
   },
   "order": [
-    "hero",
+    "hero_slideshow",
     "marquee",
     "category_tiles",
     "featured_products",

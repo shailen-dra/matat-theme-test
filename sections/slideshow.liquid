@@ -100,6 +100,14 @@
     display: none;
   }
 
+  /* Each slide sits inside Shopify's block wrapper: make the wrapper the full-width flex item */
+  .slideshow__track > * {
+    display: flex;
+    flex: 0 0 100%;
+    min-width: 0;
+    min-height: inherit;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     .slideshow__track {
       scroll-behavior: smooth;
