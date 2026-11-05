@@ -464,6 +464,7 @@
       "transparent_logo_info": "Optional light version of your logo.",
       "show_search": "Show search",
       "show_language": "Show language selector",
+      "show_language_info": "Shown when more than one language is published. Manage languages in Settings > Languages.",
       "show_border": "Show bottom border",
       "padding": "Vertical padding",
       "layout": "Desktop layout",

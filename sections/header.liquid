@@ -161,6 +161,11 @@
     {%- endif -%}
 
     <div class="header__actions">
+      {%- if section.settings.show_country and localization.available_countries.size > 1 -%}
+        {%- assign desktop_country_id = 'HeaderCountryDesktop-' | append: section.id -%}
+        <div class="header__country">{% render 'country-selector', id: desktop_country_id %}</div>
+      {%- endif -%}
+
       {%- if section.settings.show_language -%}
         <div class="header__language">{% render 'language-switcher' %}</div>
       {%- endif -%}
@@ -646,6 +651,15 @@
     margin-inline-end: 0.5rem;
   }
 
+  .header__country {
+    margin-inline-end: 0.5rem;
+    color: var(--color-foreground);
+  }
+
+  .header__country .country-selector__select {
+    max-width: 11rem;
+  }
+
   .header__icon {
     position: relative;
     display: inline-flex;
@@ -733,6 +747,7 @@
     }
 
     .header__nav,
+    .header__country,
     .header__language,
     .header__account {
       display: none;
@@ -1347,6 +1362,7 @@
       "type": "checkbox",
       "id": "show_language",
       "label": "t:sections.header.show_language",
+      "info": "t:sections.header.show_language_info",
       "default": true
     },
     {
