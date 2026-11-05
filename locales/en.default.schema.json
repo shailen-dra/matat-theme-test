@@ -548,7 +548,12 @@
       "promo_enabled": "Show promo tile",
       "promo_enabled_info": "Shown in the product grid on the first page.",
       "promo_position": "Position in grid",
-      "promo_wide": "Span two columns"
+      "promo_wide": "Span two columns",
+      "intro_layout_split": "Image beside text",
+      "intro_layout_banner": "Banner with text on the image",
+      "banner_image": "Fallback banner image",
+      "banner_image_info": "Each collection uses its own image, set in Products > Collections. This image is used for collections without one.",
+      "banner_overlay": "Image overlay"
     },
     "cart": {
       "summary": "Order summary",
