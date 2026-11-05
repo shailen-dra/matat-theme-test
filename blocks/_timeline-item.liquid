@@ -6,7 +6,7 @@
   {% content_for 'block', type: '_timeline-item', id: 'milestone-1' %}
 {% enddoc %}
 
-<li class="timeline-item" {{ block.shopify_attributes }}>
+<div class="timeline-item" role="listitem" {{ block.shopify_attributes }}>
   <span class="timeline-item__marker" aria-hidden="true"></span>
 
   <div class="timeline-item__card">
@@ -27,7 +27,7 @@
       <div class="timeline-item__text rte">{{ block.settings.text }}</div>
     {%- endif -%}
   </div>
-</li>
+</div>
 
 {% schema %}
 {

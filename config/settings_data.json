@@ -9,22 +9,19 @@
  */
 {
   "current": {
-    "social_instagram_link": "https://instagram.com/shopify",
-    "social_pinterest_link": "https://pinterest.com/shopify",
-    "social_facebook_link": "https://facebook.com/shopify",
     "color_schemes": {
       "scheme-1": {
         "settings": {
           "background": "#FFFFFF",
           "foreground": "#333333",
-          "accent": "#886B40"
+          "accent": "#83673D"
         }
       },
       "scheme-2": {
         "settings": {
           "background": "#F6F1EA",
           "foreground": "#2B2622",
-          "accent": "#886B40"
+          "accent": "#83673D"
         }
       },
       "scheme-3": {
@@ -36,7 +33,7 @@
       },
       "scheme-4": {
         "settings": {
-          "background": "#886B40",
+          "background": "#83673D",
           "foreground": "#FFFFFF",
           "accent": "#F5F0E8"
         }

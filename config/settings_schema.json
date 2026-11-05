@@ -158,7 +158,7 @@
             "type": "color",
             "id": "accent",
             "label": "t:labels.accent",
-            "default": "#886B40"
+            "default": "#83673D"
           }
         ],
         "role": {
@@ -328,44 +328,37 @@
       {
         "type": "text",
         "id": "social_instagram_link",
-        "label": "t:general.social.instagram",
-        "placeholder": "https://instagram.com/"
+        "label": "t:general.social.instagram"
       },
       {
         "type": "text",
         "id": "social_facebook_link",
-        "label": "t:general.social.facebook",
-        "placeholder": "https://facebook.com/"
+        "label": "t:general.social.facebook"
       },
       {
         "type": "text",
         "id": "social_pinterest_link",
-        "label": "t:general.social.pinterest",
-        "placeholder": "https://pinterest.com/"
+        "label": "t:general.social.pinterest"
       },
       {
         "type": "text",
         "id": "social_tiktok_link",
-        "label": "t:general.social.tiktok",
-        "placeholder": "https://tiktok.com/@"
+        "label": "t:general.social.tiktok"
       },
       {
         "type": "text",
         "id": "social_youtube_link",
-        "label": "t:general.social.youtube",
-        "placeholder": "https://youtube.com/@"
+        "label": "t:general.social.youtube"
       },
       {
         "type": "text",
         "id": "social_whatsapp_link",
-        "label": "t:general.social.whatsapp",
-        "placeholder": "https://wa.me/972"
+        "label": "t:general.social.whatsapp"
       },
       {
         "type": "text",
         "id": "social_x_link",
-        "label": "t:general.social.x",
-        "placeholder": "https://x.com/"
+        "label": "t:general.social.x"
       }
     ]
   }

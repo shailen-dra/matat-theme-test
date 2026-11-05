@@ -75,6 +75,12 @@
                       {{ item.final_price | money }}
                     {%- endif -%}
                   </p>
+                  {%- if item.unit_price_measurement -%}
+                  <p class="cart-item__unit-price">
+                    <span class="visually-hidden">{{ 'product.price.unit' | t }}</span>
+                    {{ item.unit_price | unit_price_with_measurement: item.unit_price_measurement }}
+                  </p>
+                  {%- endif -%}
 
                   {%- unless item.product.has_only_default_variant and item.properties == empty -%}
                     <dl class="cart-item__details">
@@ -299,7 +305,7 @@
 
   .cart__item-count {
     font-size: 0.9375rem;
-    opacity: 0.6;
+    opacity: 0.75;
   }
 
   .cart__layout {
@@ -324,7 +330,7 @@
     font-weight: 500;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    opacity: 0.6;
+    opacity: 0.75;
   }
 
   .cart__columns > :first-child {
@@ -386,7 +392,7 @@
     font-size: 0.6875rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    opacity: 0.6;
+    opacity: 0.75;
   }
 
   .cart-item__title {
@@ -408,6 +414,12 @@
     text-underline-offset: 0.2em;
   }
 
+  .cart-item__unit-price {
+    margin: 0;
+    color: color-mix(in srgb, var(--color-foreground) 75%, transparent);
+    font-size: 0.8125rem;
+  }
+
   .cart-item__price {
     display: flex;
     flex-wrap: wrap;
@@ -420,7 +432,7 @@
   }
 
   .cart-item__price-compare {
-    opacity: 0.5;
+    opacity: 0.75;
   }
 
   .cart-item__details {
@@ -437,7 +449,7 @@
   }
 
   .cart-item__detail dt {
-    opacity: 0.6;
+    opacity: 0.75;
   }
 
   .cart-item__detail dd {
@@ -480,7 +492,7 @@
   .cart-item__remove {
     color: inherit;
     font-size: 0.8125rem;
-    opacity: 0.65;
+    opacity: 0.75;
     text-decoration: underline;
     text-underline-offset: 0.25em;
     transition: opacity 0.2s ease;
@@ -577,7 +589,7 @@
   .cart__tax-note {
     margin-block-start: 0.75rem;
     font-size: 0.8125rem;
-    opacity: 0.65;
+    opacity: 0.75;
   }
 
   .cart__note {

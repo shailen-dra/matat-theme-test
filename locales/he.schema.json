@@ -478,6 +478,8 @@
       "show_wordmark_info": "מציג את שם החנות באותיות גדולות מעל הפס התחתון.",
       "bottom_bar": "פס תחתון",
       "show_policies": "הצגת קישורי מדיניות",
+      "show_follow_on_shop": "הצגת מעקב ב-Shop",
+      "show_follow_on_shop_info": "מאפשר ללקוחות לעקוב אחרי החנות באפליקציית Shop. נדרש Shop Pay.",
       "show_powered_by": "הצגת \"Powered by Shopify\""
     },
     "product": {

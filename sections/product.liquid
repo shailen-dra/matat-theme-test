@@ -7,11 +7,7 @@
 {%- capture blocks -%}{% content_for 'blocks' %}{%- endcapture -%}
 {% render 'product-info', section: section, product: product, blocks: blocks, update_url: true %}
 
-{%- if product != blank -%}
-  <script type="application/ld+json">
-    {{ product | structured_data }}
-  </script>
-{%- endif -%}
+{%- # Product structured data is output once, in snippets/meta-tags.liquid -%}
 
 {% javascript %}
   /* Remember this product for the recently viewed section (newest first, max 12) */

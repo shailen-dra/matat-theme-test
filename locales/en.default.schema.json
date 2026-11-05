@@ -111,7 +111,7 @@
       "right": "Right",
       "inherit": "Inherit",
       "space_between": "Space between",
-      "split": "Title left, link right"
+      "split": "Heading left, link right"
     },
     "direction": {
       "horizontal": "Horizontal",
@@ -129,9 +129,9 @@
       "adapt_to_image": "Adapt to image"
     },
     "text_style": {
-      "title": "Title",
-      "subtitle": "Subtitle",
-      "normal": "Normal text"
+      "title": "Heading",
+      "subtitle": "Subheading",
+      "normal": "Body text"
     },
     "vertical": {
       "top": "Top",
@@ -266,8 +266,8 @@
       "tag_info": "Use one H1 per page for SEO.",
       "max_width_info": "Set to 0 for no limit.",
       "presets": {
-        "title": "Title",
-        "subtitle": "Subtitle",
+        "title": "Heading",
+        "subtitle": "Subheading",
         "eyebrow": "Eyebrow"
       }
     },
@@ -294,7 +294,7 @@
     "mega_menu": {
       "name": "Mega menu",
       "menu_item": "Menu item",
-      "menu_item_info": "Title of a top-level item in the header menu, e.g. Jewelry. Its submenu becomes a full-width mega menu.",
+      "menu_item_info": "Name of a top-level item in the header menu, e.g. Jewelry. Its submenu becomes a full-width mega menu.",
       "show_view_all": "Show \"Shop all\" link",
       "image_ratio": "Image shape",
       "featured_1": "Featured card 1",
@@ -478,6 +478,8 @@
       "show_wordmark_info": "Displays the store name in large type above the bottom bar.",
       "bottom_bar": "Bottom bar",
       "show_policies": "Show policy links",
+      "show_follow_on_shop": "Show Follow on Shop",
+      "show_follow_on_shop_info": "Lets customers follow your store in the Shop app. Requires Shop Pay.",
       "show_powered_by": "Show \"Powered by Shopify\""
     },
     "product": {
@@ -638,7 +640,7 @@
     "press_logos": {
       "name": "Press logos",
       "logo": "Logo",
-      "image_info": "Shown in grayscale. Use a transparent PNG or SVG.",
+      "image_info": "Shown in grayscale. Use a transparent .png or .svg.",
       "publication": "Publication name",
       "publication_info": "Used as the image's alt text, or shown as text when there's no image.",
       "logo_height": "Logo height"

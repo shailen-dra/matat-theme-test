@@ -12,9 +12,9 @@
     alignment: 'center'
   %}
 
-  <ol class="timeline" role="list">
+  <div class="timeline" role="list">
     {% content_for 'blocks' %}
-  </ol>
+  </div>
 </div>
 
 {% stylesheet %}
@@ -79,7 +79,7 @@
   }
 
   /* Alternate sides */
-  .timeline-item:nth-child(even) .timeline-item__card {
+  .timeline > :nth-child(even) .timeline-item__card {
     grid-column: 2;
     text-align: start;
   }
@@ -93,7 +93,7 @@
     border-radius: var(--style-border-radius-buttons);
   }
 
-  .timeline-item:nth-child(even) .timeline-item__image {
+  .timeline > :nth-child(even) .timeline-item__image {
     margin-inline: 0 auto;
   }
 
@@ -135,13 +135,13 @@
     }
 
     .timeline-item__card,
-    .timeline-item:nth-child(even) .timeline-item__card {
+    .timeline > :nth-child(even) .timeline-item__card {
       grid-column: 1;
       text-align: start;
     }
 
     .timeline-item__image,
-    .timeline-item:nth-child(even) .timeline-item__image {
+    .timeline > :nth-child(even) .timeline-item__image {
       margin-inline: 0 auto;
     }
   }

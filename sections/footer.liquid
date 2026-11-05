@@ -66,6 +66,11 @@
           {% render 'language-switcher' %}
         {%- endif -%}
 
+        {%- if section.settings.show_follow_on_shop and request.page_type != 'password' -%}
+          {%- # Renders only when Shop Pay is active; branded colors must stay as Shopify ships them -%}
+          <div class="footer__follow">{{ shop | login_button: action: 'follow' }}</div>
+        {%- endif -%}
+
         {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
           <ul class="footer__payment" role="list">
             <li class="visually-hidden">{{ 'footer.payment_methods' | t }}</li>
@@ -288,6 +293,13 @@
       "type": "checkbox",
       "id": "show_payment_icons",
       "label": "t:labels.show_payment_icons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_follow_on_shop",
+      "label": "t:sections.footer.show_follow_on_shop",
+      "info": "t:sections.footer.show_follow_on_shop_info",
       "default": true
     },
     {

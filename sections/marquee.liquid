@@ -6,9 +6,14 @@
   assign separator = section.settings.separator
 -%}
 
+{%- liquid
+  # Copies drop the block wrappers' ids so ids stay unique on the page
+  assign items_copy = items | replace: 'id="shopify-block-', 'data-copy-of="shopify-block-'
+-%}
+
 {%- capture repeats -%}
   {%- for i in (1..3) -%}
-    {{ items }}
+    {{ items_copy }}
   {%- endfor -%}
 {%- endcapture -%}
 
@@ -29,7 +34,7 @@
         <span class="marquee__repeat" aria-hidden="true" inert>{{ repeats }}</span>
       </div>
       <div class="marquee__group" aria-hidden="true" inert>
-        {{ items }}
+        {{ items_copy }}
         {{ repeats }}
       </div>
     </div>

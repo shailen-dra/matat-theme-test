@@ -49,7 +49,7 @@
                 <a href="{{ article.url }}">{{ article.title | escape }}</a>
               </h3>
               {%- if section.settings.show_excerpt -%}
-                {%- assign excerpt = article.excerpt | default: article.content | strip_html | truncatewords: 22 -%}
+                {%- assign excerpt = article.excerpt_or_content | strip_html | truncatewords: 22 -%}
                 {%- if excerpt != blank -%}
                   <p class="article-card__excerpt">{{ excerpt | strip_html }}</p>
                 {%- endif -%}

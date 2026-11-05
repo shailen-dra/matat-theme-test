@@ -61,6 +61,13 @@
                       </p>
                     </div>
 
+                    {%- if item.unit_price_measurement -%}
+                    <p class="drawer-item__unit-price">
+                      <span class="visually-hidden">{{ 'product.price.unit' | t }}</span>
+                      {{ item.unit_price | unit_price_with_measurement: item.unit_price_measurement }}
+                    </p>
+                    {%- endif -%}
+
                     {%- unless item.product.has_only_default_variant -%}
                       <p class="drawer-item__options">
                         {%- for option in item.options_with_values -%}
@@ -241,7 +248,7 @@
   .side-drawer__count {
     font-family: var(--font-primary--family);
     font-size: 0.9375rem;
-    opacity: 0.6;
+    opacity: 0.75;
   }
 
   .side-drawer__close {
@@ -404,6 +411,12 @@
     text-underline-offset: 0.2em;
   }
 
+  .drawer-item__unit-price {
+    margin: 0;
+    color: color-mix(in srgb, var(--color-foreground) 75%, transparent);
+    font-size: 0.8125rem;
+  }
+
   .drawer-item__price {
     display: flex;
     flex-direction: column;
@@ -415,13 +428,13 @@
 
   .drawer-item__compare {
     font-size: 0.8125rem;
-    opacity: 0.5;
+    opacity: 0.75;
   }
 
   .drawer-item__options,
   .drawer-item__discount {
     font-size: 0.8125rem;
-    opacity: 0.65;
+    opacity: 0.75;
   }
 
   .drawer-item__property {
@@ -454,7 +467,7 @@
   .drawer-item__remove {
     color: inherit;
     font-size: 0.8125rem;
-    opacity: 0.65;
+    opacity: 0.75;
     text-decoration: underline;
     text-underline-offset: 0.25em;
   }
@@ -493,7 +506,7 @@
   .cart-drawer__note {
     margin-block-start: -0.25rem;
     font-size: 0.8125rem;
-    opacity: 0.65;
+    opacity: 0.75;
   }
 
   .cart-drawer__buttons {
