@@ -553,7 +553,11 @@
       "intro_layout_banner": "באנר עם טקסט על התמונה",
       "banner_image": "תמונת באנר חלופית",
       "banner_image_info": "כל קולקציה משתמשת בתמונה שלה, שמוגדרת במוצרים > קולקציות. תמונה זו משמשת לקולקציות ללא תמונה.",
-      "banner_overlay": "שכבת כיסוי לתמונה"
+      "banner_overlay": "שכבת כיסוי לתמונה",
+      "filter_layout": "פריסת מסננים",
+      "filter_layout_info": "במסכים קטנים תמיד מוצגת מגירה.",
+      "filter_layout_sidebar": "סרגל צד",
+      "filter_layout_drawer": "מגירה"
     },
     "cart": {
       "summary": "סיכום ההזמנה",

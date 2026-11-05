@@ -553,7 +553,11 @@
       "intro_layout_banner": "Banner with text on the image",
       "banner_image": "Fallback banner image",
       "banner_image_info": "Each collection uses its own image, set in Products > Collections. This image is used for collections without one.",
-      "banner_overlay": "Image overlay"
+      "banner_overlay": "Image overlay",
+      "filter_layout": "Filter layout",
+      "filter_layout_info": "Small screens always use the drawer.",
+      "filter_layout_sidebar": "Sidebar",
+      "filter_layout_drawer": "Drawer"
     },
     "cart": {
       "summary": "Order summary",

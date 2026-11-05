@@ -31,9 +31,14 @@
     endif
   endfor
 
+  assign filters_sidebar = false
+  if show_filters and section.settings.filter_layout == 'sidebar'
+    assign filters_sidebar = true
+  endif
+
   assign columns = section.settings.columns_desktop
   assign grid_share = 100
-  if show_filters
+  if filters_sidebar
     assign grid_share = 75
   endif
   assign desktop_width = grid_share | divided_by: columns
@@ -61,7 +66,7 @@
 -%}
 
 <collection-facets
-  class="collection section full-width{% if show_banner %} collection--banner{% endif %}"
+  class="collection section full-width{% if show_banner %} collection--banner{% endif %}{% if filters_sidebar %} collection--filters-sidebar{% endif %}"
   data-section-id="{{ section.id }}"
   style="
     --section-padding-top: {{ section.settings.padding_top }}px;
@@ -477,7 +482,7 @@
   }
 
   .collection__filter-toggle {
-    display: none;
+    display: inline-flex;
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 0;
@@ -560,13 +565,6 @@
     padding-block-start: clamp(1.5rem, 3vw, 2.5rem);
   }
 
-  .collection__layout--filters {
-    display: grid;
-    grid-template-columns: minmax(13rem, 16rem) minmax(0, 1fr);
-    gap: clamp(2rem, 4vw, 4rem);
-    align-items: start;
-  }
-
   .collection__results {
     min-width: 0;
     transition: opacity 0.25s ease;
@@ -575,30 +573,6 @@
   .collection[aria-busy='true'] .collection__results {
     opacity: 0.45;
     pointer-events: none;
-  }
-
-  /* Filter panel: a sticky sidebar on desktop */
-  .facets {
-    position: sticky;
-    top: calc(var(--header-height, 0px) + 1.5rem);
-    max-height: calc(100vh - var(--header-height, 0px) - 3rem);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
-  }
-
-  .facets:focus {
-    outline: none;
-  }
-
-  .facets__header,
-  .facets__footer,
-  .collection__backdrop {
-    display: none;
-  }
-
-  .facets__content .facet:first-child .facet__summary {
-    padding-block-start: 0;
   }
 
   /* Active filter pills */
@@ -665,115 +639,157 @@
     opacity: 0.7;
   }
 
+  /* Filter panel: an off-canvas drawer (all screens, or small screens with the sidebar layout) */
+  .facets {
+    --facets-from: -100%;
+
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    width: min(26rem, 88vw);
+    max-height: none;
+    overflow: hidden;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    transform: translateX(var(--facets-from));
+    visibility: hidden;
+    transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1), visibility 0s linear 0.35s;
+  }
+
+  [dir='rtl'] .facets {
+    --facets-from: 100%;
+  }
+
+  .facets.is-open {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+
+  .facets__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem var(--page-margin);
+    border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+  }
+
+  .facets__title {
+    font-family: var(--font-heading--family);
+    font-size: 1.125rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  [dir='rtl'] .facets__title {
+    letter-spacing: 0;
+  }
+
+  .facets__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-inline-end: -0.75rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .facets__close .icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .facets__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.5rem var(--page-margin);
+  }
+
+  .facets__content .facet:first-child .facet__summary {
+    padding-block-start: 1.125rem;
+  }
+
+  .facets__footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    padding: 1rem var(--page-margin);
+    border-top: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+  }
+
+  .facets__footer .button {
+    --button-pad-x: 0.75rem;
+  }
+
+  .collection__backdrop:not([hidden]) {
+    position: fixed;
+    inset: 0;
+    z-index: 59;
+    display: block;
+    background-color: rgb(0 0 0 / 0.35);
+  }
+
+  .facets:focus {
+    outline: none;
+  }
+
+  /* Sidebar layout: a sticky column beside the products on large screens */
+  @media (min-width: 990px) {
+    .collection--filters-sidebar .collection__layout--filters {
+      display: grid;
+      grid-template-columns: minmax(13rem, 16rem) minmax(0, 1fr);
+      gap: clamp(2rem, 4vw, 4rem);
+      align-items: start;
+    }
+
+    .collection--filters-sidebar .collection__filter-toggle {
+      display: none;
+    }
+
+    .collection--filters-sidebar .facets {
+      position: sticky;
+      inset: auto;
+      top: calc(var(--header-height, 0px) + 1.5rem);
+      z-index: auto;
+      display: block;
+      width: auto;
+      max-height: calc(100vh - var(--header-height, 0px) - 3rem);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      background-color: transparent;
+      transform: none;
+      visibility: visible;
+      transition: none;
+      scrollbar-width: thin;
+    }
+
+    .collection--filters-sidebar .facets__header,
+    .collection--filters-sidebar .facets__footer,
+    .collection--filters-sidebar .collection__backdrop:not([hidden]) {
+      display: none;
+    }
+
+    .collection--filters-sidebar .facets__content {
+      overflow: visible;
+      padding: 0;
+    }
+
+    .collection--filters-sidebar .facets__content .facet:first-child .facet__summary {
+      padding-block-start: 0;
+    }
+  }
+
   @media (max-width: 989px) {
     .collection__intro--image {
       grid-template-columns: minmax(0, 1fr);
-    }
-
-    .collection__layout--filters {
-      display: block;
-    }
-
-    .collection__filter-toggle {
-      display: inline-flex;
-    }
-
-    /* Filter panel becomes an off-canvas drawer */
-    .facets {
-      --facets-from: -100%;
-
-      position: fixed;
-      inset-block: 0;
-      inset-inline-start: 0;
-      z-index: 60;
-      display: flex;
-      flex-direction: column;
-      width: min(26rem, 88vw);
-      max-height: none;
-      overflow: hidden;
-      background-color: var(--color-background);
-      color: var(--color-foreground);
-      transform: translateX(var(--facets-from));
-      visibility: hidden;
-      transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1), visibility 0s linear 0.35s;
-    }
-
-    [dir='rtl'] .facets {
-      --facets-from: 100%;
-    }
-
-    .facets.is-open {
-      transform: none;
-      visibility: visible;
-      transition: transform 0.35s cubic-bezier(0.2, 0.6, 0.2, 1);
-    }
-
-    .facets__header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem var(--page-margin);
-      border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
-    }
-
-    .facets__title {
-      font-family: var(--font-heading--family);
-      font-size: 1.125rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-    }
-
-    [dir='rtl'] .facets__title {
-      letter-spacing: 0;
-    }
-
-    .facets__close {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 2.75rem;
-      height: 2.75rem;
-      margin-inline-end: -0.75rem;
-      padding: 0;
-      border: 0;
-      background: none;
-      color: inherit;
-      cursor: pointer;
-    }
-
-    .facets__close .icon {
-      width: 1.25rem;
-      height: 1.25rem;
-    }
-
-    .facets__content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0.5rem var(--page-margin);
-    }
-
-    .facets__content .facet:first-child .facet__summary {
-      padding-block-start: 1.125rem;
-    }
-
-    .facets__footer {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.75rem;
-      padding: 1rem var(--page-margin);
-      border-top: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
-    }
-
-    .facets__footer .button {
-      --button-pad-x: 0.75rem;
-    }
-
-    .collection__backdrop:not([hidden]) {
-      position: fixed;
-      inset: 0;
-      z-index: 59;
-      display: block;
-      background-color: rgb(0 0 0 / 0.35);
     }
   }
 
@@ -1031,6 +1047,18 @@
       "label": "t:sections.collection.enable_filtering",
       "info": "t:sections.collection.enable_filtering_info",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "filter_layout",
+      "label": "t:sections.collection.filter_layout",
+      "info": "t:sections.collection.filter_layout_info",
+      "options": [
+        { "value": "sidebar", "label": "t:sections.collection.filter_layout_sidebar" },
+        { "value": "drawer", "label": "t:sections.collection.filter_layout_drawer" }
+      ],
+      "default": "sidebar",
+      "visible_if": "{{ section.settings.enable_filtering }}"
     },
     {
       "type": "checkbox",
