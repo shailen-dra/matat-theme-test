@@ -13,22 +13,40 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {},
       "blocks": {
         "mega_catalog": {
           "type": "mega_menu",
           "settings": {
             "menu_item": "Catalog",
-            "heading_1": "Layered gold",
-            "heading_2": "Everyday hoops",
+            "show_view_all": true,
             "image_ratio": "mega-promo--portrait",
-            "show_view_all": true
+            "heading_1": "Layered gold",
+            "link_1": "",
+            "heading_2": "Everyday hoops",
+            "link_2": ""
           }
         }
       },
       "block_order": [
         "mega_catalog"
-      ]
+      ],
+      "settings": {
+        "logo_width": 140,
+        "logo_width_mobile": 100,
+        "menu": "main-menu",
+        "layout": "header--logo-center",
+        "menu_style": "header--menu-uppercase",
+        "customer_account_menu": "customer-account-main-menu",
+        "sticky": "scroll-up",
+        "transparent_on_home": true,
+        "transparent_text_color": "#ffffff",
+        "show_search": true,
+        "enable_predictive_search": true,
+        "show_country": false,
+        "show_language": false,
+        "show_border": true,
+        "padding": 20
+      }
     }
   },
   "order": [
