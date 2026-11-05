@@ -18,8 +18,8 @@
           "type": "group",
           "settings": {
             "layout_direction": "group--vertical",
-            "gap": 20,
             "alignment": "auto",
+            "gap": 20,
             "padding": 0
           },
           "blocks": {
@@ -28,8 +28,11 @@
               "settings": {
                 "text": "Fine jewelry, made to be <em>kept</em>.",
                 "style": "heading--h3",
-                "tag": "p"
-              }
+                "tag": "p",
+                "alignment": "inherit",
+                "max_width": 0
+              },
+              "blocks": {}
             },
             "brand_text": {
               "type": "text",
@@ -37,14 +40,17 @@
                 "text": "<p>Recycled gold and ethically sourced stones, crafted in small batches.</p>",
                 "size": "text--small",
                 "muted": true,
+                "alignment": "inherit",
                 "max_width": 40
-              }
+              },
+              "blocks": {}
             },
             "brand_social": {
               "type": "social-links",
               "settings": {
                 "size": "md"
-              }
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -58,18 +64,26 @@
           "settings": {
             "heading": "Shop",
             "menu": "main-menu"
-          }
+          },
+          "blocks": {}
         },
         "menu_help": {
           "type": "menu",
           "settings": {
             "heading": "Help",
             "menu": "footer"
-          }
+          },
+          "blocks": {}
         },
         "newsletter": {
           "type": "newsletter",
-          "settings": {}
+          "settings": {
+            "heading": "Join the list",
+            "text": "<p>Early access to new collections, private sales and stories from the studio.</p>",
+            "form_style": "newsletter--boxed",
+            "button_label": "Subscribe"
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -79,9 +93,19 @@
         "newsletter"
       ],
       "settings": {
-        "show_payment_icons": true,
+        "background_color": "#141312",
+        "text_color": "#ede8df",
+        "first_column_wide": true,
         "show_wordmark": false,
-        "payment_icons_fallback": "visa, master, american_express, paypal, apple_pay, google_pay, shopify_pay"
+        "padding_top": 80,
+        "padding_bottom": 32,
+        "show_policies": true,
+        "show_payment_icons": true,
+        "payment_icons_fallback": "",
+        "show_follow_on_shop": true,
+        "show_country": true,
+        "show_language": true,
+        "show_powered_by": false
       }
     },
     "newsletter_popup": {
@@ -92,8 +116,11 @@
           "settings": {
             "text": "Join the list",
             "style": "heading--eyebrow heading--accent",
-            "tag": "p"
-          }
+            "tag": "p",
+            "alignment": "inherit",
+            "max_width": 0
+          },
+          "blocks": {}
         },
         "signup": {
           "type": "newsletter",
@@ -102,19 +129,20 @@
             "text": "<p>Plus early access to new collections and private sales. No spam, unsubscribe anytime.</p>",
             "form_style": "newsletter--boxed",
             "button_label": "Subscribe"
-          }
+          },
+          "blocks": {}
         }
       },
       "block_order": [
         "eyebrow",
         "signup"
       ],
+      "disabled": true,
       "settings": {
         "enabled": true,
         "delay": 8,
         "frequency": 14
-      },
-      "disabled": true
+      }
     }
   },
   "order": [
