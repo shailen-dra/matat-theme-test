@@ -101,7 +101,7 @@
         "padding_bottom": 32,
         "show_policies": true,
         "show_payment_icons": true,
-        "payment_icons_fallback": "",
+        "payment_icons_fallback": "visa, master, american_express, paypal, apple_pay, google_pay, shopify_pay",
         "show_follow_on_shop": true,
         "show_country": true,
         "show_language": true,
