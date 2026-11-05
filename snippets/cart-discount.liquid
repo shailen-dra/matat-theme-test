@@ -61,7 +61,14 @@
       </ul>
     {%- endif -%}
 
-    <p class="discount__error" role="alert" hidden data-discount-error data-fallback="{{ 'cart.errors.generic' | t | escape }}"></p>
+    <p
+      class="discount__error"
+      role="alert"
+      hidden
+      data-discount-error
+      data-fallback="{{ 'cart.errors.generic' | t }}"
+      data-invalid="{{ 'cart.discount_code.invalid' | t }}"
+    ></p>
   </cart-discount>
 {%- endif -%}
 
@@ -251,8 +258,23 @@
         });
         const data = await response.json();
         if (!response.ok || data.status) throw new Error(data.description || data.message);
+
+        // Codes that don't exist come back in the JSON but not in Liquid's
+        // cart.discount_codes, so the re-rendered markup would silently drop them
+        const typed = this.querySelector('[data-discount-input]');
+        const inputId = typed?.id;
+        const typedValue = typed?.value ?? '';
+        const unknown = (data.discount_codes || []).some(
+          (code) => !code.applicable && code.code.toLowerCase() === typedValue.trim().toLowerCase()
+        );
+
         window.ThemeCart?.render(data.sections);
         document.dispatchEvent(new CustomEvent('cart:update', { detail: { cart: data } }));
+
+        const current = (inputId && document.getElementById(inputId)?.closest('cart-discount')) || this;
+        if (unknown && !current.codes.some((code) => code.toLowerCase() === typedValue.trim().toLowerCase())) {
+          current.showInvalid(typedValue);
+        }
       } catch (err) {
         if (error) {
           error.textContent = err.message || error.dataset.fallback;
@@ -260,6 +282,27 @@
         }
       } finally {
         this.removeAttribute('aria-busy');
+      }
+    }
+
+    /** Keeps the typed code so it can be corrected, and says it isn't valid */
+    showInvalid(value) {
+      const details = this.querySelector('.discount__details');
+      const input = this.querySelector('[data-discount-input]');
+      const error = this.querySelector('[data-discount-error]');
+      if (details) details.open = true;
+      if (input) {
+        input.value = value;
+        input.setAttribute('aria-invalid', 'true');
+        if (error) {
+          error.id = `${input.id}-error`;
+          input.setAttribute('aria-describedby', error.id);
+        }
+        input.focus();
+      }
+      if (error) {
+        error.textContent = error.dataset.invalid || error.dataset.fallback;
+        error.hidden = false;
       }
     }
   }

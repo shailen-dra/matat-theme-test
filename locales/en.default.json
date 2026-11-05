@@ -85,7 +85,8 @@
       "placeholder": "Discount code",
       "apply": "Apply",
       "remove": "Remove discount {{ code }}",
-      "not_applicable": "Not valid for this cart"
+      "not_applicable": "Not valid for this cart",
+      "invalid": "This discount code isn't valid"
     }
   },
   "customers": {

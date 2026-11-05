@@ -86,7 +86,8 @@
       "placeholder": "קוד הנחה",
       "apply": "החלה",
       "remove": "הסרת ההנחה {{ code }}",
-      "not_applicable": "לא תקף לעגלה הזו"
+      "not_applicable": "לא תקף לעגלה הזו",
+      "invalid": "קוד ההנחה הזה אינו תקף"
     }
   },
   "customers": {

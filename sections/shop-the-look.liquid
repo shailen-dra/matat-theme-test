@@ -90,6 +90,9 @@
     grid-template-columns: var(--look-columns);
     align-items: center;
     gap: clamp(2rem, 5vw, 5rem);
+    /* Hotspot tooltips near the edge must not widen the page in narrow windows */
+    overflow-x: clip;
+    overflow-clip-margin: 1rem;
   }
 
   .look--image-right {
