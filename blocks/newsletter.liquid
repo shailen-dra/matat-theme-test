@@ -125,6 +125,22 @@
     border-color: var(--color-foreground);
   }
 
+  /* Boxed: the button drops below the input when the column is too narrow for both */
+  .newsletter--boxed .newsletter__field {
+    flex-wrap: wrap;
+  }
+
+  /* The input takes the spare room; the button only grows when alone on its line */
+  .newsletter--boxed .newsletter__input {
+    flex: 999 1 12rem;
+  }
+
+  .newsletter--boxed .newsletter__field .button {
+    --button-pad-x: 1.5rem;
+
+    flex: 1 0 auto;
+  }
+
   .newsletter--underline .newsletter__field {
     gap: 0;
     border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 40%, transparent);
