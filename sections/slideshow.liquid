@@ -343,9 +343,11 @@
       const count = this.slides.length;
       const target = this.slides[((index % count) + count) % count];
       if (!target) return;
-      // Physical delta works the same in left-to-right and right-to-left
+      // Physical delta works the same in left-to-right and right-to-left. Scroll to an
+      // absolute position: a relative scrollBy halts at the next slide because of
+      // scroll-snap-stop, so wrapping from the last slide back to the first fails
       const delta = target.getBoundingClientRect().left - this.track.getBoundingClientRect().left;
-      this.track.scrollBy({ left: delta, behavior: this.reducedMotion ? 'auto' : 'smooth' });
+      this.track.scrollTo({ left: this.track.scrollLeft + delta, behavior: this.reducedMotion ? 'auto' : 'smooth' });
     }
 
     next() {
@@ -357,9 +359,9 @@
     }
 
     onClick = (event) => {
-      const isRtl = getComputedStyle(this).direction === 'rtl';
-      if (event.target.closest('[data-next]')) isRtl ? this.previous() : this.next();
-      else if (event.target.closest('[data-prev]')) isRtl ? this.next() : this.previous();
+      // The buttons mirror with the layout in right-to-left, so "next" always moves forward
+      if (event.target.closest('[data-next]')) this.next();
+      else if (event.target.closest('[data-prev]')) this.previous();
       else if (event.target.closest('[data-dot]')) this.goTo(Number(event.target.closest('[data-dot]').dataset.dot));
       else if (event.target.closest('[data-pause]')) {
         this.userPaused = !this.userPaused;

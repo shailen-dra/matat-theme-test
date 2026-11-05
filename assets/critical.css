@@ -371,6 +371,11 @@ main:focus {
   transition-delay: 0s;
 }
 
+/* Set by the script while the footer's bottom row is on screen */
+.back-to-top {
+  translate: 0 calc(var(--back-to-top-lift, 0px) * -1);
+}
+
 .back-to-top .icon {
   width: 1.125rem;
   height: 1.125rem;

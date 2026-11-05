@@ -83,8 +83,13 @@
             button.classList.toggle('is-visible', visible);
             button.toggleAttribute('aria-hidden', !visible);
             button.tabIndex = visible ? 0 : -1;
+            // Rise above the footer's bottom row so it never covers the payment icons
+            const bar = document.querySelector('.footer__bottom');
+            const lift = bar ? Math.max(0, window.innerHeight - bar.getBoundingClientRect().top) : 0;
+            button.style.setProperty('--back-to-top-lift', `${Math.round(lift)}px`);
           };
           window.addEventListener('scroll', update, { passive: true });
+          window.addEventListener('resize', update, { passive: true });
           update();
           button.addEventListener('click', (event) => {
             event.preventDefault();

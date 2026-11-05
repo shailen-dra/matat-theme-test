@@ -71,10 +71,17 @@
           <div class="footer__follow">{{ shop | login_button: action: 'follow' }}</div>
         {%- endif -%}
 
-        {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+        {%- liquid
+          # Payment methods active in Settings > Payments; the editor list covers stores that haven't activated a provider yet
+          assign payment_types = shop.enabled_payment_types
+          if payment_types.size == 0 and section.settings.payment_icons_fallback != blank
+            assign payment_types = section.settings.payment_icons_fallback | remove: ' ' | downcase | split: ','
+          endif
+        -%}
+        {%- if section.settings.show_payment_icons and payment_types.size > 0 -%}
           <ul class="footer__payment" role="list">
             <li class="visually-hidden">{{ 'footer.payment_methods' | t }}</li>
-            {%- for type in shop.enabled_payment_types -%}
+            {%- for type in payment_types -%}
               <li>{{ type | payment_type_svg_tag: class: 'footer__payment-icon' }}</li>
             {%- endfor -%}
           </ul>
@@ -294,6 +301,14 @@
       "id": "show_payment_icons",
       "label": "t:labels.show_payment_icons",
       "default": true
+    },
+    {
+      "type": "text",
+      "id": "payment_icons_fallback",
+      "label": "t:sections.footer.payment_icons_fallback",
+      "info": "t:sections.footer.payment_icons_fallback_info",
+      "placeholder": "visa, master, american_express, paypal",
+      "visible_if": "{{ section.settings.show_payment_icons }}"
     },
     {
       "type": "checkbox",

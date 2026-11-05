@@ -79,7 +79,9 @@
         "newsletter"
       ],
       "settings": {
-        "show_payment_icons": true
+        "show_payment_icons": true,
+        "show_wordmark": false,
+        "payment_icons_fallback": "visa, master, american_express, paypal, apple_pay, google_pay, shopify_pay"
       }
     },
     "newsletter_popup": {

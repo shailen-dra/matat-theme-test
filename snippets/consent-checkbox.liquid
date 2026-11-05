@@ -25,17 +25,20 @@
     endif
   -%}
   <div class="consent">
-    <input
-      type="checkbox"
-      id="{{ id }}"
-      class="consent__input"
-      {% if field %}
-        name="contact[{{ 'general.consent.field' | t }}]"
-        value="{{ 'general.consent.agreed' | t }}"
-      {% endif %}
-      required
-      aria-required="true"
-    >
+    <span class="consent__box">
+      <input
+        type="checkbox"
+        id="{{ id }}"
+        class="consent__input"
+        {% if field %}
+          name="contact[{{ 'general.consent.field' | t }}]"
+          value="{{ 'general.consent.agreed' | t }}"
+        {% endif %}
+        required
+        aria-required="true"
+      >
+      {%- render 'icon', name: 'check', class: 'consent__check' -%}
+    </span>
     <label for="{{ id }}" class="consent__label">{{ consent_label }}</label>
   </div>
 {%- endif -%}
@@ -50,18 +53,57 @@
     text-align: start;
   }
 
-  .consent__input {
+  /* Outlined box drawn in the text color, so it suits light and dark backgrounds */
+  .consent__box {
+    position: relative;
+    display: grid;
     flex-shrink: 0;
-    width: 1.125rem;
-    height: 1.125rem;
-    margin: 0.0625rem 0 0;
-    accent-color: var(--color-foreground);
+    place-items: center;
+    width: 1rem;
+    height: 1rem;
+    margin-block-start: 0.125rem;
+  }
+
+  .consent__input {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: 1px solid color-mix(in srgb, currentcolor 55%, transparent);
+    color: inherit;
+    border-radius: 2px;
+    background: transparent;
     cursor: pointer;
+    appearance: none;
+    transition:
+      background-color 0.15s ease,
+      border-color 0.15s ease;
+  }
+
+  .consent__input:hover {
+    border-color: currentcolor;
+  }
+
+  .consent__input:checked {
+    border-color: currentcolor;
+    background-color: currentcolor;
   }
 
   .consent__input:focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
+  }
+
+  .consent__check {
+    position: absolute;
+    width: 0.625rem;
+    height: 0.625rem;
+    color: var(--color-background);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .consent__input:checked + .consent__check {
+    opacity: 1;
   }
 
   .consent__label {
