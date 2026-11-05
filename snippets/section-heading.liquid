@@ -13,6 +13,7 @@
   @param {string} [link_url] - Destination of the "view all" link
   @param {string} [alignment] - `start`, `center` (default) or `split`
   @param {string} [title_style] - Heading style class (default `heading--h2`)
+  @param {string} [title_tag] - Heading element, `h1` when it's the page title (default `h2`)
 
   @example
   {% render 'section-heading',
@@ -28,6 +29,7 @@
 {%- liquid
   assign alignment = alignment | default: 'center'
   assign title_style = title_style | default: 'heading--h2'
+  assign title_tag = title_tag | default: 'h2'
   assign has_link = false
   if link_label != blank and link_url != blank
     assign has_link = true
@@ -41,7 +43,7 @@
         <p class="heading heading--eyebrow heading--accent">{{ eyebrow }}</p>
       {%- endif -%}
       {%- if title != blank -%}
-        <h2 class="heading {{ title_style }}">{{ title }}</h2>
+        <{{ title_tag }} class="heading {{ title_style }}">{{ title }}</{{ title_tag }}>
       {%- endif -%}
       {%- if subtitle != blank -%}
         <p class="heading heading--subtitle section-heading__subtitle">{{ subtitle }}</p>

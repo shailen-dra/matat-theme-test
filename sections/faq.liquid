@@ -14,11 +14,19 @@
 >
   <div class="faq {{ section.settings.layout }}">
     <div class="faq__intro">
+      {%- liquid
+        # First section of a page (the FAQ page template): its title is the page heading
+        assign faq_title_tag = 'h2'
+        if template.name == 'page' and section.index == 1
+          assign faq_title_tag = 'h1'
+        endif
+      -%}
       {% render 'section-heading',
         eyebrow: section.settings.eyebrow,
         title: section.settings.title,
         subtitle: section.settings.subtitle,
-        alignment: section.settings.heading_alignment
+        alignment: section.settings.heading_alignment,
+        title_tag: faq_title_tag
       %}
 
       {%- if has_contact -%}

@@ -1,8 +1,9 @@
 {% doc %}
   Renders the discount code field of the cart drawer and cart page, with
-  the codes already applied (and a note when one doesn't apply to this
-  cart). Codes are applied and removed with the Ajax Cart API, then every
-  cart view is re-rendered. Follows Theme settings → Cart → Discount codes.
+  the codes already applied. Codes are applied and removed with the Ajax
+  Cart API, then every cart view is re-rendered; a code that doesn't apply
+  to the cart gets a message instead. Follows Theme settings → Cart →
+  Discount codes.
 
   @param {string} id - Unique id for the input
 
@@ -11,9 +12,12 @@
 {% enddoc %}
 
 {%- if settings.show_discount_code and cart.item_count > 0 -%}
-  {%- assign codes = cart.discount_codes | map: 'code' | join: ',' -%}
-  <cart-discount class="discount" data-codes="{{ codes | escape }}">
-    <details class="discount__details"{% if cart.discount_codes.size > 0 %} open{% endif %}>
+  {%- liquid
+    # Liquid has no list of entered codes; applied codes show up as discount applications
+    assign applied_codes = cart.discount_applications | where: 'type', 'discount_code' | map: 'title' | uniq
+  -%}
+  <cart-discount class="discount" data-codes="{{ applied_codes | join: ',' | escape }}">
+    <details class="discount__details"{% if applied_codes.size > 0 %} open{% endif %}>
       <summary class="discount__summary">
         {%- render 'icon', name: 'plus', class: 'discount__icon' -%}
         {{ 'cart.discount_code.toggle' | t }}
@@ -38,24 +42,21 @@
       </div>
     </details>
 
-    {%- if cart.discount_codes.size > 0 -%}
+    {%- if applied_codes.size > 0 -%}
       <ul class="discount__codes" role="list">
-        {%- for discount_code in cart.discount_codes -%}
-          <li class="discount__code{% unless discount_code.applicable %} discount__code--invalid{% endunless %}">
+        {%- for code in applied_codes -%}
+          <li class="discount__code">
             <span class="discount__pill">
-              {{- discount_code.code | escape -}}
+              {{- code | escape -}}
               <button
                 type="button"
                 class="discount__remove"
-                data-discount-remove="{{ discount_code.code | escape }}"
-                aria-label="{{ 'cart.discount_code.remove' | t: code: discount_code.code | escape }}"
+                data-discount-remove="{{ code | escape }}"
+                aria-label="{{ 'cart.discount_code.remove' | t: code: code }}"
               >
                 {%- render 'icon', name: 'close' -%}
               </button>
             </span>
-            {%- unless discount_code.applicable -%}
-              <span class="discount__note">{{ 'cart.discount_code.not_applicable' | t }}</span>
-            {%- endunless -%}
           </li>
         {%- endfor -%}
       </ul>
@@ -166,11 +167,6 @@
     letter-spacing: 0.04em;
   }
 
-  .discount__code--invalid .discount__pill {
-    background-color: color-mix(in srgb, var(--color-foreground) 8%, var(--color-background));
-    text-decoration: line-through;
-  }
-
   .discount__remove {
     display: grid;
     place-items: center;
@@ -193,12 +189,8 @@
     outline: 2px solid var(--color-accent);
   }
 
-  .discount__note,
   .discount__error {
     font-size: 0.75rem;
-  }
-
-  .discount__error {
     color: #b42318;
   }
 {% endstylesheet %}
@@ -259,8 +251,8 @@
         const data = await response.json();
         if (!response.ok || data.status) throw new Error(data.description || data.message);
 
-        // Codes that don't exist come back in the JSON but not in Liquid's
-        // cart.discount_codes, so the re-rendered markup would silently drop them
+        // A code that doesn't exist, or that this cart doesn't qualify for,
+        // comes back as not applicable and isn't in the re-rendered markup
         const typed = this.querySelector('[data-discount-input]');
         const inputId = typed?.id;
         const typedValue = typed?.value ?? '';
