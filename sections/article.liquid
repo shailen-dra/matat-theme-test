@@ -152,6 +152,9 @@
           </textarea>
         </div>
 
+        {%- assign consent_id = field_id | append: '-consent' -%}
+        {% render 'consent-checkbox', id: consent_id %}
+
         <div class="comment-form__actions">
           {%- assign submit_label = 'blog.comment_form_submit' | t -%}
           {% render 'button', label: submit_label, type: 'submit' %}

@@ -69,6 +69,9 @@
         {% render 'button', label: submit_label, type: 'submit', style: 'outline' %}
       </div>
 
+      {%- assign consent_id = form_id | append: '-consent' -%}
+      {% render 'consent-checkbox', id: consent_id, field: true %}
+
       {%- if form.errors -%}
         <p id="{{ email_id }}-error" class="restock__message restock__message--error" role="alert">
           {{ 'newsletter.error' | t }}

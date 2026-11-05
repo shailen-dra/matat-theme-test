@@ -323,6 +323,25 @@
     ]
   },
   {
+    "name": "t:settings.consent.group",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "consent_enabled",
+        "label": "t:settings.consent.enabled",
+        "info": "t:settings.consent.enabled_info",
+        "default": true
+      },
+      {
+        "type": "inline_richtext",
+        "id": "consent_text",
+        "label": "t:settings.consent.text",
+        "info": "t:settings.consent.text_info",
+        "visible_if": "{{ settings.consent_enabled }}"
+      }
+    ]
+  },
+  {
     "name": "t:general.social_media",
     "settings": [
       {

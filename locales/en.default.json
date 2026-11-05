@@ -212,7 +212,13 @@
       "label": "Breadcrumbs",
       "home": "Home"
     },
-    "back_to_top": "Back to top"
+    "back_to_top": "Back to top",
+    "consent": {
+      "label_html": "I agree to the {{ policy }}.",
+      "label_plain": "I agree to the privacy policy.",
+      "field": "Privacy consent",
+      "agreed": "Agreed"
+    }
   },
   "sections": {
     "hero": {

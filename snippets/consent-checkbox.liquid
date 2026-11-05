@@ -1,0 +1,76 @@
+{% doc %}
+  Renders the required privacy consent checkbox of a form. The form can't be
+  submitted until it's checked. Follows Theme settings → Privacy consent; the
+  default label links to the store's privacy policy.
+
+  On contact forms, pass `field` so the consent is recorded in the email the
+  store receives.
+
+  @param {string} id - Unique id for the checkbox
+  @param {boolean} [field] - Whether to submit the consent as a contact form field
+
+  @example
+  {% render 'consent-checkbox', id: 'ContactForm-consent', field: true %}
+{% enddoc %}
+
+{%- if settings.consent_enabled -%}
+  {%- liquid
+    if settings.consent_text != blank
+      assign consent_label = settings.consent_text
+    elsif shop.privacy_policy != blank
+      assign policy_link = shop.privacy_policy.title | escape | link_to: shop.privacy_policy.url
+      assign consent_label = 'general.consent.label_html' | t: policy: policy_link
+    else
+      assign consent_label = 'general.consent.label_plain' | t
+    endif
+  -%}
+  <div class="consent">
+    <input
+      type="checkbox"
+      id="{{ id }}"
+      class="consent__input"
+      {% if field %}
+        name="contact[{{ 'general.consent.field' | t }}]"
+        value="{{ 'general.consent.agreed' | t }}"
+      {% endif %}
+      required
+      aria-required="true"
+    >
+    <label for="{{ id }}" class="consent__label">{{ consent_label }}</label>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    text-align: start;
+  }
+
+  .consent__input {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin: 0.0625rem 0 0;
+    accent-color: var(--color-foreground);
+    cursor: pointer;
+  }
+
+  .consent__input:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  .consent__label {
+    cursor: pointer;
+  }
+
+  .consent__label a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+{% endstylesheet %}

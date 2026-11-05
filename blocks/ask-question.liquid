@@ -78,6 +78,9 @@
                   <textarea name="contact[body]" rows="5" required>{{ form.body }}</textarea>
                 </label>
 
+                {%- assign consent_id = form_id | append: '-consent' -%}
+                {% render 'consent-checkbox', id: consent_id, field: true %}
+
                 {% render 'button', label: send_label, type: 'submit', style: 'primary', full_width: true %}
               {%- endif -%}
             {%- endform -%}

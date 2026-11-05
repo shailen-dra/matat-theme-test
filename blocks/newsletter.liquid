@@ -58,6 +58,9 @@
         {%- endif -%}
       </div>
 
+      {%- assign consent_id = form_id | append: '-consent' -%}
+      {% render 'consent-checkbox', id: consent_id %}
+
       {%- if form.errors -%}
         <p id="{{ input_id }}-error" class="newsletter__message newsletter__message--error" role="alert">
           {{ 'newsletter.error' | t }}

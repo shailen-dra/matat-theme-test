@@ -799,6 +799,13 @@
     },
     "layout": {
       "back_to_top": "Show back to top button"
+    },
+    "consent": {
+      "group": "Privacy consent",
+      "enabled": "Require consent on forms",
+      "enabled_info": "Adds a required checkbox to the contact, newsletter, back in stock, ask a question, comment and password page forms.",
+      "text": "Consent text",
+      "text_info": "Leave blank to link to your privacy policy. Manage policies in Settings > Policies."
     }
   }
 }

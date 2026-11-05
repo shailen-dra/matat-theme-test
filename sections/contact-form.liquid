@@ -113,6 +113,9 @@
         </textarea>
       </div>
 
+      {%- assign consent_id = form_id | append: '-consent' -%}
+      {% render 'consent-checkbox', id: consent_id, field: true %}
+
       <div class="contact__actions">
         {% render 'button', label: section.settings.button_label, type: 'submit', style: 'primary', size: 'lg' %}
         <p class="contact__required">{{ 'contact.required' | t }}</p>
