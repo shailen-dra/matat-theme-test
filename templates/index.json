@@ -794,6 +794,7 @@
     },
     "press": {
       "type": "press-logos",
+      "disabled": true,
       "blocks": {
         "logo_1": {
           "type": "_logo",
