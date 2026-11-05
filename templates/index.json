@@ -29,16 +29,22 @@
               "settings": {
                 "text": "The autumn edit",
                 "style": "heading--eyebrow",
-                "tag": "p"
-              }
+                "tag": "p",
+                "alignment": "inherit",
+                "max_width": 0
+              },
+              "blocks": {}
             },
             "title": {
               "type": "heading",
               "settings": {
                 "text": "Jewelry made to be <em>kept</em>",
                 "style": "heading--display",
-                "tag": "h1"
-              }
+                "tag": "h1",
+                "alignment": "inherit",
+                "max_width": 0
+              },
+              "blocks": {}
             },
             "subtitle": {
               "type": "heading",
@@ -46,22 +52,28 @@
                 "text": "Fine pieces in recycled gold, designed to be worn every day and passed on.",
                 "style": "heading--subtitle",
                 "tag": "p",
+                "alignment": "inherit",
                 "max_width": 44
-              }
+              },
+              "blocks": {}
             },
             "tags": {
               "type": "tags",
               "settings": {
                 "tags": "Handcrafted, 18k gold, Ethically sourced",
                 "style": "outline",
-                "size": "sm"
-              }
+                "size": "sm",
+                "alignment": "auto"
+              },
+              "blocks": {}
             },
             "buttons": {
               "type": "group",
               "settings": {
                 "layout_direction": "group--horizontal",
-                "gap": 20
+                "alignment": "auto",
+                "gap": 20,
+                "padding": 0
               },
               "blocks": {
                 "button_primary": {
@@ -69,15 +81,24 @@
                   "settings": {
                     "label": "Shop the collection",
                     "link": "shopify://collections/new-arrivals",
-                    "style": "primary"
-                  }
+                    "open_in_new_tab": false,
+                    "style": "primary",
+                    "size": "md",
+                    "full_width": false
+                  },
+                  "blocks": {}
                 },
                 "button_link": {
                   "type": "button",
                   "settings": {
                     "label": "Our story",
-                    "style": "link"
-                  }
+                    "link": "",
+                    "open_in_new_tab": false,
+                    "style": "link",
+                    "size": "md",
+                    "full_width": false
+                  },
+                  "blocks": {}
                 }
               },
               "block_order": [
@@ -110,16 +131,22 @@
               "settings": {
                 "text": "Gifting season",
                 "style": "heading--eyebrow",
-                "tag": "p"
-              }
+                "tag": "p",
+                "alignment": "inherit",
+                "max_width": 0
+              },
+              "blocks": {}
             },
             "title": {
               "type": "heading",
               "settings": {
                 "text": "Wrapped, insured and on its way",
                 "style": "heading--display",
-                "tag": "h2"
-              }
+                "tag": "h2",
+                "alignment": "inherit",
+                "max_width": 0
+              },
+              "blocks": {}
             },
             "subtitle": {
               "type": "heading",
@@ -127,16 +154,22 @@
                 "text": "Thoughtful pieces under $150, gift-wrapped as standard.",
                 "style": "heading--subtitle",
                 "tag": "p",
+                "alignment": "inherit",
                 "max_width": 40
-              }
+              },
+              "blocks": {}
             },
             "button": {
               "type": "button",
               "settings": {
                 "label": "Shop gifts under $150",
                 "link": "shopify://collections/gifts-under-150",
-                "style": "primary"
-              }
+                "open_in_new_tab": false,
+                "style": "primary",
+                "size": "md",
+                "full_width": false
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -162,16 +195,22 @@
               "settings": {
                 "text": "New arrivals",
                 "style": "heading--eyebrow",
-                "tag": "p"
-              }
+                "tag": "p",
+                "alignment": "inherit",
+                "max_width": 0
+              },
+              "blocks": {}
             },
             "title": {
               "type": "heading",
               "settings": {
                 "text": "Layer it, <em>stack it</em>",
                 "style": "heading--display",
-                "tag": "h2"
-              }
+                "tag": "h2",
+                "alignment": "inherit",
+                "max_width": 0
+              },
+              "blocks": {}
             },
             "subtitle": {
               "type": "heading",
@@ -179,16 +218,22 @@
                 "text": "Fresh chains, charms and rings, made to be worn together.",
                 "style": "heading--subtitle",
                 "tag": "p",
+                "alignment": "inherit",
                 "max_width": 40
-              }
+              },
+              "blocks": {}
             },
             "button": {
               "type": "button",
               "settings": {
                 "label": "Shop new arrivals",
                 "link": "shopify://collections/new-arrivals",
-                "style": "primary"
-              }
+                "open_in_new_tab": false,
+                "style": "primary",
+                "size": "md",
+                "full_width": false
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -211,444 +256,48 @@
         "autoplay_speed": 6
       }
     },
-    "category_tiles": {
-      "type": "collection-tiles",
-      "blocks": {
-        "tile_1": {
-          "type": "_collection-tile",
-          "settings": {
-            "title": "Rings",
-            "collection": "rings"
-          }
-        },
-        "tile_2": {
-          "type": "_collection-tile",
-          "settings": {
-            "title": "Necklaces",
-            "collection": "necklaces"
-          }
-        },
-        "tile_3": {
-          "type": "_collection-tile",
-          "settings": {
-            "title": "Earrings",
-            "collection": "earrings"
-          }
-        },
-        "tile_4": {
-          "type": "_collection-tile",
-          "settings": {
-            "title": "Bracelets",
-            "collection": "bracelets"
-          }
-        }
-      },
-      "block_order": [
-        "tile_1",
-        "tile_2",
-        "tile_3",
-        "tile_4"
-      ],
-      "settings": {
-        "eyebrow": "Find your piece",
-        "title": "Shop by category",
-        "shape": "tiles--circle",
-        "label_style": "tiles--label-below",
-        "columns_desktop": 4,
-        "mobile_layout": "tiles--mobile-scroll",
-        "gap": 24,
-        "tinted": false,
-        "padding_top": 96,
-        "padding_bottom": 80
-      }
-    },
-    "featured_products": {
-      "type": "featured-collection",
-      "settings": {
-        "products_to_show": 4,
-        "eyebrow": "Bestsellers",
-        "title": "Pieces our customers <em>love</em>",
-        "link_label": "View all",
-        "heading_alignment": "split",
-        "columns_desktop": 4,
-        "columns_mobile": "2",
-        "image_ratio": "card--portrait",
-        "show_secondary_image": true,
-        "padding_top": 40,
-        "padding_bottom": 96,
-        "collection": "bestsellers",
-        "link_url": "shopify://collections/bestsellers"
-      }
-    },
-    "brand_story": {
-      "type": "image-with-text",
-      "blocks": {
-        "eyebrow": {
-          "type": "heading",
-          "settings": {
-            "text": "Our craft",
-            "style": "heading--eyebrow heading--accent",
-            "tag": "p"
-          }
-        },
-        "title": {
-          "type": "heading",
-          "settings": {
-            "text": "Made by hand, <em>made to last</em>",
-            "style": "heading--h2",
-            "tag": "h2"
-          }
-        },
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Every piece is cast, set and polished by hand in our studio, using recycled gold and conflict-free stones. We make fewer things, and we make them well.</p>",
-            "muted": true
-          }
-        },
-        "list": {
-          "type": "list",
-          "settings": {
-            "marker": "list--diamond"
-          },
-          "blocks": {
-            "item_1": {
-              "type": "_list-item",
-              "settings": {
-                "text": "Recycled 18k gold and sterling silver"
-              }
-            },
-            "item_2": {
-              "type": "_list-item",
-              "settings": {
-                "text": "Certified, conflict-free stones"
-              }
-            },
-            "item_3": {
-              "type": "_list-item",
-              "settings": {
-                "text": "Free resizing and lifetime care"
-              }
-            }
-          },
-          "block_order": [
-            "item_1",
-            "item_2",
-            "item_3"
-          ]
-        },
-        "button": {
-          "type": "button",
-          "settings": {
-            "label": "Read our story",
-            "link": "shopify://pages/about",
-            "style": "outline"
-          }
-        }
-      },
-      "block_order": [
-        "eyebrow",
-        "title",
-        "text",
-        "list",
-        "button"
-      ],
-      "settings": {
-        "image_ratio": "arch",
-        "image_position": "image-text--image-start",
-        "image_width": "image-text--half",
-        "tinted": true,
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
-    },
-    "metal_tiles": {
-      "type": "collection-tiles",
-      "blocks": {
-        "metal_1": {
-          "type": "_collection-tile",
-          "settings": {
-            "title": "Yellow gold",
-            "caption": "18k · 14k",
-            "swatch": "linear-gradient(135deg, rgba(240, 214, 140, 1) 0%, rgba(201, 158, 74, 1) 50%, rgba(232, 200, 120, 1) 100%)",
-            "collection": "yellow-gold"
-          }
-        },
-        "metal_2": {
-          "type": "_collection-tile",
-          "settings": {
-            "title": "Rose gold",
-            "caption": "18k",
-            "swatch": "linear-gradient(135deg, rgba(240, 196, 176, 1) 0%, rgba(196, 130, 108, 1) 50%, rgba(232, 182, 160, 1) 100%)",
-            "collection": "rose-gold"
-          }
-        },
-        "metal_3": {
-          "type": "_collection-tile",
-          "settings": {
-            "title": "Sterling silver",
-            "caption": "925",
-            "swatch": "linear-gradient(135deg, rgba(236, 238, 240, 1) 0%, rgba(168, 172, 178, 1) 50%, rgba(220, 222, 226, 1) 100%)",
-            "collection": "sterling-silver"
-          }
-        },
-        "metal_4": {
-          "type": "_collection-tile",
-          "settings": {
-            "title": "Platinum",
-            "caption": "950",
-            "swatch": "linear-gradient(135deg, rgba(222, 224, 228, 1) 0%, rgba(140, 146, 156, 1) 50%, rgba(200, 204, 210, 1) 100%)",
-            "collection": "platinum"
-          }
-        }
-      },
-      "block_order": [
-        "metal_1",
-        "metal_2",
-        "metal_3",
-        "metal_4"
-      ],
-      "settings": {
-        "eyebrow": "Precious metals",
-        "title": "Shop by <em>metal</em>",
-        "shape": "tiles--arch",
-        "label_style": "tiles--label-below",
-        "columns_desktop": 4,
-        "mobile_layout": "tiles--mobile-scroll",
-        "gap": 24,
-        "tinted": false,
-        "padding_top": 96,
-        "padding_bottom": 96
-      }
-    },
-    "trust": {
-      "type": "trust-badges",
-      "blocks": {
-        "badge_1": {
-          "type": "_trust-badge",
-          "settings": {
-            "icon": "diamond",
-            "title": "Certified diamonds",
-            "text": "Every stone is graded and comes with its certificate."
-          }
-        },
-        "badge_2": {
-          "type": "_trust-badge",
-          "settings": {
-            "icon": "hallmark",
-            "title": "Hallmarked gold",
-            "text": "Independently assayed 14k and 18k gold."
-          }
-        },
-        "badge_3": {
-          "type": "_trust-badge",
-          "settings": {
-            "icon": "truck",
-            "title": "Free insured shipping",
-            "text": "Fully insured delivery, gift-wrapped as standard."
-          }
-        },
-        "badge_4": {
-          "type": "_trust-badge",
-          "settings": {
-            "icon": "returns",
-            "title": "30-day returns",
-            "text": "Not quite right? Return or exchange it, free."
-          }
-        }
-      },
-      "block_order": [
-        "badge_1",
-        "badge_2",
-        "badge_3",
-        "badge_4"
-      ],
-      "settings": {
-        "style": "badges--divided",
-        "layout": "badges--stacked",
-        "icon_size": 36,
-        "tinted": true,
-        "padding_top": 56,
-        "padding_bottom": 56
-      }
-    },
-    "shop_the_look": {
-      "type": "shop-the-look",
-      "blocks": {
-        "hotspot_1": {
-          "type": "_hotspot",
-          "settings": {
-            "position_x": 28,
-            "position_y": 38,
-            "product": "architectural-sterling-silver-necklace"
-          }
-        },
-        "hotspot_2": {
-          "type": "_hotspot",
-          "settings": {
-            "position_x": 55,
-            "position_y": 62,
-            "product": "modern-steel-hoop-earrings"
-          }
-        },
-        "hotspot_3": {
-          "type": "_hotspot",
-          "settings": {
-            "position_x": 74,
-            "position_y": 30,
-            "product": "smoky-taupe-cuff-bracelet"
-          }
-        }
-      },
-      "block_order": [
-        "hotspot_1",
-        "hotspot_2",
-        "hotspot_3"
-      ],
-      "settings": {
-        "eyebrow": "Shop the look",
-        "title": "Stacked for <em>everyday</em>",
-        "subtitle": "Tap the dots to see each piece in this look.",
-        "image_position": "look--image-left",
-        "tinted": false,
-        "padding_top": 64,
-        "padding_bottom": 64
-      }
-    },
-    "testimonials": {
-      "type": "testimonials",
-      "blocks": {
-        "testimonial_1": {
-          "type": "_testimonial",
-          "settings": {
-            "quote": "<p>The necklace is even more beautiful in person. I haven't taken it off since it arrived.</p>",
-            "rating": 5,
-            "author": "Maya R.",
-            "detail": "Verified buyer",
-            "product": "soft-taupe-pendant-necklace"
-          }
-        },
-        "testimonial_2": {
-          "type": "_testimonial",
-          "settings": {
-            "quote": "<p>Beautifully packaged and arrived in two days. It made the perfect anniversary gift.</p>",
-            "rating": 5,
-            "author": "Daniel K.",
-            "detail": "Verified buyer",
-            "product": "oversized-architectural-hoop-earrings"
-          }
-        },
-        "testimonial_3": {
-          "type": "_testimonial",
-          "settings": {
-            "quote": "<p>Delicate enough for every day, and the gold hasn't faded at all after months of wear.</p>",
-            "rating": 5,
-            "author": "Noa L.",
-            "detail": "Verified buyer",
-            "product": "matte-finish-necklace"
-          }
-        },
-        "testimonial_4": {
-          "type": "_testimonial",
-          "settings": {
-            "quote": "<p>They adjusted my bracelet for free within a week. Customer care you rarely see anymore.</p>",
-            "rating": 5,
-            "author": "Shira B.",
-            "detail": "Verified buyer",
-            "product": "mist-grey-bar-bracelet"
-          }
-        }
-      },
-      "block_order": [
-        "testimonial_1",
-        "testimonial_2",
-        "testimonial_3",
-        "testimonial_4"
-      ],
-      "settings": {
-        "eyebrow": "Kind words",
-        "title": "Loved, worn <em>and kept</em>",
-        "columns_desktop": 3,
-        "tinted": false,
-        "padding_top": 64,
-        "padding_bottom": 64,
-        "color_scheme": "scheme-2"
-      }
-    },
-    "press": {
-      "type": "press-logos",
-      "blocks": {
-        "logo_1": {
-          "type": "_logo",
-          "settings": {
-            "name": "The Edit"
-          }
-        },
-        "logo_2": {
-          "type": "_logo",
-          "settings": {
-            "name": "Atelier Weekly"
-          }
-        },
-        "logo_3": {
-          "type": "_logo",
-          "settings": {
-            "name": "Maison"
-          }
-        },
-        "logo_4": {
-          "type": "_logo",
-          "settings": {
-            "name": "Journal"
-          }
-        }
-      },
-      "block_order": [
-        "logo_1",
-        "logo_2",
-        "logo_3",
-        "logo_4"
-      ],
-      "settings": {
-        "title": "As seen in",
-        "logo_height": 32,
-        "tinted": false,
-        "padding_top": 48,
-        "padding_bottom": 48
-      }
-    },
     "marquee": {
       "type": "marquee",
       "blocks": {
         "item_1": {
           "type": "_marquee-item",
           "settings": {
-            "text": "Free insured shipping"
-          }
+            "text": "Free insured shipping",
+            "link": ""
+          },
+          "blocks": {}
         },
         "item_2": {
           "type": "_marquee-item",
           "settings": {
-            "text": "Recycled 14k gold"
-          }
+            "text": "Recycled 14k gold",
+            "link": ""
+          },
+          "blocks": {}
         },
         "item_3": {
           "type": "_marquee-item",
           "settings": {
-            "text": "Lifetime warranty"
-          }
+            "text": "Lifetime warranty",
+            "link": ""
+          },
+          "blocks": {}
         },
         "item_4": {
           "type": "_marquee-item",
           "settings": {
-            "text": "30-day returns"
-          }
+            "text": "30-day returns",
+            "link": ""
+          },
+          "blocks": {}
         },
         "item_5": {
           "type": "_marquee-item",
           "settings": {
-            "text": "Free engraving"
-          }
+            "text": "Free engraving",
+            "link": ""
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -668,6 +317,147 @@
         "padding": 14
       }
     },
+    "category_tiles": {
+      "type": "collection-tiles",
+      "blocks": {
+        "tile_1": {
+          "type": "_collection-tile",
+          "settings": {
+            "collection": "rings",
+            "title": "Rings",
+            "caption": "",
+            "link": "",
+            "swatch": ""
+          },
+          "blocks": {}
+        },
+        "tile_2": {
+          "type": "_collection-tile",
+          "settings": {
+            "collection": "necklaces",
+            "title": "Necklaces",
+            "caption": "",
+            "link": "",
+            "swatch": ""
+          },
+          "blocks": {}
+        },
+        "tile_3": {
+          "type": "_collection-tile",
+          "settings": {
+            "collection": "earrings",
+            "title": "Earrings",
+            "caption": "",
+            "link": "",
+            "swatch": ""
+          },
+          "blocks": {}
+        },
+        "tile_4": {
+          "type": "_collection-tile",
+          "settings": {
+            "collection": "bracelets",
+            "title": "Bracelets",
+            "caption": "",
+            "link": "",
+            "swatch": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3",
+        "tile_4"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "Find your piece",
+        "title": "Shop by category",
+        "subtitle": "",
+        "link_label": "",
+        "link_url": "",
+        "heading_alignment": "center",
+        "shape": "tiles--circle",
+        "label_style": "tiles--label-below",
+        "columns_desktop": 4,
+        "mobile_layout": "tiles--mobile-scroll",
+        "gap": 24,
+        "tinted": false,
+        "padding_top": 96,
+        "padding_bottom": 80
+      }
+    },
+    "featured_products": {
+      "type": "featured-collection",
+      "settings": {
+        "color_scheme": "",
+        "collection": "bestsellers",
+        "products_to_show": 4,
+        "eyebrow": "Bestsellers",
+        "title": "Pieces our customers <em>love</em>",
+        "subtitle": "",
+        "link_label": "View all",
+        "link_url": "shopify://collections/bestsellers",
+        "heading_alignment": "split",
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "image_ratio": "card--portrait",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "tinted": false,
+        "padding_top": 40,
+        "padding_bottom": 96
+      }
+    },
+    "shop_the_look": {
+      "type": "shop-the-look",
+      "blocks": {
+        "hotspot_1": {
+          "type": "_hotspot",
+          "settings": {
+            "product": "architectural-sterling-silver-necklace",
+            "position_x": 28,
+            "position_y": 38
+          },
+          "blocks": {}
+        },
+        "hotspot_2": {
+          "type": "_hotspot",
+          "settings": {
+            "product": "modern-steel-hoop-earrings",
+            "position_x": 55,
+            "position_y": 62
+          },
+          "blocks": {}
+        },
+        "hotspot_3": {
+          "type": "_hotspot",
+          "settings": {
+            "product": "smoky-taupe-cuff-bracelet",
+            "position_x": 74,
+            "position_y": 30
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "hotspot_1",
+        "hotspot_2",
+        "hotspot_3"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "image_position": "look--image-left",
+        "eyebrow": "Shop the look",
+        "title": "Stacked for <em>everyday</em>",
+        "subtitle": "Tap the dots to see each piece in this look.",
+        "tinted": false,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
     "collage": {
       "type": "collage",
       "blocks": {
@@ -675,28 +465,37 @@
           "type": "_collage-item",
           "settings": {
             "content_type": "collection",
+            "product": "",
             "collection": "necklaces",
             "image": "shopify://shop_images/collage-layered-necklaces.jpg",
-            "title": "Necklaces"
-          }
+            "title": "Necklaces",
+            "link": ""
+          },
+          "blocks": {}
         },
         "tile_2": {
           "type": "_collage-item",
           "settings": {
             "content_type": "collection",
+            "product": "",
             "collection": "earrings",
             "image": "shopify://shop_images/collage-hoops.jpg",
-            "title": "Earrings"
-          }
+            "title": "Earrings",
+            "link": ""
+          },
+          "blocks": {}
         },
         "tile_3": {
           "type": "_collage-item",
           "settings": {
             "content_type": "collection",
+            "product": "",
             "collection": "jewelry-boxes",
             "image": "shopify://shop_images/collage-gift-set.jpg",
-            "title": "Gifts and keepsakes"
-          }
+            "title": "Gifts and keepsakes",
+            "link": ""
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -705,24 +504,134 @@
         "tile_3"
       ],
       "settings": {
+        "color_scheme": "",
         "layout": "collage--large-start",
         "row_height": 300,
         "gap": 12,
         "eyebrow": "The edit",
         "title": "Pieces to <em>build on</em>",
+        "subtitle": "",
         "tinted": false,
         "padding_top": 64,
         "padding_bottom": 64
       }
     },
+    "brand_story": {
+      "type": "image-with-text",
+      "blocks": {
+        "eyebrow": {
+          "type": "heading",
+          "settings": {
+            "text": "Our craft",
+            "style": "heading--eyebrow heading--accent",
+            "tag": "p",
+            "alignment": "inherit",
+            "max_width": 0
+          },
+          "blocks": {}
+        },
+        "title": {
+          "type": "heading",
+          "settings": {
+            "text": "Made by hand, <em>made to last</em>",
+            "style": "heading--h2",
+            "tag": "h2",
+            "alignment": "inherit",
+            "max_width": 0
+          },
+          "blocks": {}
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Every piece is cast, set and polished by hand in our studio, using recycled gold and conflict-free stones. We make fewer things, and we make them well.</p>",
+            "size": "text--body",
+            "muted": true,
+            "alignment": "inherit",
+            "max_width": 0
+          },
+          "blocks": {}
+        },
+        "list": {
+          "type": "list",
+          "settings": {
+            "marker": "list--diamond",
+            "columns": "1",
+            "gap": 8
+          },
+          "blocks": {
+            "item_1": {
+              "type": "_list-item",
+              "settings": {
+                "text": "Recycled 18k gold and sterling silver"
+              },
+              "blocks": {}
+            },
+            "item_2": {
+              "type": "_list-item",
+              "settings": {
+                "text": "Certified, conflict-free stones"
+              },
+              "blocks": {}
+            },
+            "item_3": {
+              "type": "_list-item",
+              "settings": {
+                "text": "Free resizing and lifetime care"
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "item_1",
+            "item_2",
+            "item_3"
+          ]
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "label": "Read our story",
+            "link": "shopify://pages/about",
+            "open_in_new_tab": false,
+            "style": "outline",
+            "size": "md",
+            "full_width": false
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "title",
+        "text",
+        "list",
+        "button"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "image_ratio": "arch",
+        "image_position": "image-text--image-start",
+        "image_width": "image-text--half",
+        "content_position": "image-text--middle",
+        "content_alignment": "image-text--content-start",
+        "content_gap": 24,
+        "tinted": true,
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
     "studio_video": {
       "type": "video",
       "settings": {
+        "color_scheme": "",
+        "video_url": "https://www.youtube.com/watch?v=8EPFqerB6qU",
+        "background_mode": false,
         "ratio": "video-ratio--cinema",
         "full_width": false,
         "eyebrow": "In the studio",
         "title": "Every piece, <em>made by hand</em>",
-        "background_mode": false,
+        "subtitle": "",
         "tinted": false,
         "padding_top": 64,
         "padding_bottom": 64
@@ -746,6 +655,194 @@
         "padding_bottom": 80
       }
     },
+    "metal_tiles": {
+      "type": "collection-tiles",
+      "blocks": {
+        "metal_1": {
+          "type": "_collection-tile",
+          "settings": {
+            "collection": "yellow-gold",
+            "title": "Yellow gold",
+            "caption": "18k · 14k",
+            "link": "",
+            "swatch": "linear-gradient(135deg, rgba(240, 214, 140, 1) 0%, rgba(201, 158, 74, 1) 50%, rgba(232, 200, 120, 1) 100%)"
+          },
+          "blocks": {}
+        },
+        "metal_2": {
+          "type": "_collection-tile",
+          "settings": {
+            "collection": "rose-gold",
+            "title": "Rose gold",
+            "caption": "18k",
+            "link": "",
+            "swatch": "linear-gradient(135deg, rgba(240, 196, 176, 1) 0%, rgba(196, 130, 108, 1) 50%, rgba(232, 182, 160, 1) 100%)"
+          },
+          "blocks": {}
+        },
+        "metal_3": {
+          "type": "_collection-tile",
+          "settings": {
+            "collection": "sterling-silver",
+            "title": "Sterling silver",
+            "caption": "925",
+            "link": "",
+            "swatch": "linear-gradient(135deg, rgba(236, 238, 240, 1) 0%, rgba(168, 172, 178, 1) 50%, rgba(220, 222, 226, 1) 100%)"
+          },
+          "blocks": {}
+        },
+        "metal_4": {
+          "type": "_collection-tile",
+          "settings": {
+            "collection": "platinum",
+            "title": "Platinum",
+            "caption": "950",
+            "link": "",
+            "swatch": "linear-gradient(135deg, rgba(222, 224, 228, 1) 0%, rgba(140, 146, 156, 1) 50%, rgba(200, 204, 210, 1) 100%)"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "metal_1",
+        "metal_2",
+        "metal_3",
+        "metal_4"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "Precious metals",
+        "title": "Shop by <em>metal</em>",
+        "subtitle": "",
+        "link_label": "",
+        "link_url": "",
+        "heading_alignment": "center",
+        "shape": "tiles--arch",
+        "label_style": "tiles--label-below",
+        "columns_desktop": 4,
+        "mobile_layout": "tiles--mobile-scroll",
+        "gap": 24,
+        "tinted": false,
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
+    "testimonials": {
+      "type": "testimonials",
+      "blocks": {
+        "testimonial_1": {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>The necklace is even more beautiful in person. I haven't taken it off since it arrived.</p>",
+            "rating": 5,
+            "author": "Maya R.",
+            "detail": "Verified buyer",
+            "product": "soft-taupe-pendant-necklace"
+          },
+          "blocks": {}
+        },
+        "testimonial_2": {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>Beautifully packaged and arrived in two days. It made the perfect anniversary gift.</p>",
+            "rating": 5,
+            "author": "Daniel K.",
+            "detail": "Verified buyer",
+            "product": "oversized-architectural-hoop-earrings"
+          },
+          "blocks": {}
+        },
+        "testimonial_3": {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>Delicate enough for every day, and the gold hasn't faded at all after months of wear.</p>",
+            "rating": 5,
+            "author": "Noa L.",
+            "detail": "Verified buyer",
+            "product": "matte-finish-necklace"
+          },
+          "blocks": {}
+        },
+        "testimonial_4": {
+          "type": "_testimonial",
+          "settings": {
+            "quote": "<p>They adjusted my bracelet for free within a week. Customer care you rarely see anymore.</p>",
+            "rating": 5,
+            "author": "Shira B.",
+            "detail": "Verified buyer",
+            "product": "mist-grey-bar-bracelet"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "testimonial_1",
+        "testimonial_2",
+        "testimonial_3",
+        "testimonial_4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-2",
+        "eyebrow": "Kind words",
+        "title": "Loved, worn <em>and kept</em>",
+        "subtitle": "",
+        "columns_desktop": 3,
+        "tinted": false,
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
+    },
+    "press": {
+      "type": "press-logos",
+      "blocks": {
+        "logo_1": {
+          "type": "_logo",
+          "settings": {
+            "name": "The Edit",
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "logo_2": {
+          "type": "_logo",
+          "settings": {
+            "name": "Atelier Weekly",
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "logo_3": {
+          "type": "_logo",
+          "settings": {
+            "name": "Maison",
+            "link": ""
+          },
+          "blocks": {}
+        },
+        "logo_4": {
+          "type": "_logo",
+          "settings": {
+            "name": "Journal",
+            "link": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "logo_1",
+        "logo_2",
+        "logo_3",
+        "logo_4"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "title": "As seen in",
+        "logo_height": 32,
+        "tinted": false,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
     "gallery": {
       "type": "shoppable-gallery",
       "blocks": {
@@ -753,43 +850,55 @@
           "type": "_gallery-image",
           "settings": {
             "image": "shopify://shop_images/feed-rings-hand.jpg",
-            "product": "radiance-stackable-rings-set-brushed-gold"
-          }
+            "product": "radiance-stackable-rings-set-brushed-gold",
+            "link": ""
+          },
+          "blocks": {}
         },
         "photo_2": {
           "type": "_gallery-image",
           "settings": {
             "image": "shopify://shop_images/collage-layered-necklaces.jpg",
-            "product": "collar-de-cadena-bano-de-oro"
-          }
+            "product": "collar-de-cadena-bano-de-oro",
+            "link": ""
+          },
+          "blocks": {}
         },
         "photo_3": {
           "type": "_gallery-image",
           "settings": {
             "image": "shopify://shop_images/collage-hoops.jpg",
-            "product": "gilded-gold-statement-hoop-earrings"
-          }
+            "product": "gilded-gold-statement-hoop-earrings",
+            "link": ""
+          },
+          "blocks": {}
         },
         "photo_4": {
           "type": "_gallery-image",
           "settings": {
             "image": "shopify://shop_images/collage-gift-set.jpg",
-            "product": "soft-taupe-pendant-necklace"
-          }
+            "product": "soft-taupe-pendant-necklace",
+            "link": ""
+          },
+          "blocks": {}
         },
         "photo_5": {
           "type": "_gallery-image",
           "settings": {
             "image": "shopify://shop_images/slide-flatlay.jpg",
-            "product": "gold-plated-cuban-link-chain-necklace"
-          }
+            "product": "gold-plated-cuban-link-chain-necklace",
+            "link": ""
+          },
+          "blocks": {}
         },
         "photo_6": {
           "type": "_gallery-image",
           "settings": {
             "image": "shopify://shop_images/slide-autumn-edit-mobile.jpg",
-            "product": "pulseira-de-charms-banhada-a-ouro"
-          }
+            "product": "pulseira-de-charms-banhada-a-ouro",
+            "link": ""
+          },
+          "blocks": {}
         }
       },
       "block_order": [
@@ -804,6 +913,9 @@
         "color_scheme": "scheme-1",
         "eyebrow": "As worn by you",
         "title": "Shop the <em>feed</em>",
+        "subtitle": "",
+        "handle": "",
+        "profile_url": "",
         "columns": 6,
         "padding_top": 64,
         "padding_bottom": 64
@@ -813,6 +925,7 @@
       "type": "featured-blog",
       "settings": {
         "color_scheme": "scheme-1",
+        "blog": "news",
         "articles_to_show": 3,
         "show_image": true,
         "show_date": true,
@@ -821,8 +934,65 @@
         "title": "Stories from <em>the studio</em>",
         "link_label": "Read the journal",
         "padding_top": 64,
-        "padding_bottom": 64,
-        "blog": "news"
+        "padding_bottom": 64
+      }
+    },
+    "trust": {
+      "type": "trust-badges",
+      "blocks": {
+        "badge_1": {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "diamond",
+            "title": "Certified diamonds",
+            "text": "Every stone is graded and comes with its certificate."
+          },
+          "blocks": {}
+        },
+        "badge_2": {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "hallmark",
+            "title": "Hallmarked gold",
+            "text": "Independently assayed 14k and 18k gold."
+          },
+          "blocks": {}
+        },
+        "badge_3": {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free insured shipping",
+            "text": "Fully insured delivery, gift-wrapped as standard."
+          },
+          "blocks": {}
+        },
+        "badge_4": {
+          "type": "_trust-badge",
+          "settings": {
+            "icon": "returns",
+            "title": "30-day returns",
+            "text": "Not quite right? Return or exchange it, free."
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "badge_1",
+        "badge_2",
+        "badge_3",
+        "badge_4"
+      ],
+      "settings": {
+        "color_scheme": "",
+        "eyebrow": "",
+        "title": "",
+        "style": "badges--divided",
+        "layout": "badges--stacked",
+        "icon_size": 36,
+        "tinted": true,
+        "padding_top": 56,
+        "padding_bottom": 56
       }
     }
   },
