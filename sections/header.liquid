@@ -748,9 +748,16 @@
 
     .header__nav,
     .header__country,
-    .header__language,
-    .header__account {
+    .header__language {
       display: none;
+    }
+
+    /* The account component must stay visible on mobile (Theme Store requirement) */
+    .header__account {
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
     }
 
     .header__actions {
@@ -766,7 +773,7 @@
     }
 
     .header__shop-name {
-      font-size: min(1.25rem, (100vw - 11rem) / 10);
+      font-size: min(1.25rem, (100vw - 13.5rem) / 10);
     }
   }
 

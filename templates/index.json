@@ -341,6 +341,7 @@
           "type": "button",
           "settings": {
             "label": "Read our story",
+            "link": "shopify://pages/about",
             "style": "outline"
           }
         }
