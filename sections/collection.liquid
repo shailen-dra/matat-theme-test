@@ -44,10 +44,11 @@
   assign desktop_width = grid_share | divided_by: columns
   capture sizes
     echo '(min-width: 990px) ' | append: desktop_width | append: 'vw, '
+    # Mobile: subtract the page margins (and the gap between two columns)
     if section.settings.columns_mobile == '1'
-      echo '100vw'
+      echo 'calc(100vw - 40px)'
     else
-      echo '50vw'
+      echo 'calc(50vw - 28px)'
     endif
   endcapture
 

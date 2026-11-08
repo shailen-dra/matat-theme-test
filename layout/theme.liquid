@@ -31,6 +31,9 @@
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
       <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
+    {%- else -%}
+      {%- # A default icon until one is picked; without it browsers request /favicon.ico, which 404s -%}
+      <link rel="icon" type="image/svg+xml" href="{{ 'favicon-default.svg' | asset_url }}">
     {%- endif -%}
 
     {% # Social, title, etc. %}

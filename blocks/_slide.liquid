@@ -18,9 +18,18 @@
     assign contrast_color = '#ffffff'
   endif
 
+  # block.index is empty for theme blocks, so find this slide's position in the section
+  assign slide_position = 0
+  for section_block in section.blocks
+    if section_block.id == block.id
+      assign slide_position = forloop.index0
+      break
+    endif
+  endfor
+
   assign loading = 'lazy'
   assign fetchpriority = 'auto'
-  if section.index == 1 and block.index == 1
+  if section.index == 1 and slide_position == 0
     assign loading = 'eager'
     assign fetchpriority = 'high'
   endif
@@ -28,7 +37,7 @@
   assign image_style = 'object-position: ' | append: image.presentation.focal_point | append: ';'
 
   assign demo_images = 'demo-hero.jpg,demo-rings-hand.jpg,demo-ginkgo-set.jpg,demo-flatlay.jpg' | split: ','
-  assign demo_index = block.index | default: 1 | minus: 1 | modulo: 4
+  assign demo_index = slide_position | modulo: 4
   assign demo_image = demo_images[demo_index]
 -%}
 
