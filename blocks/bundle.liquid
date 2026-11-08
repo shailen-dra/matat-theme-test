@@ -13,9 +13,15 @@
   assign product = closest.product
   assign variant = product.selected_or_first_available_variant
   assign main_id = 'BundleMain-' | append: block.id
+  # Complementary products are set in the Search & Discovery app; skip the request when there are none
+  assign complementary = product.metafields['shopify--discovery--product_recommendation'].complementary_products.value
+  assign show_bundle = false
+  if complementary != blank or request.design_mode
+    assign show_bundle = true
+  endif
 -%}
 
-{%- if product != blank -%}
+{%- if product != blank and show_bundle -%}
   <bundle-offer
     class="bundle"
     data-url="{{ routes.product_recommendations_url }}?product_id={{ product.id }}&limit=8&intent=complementary&section_id=bundle-offer"
