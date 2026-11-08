@@ -9,11 +9,28 @@
   {{ settings.type_heading_font | font_modify: 'weight', 'bold' | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
   {{ settings.type_heading_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
 
+  {%- liquid
+    # Shopify's font library only covers Latin characters. Hebrew letters fall
+    # through to fonts already on the device, picked to match serif or sans.
+    assign hebrew_sans = '"Arial Hebrew", "Segoe UI", "Noto Sans Hebrew", Arial'
+    assign hebrew_serif = '"New Peninim MT", "David", "Noto Serif Hebrew", "Times New Roman"'
+
+    assign hebrew_primary = hebrew_sans
+    if settings.type_primary_font.fallback_families == 'serif'
+      assign hebrew_primary = hebrew_serif
+    endif
+
+    assign hebrew_heading = hebrew_sans
+    if settings.type_heading_font.fallback_families == 'serif'
+      assign hebrew_heading = hebrew_serif
+    endif
+  -%}
+
   :root {
-    --font-primary--family: {{ settings.type_primary_font.family }}, '{{ settings.hebrew_body_font }}', {{ settings.type_primary_font.fallback_families }};
+    --font-primary--family: {{ settings.type_primary_font.family }}, {{ hebrew_primary }}, {{ settings.type_primary_font.fallback_families }};
     --font-primary--style: {{ settings.type_primary_font.style }};
     --font-primary--weight: {{ settings.type_primary_font.weight }};
-    --font-heading--family: {{ settings.type_heading_font.family }}, '{{ settings.hebrew_heading_font }}', {{ settings.type_heading_font.fallback_families }};
+    --font-heading--family: {{ settings.type_heading_font.family }}, {{ hebrew_heading }}, {{ settings.type_heading_font.fallback_families }};
     --font-heading--style: {{ settings.type_heading_font.style }};
     --font-heading--weight: {{ settings.type_heading_font.weight }};
     --page-width: {{ settings.max_page_width }};
