@@ -490,9 +490,7 @@
       "show_policies": "הצגת קישורי מדיניות",
       "show_follow_on_shop": "הצגת מעקב ב-Shop",
       "show_follow_on_shop_info": "מאפשר ללקוחות לעקוב אחרי החנות באפליקציית Shop. נדרש Shop Pay.",
-      "show_powered_by": "הצגת \"Powered by Shopify\"",
-      "payment_icons_fallback": "סמלי תשלום להצגה",
-      "payment_icons_fallback_info": "בשימוש רק כל עוד אין אמצעי תשלום פעיל בהגדרות > תשלומים. יש להפריד בפסיקים: visa, master, american_express, discover, paypal, apple_pay, google_pay, shopify_pay."
+      "show_powered_by": "הצגת \"Powered by Shopify\""
     },
     "product": {
       "name": "פרטי מוצר",

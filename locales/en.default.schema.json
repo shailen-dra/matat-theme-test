@@ -490,9 +490,7 @@
       "show_policies": "Show policy links",
       "show_follow_on_shop": "Show Follow on Shop",
       "show_follow_on_shop_info": "Lets customers follow your store in the Shop app. Requires Shop Pay.",
-      "show_powered_by": "Show \"Powered by Shopify\"",
-      "payment_icons_fallback": "Payment icons to show",
-      "payment_icons_fallback_info": "Only used while no payment method is active in Settings > Payments. Separate with commas: visa, master, american_express, discover, paypal, apple_pay, google_pay, shopify_pay."
+      "show_powered_by": "Show \"Powered by Shopify\""
     },
     "product": {
       "name": "Product information",
