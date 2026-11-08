@@ -157,6 +157,7 @@
     "print": "הדפסה"
   },
   "password": {
+    "meta_description": "{{ shop_name }} נפתחת בקרוב. הירשמו כדי לשמוע כשנשיק.",
     "title": "החנות פרטית",
     "password": "סיסמה",
     "enter": "כניסה",

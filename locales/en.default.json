@@ -154,6 +154,7 @@
     "print": "Print"
   },
   "password": {
+    "meta_description": "{{ shop_name }} is opening soon. Sign up to hear when we launch.",
     "title": "This shop is private",
     "password": "Password",
     "enter": "Enter",

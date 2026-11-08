@@ -97,7 +97,15 @@
   href="{{ canonical_url }}"
 >
 
-{%- assign meta_description = page_description | default: shop.description -%}
+{%- liquid
+  assign meta_description = page_description | default: shop.description
+  if meta_description == blank and request.page_type == 'password'
+    assign meta_description = shop.password_message | strip_html | strip
+    if meta_description == blank
+      assign meta_description = 'password.meta_description' | t: shop_name: shop.name
+    endif
+  endif
+-%}
 {% if meta_description != blank %}
   <meta
     name="description"
