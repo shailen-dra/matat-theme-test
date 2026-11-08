@@ -36,9 +36,8 @@
 
   assign image_style = 'object-position: ' | append: image.presentation.focal_point | append: ';'
 
-  assign demo_images = 'demo-hero.jpg,demo-rings-hand.jpg,demo-ginkgo-set.jpg,demo-flatlay.jpg' | split: ','
-  assign demo_index = slide_position | modulo: 4
-  assign demo_image = demo_images[demo_index]
+  assign placeholder_number = slide_position | modulo: 2 | plus: 1
+  assign placeholder = 'lifestyle-' | append: placeholder_number
 -%}
 
 <div
@@ -85,22 +84,7 @@
         }}
       </picture>
     {%- else -%}
-      <img
-        src="{{ demo_image | asset_img_url: '1500x' }}"
-        srcset="
-          {{ demo_image | asset_img_url: '750x' }} 750w,
-          {{ demo_image | asset_img_url: '1100x' }} 1100w,
-          {{ demo_image | asset_img_url: '1500x' }} 1500w,
-          {{ demo_image | asset_img_url: '2000x' }} 2000w
-        "
-        sizes="100vw"
-        width="2000"
-        height="1333"
-        alt=""
-        class="slide__image"
-        loading="{{ loading }}"
-        fetchpriority="{{ fetchpriority }}"
-      >
+      {{ placeholder | placeholder_svg_tag: 'slide__image placeholder-svg' }}
     {%- endif -%}
   </div>
 

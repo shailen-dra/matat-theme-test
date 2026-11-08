@@ -1,7 +1,6 @@
 {%- liquid
   assign image = section.settings.image
   assign image_style = 'object-position: ' | append: image.presentation.focal_point
-  assign placeholders = 'demo-hoops.jpg,demo-layered-necklaces.jpg,demo-rings-hand.jpg,demo-ginkgo-set.jpg' | split: ','
 -%}
 
 <div
@@ -27,20 +26,7 @@
               alt: image.alt
           }}
         {%- else -%}
-          <img
-            src="{{ 'demo-flatlay.jpg' | asset_img_url: '1300x' }}"
-            srcset="
-              {{ 'demo-flatlay.jpg' | asset_img_url: '750x' }} 750w,
-              {{ 'demo-flatlay.jpg' | asset_img_url: '1300x' }} 1300w,
-              {{ 'demo-flatlay.jpg' | asset_img_url: '1600x' }} 1600w
-            "
-            sizes="(min-width: 990px) 60vw, 100vw"
-            width="1600"
-            height="1067"
-            alt="{{ 'sections.shop_the_look.demo_image_alt' | t | escape }}"
-            class="look__image"
-            loading="lazy"
-          >
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'look__image placeholder-svg' }}
         {%- endif -%}
       </div>
 
@@ -62,7 +48,8 @@
         <ul class="look__list" role="list">
           {%- for block in section.blocks -%}
             {%- assign row_id = 'LookItem-' | append: block.id -%}
-            {%- assign placeholder_index = forloop.index0 | modulo: 4 -%}
+            {%- assign placeholder_number = forloop.index0 | modulo: 6 | plus: 1 -%}
+            {%- assign placeholder = 'product-' | append: placeholder_number -%}
             {%- comment -%}
               Placeholder row; replaced by the hotspot block's own row (see blocks/_hotspot.liquid)
               because theme block product settings aren't available here.
@@ -70,7 +57,7 @@
             <li data-look-slot="{{ block.id }}">
               {% render 'product-row',
                 product: blank,
-                placeholder_image: placeholders[placeholder_index],
+                placeholder: placeholder,
                 id: row_id,
                 block_id: block.id
               %}
@@ -272,13 +259,13 @@
       "type": "inline_richtext",
       "id": "title",
       "label": "t:labels.heading",
-      "default": "Stacked for <em>everyday</em>"
+      "default": "Complete the <em>look</em>"
     },
     {
       "type": "text",
       "id": "subtitle",
       "label": "t:labels.subtitle",
-      "default": "Tap the dots to see each piece in this look."
+      "default": "Tap the dots to see each product in this look."
     },
     {
       "type": "checkbox",

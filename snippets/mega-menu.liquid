@@ -50,22 +50,7 @@
                 | image_tag: widths: '300, 400, 600, 800', sizes: '(min-width: 990px) 16rem, 45vw', loading: 'lazy'
               }}
             {%- else -%}
-              {%- liquid
-                if i == 1
-                  assign demo_image = 'demo-layered-necklaces.jpg'
-                else
-                  assign demo_image = 'demo-hoops.jpg'
-                endif
-              -%}
-              <img
-                src="{{ demo_image | asset_img_url: '800x' }}"
-                srcset="{{ demo_image | asset_img_url: '400x' }} 400w, {{ demo_image | asset_img_url: '800x' }} 800w"
-                sizes="(min-width: 990px) 16rem, 45vw"
-                alt=""
-                width="800"
-                height="1200"
-                loading="lazy"
-              >
+              {{ 'image' | placeholder_svg_tag: 'placeholder-svg' }}
             {%- endif -%}
           </span>
           {%- if promo_heading != blank -%}

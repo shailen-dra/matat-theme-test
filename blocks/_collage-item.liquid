@@ -40,9 +40,16 @@
       endif
   endcase
 
-  assign demo_images = 'demo-layered-necklaces.jpg,demo-hoops.jpg,demo-ginkgo-set.jpg,demo-rings-hand.jpg,demo-flatlay.jpg' | split: ','
-  assign demo_index = section.blocks | find_index: 'id', block.id | default: 0 | modulo: 5
-  assign demo_image = demo_images[demo_index]
+  # Shopify placeholder illustrations until an image is picked
+  assign placeholder_number = section.blocks | find_index: 'id', block.id | default: 0 | modulo: 5 | plus: 1
+  case kind
+    when 'product'
+      assign placeholder = 'product-' | append: placeholder_number
+    when 'collection'
+      assign placeholder = 'collection-' | append: placeholder_number
+    else
+      assign placeholder = 'image'
+  endcase
 
   if url != blank
     assign tag = 'a'
@@ -71,19 +78,7 @@
           alt: ''
       }}
     {%- else -%}
-      <img
-        src="{{ demo_image | asset_img_url: '1100x' }}"
-        srcset="
-          {{ demo_image | asset_img_url: '550x' }} 550w,
-          {{ demo_image | asset_img_url: '1100x' }} 1100w
-        "
-        sizes="(min-width: 990px) 50vw, 100vw"
-        width="1100"
-        height="1100"
-        alt=""
-        class="collage-item__image"
-        loading="lazy"
-      >
+      {{ placeholder | placeholder_svg_tag: 'collage-item__image placeholder-svg' }}
     {%- endif -%}
   </span>
 

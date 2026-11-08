@@ -39,14 +39,7 @@
             | image_tag: widths: '550, 750, 1100, 1500, 2000', sizes: '(min-width: 990px) 80vw, 100vw', loading: 'lazy', class: 'compare__image', alt: after.alt
           }}
         {%- else -%}
-          <img
-            src="{{ 'demo-rings-hand.jpg' | asset_img_url: '1600x' }}"
-            width="1600"
-            height="1067"
-            alt=""
-            loading="lazy"
-            class="compare__image"
-          >
+          {{ 'image' | placeholder_svg_tag: 'compare__image placeholder-svg' }}
         {%- endif -%}
         {%- if section.settings.after_label != blank -%}
           <span class="compare__label compare__label--after">{{ section.settings.after_label | escape }}</span>
@@ -61,14 +54,7 @@
             | image_tag: widths: '550, 750, 1100, 1500, 2000', sizes: '(min-width: 990px) 80vw, 100vw', loading: 'lazy', class: 'compare__image', alt: ''
           }}
         {%- else -%}
-          <img
-            src="{{ 'demo-rings-hand.jpg' | asset_img_url: '1600x' }}"
-            width="1600"
-            height="1067"
-            alt=""
-            loading="lazy"
-            class="compare__image compare__image--demo-before"
-          >
+          {{ 'image' | placeholder_svg_tag: 'compare__image placeholder-svg' }}
         {%- endif -%}
         {%- if section.settings.before_label != blank -%}
           <span class="compare__label compare__label--before">{{ section.settings.before_label | escape }}</span>
@@ -135,10 +121,6 @@
     object-fit: cover;
   }
 
-  /* Demo only: show the "before" as an unfinished, desaturated photo */
-  .compare__image--demo-before {
-    filter: grayscale(1) contrast(0.85) brightness(1.05);
-  }
 
   .compare__label {
     position: absolute;
@@ -303,19 +285,19 @@
       "type": "text",
       "id": "eyebrow",
       "label": "t:labels.eyebrow",
-      "default": "Restoration"
+      "default": "Before and after"
     },
     {
       "type": "inline_richtext",
       "id": "title",
       "label": "t:labels.heading",
-      "default": "Polished back to <em>new</em>"
+      "default": "See the <em>difference</em>"
     },
     {
       "type": "text",
       "id": "subtitle",
       "label": "t:labels.subtitle",
-      "default": "Drag to compare a well-loved piece before and after polishing."
+      "default": "Drag the slider to compare two images."
     },
     {
       "type": "range",

@@ -2,7 +2,6 @@
   assign blog = section.settings.blog
   assign limit = section.settings.articles_to_show
   assign link_url = blog.url
-  assign demo_images = 'demo-ginkgo-set.jpg,demo-rings-hand.jpg,demo-flatlay.jpg,demo-layered-necklaces.jpg' | split: ','
 -%}
 
 <div
@@ -61,19 +60,11 @@
     {%- else -%}
       {%- # Placeholder cards until a blog with articles is picked -%}
       {%- for i in (1..limit) -%}
-        {%- assign demo_index = forloop.index0 | modulo: demo_images.size -%}
         <li>
           <article class="article-card">
             {%- if section.settings.show_image -%}
               <span class="article-card__media">
-                <img
-                  src="{{ demo_images[demo_index] | asset_img_url: '900x' }}"
-                  width="900"
-                  height="600"
-                  alt=""
-                  loading="lazy"
-                  class="article-card__image"
-                >
+                {{ 'image' | placeholder_svg_tag: 'article-card__image placeholder-svg' }}
               </span>
             {%- endif -%}
             <div class="article-card__content">
@@ -144,19 +135,19 @@
       "type": "text",
       "id": "eyebrow",
       "label": "t:labels.eyebrow",
-      "default": "The journal"
+      "default": "Blog"
     },
     {
       "type": "inline_richtext",
       "id": "title",
       "label": "t:labels.heading",
-      "default": "Stories from <em>the studio</em>"
+      "default": "Latest <em>stories</em>"
     },
     {
       "type": "text",
       "id": "link_label",
       "label": "t:labels.link_label",
-      "default": "Read the journal"
+      "default": "View all"
     },
     {
       "type": "range",

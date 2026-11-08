@@ -74,7 +74,9 @@
         "title": "Polished back to <em>new</em>",
         "subtitle": "Drag to compare a well-loved piece before and after polishing.",
         "padding_top": 64,
-        "padding_bottom": 64
+        "padding_bottom": 64,
+        "before_image": "shopify://shop_images/before-rings.jpg",
+        "after_image": "shopify://shop_images/video-cover-rings.jpg"
       }
     },
     "stores": {

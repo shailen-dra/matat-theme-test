@@ -4,7 +4,7 @@
   suggestions. Without a `product` it renders a placeholder row.
 
   @param {product} [product] - The product to show
-  @param {string} [placeholder_image] - Theme asset used when `product` is blank
+  @param {string} [placeholder] - Placeholder illustration used when `product` is blank: `product-1` (default) to `product-6`
   @param {string} [id] - Id of the row element
   @param {string} [block_id] - Hotspot block id the row belongs to
   @param {string} [heading_tag] - Title element (default `h3`)
@@ -16,7 +16,7 @@
 
 {%- liquid
   assign heading_tag = heading_tag | default: 'h3'
-  assign placeholder_image = placeholder_image | default: 'demo-hoops.jpg'
+  assign placeholder = placeholder | default: 'product-1'
 -%}
 
 <div
@@ -64,14 +64,7 @@
     {%- endif -%}
   {%- else -%}
     <span class="product-row__media">
-      <img
-        src="{{ placeholder_image | asset_img_url: '240x' }}"
-        width="240"
-        height="240"
-        alt=""
-        class="product-row__image"
-        loading="lazy"
-      >
+      {{ placeholder | placeholder_svg_tag: 'product-row__image product-row__placeholder' }}
     </span>
     <div class="product-row__info">
       <{{ heading_tag }} class="product-row__title">{{ 'product.card.placeholder_title' | t }}</{{ heading_tag }}>

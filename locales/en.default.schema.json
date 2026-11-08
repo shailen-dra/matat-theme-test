@@ -303,7 +303,7 @@
     "mega_menu": {
       "name": "Mega menu",
       "menu_item": "Menu item",
-      "menu_item_info": "Name of a top-level item in the header menu, e.g. Jewelry. Its submenu becomes a full-width mega menu.",
+      "menu_item_info": "Name of a top-level item in the header menu, e.g. Shop. Its submenu becomes a full-width mega menu.",
       "show_view_all": "Show \"Shop all\" link",
       "image_ratio": "Image shape",
       "featured_1": "Featured card 1",
@@ -357,7 +357,7 @@
       "link_info": "Leave empty to link to the collection.",
       "image_info": "Leave empty to use the collection image.",
       "swatch": "Swatch",
-      "swatch_info": "Shows a color or gradient instead of an image, e.g. for metals."
+      "swatch_info": "Shows a color or gradient instead of an image, e.g. for colors or materials."
     },
     "trust_badge": {
       "name": "Trust badge"
@@ -508,7 +508,7 @@
       "label_style": "Label position",
       "presets": {
         "category": "Shop by category",
-        "metal": "Shop by metal"
+        "metal": "Shop by color"
       }
     },
     "featured_collection": {

@@ -14,8 +14,6 @@
       echo 'calc(50vw - 28px)'
     endif
   endcapture
-
-  assign demo_images = 'demo-layered-necklaces.jpg,demo-hoops.jpg,demo-rings-hand.jpg,demo-ginkgo-set.jpg,demo-flatlay.jpg' | split: ','
 -%}
 
 <div
@@ -58,9 +56,10 @@
     {%- else -%}
       {%- # Placeholder cards until a collection with products is picked -%}
       {%- for i in (1..limit) -%}
-        {%- assign demo_index = forloop.index0 | modulo: demo_images.size -%}
+        {%- assign placeholder_number = forloop.index0 | modulo: 6 | plus: 1 -%}
+        {%- assign placeholder = 'product-' | append: placeholder_number -%}
         <li class="product-grid__item">
-          {% render 'product-card', placeholder_image: demo_images[demo_index], ratio: section.settings.image_ratio, sizes: sizes %}
+          {% render 'product-card', placeholder: placeholder, ratio: section.settings.image_ratio, sizes: sizes %}
         </li>
       {%- endfor -%}
     {%- endif -%}
@@ -244,7 +243,7 @@
       "category": "t:general.collections",
       "settings": {
         "eyebrow": "Bestsellers",
-        "title": "Pieces our customers <em>love</em>"
+        "title": "Customer <em>favorites</em>"
       }
     }
   ]

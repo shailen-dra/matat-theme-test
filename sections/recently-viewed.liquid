@@ -35,11 +35,11 @@
       data-grid
     >
       {%- if request.design_mode -%}
-        {%- assign demo_images = 'demo-layered-necklaces.jpg,demo-hoops.jpg,demo-rings-hand.jpg,demo-ginkgo-set.jpg,demo-flatlay.jpg' | split: ',' -%}
-        {%- for i in (1..section.settings.products_to_show) -%}
-          {%- assign demo_index = forloop.index0 | modulo: demo_images.size -%}
+                {%- for i in (1..section.settings.products_to_show) -%}
+          {%- assign placeholder_number = forloop.index0 | modulo: 6 | plus: 1 -%}
+          {%- assign placeholder = 'product-' | append: placeholder_number -%}
           <li class="product-grid__item" data-placeholder>
-            {% render 'product-card', placeholder_image: demo_images[demo_index] %}
+            {% render 'product-card', placeholder: placeholder %}
           </li>
         {%- endfor -%}
       {%- endif -%}

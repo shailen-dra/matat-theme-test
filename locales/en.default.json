@@ -231,14 +231,8 @@
     }
   },
   "sections": {
-    "hero": {
-      "demo_image_alt": "Hands adorned with fine gold rings and delicate chain bracelets"
-    },
     "collection_tiles": {
       "placeholder_title": "Collection"
-    },
-    "image_with_text": {
-      "demo_image_alt": "Gold ginkgo leaf necklace and earrings laid on linen"
     },
     "slideshow": {
       "carousel": "carousel",
@@ -252,8 +246,7 @@
       "go_to": "Go to slide {{ index }}"
     },
     "shop_the_look": {
-      "hotspot_label": "Show {{ title }}",
-      "demo_image_alt": "Gold jewelry arranged on linen"
+      "hotspot_label": "Show {{ title }}"
     },
     "testimonials": {
       "rating": "Rated {{ rating }} out of 5",

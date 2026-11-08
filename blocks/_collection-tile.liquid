@@ -15,21 +15,9 @@
   assign swatch = block.settings.swatch
   assign image_style = 'object-position: ' | append: image.presentation.focal_point
 
-  if image == blank and swatch == blank
-    assign key = title | downcase
-    # Earrings first: "earring" also contains "ring"
-    if key contains 'earring' or key contains 'hoop'
-      assign demo_image = 'demo-hoops.jpg'
-    elsif key contains 'ring'
-      assign demo_image = 'demo-rings-hand.jpg'
-    elsif key contains 'necklace' or key contains 'pendant'
-      assign demo_image = 'demo-layered-necklaces.jpg'
-    elsif key contains 'bracelet' or key contains 'bangle'
-      assign demo_image = 'demo-flatlay.jpg'
-    else
-      assign demo_image = 'demo-ginkgo-set.jpg'
-    endif
-  endif
+  # Shopify's collection placeholders (collection-1 to collection-6) until an image is picked
+  assign placeholder_number = section.blocks | find_index: 'id', block.id | default: 0 | modulo: 6 | plus: 1
+  assign placeholder = 'collection-' | append: placeholder_number
 -%}
 
 <a href="{{ url }}" class="tile" {{ block.shopify_attributes }}>
@@ -49,16 +37,7 @@
           alt: ''
       }}
     {%- else -%}
-      <img
-        src="{{ demo_image | asset_img_url: '600x' }}"
-        srcset="{{ demo_image | asset_img_url: '360x' }} 360w, {{ demo_image | asset_img_url: '600x' }} 600w, {{ demo_image | asset_img_url: '900x' }} 900w"
-        sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 45vw"
-        width="900"
-        height="900"
-        alt=""
-        class="tile__image"
-        loading="lazy"
-      >
+      {{ placeholder | placeholder_svg_tag: 'tile__image placeholder-svg' }}
     {%- endif -%}
   </span>
   <span class="tile__label">

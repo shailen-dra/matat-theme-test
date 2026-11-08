@@ -234,14 +234,8 @@
     }
   },
   "sections": {
-    "hero": {
-      "demo_image_alt": "ידיים עונדות טבעות זהב עדינות וצמידי שרשרת דקים"
-    },
     "collection_tiles": {
       "placeholder_title": "קולקציה"
-    },
-    "image_with_text": {
-      "demo_image_alt": "שרשרת ועגילי זהב בצורת עלי גינקו על בד פשתן"
     },
     "slideshow": {
       "carousel": "קרוסלה",
@@ -255,8 +249,7 @@
       "go_to": "מעבר לשקופית {{ index }}"
     },
     "shop_the_look": {
-      "hotspot_label": "הצגת {{ title }}",
-      "demo_image_alt": "תכשיטי זהב מונחים על פשתן"
+      "hotspot_label": "הצגת {{ title }}"
     },
     "testimonials": {
       "rating": "דירוג {{ rating }} מתוך 5",

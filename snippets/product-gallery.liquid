@@ -123,17 +123,10 @@
         </div>
       {%- endfor -%}
     {%- else -%}
-      {%- assign demo_images = 'demo-ginkgo-set.jpg,demo-layered-necklaces.jpg,demo-hoops.jpg,demo-rings-hand.jpg' | split: ',' -%}
-      {%- for demo_image in demo_images -%}
+      {%- for i in (1..4) -%}
+        {%- assign placeholder = 'product-' | append: i -%}
         <div class="product-gallery__item">
-          <img
-            class="product-gallery__image"
-            src="{{ demo_image | asset_img_url: '1200x' }}"
-            alt=""
-            width="1200"
-            height="1500"
-            loading="lazy"
-          >
+          {{ placeholder | placeholder_svg_tag: 'product-gallery__placeholder' }}
         </div>
       {%- endfor -%}
     {%- endif -%}

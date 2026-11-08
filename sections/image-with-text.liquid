@@ -30,20 +30,7 @@
             alt: image.alt
         }}
       {%- else -%}
-        <img
-          src="{{ 'demo-ginkgo-set.jpg' | asset_img_url: '1100x' }}"
-          srcset="
-            {{ 'demo-ginkgo-set.jpg' | asset_img_url: '550x' }} 550w,
-            {{ 'demo-ginkgo-set.jpg' | asset_img_url: '1100x' }} 1100w,
-            {{ 'demo-ginkgo-set.jpg' | asset_img_url: '1600x' }} 1600w
-          "
-          sizes="(min-width: 750px) 55vw, 100vw"
-          width="1600"
-          height="1067"
-          alt="{{ 'sections.image_with_text.demo_image_alt' | t | escape }}"
-          class="image-text__image"
-          loading="lazy"
-        >
+        {{ 'image' | placeholder_svg_tag: 'image-text__image placeholder-svg' }}
       {%- endif -%}
     </div>
 
@@ -284,16 +271,16 @@
       "blocks": [
         {
           "type": "heading",
-          "settings": { "text": "Our craft", "style": "heading--eyebrow heading--accent", "tag": "p" }
+          "settings": { "text": "About us", "style": "heading--eyebrow heading--accent", "tag": "p" }
         },
         {
           "type": "heading",
-          "settings": { "text": "Made by hand, <em>made to last</em>", "style": "heading--h2", "tag": "h2" }
+          "settings": { "text": "Tell your <em>story</em>", "style": "heading--h2", "tag": "h2" }
         },
         {
           "type": "text",
           "settings": {
-            "text": "<p>Every piece is cast, set and polished by hand in our studio, using recycled gold and conflict-free stones. We make fewer things, and we make them well.</p>",
+            "text": "<p>Pair text with an image to share your brand story, describe a product or announce a promotion.</p>",
             "muted": true
           }
         },
@@ -301,14 +288,14 @@
           "type": "list",
           "settings": { "marker": "list--diamond" },
           "blocks": [
-            { "type": "_list-item", "settings": { "text": "Recycled 18k gold and sterling silver" } },
-            { "type": "_list-item", "settings": { "text": "Certified, conflict-free stones" } },
-            { "type": "_list-item", "settings": { "text": "Free resizing and lifetime care" } }
+            { "type": "_list-item", "settings": { "text": "Add a key detail" } },
+            { "type": "_list-item", "settings": { "text": "Highlight a benefit" } },
+            { "type": "_list-item", "settings": { "text": "Share what makes you different" } }
           ]
         },
         {
           "type": "button",
-          "settings": { "label": "Read our story", "style": "outline" }
+          "settings": { "label": "Learn more", "style": "outline" }
         }
       ]
     }

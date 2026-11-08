@@ -86,20 +86,7 @@
                 alt: ''
             }}
           {%- else -%}
-            <img
-              src="{{ 'demo-rings-hand.jpg' | asset_img_url: '1600x' }}"
-              srcset="
-                {{ 'demo-rings-hand.jpg' | asset_img_url: '750x' }} 750w,
-                {{ 'demo-rings-hand.jpg' | asset_img_url: '1100x' }} 1100w,
-                {{ 'demo-rings-hand.jpg' | asset_img_url: '1600x' }} 1600w
-              "
-              sizes="(min-width: 990px) 90vw, 100vw"
-              width="1600"
-              height="1067"
-              alt=""
-              class="video-section__media"
-              loading="lazy"
-            >
+            {{ 'lifestyle-2' | placeholder_svg_tag: 'video-section__media placeholder-svg' }}
           {%- endif -%}
 
           {%- if has_video -%}
@@ -389,6 +376,7 @@
       "id": "video_url",
       "label": "t:sections.video.video_url",
       "accept": ["youtube", "vimeo"],
+      "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc",
       "info": "t:sections.video.video_url_info"
     },
     {
@@ -429,13 +417,13 @@
       "type": "text",
       "id": "eyebrow",
       "label": "t:labels.eyebrow",
-      "default": "In the studio"
+      "default": "Video"
     },
     {
       "type": "inline_richtext",
       "id": "title",
       "label": "t:labels.heading",
-      "default": "Every piece, <em>made by hand</em>"
+      "default": "Tell your story <em>with video</em>"
     },
     {
       "type": "text",

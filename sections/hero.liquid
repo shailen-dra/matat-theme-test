@@ -73,38 +73,8 @@
         }}
       </picture>
     {%- else -%}
-      {%- # Demo photography (theme assets) until the merchant picks an image -%}
-      <picture>
-        <source
-          media="(max-width: 749px)"
-          srcset="
-            {{ 'demo-hero-mobile.jpg' | asset_img_url: '550x' }} 550w,
-            {{ 'demo-hero-mobile.jpg' | asset_img_url: '750x' }} 750w,
-            {{ 'demo-hero-mobile.jpg' | asset_img_url: '1100x' }} 1100w
-          "
-          sizes="100vw"
-          width="1200"
-          height="1252"
-        >
-        <img
-          src="{{ 'demo-hero.jpg' | asset_img_url: '1500x' }}"
-          srcset="
-            {{ 'demo-hero.jpg' | asset_img_url: '750x' }} 750w,
-            {{ 'demo-hero.jpg' | asset_img_url: '1100x' }} 1100w,
-            {{ 'demo-hero.jpg' | asset_img_url: '1500x' }} 1500w,
-            {{ 'demo-hero.jpg' | asset_img_url: '2000x' }} 2000w,
-            {{ 'demo-hero.jpg' | asset_img_url: '2400x' }} 2400w
-          "
-          sizes="100vw"
-          width="2400"
-          height="1597"
-          alt="{{ 'sections.hero.demo_image_alt' | t | escape }}"
-          class="hero__image"
-          style="object-position: 50% 35%;"
-          loading="{{ loading }}"
-          fetchpriority="{{ fetchpriority }}"
-        >
-      </picture>
+      {%- # Shopify's lifestyle placeholder until the merchant picks an image -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'hero__image placeholder-svg' }}
     {%- endif -%}
   </div>
 
@@ -521,16 +491,16 @@
       "blocks": [
         {
           "type": "heading",
-          "settings": { "text": "The autumn edit", "style": "heading--eyebrow", "tag": "p" }
+          "settings": { "text": "New collection", "style": "heading--eyebrow", "tag": "p" }
         },
         {
           "type": "heading",
-          "settings": { "text": "Jewelry made to be <em>kept</em>", "style": "heading--display", "tag": "h1" }
+          "settings": { "text": "Introduce your <em>brand</em>", "style": "heading--display", "tag": "h1" }
         },
         {
           "type": "heading",
           "settings": {
-            "text": "Fine pieces in recycled gold, designed to be worn every day and passed on.",
+            "text": "Use this text to describe your brand or highlight a new collection.",
             "style": "heading--subtitle",
             "tag": "p",
             "max_width": 44

@@ -455,7 +455,8 @@
         "subtitle": "Tap the dots to see each piece in this look.",
         "tinted": false,
         "padding_top": 64,
-        "padding_bottom": 64
+        "padding_bottom": 64,
+        "image": "shopify://shop_images/look-flatlay.jpg"
       }
     },
     "collage": {
@@ -618,7 +619,8 @@
         "content_gap": 24,
         "tinted": true,
         "padding_top": 96,
-        "padding_bottom": 96
+        "padding_bottom": 96,
+        "image": "shopify://shop_images/story-ginkgo-set.jpg"
       }
     },
     "studio_video": {
@@ -634,7 +636,8 @@
         "subtitle": "",
         "tinted": false,
         "padding_top": 64,
-        "padding_bottom": 64
+        "padding_bottom": 64,
+        "poster": "shopify://shop_images/video-cover-rings.jpg"
       }
     },
     "countdown": {

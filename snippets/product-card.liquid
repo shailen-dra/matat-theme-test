@@ -3,11 +3,12 @@
   sale / sold-out badge, quick add button, vendor, title and
   price. Quick add follows the "Product cards" theme settings.
 
-  Without a `product` it renders a placeholder card using a demo image, so
-  grids look complete on stores that have no products yet.
+  Without a `product` it renders a placeholder card using Shopify's product
+  placeholder illustration, so grids look complete on stores that have no
+  products yet.
 
   @param {product} [product] - The product to show
-  @param {string} [placeholder_image] - Theme asset used when `product` is blank
+  @param {string} [placeholder] - Placeholder illustration used when `product` is blank: `product-1` (default) to `product-6`
   @param {string} [ratio] - Image ratio class: `card--portrait` (default), `card--square` or `card--natural`
   @param {boolean} [show_secondary_image] - Shows the second product image on hover
   @param {boolean} [show_vendor] - Shows the vendor above the title
@@ -17,7 +18,7 @@
 
   @example
   {% render 'product-card', product: product, show_secondary_image: true %}
-  {% render 'product-card', placeholder_image: 'demo-hoops.jpg' %}
+  {% render 'product-card', placeholder: 'product-2' %}
 {% enddoc %}
 
 {%- liquid
@@ -204,16 +205,7 @@
     </div>
   {%- else -%}
     <div class="card__media">
-      <img
-        src="{{ placeholder_image | default: 'demo-ginkgo-set.jpg' | asset_img_url: '600x' }}"
-        srcset="{{ placeholder_image | default: 'demo-ginkgo-set.jpg' | asset_img_url: '450x' }} 450w, {{ placeholder_image | default: 'demo-ginkgo-set.jpg' | asset_img_url: '750x' }} 750w"
-        sizes="{{ sizes }}"
-        width="750"
-        height="1000"
-        alt=""
-        class="card__image"
-        loading="{{ loading }}"
-      >
+      {{ placeholder | default: 'product-1' | placeholder_svg_tag: 'card__image card__placeholder' }}
     </div>
     <div class="card__info">
       <{{ heading_tag | default: 'h3' }} class="card__title">{{ 'product.card.placeholder_title' | t }}</{{ heading_tag | default: 'h3' }}>

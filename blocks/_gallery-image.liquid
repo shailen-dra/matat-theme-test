@@ -18,9 +18,6 @@
     assign image = product.featured_media.preview_image
   endif
 
-  assign demo_images = 'demo-rings-hand.jpg,demo-layered-necklaces.jpg,demo-hoops.jpg,demo-ginkgo-set.jpg,demo-flatlay.jpg,demo-hero-mobile.jpg' | split: ','
-  assign demo_index = section.blocks | find_index: 'id', block.id | default: 0 | modulo: 6
-  assign demo_image = demo_images[demo_index]
 
   if url != blank
     assign tag = 'a'
@@ -43,14 +40,7 @@
       | image_tag: widths: '300, 450, 600, 800', sizes: '(min-width: 990px) 17vw, 45vw', loading: 'lazy', class: 'gallery-tile__image', alt: image.alt
     }}
   {%- else -%}
-    <img
-      src="{{ demo_image | asset_img_url: '600x600', crop: 'center' }}"
-      width="600"
-      height="600"
-      alt=""
-      loading="lazy"
-      class="gallery-tile__image"
-    >
+    {{ 'image' | placeholder_svg_tag: 'gallery-tile__image placeholder-svg' }}
   {%- endif -%}
 
   {%- if product != blank -%}
