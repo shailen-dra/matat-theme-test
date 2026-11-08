@@ -8,7 +8,52 @@
  * ------------------------------------------------------------
  */
 {
-  "current": "Matat",
+  "current": {
+    "social_instagram_link": "https://www.instagram.com/",
+    "social_facebook_link": "https://www.facebook.com/",
+    "social_tiktok_link": "https://www.tiktok.com/",
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
+      }
+    },
+    "content_for_index": [],
+    "color_schemes": {
+      "scheme-1": {
+        "settings": {
+          "background": "#ffffff",
+          "background_gradient": "",
+          "foreground": "#333333",
+          "accent": "#83673d"
+        }
+      },
+      "scheme-2": {
+        "settings": {
+          "background": "#f6f1ea",
+          "background_gradient": "",
+          "foreground": "#2b2622",
+          "accent": "#83673d"
+        }
+      },
+      "scheme-3": {
+        "settings": {
+          "background": "#1a1a1a",
+          "background_gradient": "",
+          "foreground": "#f5f0e8",
+          "accent": "#c9a66b"
+        }
+      },
+      "scheme-4": {
+        "settings": {
+          "background": "#83673d",
+          "background_gradient": "",
+          "foreground": "#ffffff",
+          "accent": "#f5f0e8"
+        }
+      }
+    }
+  },
   "presets": {
     "Matat": {
       "color_schemes": {
