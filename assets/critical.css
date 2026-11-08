@@ -236,9 +236,17 @@ main:focus {
 
 .rte :is(h5, h6) {
   font-family: var(--font-primary--family);
-  font-size: 0.8125rem;
-  letter-spacing: 0.16em;
   text-transform: uppercase;
+}
+
+.rte h5 {
+  font-size: 0.875rem;
+  letter-spacing: 0.12em;
+}
+
+.rte h6 {
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
 }
 
 .rte a {

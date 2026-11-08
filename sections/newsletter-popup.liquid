@@ -178,13 +178,11 @@
       this.dialog.addEventListener('close', this.onClose);
 
       if (window.Shopify?.designMode) {
-        const section = this.closest('.shopify-section');
-        document.addEventListener('shopify:section:select', (event) => {
-          if (event.target === section) this.open(true);
-        });
-        document.addEventListener('shopify:section:deselect', (event) => {
-          if (event.target === section) this.dialog.close();
-        });
+        this.section = this.closest('.shopify-section');
+        document.addEventListener('shopify:section:select', this.onEditorOpen);
+        // Changing a setting re-renders the section: reopen it so the change shows
+        document.addEventListener('shopify:section:load', this.onEditorOpen);
+        document.addEventListener('shopify:section:deselect', this.onEditorClose);
         return;
       }
 
@@ -201,7 +199,18 @@
 
     disconnectedCallback() {
       clearTimeout(this.timer);
+      document.removeEventListener('shopify:section:select', this.onEditorOpen);
+      document.removeEventListener('shopify:section:load', this.onEditorOpen);
+      document.removeEventListener('shopify:section:deselect', this.onEditorClose);
     }
+
+    onEditorOpen = (event) => {
+      if (event.target === this.section) this.open(true);
+    };
+
+    onEditorClose = (event) => {
+      if (event.target === this.section) this.dialog.close();
+    };
 
     read() {
       try {
