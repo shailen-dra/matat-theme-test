@@ -233,7 +233,7 @@
         "id": "show_discount_code",
         "label": "t:settings.cart.show_discount_code",
         "info": "t:settings.cart.show_discount_code_info",
-        "default": true
+        "default": false
       },
       {
         "type": "header",
