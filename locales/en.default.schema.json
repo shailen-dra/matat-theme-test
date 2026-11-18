@@ -690,7 +690,9 @@
       "image_info": "Optional for products and collections, which use their own image.",
       "title_info": "Optional for products and collections, which use their own title.",
       "large_start": "Large tile first",
-      "large_end": "Large tile last"
+      "large_end": "Large tile last",
+      "product_info": "Used when the content type is Product.",
+      "collection_info": "Used when the content type is Collection."
     },
     "faq": {
       "name": "FAQ",

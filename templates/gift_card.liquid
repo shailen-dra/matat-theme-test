@@ -228,9 +228,9 @@
   <body>
     <main id="MainContent" class="gift-card">
       <a href="{{ routes.root_url }}" class="gift-card__brand">
-        {%- if settings.logo -%}
+        {%- if shop.brand.logo -%}
           {{
-            settings.logo
+            shop.brand.logo
             | image_url: width: 280
             | image_tag: widths: '140, 280', sizes: '140px', class: 'gift-card__logo', alt: shop.name
           }}

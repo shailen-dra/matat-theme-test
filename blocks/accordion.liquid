@@ -7,20 +7,40 @@
   {% content_for 'block', type: 'accordion', id: 'accordion' %}
 {% enddoc %}
 
+{%- liquid
+  # Inside an FAQ section with structured data on, mark this row up as a Question
+  assign faq_schema = false
+  if section.settings.structured_data == true and block.settings.heading != blank and block.settings.content != blank
+    assign faq_schema = true
+  endif
+-%}
+
 <details
   class="accordion"
   {% if block.settings.open %}
     open
   {% endif %}
+  {% if faq_schema %}
+    itemscope itemprop="mainEntity" itemtype="https://schema.org/Question"
+  {% endif %}
   {{ block.shopify_attributes }}
 >
   <summary class="accordion__summary">
-    <span class="accordion__heading">{{ block.settings.heading | escape }}</span>
+    <span class="accordion__heading" {% if faq_schema %}itemprop="name"{% endif %}>
+      {{- block.settings.heading | escape -}}
+    </span>
     {% render 'icon', name: 'chevron-down', class: 'accordion__icon' %}
   </summary>
-  <div class="accordion__content">
+  <div
+    class="accordion__content"
+    {% if faq_schema %}
+      itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer"
+    {% endif %}
+  >
     {%- if block.settings.content != blank -%}
-      <div class="rte text text--small text--muted">{{ block.settings.content }}</div>
+      <div class="rte text text--small text--muted" {% if faq_schema %}itemprop="text"{% endif %}>
+        {{- block.settings.content -}}
+      </div>
     {%- endif -%}
     {% content_for 'blocks' %}
   </div>

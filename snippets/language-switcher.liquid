@@ -3,12 +3,14 @@
   than one published language. Each option submits the localization form, so
   Shopify redirects to the same page in the chosen language.
 
+  @param {string} id - Unique id for the localization form (there can be several per page)
+
   @example
-  {% render 'language-switcher' %}
+  {% render 'language-switcher', id: 'FooterLanguage' %}
 {% enddoc %}
 
 {%- if localization.available_languages.size > 1 -%}
-  {%- form 'localization', class: 'language-switcher' -%}
+  {%- form 'localization', id: id, class: 'language-switcher' -%}
     <span class="visually-hidden">{{ 'general.language.label' | t }}</span>
     <ul class="language-switcher__list" role="list">
       {%- for language in localization.available_languages -%}

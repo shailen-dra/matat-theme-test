@@ -216,7 +216,8 @@
     {
       "type": "url",
       "id": "profile_url",
-      "label": "t:sections.shoppable_gallery.profile_url"
+      "label": "t:sections.shoppable_gallery.profile_url",
+      "visible_if": "{{ section.settings.handle != blank }}"
     },
     {
       "type": "range",

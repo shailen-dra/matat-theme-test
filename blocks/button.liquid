@@ -31,7 +31,8 @@
       "type": "checkbox",
       "id": "open_in_new_tab",
       "label": "t:labels.open_in_new_tab",
-      "default": false
+      "default": false,
+      "visible_if": "{{ block.settings.link != blank }}"
     },
     {
       "type": "select",

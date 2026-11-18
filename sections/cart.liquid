@@ -812,13 +812,15 @@
       "type": "inline_richtext",
       "id": "empty_title",
       "label": "t:labels.heading",
-      "default": "You might <em>love</em>"
+      "default": "You might <em>love</em>",
+      "visible_if": "{{ section.settings.empty_collection != blank }}"
     },
     {
       "type": "text",
       "id": "empty_link_label",
       "label": "t:labels.link_label",
-      "default": "View all"
+      "default": "View all",
+      "visible_if": "{{ section.settings.empty_collection != blank }}"
     },
     {
       "type": "header",

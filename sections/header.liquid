@@ -167,7 +167,8 @@
       {%- endif -%}
 
       {%- if section.settings.show_language -%}
-        <div class="header__language">{% render 'language-switcher' %}</div>
+        {%- assign desktop_language_id = 'HeaderLanguageDesktop-' | append: section.id -%}
+        <div class="header__language">{% render 'language-switcher', id: desktop_language_id %}</div>
       {%- endif -%}
 
       {%- if section.settings.show_search -%}
@@ -286,7 +287,8 @@
         {% render 'country-selector', id: country_id %}
       {%- endif -%}
       {%- if section.settings.show_language -%}
-        {% render 'language-switcher' %}
+        {%- assign language_id = 'HeaderLanguage-' | append: section.id -%}
+        {% render 'language-switcher', id: language_id %}
       {%- endif -%}
     </div>
   </dialog>
@@ -1344,7 +1346,7 @@
       "id": "transparent_logo",
       "label": "t:sections.header.transparent_logo",
       "info": "t:sections.header.transparent_logo_info",
-      "visible_if": "{{ section.settings.transparent_on_home }}"
+      "visible_if": "{{ section.settings.transparent_on_home and section.settings.logo != blank }}"
     },
     {
       "type": "checkbox",

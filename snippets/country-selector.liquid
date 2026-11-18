@@ -12,7 +12,8 @@
 
 {%- if localization.available_countries.size > 1 -%}
   <country-selector class="country-selector">
-    {%- form 'localization', class: 'country-selector__form' -%}
+    {%- assign form_id = id | append: '-form' -%}
+    {%- form 'localization', id: form_id, class: 'country-selector__form' -%}
       <label for="{{ id }}" class="visually-hidden">{{ 'general.country.label' | t }}</label>
       <div class="country-selector__field">
         <select id="{{ id }}" name="country_code" class="country-selector__select">

@@ -63,7 +63,8 @@
         {%- endif -%}
 
         {%- if section.settings.show_language -%}
-          {% render 'language-switcher' %}
+          {%- assign language_id = 'FooterLanguage-' | append: section.id -%}
+          {% render 'language-switcher', id: language_id %}
         {%- endif -%}
 
         {%- if section.settings.show_follow_on_shop and request.page_type != 'password' -%}

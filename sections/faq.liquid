@@ -43,34 +43,21 @@
       {%- endif -%}
     </div>
 
-    <div class="faq__items">
+    {%- comment -%}
+      FAQ rich results use microdata: a parent section can't read theme block
+      settings, so each accordion block marks itself up as a Question.
+    {%- endcomment -%}
+    <div
+      class="faq__items"
+      {% if section.settings.structured_data %}
+        itemscope itemtype="https://schema.org/FAQPage"
+      {% endif %}
+    >
       {% content_for 'blocks' %}
     </div>
   </div>
 </div>
 
-{%- comment -%} FAQ rich results: every question with an answer {%- endcomment -%}
-{%- if section.settings.structured_data -%}
-  {%- assign faq_started = false -%}
-  {%- capture faq_entries -%}
-    {%- for block in section.blocks -%}
-      {%- if block.type == 'accordion' and block.settings.heading != blank and block.settings.content != blank -%}
-        {%- unless faq_started -%}{%- assign faq_started = true -%}{%- else -%},{%- endunless -%}
-        {
-          "@type": "Question",
-          "name": {{ block.settings.heading | json }},
-          "acceptedAnswer": { "@type": "Answer", "text": {{ block.settings.content | json }} }
-        }
-      {%- endif -%}
-    {%- endfor -%}
-  {%- endcapture -%}
-
-  {%- if faq_started -%}
-    <script type="application/ld+json">
-      { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{{ faq_entries }}] }
-    </script>
-  {%- endif -%}
-{%- endif -%}
 
 {% stylesheet %}
   .faq {
