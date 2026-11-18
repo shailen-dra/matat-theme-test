@@ -9,6 +9,8 @@
  *   - removes every `shopify://` setting value from templates and section groups
  *   - removes the same values and the placeholder social media links from
  *     the `current` settings in config/settings_data.json
+ *   - points header mega menu blocks back at "Catalog", the top-level menu
+ *     item in a new store's main menu (the demo store's menu uses "Shop")
  *   - checks that settings_data.json still has a preset named after the theme
  * then runs `shopify theme package` on the copy and saves the zip to dist/.
  * The theme files in the repo aren't changed.
@@ -25,6 +27,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const themeDirs = ['assets', 'blocks', 'config', 'layout', 'locales', 'sections', 'snippets', 'templates'];
 const work = mkdtempSync(join(tmpdir(), 'theme-package-'));
 const removed = [];
+const DEFAULT_MEGA_MENU_ITEM = 'Catalog';
 
 /** Splits Shopify's leading comment banner from the JSON body. */
 function readJson(path) {
@@ -58,6 +61,19 @@ function stripStoreReferences(node, file, trail = '') {
   }
 }
 
+/** New stores' main menu has "Catalog", not the demo store's menu items. */
+function resetMegaMenus(group, file) {
+  for (const [sectionKey, section] of Object.entries(group.sections || {})) {
+    for (const [blockKey, block] of Object.entries(section.blocks || {})) {
+      if (block.type !== 'mega_menu' || !block.settings) continue;
+      if (block.settings.menu_item !== DEFAULT_MEGA_MENU_ITEM) {
+        removed.push(`${file}: ${sectionKey}.${blockKey}.menu_item (${block.settings.menu_item} -> ${DEFAULT_MEGA_MENU_ITEM})`);
+        block.settings.menu_item = DEFAULT_MEGA_MENU_ITEM;
+      }
+    }
+  }
+}
+
 try {
   for (const dir of themeDirs) cpSync(join(root, dir), join(work, dir), { recursive: true });
 
@@ -67,6 +83,7 @@ try {
       const path = join(work, dir, name);
       const { banner, data } = readJson(path);
       stripStoreReferences(data, `${dir}/${name}`);
+      if (dir === 'sections' && name === 'header-group.json') resetMegaMenus(data, `${dir}/${name}`);
       writeJson(path, banner, data);
     }
   }
@@ -89,7 +106,7 @@ try {
   }
   writeJson(settingsPath, banner, settings);
 
-  console.log(`Removed ${removed.length} store-specific values:`);
+  console.log(`Removed or reset ${removed.length} store-specific values:`);
   for (const line of removed) console.log(`  - ${line}`);
 
   execFileSync('shopify', ['theme', 'package', '--path', work], { cwd: root, stdio: 'inherit' });
