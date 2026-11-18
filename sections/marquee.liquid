@@ -150,13 +150,13 @@
       animation: marquee-scroll var(--marquee-duration) linear infinite;
     }
 
-    [dir='rtl'] .marquee__track,
     .marquee--reverse .marquee__track {
       animation-direction: reverse;
     }
 
-    [dir='rtl'] .marquee--reverse .marquee__track {
-      animation-direction: normal;
+    /* RTL: the track starts at the right edge, so it scrolls the other way */
+    [dir='rtl'] .marquee__track {
+      animation-name: marquee-scroll-rtl;
     }
 
     .marquee:hover .marquee__track,
@@ -191,6 +191,12 @@
   @keyframes marquee-scroll {
     to {
       transform: translateX(-50%);
+    }
+  }
+
+  @keyframes marquee-scroll-rtl {
+    to {
+      transform: translateX(50%);
     }
   }
 {% endstylesheet %}
