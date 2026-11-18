@@ -1,0 +1,105 @@
+{% doc %}
+  Renders a logo image, for example at the top of the footer's brand column.
+  Falls back to the logo from Settings > Brand, then to the store name.
+
+  @example
+  {% content_for 'block', type: 'logo', id: 'logo' %}
+{% enddoc %}
+
+{%- liquid
+  assign logo = block.settings.image | default: shop.brand.logo
+  assign sizes = block.settings.width | append: 'px'
+-%}
+
+<div
+  class="logo-block"
+  style="--logo-block-width: {{ block.settings.width }}px;"
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.link_home -%}
+    <a href="{{ routes.root_url }}" class="logo-block__link">
+  {%- endif -%}
+
+  {%- if logo != blank -%}
+    {{
+      logo
+      | image_url: width: 640
+      | image_tag: widths: '160, 240, 320, 480, 640', sizes: sizes, alt: shop.name, class: 'logo-block__image', loading: 'lazy'
+    }}
+  {%- else -%}
+    <span class="logo-block__text">{{ shop.name }}</span>
+  {%- endif -%}
+
+  {%- if block.settings.link_home -%}
+    </a>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .logo-block {
+    display: flex;
+    max-width: 100%;
+  }
+
+  .logo-block__link {
+    display: inline-flex;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .logo-block__link:focus-visible {
+    outline: 2px solid currentcolor;
+    outline-offset: 4px;
+  }
+
+  .logo-block__image {
+    width: min(var(--logo-block-width), 100%);
+    height: auto;
+  }
+
+  .logo-block__text {
+    font-family: var(--font-heading--family);
+    font-size: 1.5rem;
+    font-weight: var(--font-heading--weight);
+    letter-spacing: 0.12em;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:blocks.logo.name",
+  "tag": null,
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "t:labels.image",
+      "info": "t:blocks.logo.image_info"
+    },
+    {
+      "type": "range",
+      "id": "width",
+      "label": "t:blocks.logo.width",
+      "min": 60,
+      "max": 320,
+      "step": 10,
+      "unit": "px",
+      "default": 140
+    },
+    {
+      "type": "checkbox",
+      "id": "link_home",
+      "label": "t:blocks.logo.link_home",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "t:blocks.logo.name",
+      "category": "t:general.layout"
+    }
+  ]
+}
+{% endschema %}

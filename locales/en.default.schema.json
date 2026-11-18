@@ -442,6 +442,12 @@
     },
     "payment_icons": {
       "name": "Payment icons"
+    },
+    "logo": {
+      "name": "Logo",
+      "image_info": "Uses the logo from Settings > Brand when empty, or the store name if there is none.",
+      "width": "Logo width",
+      "link_home": "Link to home page"
     }
   },
   "sections": {
