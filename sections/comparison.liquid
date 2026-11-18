@@ -13,18 +13,26 @@
   %}
 
   <div class="comparison">
-    <table class="comparison__table">
-      <thead>
-        <tr>
-          <td class="comparison__corner"></td>
-          <th scope="col" class="comparison__head comparison__cell--highlight">{{ section.settings.column_1 | escape }}</th>
-          <th scope="col" class="comparison__head">{{ section.settings.column_2 | escape }}</th>
-        </tr>
-      </thead>
-      <tbody>
+    {%- comment -%}
+      ARIA table roles instead of <table>: Shopify wraps each row block in a
+      <div>, which is not valid inside <tbody>.
+    {%- endcomment -%}
+    <div class="comparison__table" role="table">
+      <div role="rowgroup">
+        <div class="comparison__row" role="row">
+          <div class="comparison__cell comparison__corner" role="cell"></div>
+          <div class="comparison__cell comparison__head comparison__cell--highlight" role="columnheader">
+            {{- section.settings.column_1 | escape -}}
+          </div>
+          <div class="comparison__cell comparison__head" role="columnheader">
+            {{- section.settings.column_2 | escape -}}
+          </div>
+        </div>
+      </div>
+      <div class="comparison__body" role="rowgroup">
         {% content_for 'blocks' %}
-      </tbody>
-    </table>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -38,20 +46,26 @@
 
   .comparison__table {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
   }
 
-  .comparison__table :is(th, td) {
+  /* Every row uses the same column template, so columns line up across rows */
+  .comparison__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .comparison__cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 1rem 1.25rem;
     border-bottom: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
     text-align: center;
-    vertical-align: middle;
   }
 
   .comparison__feature {
-    font-weight: 400;
-    text-align: start !important;
+    justify-content: flex-start;
+    text-align: start;
   }
 
   .comparison__head {
@@ -65,18 +79,19 @@
     background-color: color-mix(in srgb, var(--color-accent) 8%, var(--color-background));
   }
 
-  thead .comparison__cell--highlight {
+  .comparison__head.comparison__cell--highlight {
     border-start-start-radius: var(--style-border-radius-buttons);
     border-start-end-radius: var(--style-border-radius-buttons);
     color: var(--color-accent);
   }
 
-  tbody tr:last-child .comparison__cell--highlight {
+  /* Each row sits inside its own block wrapper, so match the last wrapper */
+  .comparison__body > :last-child .comparison__cell--highlight {
     border-end-start-radius: var(--style-border-radius-buttons);
     border-end-end-radius: var(--style-border-radius-buttons);
   }
 
-  tbody tr:last-child :is(th, td) {
+  .comparison__body > :last-child .comparison__cell {
     border-bottom: 0;
   }
 
@@ -103,7 +118,7 @@
   }
 
   @media (max-width: 749px) {
-    .comparison__table :is(th, td) {
+    .comparison__cell {
       padding: 0.875rem 0.625rem;
       font-size: 0.875rem;
     }

@@ -6,13 +6,13 @@
   {% content_for 'block', type: '_comparison-row', id: 'row-1' %}
 {% enddoc %}
 
-<tr class="comparison__row" {{ block.shopify_attributes }}>
-  <th scope="row" class="comparison__feature">{{ block.settings.feature | escape }}</th>
+<div class="comparison__row" role="row" {{ block.shopify_attributes }}>
+  <div class="comparison__cell comparison__feature" role="rowheader">{{ block.settings.feature | escape }}</div>
   {%- assign values = block.settings.value_1 | append: '||' | append: block.settings.value_2 | split: '||' -%}
   {%- for i in (0..1) -%}
     {%- assign value = values[i] | strip -%}
     {%- assign value_key = value | downcase -%}
-    <td class="comparison__cell{% if forloop.first %} comparison__cell--highlight{% endif %}">
+    <div class="comparison__cell{% if forloop.first %} comparison__cell--highlight{% endif %}" role="cell">
       {%- case value_key -%}
         {%- when 'yes', 'true', '✓' -%}
           <span class="comparison__mark comparison__mark--yes">
@@ -27,9 +27,9 @@
         {%- else -%}
           {{ value | escape }}
       {%- endcase -%}
-    </td>
+    </div>
   {%- endfor -%}
-</tr>
+</div>
 
 {% schema %}
 {

@@ -31,7 +31,7 @@
       <div class="marquee__group">
         {{ items }}
         {%- # Copies fill the width for a seamless loop; hidden from assistive tech -%}
-        <span class="marquee__repeat" aria-hidden="true" inert>{{ repeats }}</span>
+        <div class="marquee__repeat" aria-hidden="true" inert>{{ repeats }}</div>
       </div>
       <div class="marquee__group" aria-hidden="true" inert>
         {{ items_copy }}
