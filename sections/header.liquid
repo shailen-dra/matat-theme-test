@@ -174,7 +174,7 @@
       {%- if section.settings.show_search -%}
         <button
           type="button"
-          class="header__icon"
+          class="header__icon header__search"
           data-dialog-open="{{ search_id }}"
           aria-haspopup="dialog"
           aria-controls="{{ search_id }}"
@@ -451,7 +451,7 @@
 
   .header--transparent:not(:hover, :focus-within, [data-scrolled], :has(details[open]))
     .header__logo:has(.header__logo-image--transparent)
-    .header__logo-image {
+    .header__logo-image:not(.header__logo-image--transparent) {
     display: none;
   }
 
@@ -721,10 +721,29 @@
 
   /* Mobile */
   @media (max-width: 989px) {
+    /* Two icon slots on each side keep the logo centered: menu + search | logo | account + cart */
     .header .header__inner {
-      grid-template-columns: 1fr auto 1fr;
-      grid-template-areas: 'toggle logo actions';
-      gap: 0.5rem;
+      grid-template-columns: repeat(2, 2.5rem) minmax(0, 1fr) repeat(2, 2.5rem);
+      grid-template-areas: 'toggle search logo account cart';
+      gap: 0;
+    }
+
+    .header .header__actions {
+      display: contents;
+    }
+
+    .header__search {
+      grid-area: search;
+    }
+
+    .header__account {
+      grid-area: account;
+    }
+
+    .header__cart {
+      grid-area: cart;
+      justify-self: end;
+      margin-inline-end: -0.625rem;
     }
 
     .header__toggle {
@@ -768,12 +787,8 @@
     }
   }
 
-  /* Small phones: the text logo takes the flexible middle column and scales down so the icons stay on screen */
+  /* Small phones: the text logo scales down so it fits the middle column */
   @media (max-width: 389px) {
-    .header .header__inner {
-      grid-template-columns: auto minmax(0, 1fr) auto;
-    }
-
     .header__shop-name {
       font-size: min(1.25rem, (100vw - 13.5rem) / 10);
     }
