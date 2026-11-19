@@ -165,7 +165,7 @@
     }
 
     .slideshow--boxes .slide.is-boxing {
-      --slide-content-delay: 0.6s;
+      --slide-content-delay: 0.4s;
     }
   }
 
@@ -179,7 +179,7 @@
   }
 
   .slide.is-boxing .slide__overlay {
-    animation: slideshow-fade-in 1.2s ease both;
+    animation: slideshow-fade-in 0.8s ease both;
   }
 
   .slide__tiles {
@@ -192,7 +192,7 @@
   .slide__tile {
     position: absolute;
     overflow: hidden;
-    animation: slideshow-tile-in 0.7s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+    animation: slideshow-tile-in 0.5s cubic-bezier(0.2, 0.6, 0.2, 1) both;
   }
 
   .slide__tile-inner {
@@ -529,8 +529,8 @@
       const rows = Math.max(3, Math.min(8, Math.round((cols * height) / width)));
       const tileWidth = width / cols;
       const tileHeight = height / rows;
-      const stagger = 70;
-      const tileDuration = 700;
+      const stagger = 45;
+      const tileDuration = 500;
       const isRtl = getComputedStyle(this).direction === 'rtl';
 
       const layer = document.createElement('div');
