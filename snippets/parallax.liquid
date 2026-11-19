@@ -5,7 +5,7 @@
   To opt an image in, put `data-parallax` on the element that frames it (the
   frame must clip its overflow). Images inside the frame drift a little slower
   than the page as it scrolls. Set `--parallax-amount` on the frame to change
-  how far they travel, as a fraction of the frame height (default 0.06).
+  how far they travel, as a fraction of the frame height (default 0.1).
 
   It only runs when the "Parallax images" theme setting is on and the shopper
   doesn't prefer reduced motion: the layout then adds `js-parallax` to <html>.
@@ -17,7 +17,7 @@
 
 {% stylesheet %}
   .js-parallax [data-parallax] {
-    --parallax-amount: 0.06;
+    --parallax-amount: 0.1;
 
     overflow: hidden;
   }
