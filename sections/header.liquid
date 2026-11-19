@@ -377,15 +377,17 @@
 
   /*
     Glass bubble sticky style: the header floats as a rounded glass bubble.
-    Over a transparent home page header it starts as a full-width clear bar
-    with a faint bottom line, then shrinks into the frosted bubble once the
-    page scrolls (or the header is hovered).
+    Over a transparent home page header it starts as a wide, clear bubble
+    with a very light border, then shrinks into the narrower frosted bubble
+    once the page scrolls (or the header is hovered).
     The bubble is drawn by a pseudo-element inset from the bar, so the header
-    keeps its size and the page never shifts.
+    keeps its size and the page never shifts. --glass-x is the bubble's
+    distance from the screen edges; the content and mega menu follow it.
   */
   .header--sticky-glass {
     --glass-inset: 0.5rem;
     --glass-radius: 1.75rem;
+    --glass-x: max(var(--glass-inset), calc((100% - var(--content-width)) / 2 - 1.25rem));
 
     isolation: isolate;
     border-bottom-width: 0;
@@ -395,8 +397,7 @@
   .header--sticky-glass::before {
     content: '';
     position: absolute;
-    /* Wrap the content width with a little breathing room, never touching the screen edges */
-    inset: var(--glass-inset) max(var(--glass-inset), calc((100% - var(--content-width)) / 2 - 1.25rem));
+    inset: var(--glass-inset) var(--glass-x);
     z-index: -1;
     border: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
     border-radius: var(--glass-radius);
@@ -406,7 +407,6 @@
     transition:
       inset 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
       border-radius 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
-      border-width 0.45s ease,
       background-color 0.3s ease,
       border-color 0.3s ease,
       box-shadow 0.3s ease;
@@ -422,24 +422,28 @@
 
   /* Keep the content clear of the bubble's rounded ends */
   .header--sticky-glass .header__inner {
-    width: min(var(--content-width), calc(100% - 2 * (var(--glass-inset) + 1.25rem)));
+    width: min(var(--content-width), calc(100% - 2 * (var(--glass-x) + 1.25rem)));
     transition: width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
-  /* Over the home page's first section: a full-width clear bar with a very light bottom line */
+  /* Desktop: the sticky bubble sits further in, so it visibly shrinks from the wide top bubble */
+  @media (min-width: 990px) {
+    .header--sticky-glass {
+      --glass-x: max(2.5rem, calc((100% - var(--content-width)) / 2 - 1.25rem));
+    }
+  }
+
+  /* Over the home page's first section: a wide, clear bubble with a very light border */
+  .header--sticky-glass.header--transparent:not(:hover, :focus-within, [data-scrolled], :has(details[open])) {
+    --glass-x: var(--glass-inset);
+  }
+
   .header--sticky-glass.header--transparent:not(:hover, :focus-within, [data-scrolled], :has(details[open]))::before {
-    inset: 0;
-    border-width: 0 0 1px;
-    border-color: color-mix(in srgb, var(--header-transparent-fg) 12%, transparent);
-    border-radius: 0;
-    background-color: transparent;
+    border-color: color-mix(in srgb, var(--header-transparent-fg) 14%, transparent);
+    background-color: color-mix(in srgb, var(--header-transparent-fg) 4%, transparent);
     box-shadow: none;
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-  }
-
-  .header--sticky-glass.header--transparent:not(:hover, :focus-within, [data-scrolled], :has(details[open])) .header__inner {
-    width: var(--content-width);
   }
 
   /* Menus open as rounded cards that match the bubble */
@@ -448,7 +452,7 @@
   }
 
   .header--sticky-glass .menu__item--mega .menu__panel {
-    inset-inline: max(var(--glass-inset), calc((100% - var(--content-width)) / 2 - 1.25rem));
+    inset-inline: var(--glass-x);
     border-inline: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
     border-radius: var(--glass-radius);
     box-shadow: 0 24px 48px -16px rgb(0 0 0 / 0.2);
