@@ -20,7 +20,7 @@
   %}
 
   <testimonial-slider
-    class="testimonials"
+    class="testimonials {{ section.settings.layout }}"
     style="--testimonials-columns: {{ section.settings.columns_desktop }};"
   >
     <div
@@ -150,6 +150,60 @@
       grid-auto-columns: 85%;
     }
   }
+
+  /*
+    Auto-scrolling row: the script duplicates the cards (hidden from assistive
+    tech) and the track slides by exactly half its width, so the loop is
+    seamless. The trailing padding makes both halves the same width. Falls
+    back to the plain slider for reduced motion and in the theme editor.
+  */
+  .testimonials--marquee:has(.is-looping) {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  .testimonials__track.is-looping {
+    grid-auto-columns: clamp(17rem, 28vw, 24rem);
+    width: max-content;
+    padding-inline-end: var(--testimonials-gap);
+    overflow: visible;
+    scroll-snap-type: none;
+    animation: testimonials-loop var(--testimonials-loop-duration, 40s) linear infinite;
+  }
+
+  [dir='rtl'] .testimonials__track.is-looping {
+    animation-name: testimonials-loop-rtl;
+  }
+
+  .testimonials--marquee:is(:hover, :focus-within) .testimonials__track.is-looping {
+    animation-play-state: paused;
+  }
+
+  .testimonials__track.is-looping .testimonial {
+    border-color: color-mix(in srgb, var(--color-foreground) 8%, transparent);
+    border-radius: 1.5rem;
+    background-color: color-mix(in srgb, var(--color-background) 70%, transparent);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: 0 14px 36px -20px rgb(0 0 0 / 0.25);
+  }
+
+  .testimonials:has(.is-looping) .testimonials__nav {
+    display: none;
+  }
+
+  @keyframes testimonials-loop {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes testimonials-loop-rtl {
+    to {
+      transform: translateX(50%);
+    }
+  }
 {% endstylesheet %}
 
 {% javascript %}
@@ -170,7 +224,27 @@
       this.addEventListener('shopify:block:select', (event) => {
         event.target.scrollIntoView({ block: 'nearest', inline: 'start' });
       });
+      if (this.classList.contains('testimonials--marquee')) this.startLoop();
       this.update();
+    }
+
+    /** Auto-scrolling row: duplicate the cards so the row can loop seamlessly */
+    startLoop() {
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const cards = [...this.track.children];
+      if (reducedMotion || window.Shopify?.designMode || cards.length < 2) return;
+      cards.forEach((card) => {
+        const clone = card.cloneNode(true);
+        clone.setAttribute('aria-hidden', 'true');
+        clone.inert = true;
+        clone.removeAttribute('id');
+        clone.querySelectorAll('[id]').forEach((el) => el.removeAttribute('id'));
+        this.track.append(clone);
+      });
+      // Roughly 7 seconds per card keeps the pace calm whatever the count
+      this.style.setProperty('--testimonials-loop-duration', `${cards.length * 7}s`);
+      this.track.classList.add('is-looping');
+      this.track.removeAttribute('tabindex');
     }
 
     disconnectedCallback() {
@@ -240,9 +314,21 @@
       "label": "t:labels.subtitle"
     },
     {
+      "type": "select",
+      "id": "layout",
+      "label": "t:general.layout",
+      "info": "t:sections.testimonials.layout_info",
+      "options": [
+        { "value": "testimonials--slider", "label": "t:sections.testimonials.layout_slider" },
+        { "value": "testimonials--marquee", "label": "t:sections.testimonials.layout_marquee" }
+      ],
+      "default": "testimonials--slider"
+    },
+    {
       "type": "range",
       "id": "columns_desktop",
       "label": "t:labels.columns_desktop",
+      "visible_if": "{{ section.settings.layout == 'testimonials--slider' }}",
       "min": 1,
       "max": 4,
       "step": 1,

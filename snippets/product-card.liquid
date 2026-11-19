@@ -46,7 +46,7 @@
   endif
 -%}
 
-<article class="card {{ ratio }}{% if secondary_image != blank %} card--has-secondary{% endif %}">
+<article class="card {{ ratio }} {{ settings.card_style }}{% if secondary_image != blank %} card--has-secondary{% endif %}">
   {%- if product != blank -%}
     <div class="card__media-wrap">
       <a href="{{ product.url }}" class="card__media" style="{{ ratio_style }}" tabindex="-1" aria-hidden="true">
@@ -319,6 +319,58 @@
   @media (hover: none) {
     .card__quick-add {
       inset-inline-start: auto;
+    }
+  }
+
+  /*
+    Modern card style: soft rounded media, frosted glass badges and a glass
+    pill quick add, matching the glass header and product page.
+  */
+  .card--modern {
+    --card-modern-radius: 1.25rem;
+  }
+
+  .card--modern .card__media {
+    border-radius: var(--card-modern-radius);
+  }
+
+  .card--modern .card__badge {
+    border-radius: 999px;
+    background-color: color-mix(in srgb, var(--color-foreground) 62%, transparent);
+    color: var(--color-background);
+    -webkit-backdrop-filter: blur(10px) saturate(1.5);
+    backdrop-filter: blur(10px) saturate(1.5);
+  }
+
+  .card--modern .card__badge--sale {
+    background-color: color-mix(in srgb, var(--color-accent) 85%, transparent);
+    color: #ffffff;
+  }
+
+  .card--modern .quick-add__button {
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    border-radius: 999px;
+    background-color: color-mix(in srgb, var(--color-background) 70%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    backdrop-filter: blur(16px) saturate(1.6);
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+  }
+
+  .card--modern .quick-add__button:hover {
+    border-color: var(--color-foreground);
+    background-color: var(--color-foreground);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card--modern .card__media {
+      transition: box-shadow 0.4s ease, transform 0.4s cubic-bezier(0.2, 0.6, 0.2, 1);
+    }
+
+    @media (hover: hover) {
+      .card--modern:hover .card__media {
+        box-shadow: 0 18px 40px -18px rgb(0 0 0 / 0.35);
+        transform: translateY(-4px);
+      }
     }
   }
 

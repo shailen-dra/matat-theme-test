@@ -21,7 +21,7 @@
   %}
 
   <div
-    class="collage {{ section.settings.layout }} collage--count-{{ count }}"
+    class="collage {{ section.settings.layout }} {{ section.settings.label_style }} collage--count-{{ count }}"
     style="
       --collage-columns: {{ columns }};
       --collage-row: {{ section.settings.row_height }}px;
@@ -142,6 +142,46 @@
     content: ' ←';
   }
 
+  /* Glass labels: rounded tiles with the title on a frosted label that rises on hover */
+  .collage--glass .collage-item {
+    border-radius: 1.5rem;
+  }
+
+  .collage--glass .collage-item__label {
+    inset-inline: 0.875rem auto;
+    bottom: 0.875rem;
+    max-width: calc(100% - 1.75rem);
+    padding: 0.875rem 1.125rem;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    border-radius: 1rem;
+    background: rgb(20 18 16 / 0.32);
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    backdrop-filter: blur(16px) saturate(1.5);
+    box-shadow: 0 12px 30px -14px rgb(0 0 0 / 0.45);
+    transition: transform 0.4s cubic-bezier(0.2, 0.6, 0.2, 1), background-color 0.3s ease;
+  }
+
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .collage--glass a.collage-item:hover .collage-item__label {
+      transform: translateY(-4px);
+      background-color: rgb(20 18 16 / 0.44);
+    }
+  }
+
+  @media (max-width: 749px) {
+    .collage--glass .collage-item {
+      border-radius: 1.125rem;
+    }
+
+    .collage--glass .collage-item__label {
+      inset-inline: 0.5rem auto;
+      bottom: 0.5rem;
+      max-width: calc(100% - 1rem);
+      padding: 0.625rem 0.75rem;
+      border-radius: 0.75rem;
+    }
+  }
+
   @media (max-width: 749px) {
     .collage {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -199,6 +239,16 @@
         { "value": "collage--large-end", "label": "t:sections.collage.large_end" }
       ],
       "default": "collage--large-start"
+    },
+    {
+      "type": "select",
+      "id": "label_style",
+      "label": "t:sections.collage.label_style",
+      "options": [
+        { "value": "collage--gradient", "label": "t:sections.collage.label_style_gradient" },
+        { "value": "collage--glass", "label": "t:sections.collage.label_style_glass" }
+      ],
+      "default": "collage--gradient"
     },
     {
       "type": "range",

@@ -181,6 +181,16 @@
     "name": "t:general.product_cards",
     "settings": [
       {
+        "type": "select",
+        "id": "card_style",
+        "label": "t:settings.product_cards.card_style",
+        "options": [
+          { "value": "card--classic", "label": "t:settings.product_cards.card_style_classic" },
+          { "value": "card--modern", "label": "t:settings.product_cards.card_style_modern" }
+        ],
+        "default": "card--classic"
+      },
+      {
         "type": "checkbox",
         "id": "enable_quick_add",
         "label": "t:settings.product_cards.enable_quick_add",

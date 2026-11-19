@@ -163,6 +163,12 @@
     .marquee:focus-within .marquee__track {
       animation-play-state: paused;
     }
+
+    /* Messages fade in and out at the edges instead of being cut off */
+    .marquee__viewport {
+      -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+      mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+    }
   }
 
   /* Reduced motion: a static, centered row that wraps */

@@ -663,6 +663,9 @@
     },
     "testimonials": {
       "name": "Testimonials",
+      "layout_slider": "Slider with arrows",
+      "layout_marquee": "Auto-scrolling row",
+      "layout_info": "The auto-scrolling row pauses on hover. Shoppers who prefer reduced motion, and the theme editor, see the slider.",
       "testimonial": "Testimonial",
       "quote": "Quote",
       "rating_label": "Star rating",
@@ -704,6 +707,9 @@
     },
     "collage": {
       "name": "Collage",
+      "label_style": "Label style",
+      "label_style_gradient": "Gradient",
+      "label_style_glass": "Glass label",
       "item": "Tile",
       "content_type": "Content",
       "image_info": "Optional for products and collections, which use their own image.",
@@ -723,6 +729,9 @@
     },
     "countdown": {
       "name": "Countdown",
+      "tile_style": "Number tiles",
+      "tile_style_outline": "Outline",
+      "tile_style_glass": "Glass with flip",
       "end_date": "End date",
       "end_date_info": "Format: YYYY-MM-DD. Uses your store's time zone.",
       "end_time": "End time",
@@ -792,6 +801,9 @@
   },
   "settings": {
     "product_cards": {
+      "card_style": "Card style",
+      "card_style_classic": "Classic",
+      "card_style_modern": "Modern",
       "enable_quick_add": "Show quick add",
       "enable_quick_add_info": "Single-option products are added straight to the cart; others open a quick view to choose options.",
       "badges": "Badges",

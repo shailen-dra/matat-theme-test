@@ -663,6 +663,9 @@
     },
     "testimonials": {
       "name": "המלצות",
+      "layout_slider": "סליידר עם חיצים",
+      "layout_marquee": "שורה בגלילה אוטומטית",
+      "layout_info": "השורה בגלילה אוטומטית נעצרת במעבר עכבר. מי שמעדיף תנועה מופחתת, ועורך העיצוב, רואים את הסליידר.",
       "testimonial": "המלצה",
       "quote": "ציטוט",
       "rating_label": "דירוג כוכבים",
@@ -704,6 +707,9 @@
     },
     "collage": {
       "name": "קולאז׳",
+      "label_style": "סגנון התווית",
+      "label_style_gradient": "מעבר צבע",
+      "label_style_glass": "תווית זכוכית",
       "item": "אריח",
       "content_type": "תוכן",
       "image_info": "אופציונלי למוצרים ולקולקציות, שמשתמשים בתמונה שלהם.",
@@ -723,6 +729,9 @@
     },
     "countdown": {
       "name": "ספירה לאחור",
+      "tile_style": "אריחי המספרים",
+      "tile_style_outline": "קו מתאר",
+      "tile_style_glass": "זכוכית עם היפוך",
       "end_date": "תאריך סיום",
       "end_date_info": "פורמט: YYYY-MM-DD. לפי אזור הזמן של החנות.",
       "end_time": "שעת סיום",
@@ -792,6 +801,9 @@
   },
   "settings": {
     "product_cards": {
+      "card_style": "סגנון כרטיס",
+      "card_style_classic": "קלאסי",
+      "card_style_modern": "מודרני",
       "enable_quick_add": "הצגת הוספה מהירה",
       "enable_quick_add_info": "מוצרים עם אפשרות אחת נוספים ישירות לסל; אחרים פותחים תצוגה מהירה לבחירת אפשרויות.",
       "badges": "תגיות",

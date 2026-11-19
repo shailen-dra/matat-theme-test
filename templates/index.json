@@ -508,6 +508,7 @@
       "settings": {
         "color_scheme": "",
         "layout": "collage--large-start",
+        "label_style": "collage--glass",
         "row_height": 300,
         "gap": 12,
         "eyebrow": "The edit",
@@ -646,6 +647,7 @@
       "settings": {
         "end_date": "2026-12-24",
         "end_time": "18:00",
+        "tile_style": "countdown--glass",
         "expired_behavior": "hide",
         "expired_text": "This drop has ended. Thank you!",
         "eyebrow": "Limited edition",
@@ -790,6 +792,7 @@
         "eyebrow": "Kind words",
         "title": "Loved, worn <em>and kept</em>",
         "subtitle": "",
+        "layout": "testimonials--marquee",
         "columns_desktop": 3,
         "tinted": false,
         "padding_top": 64,

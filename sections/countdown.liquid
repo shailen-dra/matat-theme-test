@@ -53,7 +53,7 @@
     {%- endif -%}
 
     <count-down
-      class="countdown"
+      class="countdown {{ section.settings.tile_style }}"
       {% if valid %}
         data-end="{{ end_epoch | times: 1000 }}"
       {% endif %}
@@ -210,6 +210,32 @@
       flex: 1;
     }
   }
+
+  /* Glass tiles: frosted number tiles whose digits flip as they change */
+  .countdown--glass .countdown__unit {
+    border-color: color-mix(in srgb, var(--countdown-fg) 18%, transparent);
+    border-radius: 1.25rem;
+    background-color: color-mix(in srgb, var(--countdown-fg) 9%, transparent);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
+    backdrop-filter: blur(16px) saturate(1.4);
+    box-shadow:
+      inset 0 1px 0 color-mix(in srgb, var(--countdown-fg) 18%, transparent),
+      0 12px 32px -12px rgb(0 0 0 / 0.35);
+    perspective: 400px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .countdown--glass .countdown__value.is-flipping {
+      animation: countdown-flip 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+  }
+
+  @keyframes countdown-flip {
+    from {
+      opacity: 0;
+      transform: rotateX(-80deg) translateY(-0.15em);
+    }
+  }
 {% endstylesheet %}
 
 {% javascript %}
@@ -244,7 +270,14 @@
         seconds: seconds % 60,
       };
       Object.entries(parts).forEach(([unit, value]) => {
-        if (this.values[unit]) this.values[unit].textContent = String(value).padStart(2, '0');
+        const el = this.values[unit];
+        const text = String(value).padStart(2, '0');
+        if (!el || el.textContent === text) return;
+        el.textContent = text;
+        // Restart the flip animation (glass tiles) for the digits that changed
+        el.classList.remove('is-flipping');
+        void el.offsetWidth;
+        el.classList.add('is-flipping');
       });
 
       if (remaining === 0) {
@@ -303,6 +336,16 @@
       "id": "expired_text",
       "label": "t:sections.countdown.expired_text",
       "default": "This offer has ended."
+    },
+    {
+      "type": "select",
+      "id": "tile_style",
+      "label": "t:sections.countdown.tile_style",
+      "options": [
+        { "value": "countdown--outline", "label": "t:sections.countdown.tile_style_outline" },
+        { "value": "countdown--glass", "label": "t:sections.countdown.tile_style_glass" }
+      ],
+      "default": "countdown--outline"
     },
     {
       "type": "header",

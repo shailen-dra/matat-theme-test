@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "card_style": "card--modern",
     "social_instagram_link": "https://www.instagram.com/",
     "social_facebook_link": "https://www.facebook.com/",
     "social_tiktok_link": "https://www.tiktok.com/",
@@ -56,6 +57,7 @@
   },
   "presets": {
     "Matat": {
+      "card_style": "card--modern",
       "color_schemes": {
         "scheme-1": {
           "settings": {
@@ -88,6 +90,7 @@
       }
     },
     "Apparel": {
+      "card_style": "card--modern",
       "color_schemes": {
         "scheme-1": {
           "settings": {

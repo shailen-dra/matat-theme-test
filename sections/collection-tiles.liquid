@@ -114,6 +114,26 @@
     transform: scale(1.05);
   }
 
+  /* The tile lifts and gains an accent ring (following its shape) on hover and focus */
+  .tile__media {
+    transition:
+      transform 0.4s cubic-bezier(0.2, 0.6, 0.2, 1),
+      box-shadow 0.4s ease;
+  }
+
+  .tile:is(:hover, :focus-visible) .tile__media {
+    box-shadow:
+      0 0 0 3px var(--color-background),
+      0 0 0 4px color-mix(in srgb, var(--color-accent) 70%, transparent),
+      0 18px 36px -18px rgb(0 0 0 / 0.35);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .tile:is(:hover, :focus-visible) .tile__media {
+      transform: translateY(-4px);
+    }
+  }
+
   .tile__label {
     display: flex;
     flex-direction: column;
