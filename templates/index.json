@@ -251,10 +251,10 @@
       ],
       "settings": {
         "height": "slideshow--large",
+        "transition": "slideshow--boxes",
         "show_arrows": true,
         "autoplay": true,
-        "autoplay_speed": 6,
-        "transition": "slideshow--boxes"
+        "autoplay_speed": 5
       }
     },
     "marquee": {
@@ -450,14 +450,14 @@
       ],
       "settings": {
         "color_scheme": "",
+        "image": "shopify://shop_images/look-flatlay.jpg",
         "image_position": "look--image-left",
         "eyebrow": "Shop the look",
         "title": "Stacked for <em>everyday</em>",
         "subtitle": "Tap the dots to see each piece in this look.",
         "tinted": false,
         "padding_top": 64,
-        "padding_bottom": 64,
-        "image": "shopify://shop_images/look-flatlay.jpg"
+        "padding_bottom": 64
       }
     },
     "collage": {
@@ -612,6 +612,7 @@
       ],
       "settings": {
         "color_scheme": "",
+        "image": "shopify://shop_images/story-ginkgo-set.jpg",
         "image_ratio": "arch",
         "image_position": "image-text--image-start",
         "image_width": "image-text--half",
@@ -620,8 +621,7 @@
         "content_gap": 24,
         "tinted": true,
         "padding_top": 96,
-        "padding_bottom": 96,
-        "image": "shopify://shop_images/story-ginkgo-set.jpg"
+        "padding_bottom": 96
       }
     },
     "studio_video": {
@@ -629,6 +629,7 @@
       "settings": {
         "color_scheme": "",
         "video_url": "https://www.youtube.com/watch?v=8EPFqerB6qU",
+        "poster": "shopify://shop_images/video-cover-rings.jpg",
         "background_mode": false,
         "ratio": "video-ratio--cinema",
         "full_width": false,
@@ -637,8 +638,7 @@
         "subtitle": "",
         "tinted": false,
         "padding_top": 64,
-        "padding_bottom": 64,
-        "poster": "shopify://shop_images/video-cover-rings.jpg"
+        "padding_bottom": 64
       }
     },
     "countdown": {
@@ -798,7 +798,6 @@
     },
     "press": {
       "type": "press-logos",
-      "disabled": true,
       "blocks": {
         "logo_1": {
           "type": "_logo",
@@ -839,6 +838,7 @@
         "logo_3",
         "logo_4"
       ],
+      "disabled": true,
       "settings": {
         "color_scheme": "",
         "title": "As seen in",
