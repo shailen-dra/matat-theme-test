@@ -121,6 +121,8 @@
     overflow: hidden;
     scroll-snap-type: none;
     touch-action: pan-y;
+    /* Keep the slides' stacking order inside the track so the controls stay on top */
+    isolation: isolate;
   }
 
   .slideshow--fade .slideshow__track > *,
