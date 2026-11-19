@@ -11,7 +11,7 @@
   "
 >
   <shop-the-look class="look {{ section.settings.image_position }}">
-    <div class="look__media">
+    <div class="look__media" data-parallax>
       <div class="look__image-wrap">
         {%- if image != blank -%}
           {{
@@ -108,6 +108,26 @@
   .look__hotspots {
     position: absolute;
     inset: 0;
+  }
+
+  /*
+    Parallax: the image frame does the clipping, so the hotspot labels can still
+    overflow the media. The hotspot layer tracks the moved, enlarged image box
+    (same maths as snippets/parallax.liquid) so each dot stays on its piece
+    without the dots themselves being scaled.
+  */
+  .js-parallax .look__media[data-parallax] {
+    --look-scale: calc(1 + 2.2 * var(--parallax-amount));
+
+    overflow: visible;
+  }
+
+  .js-parallax .look__media[data-parallax] .look__hotspots {
+    inset: auto;
+    left: calc((1 - var(--look-scale)) * 50%);
+    top: calc((1 - var(--look-scale)) * 50% + var(--parallax-shift, 0) * var(--parallax-amount) * 100%);
+    width: calc(var(--look-scale) * 100%);
+    height: calc(var(--look-scale) * 100%);
   }
 
   .look__content {
