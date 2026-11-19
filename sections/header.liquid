@@ -376,63 +376,72 @@
   }
 
   /*
-    Glass bubble sticky style: once the page scrolls, the bar floats as a
-    frosted, rounded bubble. The bubble is drawn by a pseudo-element inset
-    from the bar, so the header keeps its size and the page never shifts.
+    Glass bubble sticky style: the header floats as a rounded glass bubble from
+    the start. Over a transparent home page header it is clear glass with the
+    light text; once scrolled (or hovered) it turns frosted with page colors.
+    The bubble is drawn by a pseudo-element inset from the bar, so the header
+    keeps its size and the page never shifts.
   */
   .header--sticky-glass {
     --glass-inset: 0.5rem;
     --glass-radius: 1.75rem;
-    --glass-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
 
     isolation: isolate;
+    border-bottom-width: 0;
+    background-color: transparent;
   }
 
   .header--sticky-glass::before {
     content: '';
     position: absolute;
-    inset: 0;
+    /* Wrap the content width with a little breathing room, never touching the screen edges */
+    inset: var(--glass-inset) max(var(--glass-inset), calc((100% - var(--content-width)) / 2 - 1.25rem));
     z-index: -1;
-    border: 1px solid transparent;
-    border-radius: 0;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    border-radius: var(--glass-radius);
+    background-color: color-mix(in srgb, var(--color-background) 94%, transparent);
+    box-shadow: 0 10px 34px rgb(0 0 0 / 0.12);
     pointer-events: none;
     transition:
-      inset 0.45s var(--glass-ease),
-      border-radius 0.45s var(--glass-ease),
       background-color 0.3s ease,
       border-color 0.3s ease,
       box-shadow 0.3s ease;
   }
 
-  .header--sticky-glass[data-scrolled] {
-    border-bottom-color: transparent;
-    background-color: transparent;
-  }
-
-  .header--sticky-glass[data-scrolled]::before {
-    /* Wrap the content width with a little breathing room, never touching the screen edges */
-    inset: var(--glass-inset) max(var(--glass-inset), calc((100% - var(--content-width)) / 2 - 1.25rem));
-    border-color: color-mix(in srgb, var(--color-foreground) 10%, transparent);
-    border-radius: var(--glass-radius);
-    background-color: color-mix(in srgb, var(--color-background) 94%, transparent);
-    box-shadow: 0 10px 34px rgb(0 0 0 / 0.12);
-  }
-
   @supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
-    .header--sticky-glass[data-scrolled]::before {
+    .header--sticky-glass::before {
       background-color: color-mix(in srgb, var(--color-background) 68%, transparent);
       -webkit-backdrop-filter: blur(20px) saturate(1.6);
       backdrop-filter: blur(20px) saturate(1.6);
     }
   }
 
-  /* Keep the content clear of the bubble's rounded ends */
-  .header--sticky-glass .header__inner {
-    transition: width 0.45s var(--glass-ease);
+  /* Clear glass over the home page's first section, matching the light header text */
+  .header--sticky-glass.header--transparent:not(:hover, :focus-within, [data-scrolled], :has(details[open]))::before {
+    border-color: color-mix(in srgb, var(--header-transparent-fg) 28%, transparent);
+    background-color: color-mix(in srgb, var(--header-transparent-fg) 10%, transparent);
+    box-shadow: none;
   }
 
-  .header--sticky-glass[data-scrolled] .header__inner {
+  /* Keep the content clear of the bubble's rounded ends */
+  .header--sticky-glass .header__inner {
     width: min(var(--content-width), calc(100% - 2 * (var(--glass-inset) + 1.25rem)));
+  }
+
+  /* Menus open as rounded cards that match the bubble */
+  .header--sticky-glass .menu__panel {
+    border-radius: 1.25rem;
+  }
+
+  .header--sticky-glass .menu__item--mega .menu__panel {
+    inset-inline: max(var(--glass-inset), calc((100% - var(--content-width)) / 2 - 1.25rem));
+    border-inline: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    border-radius: var(--glass-radius);
+    box-shadow: 0 24px 48px -16px rgb(0 0 0 / 0.2);
+  }
+
+  .header--sticky-glass .menu__item--mega :is(.mega-menu, .menu__view-all) {
+    width: calc(100% - 2.5rem);
   }
 
   @media (max-width: 749px) {
@@ -442,8 +451,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .header--sticky-glass::before,
-    .header--sticky-glass .header__inner {
+    .header--sticky-glass::before {
       transition: none;
     }
   }
@@ -839,8 +847,22 @@
       width: var(--logo-width-mobile);
     }
 
+    /*
+      Text logo: fill the column between the icons and size the name to fit it,
+      so long store names never run under the search and account icons.
+    */
+    .header .header__logo:has(.header__shop-name) {
+      justify-self: stretch;
+      min-width: 0;
+      container-type: inline-size;
+      text-align: center;
+    }
+
     .header__shop-name {
-      font-size: 1.25rem;
+      overflow: hidden;
+      font-size: clamp(0.8125rem, 8cqi, 1.25rem);
+      letter-spacing: 0.12em;
+      text-overflow: ellipsis;
     }
 
     .header__nav,
