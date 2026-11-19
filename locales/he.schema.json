@@ -639,7 +639,11 @@
       "show_arrows": "הצגת חיצים",
       "autoplay": "החלפת שקופיות אוטומטית",
       "autoplay_info": "נעצרת במעבר עכבר ובמיקוד. הקונים יכולים גם להשהות אותה, והיא לא מתחלפת אוטומטית אצל מי שמעדיף תנועה מופחתת.",
-      "autoplay_speed": "החלפת שקופית כל"
+      "autoplay_speed": "החלפת שקופית כל",
+      "transition": "מעבר",
+      "transition_slide": "החלקה",
+      "transition_fade": "דהייה",
+      "transition_boxes": "ריבועים בדהייה"
     },
     "shop_the_look": {
       "name": "קנו את הלוק",

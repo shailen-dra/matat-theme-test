@@ -1,5 +1,5 @@
 <slide-show
-  class="slideshow full-width {{ section.settings.height }}"
+  class="slideshow full-width {{ section.settings.height }} {{ section.settings.transition }}"
   role="region"
   aria-roledescription="{{ 'sections.slideshow.carousel' | t | escape }}"
   aria-label="{{ 'sections.slideshow.label' | t | escape }}"
@@ -111,6 +111,102 @@
   @media (prefers-reduced-motion: no-preference) {
     .slideshow__track {
       scroll-behavior: smooth;
+    }
+  }
+
+  /* Fade and box transitions: slides stack in one cell instead of scrolling */
+  .slideshow--fade .slideshow__track,
+  .slideshow--boxes .slideshow__track {
+    display: grid;
+    overflow: hidden;
+    scroll-snap-type: none;
+    touch-action: pan-y;
+  }
+
+  .slideshow--fade .slideshow__track > *,
+  .slideshow--boxes .slideshow__track > * {
+    grid-area: 1 / 1;
+  }
+
+  /* Before the script runs, show only the first slide so the hero paints straight away */
+  .slideshow--fade:not(.is-ready) .slideshow__track > :not(:first-child),
+  .slideshow--boxes:not(.is-ready) .slideshow__track > :not(:first-child) {
+    visibility: hidden;
+  }
+
+  .slideshow--fade.is-ready .slide,
+  .slideshow--boxes.is-ready .slide {
+    z-index: 0;
+    visibility: hidden;
+    opacity: 0;
+  }
+
+  .slideshow--fade.is-ready .slide.is-leaving,
+  .slideshow--boxes.is-ready .slide.is-leaving {
+    z-index: 1;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .slideshow--fade.is-ready .slide.is-active,
+  .slideshow--boxes.is-ready .slide.is-active {
+    z-index: 2;
+    visibility: visible;
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .slideshow--fade.is-ready .slide.is-active {
+      --slide-content-delay: 0.3s;
+
+      transition: opacity 1s ease;
+    }
+
+    .slideshow--boxes .slide.is-boxing {
+      --slide-content-delay: 0.6s;
+    }
+  }
+
+  /* Fading boxes: the incoming image is built from tiles that fade and grow into place */
+  .slide.is-boxing .slide__media {
+    background-color: transparent;
+  }
+
+  .slide.is-boxing .slide__media > :not(.slide__tiles) {
+    visibility: hidden;
+  }
+
+  .slide.is-boxing .slide__overlay {
+    animation: slideshow-fade-in 1.2s ease both;
+  }
+
+  .slide__tiles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  .slide__tile {
+    position: absolute;
+    overflow: hidden;
+    animation: slideshow-tile-in 0.7s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+  }
+
+  .slide__tile-inner {
+    position: absolute;
+  }
+
+  @keyframes slideshow-tile-in {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+  }
+
+  @keyframes slideshow-fade-in {
+    from {
+      opacity: 0;
     }
   }
 
@@ -268,6 +364,9 @@
    * arrows, dots and optional autoplay. Autoplay pauses on hover, keyboard
    * focus, when off-screen or the tab is hidden, and with the pause button;
    * it never starts when the shopper prefers reduced motion.
+   *
+   * With the fade or fading-boxes transition the slides stack instead of
+   * scrolling, and a short swipe gesture moves between them.
    */
   class SlideShow extends HTMLElement {
     connectedCallback() {
@@ -289,8 +388,22 @@
       this.autoplay = this.dataset.autoplay === 'true' && this.slides.length > 1;
       if (this.autoplay && this.reducedMotion) this.setPausedButton(true);
 
-      this.slideObserver = new IntersectionObserver(this.onSlideIntersect, { root: this.track, threshold: 0.6 });
-      this.slides.forEach((slide) => this.slideObserver.observe(slide));
+      this.transition = this.classList.contains('slideshow--boxes')
+        ? 'boxes'
+        : this.classList.contains('slideshow--fade')
+          ? 'fade'
+          : 'slide';
+      this.stacked = this.transition !== 'slide';
+      this.transitionToken = 0;
+
+      if (this.stacked) {
+        this.track.addEventListener('pointerdown', this.onPointerDown);
+        this.track.addEventListener('pointerup', this.onPointerUp);
+        this.track.addEventListener('pointercancel', this.onPointerCancel);
+      } else {
+        this.slideObserver = new IntersectionObserver(this.onSlideIntersect, { root: this.track, threshold: 0.6 });
+        this.slides.forEach((slide) => this.slideObserver.observe(slide));
+      }
 
       this.viewObserver = new IntersectionObserver(([entry]) => {
         this.inView = entry.isIntersecting;
@@ -314,6 +427,7 @@
 
     disconnectedCallback() {
       this.stop();
+      this.finishTransition();
       this.slideObserver?.disconnect();
       this.viewObserver?.disconnect();
       document.removeEventListener('visibilitychange', this.updatePlayback);
@@ -341,8 +455,13 @@
 
     goTo(index) {
       const count = this.slides.length;
-      const target = this.slides[((index % count) + count) % count];
+      const targetIndex = ((index % count) + count) % count;
+      const target = this.slides[targetIndex];
       if (!target) return;
+      if (this.stacked) {
+        this.show(targetIndex);
+        return;
+      }
       // Physical delta works the same in left-to-right and right-to-left. Scroll to an
       // absolute position: a relative scrollBy halts at the next slide because of
       // scroll-snap-stop, so wrapping from the last slide back to the first fails
@@ -353,6 +472,113 @@
     next() {
       this.goTo(this.index + 1);
     }
+
+    /** Fade or fading-boxes change: the old slide stays underneath until the new one covers it */
+    async show(index) {
+      if (index === this.index) return;
+      const token = ++this.transitionToken;
+      const incoming = this.slides[index];
+      const animate = !this.reducedMotion;
+
+      if (animate && this.transition === 'boxes') await this.imageReady(incoming);
+      if (token !== this.transitionToken) return;
+
+      this.finishTransition();
+      const outgoing = this.slides[this.index];
+      if (animate) outgoing.classList.add('is-leaving');
+      this.setActive(index);
+      if (!animate) return;
+
+      const duration = this.transition === 'boxes' ? this.buildTiles(incoming) : 1000;
+      this.transitionTimer = setTimeout(() => this.finishTransition(), duration + 50);
+    }
+
+    finishTransition() {
+      clearTimeout(this.transitionTimer);
+      this.transitionTimer = null;
+      this.slides.forEach((slide) => {
+        slide.classList.remove('is-leaving', 'is-boxing');
+        slide.querySelector('.slide__tiles')?.remove();
+      });
+    }
+
+    /** Wait (briefly) for the incoming photo so the tiles never show a blank image */
+    imageReady(slide) {
+      const img = slide.querySelector('.slide__media img');
+      if (!img || img.complete) return Promise.resolve();
+      img.loading = 'eager';
+      return Promise.race([img.decode().catch(() => {}), new Promise((resolve) => setTimeout(resolve, 1500))]);
+    }
+
+    /**
+     * Cover the incoming slide's media with a grid of tiles, each showing its
+     * piece of the photo, that fade in as a diagonal wave from the reading start.
+     * Returns how long the wave takes in milliseconds.
+     */
+    buildTiles(slide) {
+      const media = slide.querySelector('.slide__media');
+      const source = media?.querySelector('picture, .slide__image');
+      if (!source) return 0;
+
+      const { width, height } = media.getBoundingClientRect();
+      if (!width || !height) return 0;
+
+      const cols = width < 750 ? 4 : 8;
+      const rows = Math.max(3, Math.min(8, Math.round((cols * height) / width)));
+      const tileWidth = width / cols;
+      const tileHeight = height / rows;
+      const stagger = 70;
+      const tileDuration = 700;
+      const isRtl = getComputedStyle(this).direction === 'rtl';
+
+      const layer = document.createElement('div');
+      layer.className = 'slide__tiles';
+      layer.setAttribute('aria-hidden', 'true');
+
+      for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+          const step = (isRtl ? cols - 1 - col : col) + row;
+          const tile = document.createElement('div');
+          tile.className = 'slide__tile';
+          tile.style.cssText = `left:${col * tileWidth}px;top:${row * tileHeight}px;width:${Math.ceil(tileWidth) + 1}px;height:${Math.ceil(tileHeight) + 1}px;animation-delay:${step * stagger}ms`;
+
+          const inner = document.createElement('div');
+          inner.className = 'slide__tile-inner';
+          inner.style.cssText = `width:${width}px;height:${height}px;left:${-col * tileWidth}px;top:${-row * tileHeight}px`;
+
+          const clone = source.cloneNode(true);
+          clone.querySelectorAll?.('img').forEach((img) => img.removeAttribute('fetchpriority'));
+          clone.removeAttribute?.('fetchpriority');
+          inner.append(clone);
+          tile.append(inner);
+          layer.append(tile);
+        }
+      }
+
+      media.append(layer);
+      slide.classList.add('is-boxing');
+      return (cols + rows - 2) * stagger + tileDuration;
+    }
+
+    onPointerDown = (event) => {
+      if (event.pointerType === 'mouse') return;
+      this.pointerStart = { x: event.clientX, y: event.clientY };
+    };
+
+    onPointerUp = (event) => {
+      if (!this.pointerStart) return;
+      const dx = event.clientX - this.pointerStart.x;
+      const dy = event.clientY - this.pointerStart.y;
+      this.pointerStart = null;
+      if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+      const isRtl = getComputedStyle(this).direction === 'rtl';
+      const forward = isRtl ? dx > 0 : dx < 0;
+      forward ? this.next() : this.previous();
+    };
+
+    onPointerCancel = () => {
+      this.pointerStart = null;
+    };
 
     previous() {
       this.goTo(this.index - 1);
@@ -477,6 +703,17 @@
         { "value": "slideshow--full", "label": "t:options.size.full_screen" }
       ],
       "default": "slideshow--large"
+    },
+    {
+      "type": "select",
+      "id": "transition",
+      "label": "t:sections.slideshow.transition",
+      "options": [
+        { "value": "slideshow--slide", "label": "t:sections.slideshow.transition_slide" },
+        { "value": "slideshow--fade", "label": "t:sections.slideshow.transition_fade" },
+        { "value": "slideshow--boxes", "label": "t:sections.slideshow.transition_boxes" }
+      ],
+      "default": "slideshow--slide"
     },
     {
       "type": "checkbox",

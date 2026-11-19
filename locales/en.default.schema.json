@@ -639,7 +639,11 @@
       "show_arrows": "Show arrows",
       "autoplay": "Auto-rotate slides",
       "autoplay_info": "Pauses on hover and focus. Shoppers can also pause it, and it never auto-rotates for shoppers who prefer reduced motion.",
-      "autoplay_speed": "Change slides every"
+      "autoplay_speed": "Change slides every",
+      "transition": "Transition",
+      "transition_slide": "Slide",
+      "transition_fade": "Fade",
+      "transition_boxes": "Fading boxes"
     },
     "shop_the_look": {
       "name": "Shop the look",

@@ -253,7 +253,8 @@
         "height": "slideshow--large",
         "show_arrows": true,
         "autoplay": true,
-        "autoplay_speed": 6
+        "autoplay_speed": 6,
+        "transition": "slideshow--boxes"
       }
     },
     "marquee": {
