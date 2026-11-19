@@ -226,6 +226,7 @@
         "share"
       ],
       "settings": {
+        "style": "product--modern",
         "gallery_layout": "product-gallery--grid",
         "media_ratio": "portrait",
         "media_width": "product--media-default",

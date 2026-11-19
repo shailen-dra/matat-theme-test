@@ -504,6 +504,9 @@
     },
     "product": {
       "name": "פרטי מוצר",
+      "style": "סגנון",
+      "style_classic": "קלאסי",
+      "style_modern": "מודרני",
       "gallery": "גלריית מדיה",
       "media_ratio": "יחס גובה-רוחב של המדיה",
       "media_width": "רוחב המדיה",

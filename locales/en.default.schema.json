@@ -504,6 +504,9 @@
     },
     "product": {
       "name": "Product information",
+      "style": "Style",
+      "style_classic": "Classic",
+      "style_modern": "Modern",
       "gallery": "Media gallery",
       "media_ratio": "Media aspect ratio",
       "media_width": "Media width",

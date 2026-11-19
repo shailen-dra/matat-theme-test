@@ -24,6 +24,9 @@
   if section.settings.sticky_details
     assign product_classes = product_classes | append: ' product--sticky'
   endif
+  if section.settings.style != blank
+    assign product_classes = product_classes | append: ' ' | append: section.settings.style
+  endif
 -%}
 
 <product-info
@@ -128,6 +131,117 @@
 
     .product {
       padding-block-start: 0;
+    }
+  }
+
+  /*
+    Modern style: soft rounded media, pill-shaped controls, a segmented tab
+    switcher and a floating glass add-to-cart bar, matching the glass header.
+    Controls go round through the shared button radius variable; content
+    boxes that would look wrong as pills get a fixed soft radius instead.
+  */
+  .product--modern {
+    --style-border-radius-buttons: 999px;
+    --product-soft-radius: 1.25rem;
+  }
+
+  .product--modern .product-gallery__item {
+    border-radius: var(--product-soft-radius);
+  }
+
+  .product--modern .product-gallery__thumbnail {
+    overflow: hidden;
+    border-radius: 0.75rem;
+  }
+
+  .product--modern :is(.personalization__option, .personalization__summary, .specs--boxed, .bundle, .restock__form) {
+    border-radius: 1rem;
+  }
+
+  .product--modern .buy-buttons__dynamic {
+    --shopify-accelerated-checkout-button-border-radius: 999px;
+  }
+
+  .product--modern .delivery {
+    padding: 0.875rem 1.125rem;
+    border-radius: 1rem;
+    background-color: color-mix(in srgb, var(--color-foreground) 4%, transparent);
+  }
+
+  /* Tabs: a segmented pill switcher */
+  .product--modern .tabs__list {
+    gap: 0.25rem;
+    width: fit-content;
+    max-width: 100%;
+    padding: 0.25rem;
+    border: 0;
+    border-radius: 999px;
+    background-color: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+  }
+
+  .product--modern .tabs__button {
+    padding: 0.625rem 1.125rem;
+    border-radius: 999px;
+    letter-spacing: 0.12em;
+    white-space: nowrap;
+    transition:
+      background-color 0.25s ease,
+      box-shadow 0.25s ease,
+      opacity 0.25s ease;
+  }
+
+  .product--modern .tabs__button[aria-selected='true'] {
+    background-color: var(--color-background);
+    box-shadow:
+      0 1px 2px rgb(0 0 0 / 0.06),
+      0 4px 14px rgb(0 0 0 / 0.08);
+  }
+
+  .product--modern .tabs__button[aria-selected='true']::after {
+    display: none;
+  }
+
+  /* Sticky add to cart: a floating glass bubble instead of an edge-to-edge bar */
+  .product--modern .sticky-atc {
+    inset-inline: max(0.5rem, calc((100vw - var(--page-width)) / 2 + var(--page-margin) - 1.25rem));
+    bottom: calc(0.5rem + env(safe-area-inset-bottom));
+    padding: 0.625rem 0.75rem 0.625rem 0.875rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 10%, transparent);
+    border-radius: 999px;
+    background-color: color-mix(in srgb, var(--color-background) 72%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    backdrop-filter: blur(20px) saturate(1.6);
+    box-shadow: 0 12px 36px rgb(0 0 0 / 0.14);
+    transform: translateY(calc(100% + 1rem));
+  }
+
+  .product--modern .sticky-atc.is-visible {
+    transform: none;
+  }
+
+  .product--modern .sticky-atc__image {
+    border-radius: 50%;
+  }
+
+  /* Desktop: line the bar up with the sticky header bubble */
+  @media (min-width: 990px) {
+    .product--modern .sticky-atc {
+      inset-inline: max(2.5rem, calc((100vw - var(--page-width)) / 2 + var(--page-margin) - 1.25rem));
+    }
+  }
+
+  @media (max-width: 749px) {
+    /* Keep the rounded gallery inside the page margins instead of bleeding to the edges */
+    .product--modern .product__media {
+      margin-inline: 0;
+    }
+
+    .product--modern {
+      padding-block-start: 0.5rem;
+    }
+
+    .product--modern .sticky-atc {
+      border-radius: 1.5rem;
     }
   }
 {% endstylesheet %}
