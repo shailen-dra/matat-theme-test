@@ -376,9 +376,10 @@
   }
 
   /*
-    Glass bubble sticky style: the header floats as a rounded glass bubble from
-    the start. Over a transparent home page header it is clear glass with the
-    light text; once scrolled (or hovered) it turns frosted with page colors.
+    Glass bubble sticky style: the header floats as a rounded glass bubble.
+    Over a transparent home page header it starts as a full-width clear bar
+    with a faint bottom line, then shrinks into the frosted bubble once the
+    page scrolls (or the header is hovered).
     The bubble is drawn by a pseudo-element inset from the bar, so the header
     keeps its size and the page never shifts.
   */
@@ -403,6 +404,9 @@
     box-shadow: 0 10px 34px rgb(0 0 0 / 0.12);
     pointer-events: none;
     transition:
+      inset 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+      border-radius 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+      border-width 0.45s ease,
       background-color 0.3s ease,
       border-color 0.3s ease,
       box-shadow 0.3s ease;
@@ -416,16 +420,26 @@
     }
   }
 
-  /* Clear glass over the home page's first section, matching the light header text */
-  .header--sticky-glass.header--transparent:not(:hover, :focus-within, [data-scrolled], :has(details[open]))::before {
-    border-color: color-mix(in srgb, var(--header-transparent-fg) 28%, transparent);
-    background-color: color-mix(in srgb, var(--header-transparent-fg) 10%, transparent);
-    box-shadow: none;
-  }
-
   /* Keep the content clear of the bubble's rounded ends */
   .header--sticky-glass .header__inner {
     width: min(var(--content-width), calc(100% - 2 * (var(--glass-inset) + 1.25rem)));
+    transition: width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  /* Over the home page's first section: a full-width clear bar with a very light bottom line */
+  .header--sticky-glass.header--transparent:not(:hover, :focus-within, [data-scrolled], :has(details[open]))::before {
+    inset: 0;
+    border-width: 0 0 1px;
+    border-color: color-mix(in srgb, var(--header-transparent-fg) 12%, transparent);
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .header--sticky-glass.header--transparent:not(:hover, :focus-within, [data-scrolled], :has(details[open])) .header__inner {
+    width: var(--content-width);
   }
 
   /* Menus open as rounded cards that match the bubble */
@@ -451,7 +465,8 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .header--sticky-glass::before {
+    .header--sticky-glass::before,
+    .header--sticky-glass .header__inner {
       transition: none;
     }
   }
