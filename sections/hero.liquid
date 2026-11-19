@@ -41,7 +41,7 @@
     {% if image_mobile %}--hero-aspect-mobile: {{ image_mobile.aspect_ratio }};{% endif %}
   "
 >
-  <div class="hero__media">
+  <div class="hero__media" data-parallax>
     {%- if image -%}
       <picture>
         {%- if image_mobile -%}

@@ -152,6 +152,13 @@
         "label": "t:settings.animations.reveal_on_scroll",
         "info": "t:settings.animations.reveal_on_scroll_info",
         "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "parallax",
+        "label": "t:settings.animations.parallax",
+        "info": "t:settings.animations.parallax_info",
+        "default": true
       }
     ]
   },

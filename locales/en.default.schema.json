@@ -823,7 +823,9 @@
     "animations": {
       "group": "Animations",
       "reveal_on_scroll": "Reveal sections on scroll",
-      "reveal_on_scroll_info": "Sections fade in as shoppers scroll. Turned off for shoppers who prefer reduced motion, and in the theme editor."
+      "reveal_on_scroll_info": "Sections fade in as shoppers scroll. Turned off for shoppers who prefer reduced motion, and in the theme editor.",
+      "parallax": "Parallax images",
+      "parallax_info": "Large banner and section images drift gently as shoppers scroll. Turned off for shoppers who prefer reduced motion."
     },
     "layout": {
       "back_to_top": "Show back to top button"

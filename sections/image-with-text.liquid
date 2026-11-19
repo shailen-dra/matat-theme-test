@@ -16,7 +16,7 @@
   "
 >
   <div class="{{ classes }}" style="--image-text-gap: {{ section.settings.content_gap }}px;">
-    <div class="image-text__media image-text--{{ section.settings.image_ratio }}" style="{{ ratio_style }}">
+    <div class="image-text__media image-text--{{ section.settings.image_ratio }}" style="{{ ratio_style }}" data-parallax>
       {%- if image != blank -%}
         {{
           image

@@ -1,0 +1,85 @@
+{% doc %}
+  Scroll parallax for large images. Rendered once in the layout; it adds no
+  markup, only the shared CSS and the scroll script.
+
+  To opt an image in, put `data-parallax` on the element that frames it (the
+  frame must clip its overflow). Images inside the frame drift a little slower
+  than the page as it scrolls. Set `--parallax-amount` on the frame to change
+  how far they travel, as a fraction of the frame height (default 0.06).
+
+  It only runs when the "Parallax images" theme setting is on and the shopper
+  doesn't prefer reduced motion: the layout then adds `js-parallax` to <html>.
+
+  @example
+  {% render 'parallax' %}
+  <div class="banner__media" data-parallax>{{ image | image_url: width: 2000 | image_tag }}</div>
+{% enddoc %}
+
+{% stylesheet %}
+  .js-parallax [data-parallax] {
+    --parallax-amount: 0.06;
+
+    overflow: hidden;
+  }
+
+  /*
+    Uses the individual translate/scale properties so the parallax composes
+    with any transform an image already has (hover zooms, entrance effects).
+    The scale leaves enough image beyond the frame for the full travel.
+  */
+  .js-parallax [data-parallax] :is(img, .placeholder-svg) {
+    translate: 0 calc(var(--parallax-shift, 0) * var(--parallax-amount) * 100%);
+    scale: calc(1 + 2.2 * var(--parallax-amount));
+    will-change: translate;
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (() => {
+    const root = document.documentElement;
+    if (!root.classList.contains('js-parallax') || window.__parallaxReady) return;
+    window.__parallaxReady = true;
+
+    const visible = new Set();
+    let frame = null;
+
+    const update = () => {
+      frame = null;
+      const viewport = window.innerHeight;
+      visible.forEach((element) => {
+        const rect = element.getBoundingClientRect();
+        // -1 when the frame enters at the bottom, 0 at the middle, 1 as it leaves at the top
+        const progress = (viewport / 2 - (rect.top + rect.height / 2)) / (viewport / 2 + rect.height / 2);
+        const shift = Math.max(-1, Math.min(1, progress));
+        element.style.setProperty('--parallax-shift', shift.toFixed(4));
+      });
+    };
+
+    const requestUpdate = () => {
+      if (!frame && visible.size) frame = requestAnimationFrame(update);
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      });
+      requestUpdate();
+    });
+
+    const observeAll = (scope = document) => {
+      scope.querySelectorAll('[data-parallax]').forEach((element) => observer.observe(element));
+    };
+
+    const start = () => {
+      observeAll();
+      window.addEventListener('scroll', requestUpdate, { passive: true });
+      window.addEventListener('resize', requestUpdate);
+      // Sections re-rendered in the theme editor bring new frames
+      document.addEventListener('shopify:section:load', (event) => observeAll(event.target));
+    };
+
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+    else start();
+  })();
+{% endjavascript %}

@@ -43,6 +43,14 @@
 
     {{ content_for_header }}
 
+    {%- if settings.parallax -%}
+      <script>
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+          document.documentElement.classList.add('js-parallax');
+        }
+      </script>
+    {%- endif -%}
+
     {%- if settings.reveal_on_scroll and request.design_mode == false -%}
       <script>
         if (!matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
@@ -65,6 +73,7 @@
 
     {%- if settings.enable_quick_add -%}
       {% render 'quick-view-dialog' %}
+      {% render 'parallax' %}
     {%- endif -%}
 
     {%- if settings.cart_type == 'drawer' -%}
