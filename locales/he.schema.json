@@ -490,6 +490,9 @@
       "enable_predictive_search": "הפעלת חיפוש חזוי"
     },
     "footer": {
+      "style": "סגנון",
+      "style_classic": "קלאסי",
+      "style_card": "כרטיס צף",
       "first_column_wide": "עמודה ראשונה רחבה יותר",
       "show_wordmark": "הצגת שם החנות בגדול",
       "show_wordmark_info": "מציג את שם החנות באותיות גדולות מעל הפס התחתון.",

@@ -490,6 +490,9 @@
       "enable_predictive_search": "Enable predictive search"
     },
     "footer": {
+      "style": "Style",
+      "style_classic": "Classic",
+      "style_card": "Floating card",
       "first_column_wide": "Make first column wider",
       "show_wordmark": "Show large wordmark",
       "show_wordmark_info": "Displays the store name in large type above the bottom bar.",

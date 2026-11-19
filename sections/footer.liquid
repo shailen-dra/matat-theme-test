@@ -15,7 +15,7 @@
 -%}
 
 <footer
-  class="footer full-width{% if section.settings.first_column_wide %} footer--first-wide{% endif %}"
+  class="footer full-width {{ section.settings.style }}{% if section.settings.first_column_wide %} footer--first-wide{% endif %}"
   style="
     --color-background: {{ section.settings.background_color }};
     --color-foreground: {{ section.settings.text_color }};
@@ -194,6 +194,108 @@
     width: 2.125rem;
     height: auto;
   }
+
+  /*
+    Floating card style: the footer is a rounded panel inset from the page edges
+    (lined up with the glass bubble header), with a soft accent glow, a glass
+    newsletter card, round social buttons and animated link underlines.
+  */
+  .footer--card {
+    --footer-card-radius: 2rem;
+
+    margin: 0.5rem max(0.5rem, calc((100% - var(--content-width)) / 2 - 1.25rem));
+    border-radius: var(--footer-card-radius);
+    background-image: radial-gradient(
+      ellipse 60% 70% at 100% 0%,
+      color-mix(in srgb, var(--color-accent) 16%, transparent),
+      transparent 70%
+    );
+  }
+
+  .footer--card .footer__inner {
+    width: min(var(--content-width), calc(100% - 5rem));
+  }
+
+  .footer--card .footer__bottom {
+    border-top-color: color-mix(in srgb, var(--color-foreground) 12%, transparent);
+  }
+
+  .footer--card .newsletter {
+    padding: 1.75rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    border-radius: 1.5rem;
+    background-color: color-mix(in srgb, var(--color-foreground) 5%, transparent);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+
+  .footer--card .newsletter--boxed .newsletter__input,
+  .footer--card .newsletter--boxed .button {
+    border-radius: 999px;
+  }
+
+  .footer--card .newsletter--boxed .newsletter__input {
+    padding-inline: 1.25rem;
+  }
+
+  .footer--card .social-links {
+    gap: 0.625rem;
+    margin-inline-start: 0;
+  }
+
+  .footer--card .social-links__link {
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 22%, transparent);
+    border-radius: 50%;
+    transition:
+      color 0.25s ease,
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.25s ease;
+  }
+
+  .footer--card .social-links__link:hover {
+    border-color: var(--color-foreground);
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  .footer--card .menu-block__link {
+    background-image: linear-gradient(currentcolor, currentcolor);
+    background-position: left 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition:
+      color 0.2s ease,
+      background-size 0.3s ease;
+  }
+
+  [dir='rtl'] .footer--card .menu-block__link {
+    background-position: right 100%;
+  }
+
+  .footer--card .menu-block__link:hover {
+    background-size: 100% 1px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .footer--card .social-links__link:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (max-width: 749px) {
+    .footer--card {
+      --footer-card-radius: 1.5rem;
+    }
+
+    .footer--card .footer__inner {
+      width: calc(100% - 2.5rem);
+    }
+
+    .footer--card .newsletter {
+      padding: 1.25rem;
+    }
+  }
 {% endstylesheet %}
 
 {% javascript %}
@@ -231,6 +333,16 @@
   "class": "footer-section",
   "blocks": [{ "type": "@theme" }],
   "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "t:sections.footer.style",
+      "options": [
+        { "value": "footer--classic", "label": "t:sections.footer.style_classic" },
+        { "value": "footer--card", "label": "t:sections.footer.style_card" }
+      ],
+      "default": "footer--classic"
+    },
     {
       "type": "header",
       "content": "t:general.colors"
