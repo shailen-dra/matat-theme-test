@@ -96,7 +96,7 @@
       "product_style": "product--modern"
     },
     "Apparel": {
-      "card_style": "card--classic",
+      "card_style": "card--modern",
       "color_schemes": {
         "scheme-1": {
           "settings": {
@@ -133,9 +133,9 @@
       "min_page_margin": 24,
       "button_corner_radius": 40,
       "input_corner_radius": 10,
-      "header_style": "header--sticky-bar",
-      "footer_style": "footer--classic",
-      "product_style": "product--classic"
+      "header_style": "header--sticky-glass",
+      "footer_style": "footer--card",
+      "product_style": "product--modern"
     }
   }
 }
