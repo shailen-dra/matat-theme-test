@@ -3,8 +3,15 @@
   assign drawer_id = 'HeaderDrawer-' | append: section.id
   assign search_id = 'HeaderSearch-' | append: section.id
 
+  # Index rail: a vertical catalogue index down the left edge on desktop. It
+  # never overlays the page, and on mobile it behaves as a plain sticky bar.
+  assign is_rail = false
+  if section.settings.layout == 'header--rail'
+    assign is_rail = true
+  endif
+
   assign is_transparent = false
-  if section.settings.transparent_on_home and template.name == 'index'
+  if section.settings.transparent_on_home and template.name == 'index' and is_rail == false
     assign is_transparent = true
   endif
 
@@ -19,6 +26,9 @@
     assign sticky_style = section.settings.sticky_style
     if sticky_style == 'theme'
       assign sticky_style = settings.header_style
+    endif
+    if is_rail
+      assign sticky_style = 'header--sticky-bar'
     endif
     assign header_classes = header_classes | append: ' ' | append: sticky_style
   endif
@@ -1145,6 +1155,210 @@
       animation: none;
     }
   }
+  /*
+    Index rail layout: on desktop the header becomes a fixed vertical rail
+    down the left edge, reading like the index of a printed catalogue.
+    Menu items are numbered, submenus open as a full-height panel beside
+    the rail, and the page shifts over to make room. Below 990px the rail
+    falls back to the standard mobile header.
+  */
+  @media (min-width: 990px) {
+    :root:has(.header--rail) {
+      --rail-width: clamp(14rem, 16vw, 17rem);
+    }
+
+    body:has(.header--rail) {
+      padding-inline-start: var(--rail-width);
+    }
+
+    .header-section:has(> .header--rail),
+    .header-section:has(> .header--rail[data-hidden]) {
+      position: fixed;
+      inset-block: 0;
+      inset-inline-start: 0;
+      z-index: 30;
+      width: var(--rail-width);
+      transform: none;
+    }
+
+    .header.header--rail {
+      height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      border-block-end: 0;
+      border-inline-end: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+    }
+
+    .header--rail .header__inner {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto 1fr auto;
+      grid-template-areas:
+        'logo'
+        'nav'
+        'actions';
+      align-items: start;
+      gap: 2.5rem;
+      width: auto;
+      min-height: 100%;
+      margin: 0;
+      padding-block: 2rem 1.5rem;
+      padding-inline: 1.75rem 0;
+    }
+
+    .header--rail .header__logo,
+    .header--rail .header__actions {
+      margin-inline-end: 1.75rem;
+    }
+
+    .header--rail .header__logo {
+      justify-self: start;
+      max-width: calc(100% - 1.75rem);
+    }
+
+    .header--rail .header__logo-image {
+      max-width: 100%;
+      height: auto;
+    }
+
+    /* A text logo wraps inside the rail instead of running past its edge */
+    .header--rail .header__shop-name {
+      display: block;
+      font-size: clamp(1.125rem, 1.5vw, 1.5rem);
+      line-height: 1.2;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .header--rail .header__nav {
+      display: block;
+      align-self: start;
+    }
+
+    .header--rail .header__toggle {
+      display: none;
+    }
+
+    .header--rail .menu {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: stretch;
+      gap: 0;
+      counter-reset: rail;
+    }
+
+    .header--rail .menu__item {
+      counter-increment: rail;
+      border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    }
+
+    .header--rail .menu__item:last-child {
+      border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    }
+
+    .header--rail .menu__link {
+      display: flex;
+      align-items: baseline;
+      gap: 0.875rem;
+      width: 100%;
+      padding-block: 0.8125rem;
+      padding-inline-end: 1.75rem;
+    }
+
+    .header--rail .menu__link::before {
+      content: counter(rail, decimal-leading-zero);
+      min-width: 1.25rem;
+      font-size: 0.6875rem;
+      letter-spacing: 0.08em;
+      font-variant-numeric: tabular-nums;
+      opacity: 0.55;
+    }
+
+    .header--rail .menu__link::after {
+      display: none;
+    }
+
+    .header--rail .menu__link:hover,
+    .header--rail .menu__link[aria-current='page'],
+    .header--rail .menu__link[data-active],
+    .header--rail details[open] > .menu__link {
+      color: var(--color-accent);
+    }
+
+    .header--rail .menu__chevron {
+      align-self: center;
+      margin-inline-start: auto;
+      transform: rotate(-90deg);
+    }
+
+    [dir='rtl'] .header--rail .menu__chevron {
+      transform: rotate(90deg);
+    }
+
+    .header--rail .menu__panel,
+    .header--rail .menu__item--mega .menu__panel {
+      position: fixed;
+      inset-block: 0;
+      inset-inline-start: var(--rail-width);
+      inset-inline-end: auto;
+      top: 0;
+      left: auto;
+      right: auto;
+      align-content: start;
+      width: min(24rem, calc(100% - var(--rail-width)));
+      padding: 2rem 2.25rem;
+      overflow-y: auto;
+      border: 0;
+      border-inline-end: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+      box-shadow: 32px 0 64px -32px rgb(0 0 0 / 0.2);
+      animation: header-rail-panel-in 0.3s ease both;
+    }
+
+    [dir='ltr'] .header--rail .menu__panel {
+      left: var(--rail-width);
+    }
+
+    [dir='rtl'] .header--rail .menu__panel {
+      right: var(--rail-width);
+    }
+
+    .header--rail .menu__item--mega .menu__panel {
+      width: min(60rem, calc(100% - var(--rail-width)));
+    }
+
+    .header--rail .menu__item--mega :is(.mega-menu, .menu__view-all) {
+      width: auto;
+      margin-inline: 0;
+    }
+
+    .header--rail .header__actions {
+      justify-self: stretch;
+      justify-content: space-between;
+      align-self: end;
+      flex-wrap: wrap;
+      margin-inline-start: 0;
+      padding-block-start: 1.25rem;
+      border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    }
+
+    /* Overlays pinned to the page edges make room for the rail */
+    body:has(.header--rail) .sticky-atc {
+      inset-inline-start: var(--rail-width);
+    }
+  }
+
+  @keyframes header-rail-panel-in {
+    from {
+      opacity: 0;
+      transform: translateX(-0.75rem);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header--rail .menu__panel {
+      animation: none;
+    }
+  }
 {% endstylesheet %}
 
 {% javascript %}
@@ -1229,7 +1443,9 @@
     /** Publishes the header height so overlapping sections (e.g. hero) can offset their content. */
     observeHeight() {
       this.resizeObserver = new ResizeObserver(() => {
-        document.documentElement.style.setProperty('--header-height', `${this.offsetHeight}px`);
+        // The desktop index rail sits beside the page, not above it, so nothing needs offsetting
+        const beside = this.classList.contains('header--rail') && window.innerWidth >= 990;
+        document.documentElement.style.setProperty('--header-height', beside ? '0px' : `${this.offsetHeight}px`);
       });
       this.resizeObserver.observe(this);
     }
@@ -1503,7 +1719,8 @@
         { "value": "header--logo-center", "label": "t:options.header_layout.logo_center" },
         { "value": "header--logo-center-menu-below", "label": "t:options.header_layout.logo_center_menu_below" },
         { "value": "header--logo-right", "label": "t:options.header_layout.logo_right" },
-        { "value": "header--logo-right-menu-left", "label": "t:options.header_layout.logo_right_menu_left" }
+        { "value": "header--logo-right-menu-left", "label": "t:options.header_layout.logo_right_menu_left" },
+        { "value": "header--rail", "label": "t:options.header_layout.rail" }
       ],
       "default": "header--logo-center"
     },

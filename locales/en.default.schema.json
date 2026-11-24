@@ -196,7 +196,8 @@
       "logo_center": "Logo center, menu left",
       "logo_center_menu_below": "Logo center, menu below",
       "logo_right": "Logo right, menu center",
-      "logo_right_menu_left": "Logo right, menu left"
+      "logo_right_menu_left": "Logo right, menu left",
+      "rail": "Index rail (vertical on desktop)"
     },
     "menu_style": {
       "uppercase": "Uppercase",

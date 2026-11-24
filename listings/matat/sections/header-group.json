@@ -36,7 +36,7 @@
         "logo_width": 140,
         "logo_width_mobile": 100,
         "menu": "main-menu",
-        "layout": "header--logo-center",
+        "layout": "header--rail",
         "menu_style": "header--menu-uppercase",
         "customer_account_menu": "customer-account-main-menu",
         "sticky": "scroll-up",

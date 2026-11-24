@@ -166,6 +166,13 @@
     --product-media-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
   }
 
+  /* Narrower desktops (or beside the index rail): an even split keeps the buy buttons on one row */
+  @media (max-width: 1279px) {
+    .product--catalogue {
+      --product-media-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
   .product--catalogue .product__details-inner {
     padding-block-start: 1rem;
     border-block-start: 1px solid var(--color-foreground);

@@ -54,13 +54,13 @@
         }
       }
     },
-    "header_style": "header--sticky-glass",
-    "footer_style": "footer--card",
+    "header_style": "header--sticky-bar",
+    "footer_style": "footer--classic",
     "product_style": "product--catalogue"
   },
   "presets": {
     "Matat": {
-      "card_style": "card--modern",
+      "card_style": "card--ledger",
       "color_schemes": {
         "scheme-1": {
           "settings": {
@@ -91,9 +91,9 @@
           }
         }
       },
-      "header_style": "header--sticky-glass",
-      "footer_style": "footer--card",
-      "product_style": "product--modern"
+      "header_style": "header--sticky-bar",
+      "footer_style": "footer--classic",
+      "product_style": "product--catalogue"
     },
     "Apparel": {
       "card_style": "card--modern",

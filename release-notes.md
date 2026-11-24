@@ -4,6 +4,12 @@
 
 First release.
 
+### Catalogue system
+- Index rail header: a numbered vertical index down the left edge on desktop, with submenus opening as a full-height panel beside it
+- Ledger product cards: numbered pieces, a material line and a ruled price row, with grids ruled into one catalogue plate
+- Plates and index views on collection pages, with the hovered piece's photo following the cursor in the index
+- Catalogue product page: numbered figure labels, a type and SKU reference line and numbered product notes
+
 ### Home page and storytelling
 - Slideshow and hero banner sections, with video, image-with-text, collage and collection tiles
 - Featured collection, featured product and featured blog sections

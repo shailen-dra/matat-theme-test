@@ -130,6 +130,17 @@
     }
   }
 
+  /* Beside the desktop index rail the page is narrower, so keep the paired layout a little longer */
+  @media (min-width: 990px) and (max-width: 1279px) {
+    body:has(.header--rail) .footer .footer__blocks {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    body:has(.header--rail) .footer__blocks > :not(.menu-block) {
+      grid-column: 1 / -1;
+    }
+  }
+
   .footer__wordmark {
     display: block;
     overflow: hidden;
