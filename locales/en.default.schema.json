@@ -404,11 +404,6 @@
       "style_lines": "Lines",
       "style_boxed": "Boxed"
     },
-    "back_in_stock": {
-      "name": "Back in stock request",
-      "info": "Shows an email form while the selected variant is sold out. Requests arrive as contact form emails with the product, variant and link.",
-      "preview_in_editor": "Always show in the theme editor"
-    },
     "share": {
       "name": "Share"
     },
@@ -827,9 +822,7 @@
       "upsell_info": "Based on Shopify's product recommendations for the first item in the cart.",
       "gift_wrap": "Gift wrap",
       "gift_wrap_product": "Gift wrap product",
-      "gift_wrap_product_info": "Shows an \"Add gift wrapping\" checkbox in the cart that adds this product. Use a product with a single variant.",
-      "show_discount_code": "Show discount code field",
-      "show_discount_code_info": "In the cart drawer and on the cart page."
+      "gift_wrap_product_info": "Shows an \"Add gift wrapping\" checkbox in the cart that adds this product. Use a product with a single variant."
     },
     "favicon": {
       "group": "Favicon",

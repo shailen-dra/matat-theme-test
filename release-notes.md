@@ -24,7 +24,7 @@ First release.
 - Collection filtering and sorting, in a sidebar or a drawer
 - Collection banner layout
 - Predictive search and a search results page with filters
-- Cart page and cart drawer, with upsells and discount codes
+- Cart page and cart drawer, with upsells
 
 ### Store-wide
 - Color schemes, Shopify font picker and global typography settings

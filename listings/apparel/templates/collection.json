@@ -1,0 +1,48 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "collection",
+      "settings": {
+        "show_description": true,
+        "intro_layout": "banner",
+        "show_image": true,
+        "banner_height": "collection__banner--large",
+        "banner_overlay_opacity": 35,
+        "banner_text_color": "#ffffff",
+        "banner_position_x": "collection__banner--x-left",
+        "banner_position_y": "collection__banner--y-bottom",
+        "products_per_page": 24,
+        "columns_desktop": 4,
+        "columns_mobile": "2",
+        "image_ratio": "card--portrait",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "promo_enabled": true,
+        "promo_position": 3,
+        "promo_wide": true,
+        "promo_image": "shopify://shop_images/apparel-slide-evening-mobile.jpg",
+        "promo_eyebrow": "Evening edit",
+        "promo_heading": "Satin, velvet and heels",
+        "promo_button_label": "Shop the edit",
+        "promo_link": "shopify://collections/evening",
+        "enable_filtering": true,
+        "filter_layout": "sidebar",
+        "enable_sorting": true,
+        "padding_top": 48,
+        "padding_bottom": 96
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

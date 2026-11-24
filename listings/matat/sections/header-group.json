@@ -1,0 +1,58 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "t:general.header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "blocks": {
+        "mega_catalog": {
+          "type": "mega_menu",
+          "settings": {
+            "menu_item": "Shop",
+            "show_view_all": true,
+            "image_ratio": "mega-promo--portrait",
+            "image_1": "shopify://shop_images/collage-layered-necklaces.jpg",
+            "heading_1": "Layered gold",
+            "link_1": "shopify://collections/necklaces",
+            "image_2": "shopify://shop_images/collage-hoops.jpg",
+            "heading_2": "Everyday hoops",
+            "link_2": "shopify://collections/earrings"
+          }
+        }
+      },
+      "block_order": [
+        "mega_catalog"
+      ],
+      "settings": {
+        "logo_width": 140,
+        "logo_width_mobile": 100,
+        "menu": "main-menu",
+        "layout": "header--logo-center",
+        "menu_style": "header--menu-uppercase",
+        "customer_account_menu": "customer-account-main-menu",
+        "sticky": "scroll-up",
+        "sticky_style": "theme",
+        "transparent_on_home": true,
+        "transparent_text_color": "#ffffff",
+        "show_search": true,
+        "enable_predictive_search": true,
+        "show_country": false,
+        "show_language": false,
+        "show_border": true,
+        "padding": 20
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

@@ -1,0 +1,60 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "header",
+  "name": "t:general.header",
+  "sections": {
+    "header": {
+      "type": "header",
+      "blocks": {
+        "mega_catalog": {
+          "type": "mega_menu",
+          "settings": {
+            "menu_item": "Shop",
+            "show_view_all": true,
+            "image_ratio": "mega-promo--portrait",
+            "image_1": "shopify://shop_images/apparel-collage-dresses.jpg",
+            "heading_1": "The dress edit",
+            "link_1": "shopify://collections/dresses",
+            "image_2": "shopify://shop_images/apparel-collage-shoes.jpg",
+            "heading_2": "New season boots",
+            "link_2": "shopify://collections/shoes"
+          }
+        }
+      },
+      "block_order": [
+        "mega_catalog"
+      ],
+      "settings": {
+        "logo_width": 150,
+        "logo_width_mobile": 110,
+        "menu": "main-menu",
+        "layout": "header--logo-left",
+        "menu_style": "header--menu-regular",
+        "customer_account_menu": "customer-account-main-menu",
+        "sticky": "scroll-up",
+        "sticky_style": "header--sticky-glass",
+        "transparent_on_home": true,
+        "transparent_text_color": "#ffffff",
+        "show_search": true,
+        "enable_predictive_search": true,
+        "show_country": false,
+        "show_language": false,
+        "show_border": false,
+        "padding": 18,
+        "logo": "shopify://shop_images/ashana-logo.png",
+        "transparent_logo": "shopify://shop_images/ashana-logo-white.png"
+      }
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

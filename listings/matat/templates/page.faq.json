@@ -1,0 +1,90 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "question_1": {
+          "type": "accordion",
+          "settings": {
+            "heading": "What is your jewelry made of?",
+            "content": "<p>Every piece is made from recycled 14k or 18k gold, or 925 sterling silver. Stones are ethically sourced and conflict-free.</p>",
+            "open": false
+          }
+        },
+        "question_2": {
+          "type": "accordion",
+          "settings": {
+            "heading": "How do I find my ring size?",
+            "content": "<p>Use the size guide on any ring page, or wrap a strip of paper around your finger and match its length to our chart. We resize for free within 30 days.</p>",
+            "open": false
+          }
+        },
+        "question_3": {
+          "type": "accordion",
+          "settings": {
+            "heading": "How long does shipping take?",
+            "content": "<p>Orders ship within 2 business days, fully insured and gift-wrapped. Delivery usually takes 3–5 business days.</p>",
+            "open": false
+          }
+        },
+        "question_4": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Can I return or exchange a piece?",
+            "content": "<p>Yes. Unworn pieces can be returned or exchanged within 30 days. Engraved pieces are final sale.</p>",
+            "open": false
+          }
+        },
+        "question_5": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Do you offer engraving?",
+            "content": "<p>Yes, free on most pieces. Add your text on the product page before adding to cart, up to 15 characters.</p>",
+            "open": false
+          }
+        },
+        "question_6": {
+          "type": "accordion",
+          "settings": {
+            "heading": "How should I care for my jewelry?",
+            "content": "<p>Remove jewelry before swimming or showering, store pieces separately in the pouch provided, and polish gently with a soft cloth.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "question_1",
+        "question_2",
+        "question_3",
+        "question_4",
+        "question_5",
+        "question_6"
+      ],
+      "settings": {
+        "layout": "faq--split",
+        "eyebrow": "Help",
+        "title": "Questions, <em>answered</em>",
+        "heading_alignment": "start",
+        "contact_text": "Still have a question?",
+        "contact_label": "Contact us",
+        "contact_link": "/pages/contact",
+        "structured_data": true,
+        "tinted": false,
+        "padding_top": 64,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "faq"
+  ]
+}

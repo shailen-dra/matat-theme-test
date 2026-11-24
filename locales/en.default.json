@@ -87,14 +87,6 @@
     "gift_wrap": {
       "label": "Add gift wrapping",
       "free": "Free"
-    },
-    "discount_code": {
-      "toggle": "Add a discount code",
-      "label": "Discount code",
-      "placeholder": "Discount code",
-      "apply": "Apply",
-      "remove": "Remove discount {{ code }}",
-      "invalid": "This discount code isn't valid for this cart"
     }
   },
   "customers": {
@@ -408,17 +400,6 @@
       "in_stock": "In stock, ready to ship",
       "backorder": "Out of stock, available to pre-order"
     },
-    "back_in_stock": {
-      "heading": "Notify me when it's back",
-      "text": "Leave your email and we'll let you know as soon as it's available again.",
-      "subject": "Back in stock request: {{ title }}",
-      "product_field": "Product",
-      "variant_field": "Variant",
-      "link_field": "Link",
-      "body": "Please let me know when {{ title }} is back in stock.",
-      "submit": "Notify me",
-      "success": "Thanks! We'll email you when it's back."
-    },
     "bundle": {
       "this_item": "This item",
       "add": "Add {{ items }} to cart · {{ total }}"
@@ -427,7 +408,9 @@
       "intro": "Have a question about {{ title }}? We usually reply within one business day.",
       "subject": "Question about {{ title }}",
       "send": "Send question",
-      "success": "Thanks! We'll get back to you by email soon."
+      "success": "Thanks! We'll get back to you by email soon.",
+      "product_field": "Product",
+      "link_field": "Link"
     },
     "gift_card_recipient": {
       "toggle": "Send as a gift to someone",

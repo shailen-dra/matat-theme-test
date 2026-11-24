@@ -1,0 +1,90 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "question_1": {
+          "type": "accordion",
+          "settings": {
+            "heading": "What are your clothes made of?",
+            "content": "<p>Natural fibres wherever we can: organic cotton, linen, responsibly sourced wool and vegetable-tanned leather.</p>",
+            "open": false
+          }
+        },
+        "question_2": {
+          "type": "accordion",
+          "settings": {
+            "heading": "How do I find my size?",
+            "content": "<p>Use the size guide on any product page. If you are between sizes, size up for a relaxed fit.</p>",
+            "open": false
+          }
+        },
+        "question_3": {
+          "type": "accordion",
+          "settings": {
+            "heading": "How long does shipping take?",
+            "content": "<p>Orders ship within 2 business days. Delivery usually takes 3–5 business days, and shipping is free over $150.</p>",
+            "open": false
+          }
+        },
+        "question_4": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Can I return or exchange an item?",
+            "content": "<p>Yes. Unworn items with their tags can be returned or exchanged within 30 days.</p>",
+            "open": false
+          }
+        },
+        "question_5": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Do you offer alterations?",
+            "content": "<p>Yes. We shorten hems and sleeves for free on all clothing. Just add a note at checkout.</p>",
+            "open": false
+          }
+        },
+        "question_6": {
+          "type": "accordion",
+          "settings": {
+            "heading": "How should I care for my clothes?",
+            "content": "<p>Wash cool and inside out, dry flat and steam instead of ironing. Each product page has specific care notes.</p>",
+            "open": false
+          }
+        }
+      },
+      "block_order": [
+        "question_1",
+        "question_2",
+        "question_3",
+        "question_4",
+        "question_5",
+        "question_6"
+      ],
+      "settings": {
+        "layout": "faq--split",
+        "eyebrow": "Help",
+        "title": "Questions, <em>answered</em>",
+        "heading_alignment": "start",
+        "contact_text": "Still have a question?",
+        "contact_label": "Contact us",
+        "contact_link": "/pages/contact",
+        "structured_data": true,
+        "tinted": false,
+        "padding_top": 64,
+        "padding_bottom": 80
+      }
+    }
+  },
+  "order": [
+    "faq"
+  ]
+}

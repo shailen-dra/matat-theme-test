@@ -130,12 +130,6 @@
             "fallback_collection": true
           }
         },
-        "back_in_stock": {
-          "type": "back-in-stock",
-          "settings": {
-            "preview_in_editor": true
-          }
-        },
         "share": {
           "type": "share",
           "settings": {
@@ -215,7 +209,6 @@
         "buy_buttons",
         "delivery",
         "payment_icons",
-        "back_in_stock",
         "sticky_atc",
         "bundle",
         "pickup",

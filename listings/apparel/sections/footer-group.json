@@ -1,0 +1,162 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "type": "footer",
+  "name": "t:general.footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "brand": {
+          "type": "group",
+          "settings": {
+            "layout_direction": "group--vertical",
+            "alignment": "auto",
+            "gap": 20,
+            "padding": 0
+          },
+          "blocks": {
+            "brand_heading": {
+              "type": "heading",
+              "settings": {
+                "text": "Clothes made to be <em>lived in</em>.",
+                "style": "heading--h3",
+                "tag": "p",
+                "alignment": "inherit",
+                "max_width": 0
+              },
+              "blocks": {}
+            },
+            "brand_text": {
+              "type": "text",
+              "settings": {
+                "text": "<p>Natural fibres and small-batch making, designed to be worn for years.</p>",
+                "size": "text--small",
+                "muted": true,
+                "alignment": "inherit",
+                "max_width": 40
+              },
+              "blocks": {}
+            },
+            "brand_social": {
+              "type": "social-links",
+              "settings": {
+                "size": "md"
+              },
+              "blocks": {}
+            },
+            "brand_logo": {
+              "type": "logo",
+              "settings": {
+                "image": "shopify://shop_images/ashana-logo-white.png",
+                "width": 170,
+                "link_home": true
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "brand_logo",
+            "brand_heading",
+            "brand_text",
+            "brand_social"
+          ]
+        },
+        "menu_shop": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu"
+          },
+          "blocks": {}
+        },
+        "menu_help": {
+          "type": "menu",
+          "settings": {
+            "heading": "Help",
+            "menu": "footer"
+          },
+          "blocks": {}
+        },
+        "newsletter": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "Join the list",
+            "text": "<p>Early access to new collections, private sales and styling notes.</p>",
+            "form_style": "newsletter--boxed",
+            "button_label": "Subscribe"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "brand",
+        "menu_shop",
+        "menu_help",
+        "newsletter"
+      ],
+      "settings": {
+        "background_color": "#2f3de0",
+        "text_color": "#ffffff",
+        "style": "footer--card",
+        "first_column_wide": true,
+        "show_wordmark": false,
+        "padding_top": 80,
+        "padding_bottom": 32,
+        "show_policies": true,
+        "show_payment_icons": true,
+        "show_follow_on_shop": true,
+        "show_country": true,
+        "show_language": false,
+        "show_powered_by": false
+      }
+    },
+    "newsletter_popup": {
+      "type": "newsletter-popup",
+      "blocks": {
+        "eyebrow": {
+          "type": "heading",
+          "settings": {
+            "text": "Join the list",
+            "style": "heading--eyebrow heading--accent",
+            "tag": "p",
+            "alignment": "inherit",
+            "max_width": 0
+          },
+          "blocks": {}
+        },
+        "signup": {
+          "type": "newsletter",
+          "settings": {
+            "heading": "10% off your first order",
+            "text": "<p>Plus early access to new collections and private sales. No spam, unsubscribe anytime.</p>",
+            "form_style": "newsletter--boxed",
+            "button_label": "Subscribe"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "eyebrow",
+        "signup"
+      ],
+      "disabled": true,
+      "settings": {
+        "enabled": true,
+        "delay": 8,
+        "frequency": 14
+      }
+    }
+  },
+  "order": [
+    "footer",
+    "newsletter_popup"
+  ]
+}
