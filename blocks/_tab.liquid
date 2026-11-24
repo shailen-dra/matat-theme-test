@@ -9,7 +9,7 @@
 {%- assign product = closest.product -%}
 
 <div class="tab" data-tab {{ block.shopify_attributes }}>
-  <h3 class="tab__heading" data-tab-heading>{{ block.settings.title | escape }}</h3>
+  <h2 class="tab__heading" data-tab-heading>{{ block.settings.title | escape }}</h2>
   <div class="tab__panel" data-tab-panel>
     {%- if block.settings.show_description and product.description != blank -%}
       <div class="rte">{{ product.description }}</div>
