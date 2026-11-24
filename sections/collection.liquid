@@ -69,6 +69,9 @@
 <collection-facets
   class="collection section full-width{% if show_banner %} collection--banner{% endif %}{% if filters_sidebar %} collection--filters-sidebar{% endif %}"
   data-section-id="{{ section.id }}"
+  {% if section.settings.enable_index_view %}
+    data-view="{{ section.settings.default_view }}"
+  {% endif %}
   style="
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
@@ -152,6 +155,18 @@
         {{- 'collections.product_count' | t: count: collection.products_count -}}
       </p>
     </div>
+
+    {%- if section.settings.enable_index_view -%}
+      <view-toggle class="view-toggle" data-default="{{ section.settings.default_view }}">
+        <span class="visually-hidden">{{ 'collections.view.label' | t }}</span>
+        <button type="button" class="view-toggle__button" data-view-option="plates" aria-pressed="{% if section.settings.default_view == 'plates' %}true{% else %}false{% endif %}">
+          {{- 'collections.view.plates' | t -}}
+        </button>
+        <button type="button" class="view-toggle__button" data-view-option="index" aria-pressed="{% if section.settings.default_view == 'index' %}true{% else %}false{% endif %}">
+          {{- 'collections.view.index' | t -}}
+        </button>
+      </view-toggle>
+    {%- endif -%}
 
     {%- if section.settings.enable_sorting -%}
       <div class="collection__sort">
@@ -285,6 +300,7 @@
                 </li>
               {%- endif -%}
               {%- liquid
+                assign card_number = paginate.current_offset | plus: forloop.index
                 assign loading = 'lazy'
                 if forloop.index <= columns
                   assign loading = 'eager'
@@ -298,7 +314,8 @@
                   show_vendor: section.settings.show_vendor,
                   sizes: sizes,
                   loading: loading,
-                  heading_tag: 'h2'
+                  heading_tag: 'h2',
+                  number: card_number
                 %}
               </li>
             {%- endfor -%}
@@ -325,6 +342,9 @@
       {%- endpaginate -%}
     </div>
   </div>
+  {%- if section.settings.enable_index_view -%}
+    <div class="index-preview" aria-hidden="true"></div>
+  {%- endif -%}
 </collection-facets>
 
 {% stylesheet %}
@@ -823,7 +843,269 @@
       transition: none;
     }
   }
+  /*
+    Index view: the grid becomes a numbered list, like the index of a
+    printed catalogue. Each row reads number, title, material, price; on
+    devices with a mouse, hovering a row floats its photo beside the cursor.
+  */
+  .view-toggle {
+    display: inline-flex;
+    gap: 0.25rem;
+    padding: 0.1875rem;
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+
+  .view-toggle__button {
+    min-height: 2rem;
+    padding: 0.25rem 0.75rem;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .view-toggle__button[aria-pressed='true'] {
+    background-color: var(--color-foreground);
+    color: var(--color-background);
+  }
+
+  [data-view='index'] .collection__grid.product-grid {
+    display: block;
+    padding: 0;
+    border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+
+  [data-view='index'] .collection__grid.product-grid > li {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+
+  [data-view='index'] .collection__grid .product-grid__item--promo {
+    display: none;
+  }
+
+  [data-view='index'] .collection__grid .card {
+    display: grid;
+    grid-template-columns: 4.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    height: auto;
+    padding-block: 0.75rem;
+  }
+
+  [data-view='index'] .collection__grid .card__media-wrap {
+    width: 4.5rem;
+  }
+
+  [data-view='index'] .collection__grid .card__media {
+    aspect-ratio: 1;
+    border-radius: 0;
+  }
+
+  [data-view='index'] .collection__grid :is(.card__badges, .card__quick-add, .card__swatches, .card__vendor, .card__unit-price, .card__image--secondary) {
+    display: none;
+  }
+
+  [data-view='index'] .collection__grid .card__info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'number number'
+      'title price';
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+    padding: 0;
+  }
+
+  [data-view='index'] .collection__grid .card__ledger {
+    display: contents;
+  }
+
+  [data-view='index'] .collection__grid .card__number {
+    grid-area: number;
+  }
+
+  [data-view='index'] .collection__grid .card__material {
+    display: none;
+  }
+
+  [data-view='index'] .collection__grid .card__title {
+    grid-area: title;
+  }
+
+  [data-view='index'] .collection__grid .card__price {
+    grid-area: price;
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (min-width: 750px) {
+    [data-view='index'] .collection__grid .card {
+      grid-template-columns: minmax(0, 1fr);
+      padding-block: 1.125rem;
+      transition: padding-inline 0.3s ease;
+    }
+
+    [data-view='index'] .collection__grid .card__media-wrap {
+      display: none;
+    }
+
+    [data-view='index'] .collection__grid .card__info {
+      grid-template-columns: 5rem minmax(0, 1fr) minmax(0, 14rem) 9rem;
+      grid-template-areas: 'number title material price';
+      align-items: baseline;
+    }
+
+    [data-view='index'] .collection__grid .card__material {
+      display: block;
+      grid-area: material;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: color-mix(in srgb, var(--color-foreground) 62%, transparent);
+    }
+
+    [data-view='index'] .collection__grid .card__title {
+      font-size: clamp(1.125rem, 1.6vw, 1.5rem);
+    }
+
+    [data-view='index'] .collection__grid .card:hover,
+    [data-view='index'] .collection__grid .card:focus-within {
+      padding-inline-start: 0.75rem;
+    }
+  }
+
+  .index-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 20;
+    width: clamp(12rem, 18vw, 17rem);
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background-color: color-mix(in srgb, var(--color-foreground) 5%, var(--color-background));
+    transform: translate3d(var(--preview-x, 0), var(--preview-y, 0), 0);
+    transition: opacity 0.2s ease;
+  }
+
+  .index-preview.is-visible {
+    opacity: 1;
+  }
+
+  @media (max-width: 749px) {
+    .index-preview {
+      display: none;
+    }
+  }
+
+  .index-preview__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-view='index'] .collection__grid .card {
+      transition: none;
+    }
+  }
 {% endstylesheet %}
+
+{% javascript %}
+  /**
+   * Switches the collection between plates (photo grid) and index (list).
+   * The choice is kept for the visitor in localStorage and set on the
+   * <collection-facets> element, which survives filter and sort updates.
+   */
+  class ViewToggle extends HTMLElement {
+    static storageKey = 'collection-view';
+
+    connectedCallback() {
+      this.root = this.closest('[data-view]');
+      if (!this.root) return;
+      this.buttons = [...this.querySelectorAll('[data-view-option]')];
+
+      let saved = null;
+      try {
+        saved = localStorage.getItem(ViewToggle.storageKey);
+      } catch (error) {}
+      if (saved === 'plates' || saved === 'index') this.set(saved, false);
+
+      this.buttons.forEach((button) => {
+        button.addEventListener('click', () => this.set(button.dataset.viewOption, true));
+      });
+
+      this.setupPreview();
+    }
+
+    set(view, remember) {
+      this.root.dataset.view = view;
+      this.buttons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.viewOption === view)));
+      if (!remember) return;
+      try {
+        localStorage.setItem(ViewToggle.storageKey, view);
+      } catch (error) {}
+    }
+
+    /** Floats the hovered row's photo beside the cursor in index view (mouse only). */
+    setupPreview() {
+      const preview = this.root.querySelector('.index-preview');
+      if (!preview || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+      const image = document.createElement('img');
+      image.alt = '';
+      image.className = 'index-preview__image';
+      preview.append(image);
+      let frame = null;
+      let x = 0;
+      let y = 0;
+
+      const place = () => {
+        frame = null;
+        const width = preview.offsetWidth;
+        const height = preview.offsetHeight;
+        const left = Math.min(x + 24, window.innerWidth - width - 16);
+        const top = Math.min(Math.max(y - height / 2, 16), window.innerHeight - height - 16);
+        preview.style.setProperty('--preview-x', `${left}px`);
+        preview.style.setProperty('--preview-y', `${top}px`);
+      };
+
+      this.root.addEventListener('pointermove', (event) => {
+        if (this.root.dataset.view !== 'index' || event.pointerType !== 'mouse') return;
+        const card = event.target.closest('.collection__grid .card');
+        const source = card?.querySelector('.card__image:not(.card__image--secondary)');
+        if (!source) {
+          preview.classList.remove('is-visible');
+          return;
+        }
+        const src = source.currentSrc || source.src;
+        if (image.getAttribute('src') !== src) image.src = src;
+        preview.classList.add('is-visible');
+        x = event.clientX;
+        y = event.clientY;
+        if (!frame) frame = requestAnimationFrame(place);
+      });
+
+      const hide = () => preview.classList.remove('is-visible');
+      this.root.addEventListener('pointerleave', hide);
+      window.addEventListener('scroll', hide, { passive: true });
+    }
+  }
+
+  if (!customElements.get('view-toggle')) {
+    customElements.define('view-toggle', ViewToggle);
+  }
+{% endjavascript %}
 
 {% schema %}
 {
@@ -921,6 +1203,24 @@
     {
       "type": "header",
       "content": "t:sections.collection.products"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_index_view",
+      "label": "t:sections.collection.enable_index_view",
+      "info": "t:sections.collection.enable_index_view_info",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "t:sections.collection.default_view",
+      "options": [
+        { "value": "plates", "label": "t:sections.collection.view_plates" },
+        { "value": "index", "label": "t:sections.collection.view_index" }
+      ],
+      "default": "plates",
+      "visible_if": "{{ section.settings.enable_index_view }}"
     },
     {
       "type": "range",

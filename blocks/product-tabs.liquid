@@ -137,6 +137,8 @@
     }
 
     build() {
+      // The Catalogue product style shows every tab as a numbered note, so it skips the tab bar
+      if (this.closest('.product--catalogue')) return;
       this.tabs = [...this.querySelectorAll(':scope > .tabs__panels [data-tab]')];
       this.list = this.querySelector('[data-tablist]');
       if (!this.list || this.tabs.length === 0) return;

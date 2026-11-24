@@ -318,6 +318,7 @@
             >
               {%- for result in search.results -%}
                 {%- liquid
+                  assign card_number = paginate.current_offset | plus: forloop.index
                   assign loading = 'lazy'
                   if forloop.index <= columns
                     assign loading = 'eager'
@@ -332,7 +333,8 @@
                       show_vendor: section.settings.show_vendor,
                       sizes: sizes,
                       loading: loading,
-                      heading_tag: 'h2'
+                      heading_tag: 'h2',
+                      number: card_number
                     %}
                   {%- else -%}
                     {% render 'search-result-card',

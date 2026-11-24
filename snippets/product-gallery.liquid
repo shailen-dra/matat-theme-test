@@ -11,6 +11,7 @@
   @param {string} [loading] - Loading strategy for the first image: `eager` or `lazy` (default)
   @param {string} [id] - Unique id used to scope element ids (e.g. `section.id`)
   @param {boolean} [zoom] - Adds zoom buttons that open the images in a full-screen viewer
+  @param {boolean} [captions] - Labels each image as a numbered figure (Fig. 01, Fig. 02…), used by the Catalogue product style
 
   @example
   {% render 'product-gallery', product: product, layout: 'product-gallery--thumbnails', id: section.id %}
@@ -84,6 +85,15 @@
           assign media_alt = media.alt | default: product.title | escape
         -%}
         <div class="product-gallery__item product-gallery__item--{{ media.media_type }}" data-media-id="{{ media.id }}">
+          {%- if captions -%}
+            {%- liquid
+              assign figure_number = forloop.index
+              if figure_number < 10
+                assign figure_number = '0' | append: forloop.index
+              endif
+            -%}
+            <span class="product-gallery__caption" aria-hidden="true">{{ 'product.gallery.figure' | t: number: figure_number }}</span>
+          {%- endif -%}
           {%- case media.media_type -%}
             {%- when 'image' -%}
               {{
@@ -259,6 +269,21 @@
     height: 100%;
     object-fit: cover;
     border: 0;
+  }
+
+  .product-gallery__caption {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    z-index: 1;
+    padding: 0.375rem 0.625rem;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-size: 0.6875rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
   }
 
   .product-gallery__item--external_video iframe {

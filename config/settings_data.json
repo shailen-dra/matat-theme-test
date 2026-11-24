@@ -9,7 +9,7 @@
  */
 {
   "current": {
-    "card_style": "card--modern",
+    "card_style": "card--ledger",
     "social_instagram_link": "https://www.instagram.com/",
     "social_facebook_link": "https://www.facebook.com/",
     "social_tiktok_link": "https://www.tiktok.com/",
@@ -56,7 +56,7 @@
     },
     "header_style": "header--sticky-glass",
     "footer_style": "footer--card",
-    "product_style": "product--modern"
+    "product_style": "product--catalogue"
   },
   "presets": {
     "Matat": {

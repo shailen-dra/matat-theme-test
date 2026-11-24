@@ -31,6 +31,11 @@
   if product_style != blank
     assign product_classes = product_classes | append: ' ' | append: product_style
   endif
+
+  assign show_captions = false
+  if product_style == 'product--catalogue'
+    assign show_captions = true
+  endif
 -%}
 
 <product-info
@@ -53,7 +58,8 @@
       ratio: section.settings.media_ratio,
       loading: loading,
       id: section.id,
-      zoom: section.settings.enable_zoom
+      zoom: section.settings.enable_zoom,
+      captions: show_captions
     %}
   </div>
 
@@ -61,6 +67,16 @@
     <div class="product__details-inner">
       {%- if product == blank and request.design_mode -%}
         <p class="product__empty">{{ 'product.select_product' | t }}</p>
+      {%- endif -%}
+      {%- if product_style == 'product--catalogue' and product != blank -%}
+        <p class="product__reference" data-update="reference">
+          {%- if product.type != blank -%}
+            <span>{{ product.type | escape }}</span>
+          {%- endif -%}
+          {%- if variant.sku != blank -%}
+            <span>{{ 'product.reference' | t: sku: variant.sku | escape }}</span>
+          {%- endif -%}
+        </p>
       {%- endif -%}
       {{ blocks }}
     </div>
@@ -135,6 +151,70 @@
 
     .product {
       padding-block-start: 0;
+    }
+  }
+
+  /*
+    Catalogue style: the product page reads as an entry in a printed
+    catalogue. Square plates with numbered figure labels, a reference line
+    (type and SKU) above the title, and the product details laid out as
+    numbered notes instead of tabs.
+  */
+  .product--catalogue {
+    --style-border-radius-buttons: 0;
+    --style-border-radius-inputs: 0;
+    --product-media-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+  }
+
+  .product--catalogue .product__details-inner {
+    padding-block-start: 1rem;
+    border-block-start: 1px solid var(--color-foreground);
+  }
+
+  .product__reference {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-foreground) 64%, transparent);
+  }
+
+  .product--catalogue .tabs {
+    counter-reset: note;
+    gap: 0;
+  }
+
+  .product--catalogue .tabs .tab {
+    counter-increment: note;
+    margin: 0;
+    padding-block: 1.25rem;
+    border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+
+  .product--catalogue .tab__heading {
+    display: flex;
+    gap: 1.25rem;
+    margin-block-end: 0.875rem;
+  }
+
+  .product--catalogue .tab__heading::before {
+    content: counter(note, decimal-leading-zero);
+    min-width: 1.5rem;
+    font-variant-numeric: tabular-nums;
+    color: color-mix(in srgb, var(--color-foreground) 55%, transparent);
+  }
+
+  .product--catalogue .tab__panel {
+    padding-inline-start: 2.75rem;
+  }
+
+  @media (max-width: 749px) {
+    .product--catalogue .tab__panel {
+      padding-inline-start: 0;
     }
   }
 

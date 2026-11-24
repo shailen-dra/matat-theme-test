@@ -129,6 +129,11 @@
       "button": "Shop all",
       "filtered_title": "No matching pieces",
       "filtered_text": "Try removing a filter or two to see more."
+    },
+    "view": {
+      "label": "View",
+      "plates": "Plates",
+      "index": "Index"
     }
   },
   "gift_card": {
@@ -336,12 +341,15 @@
       "label": "Product media",
       "previous": "Previous image",
       "next": "Next image",
-      "go_to": "Show image {{ index }}"
+      "go_to": "Show image {{ index }}",
+      "figure": "Fig. {{ number }}"
     },
     "card": {
       "from_price": "From {{ price }}",
       "placeholder_title": "Product title",
-      "new_badge": "New"
+      "new_badge": "New",
+      "number": "No. {{ number }}",
+      "material_more": "{{ material }} +{{ count }}"
     },
     "quick_view": {
       "full_details": "View full details",
@@ -425,7 +433,8 @@
       "order_within": "Order within {{ time }}",
       "hours_minutes": "{{ hours }}h {{ minutes }}m",
       "minutes": "{{ minutes }}m"
-    }
+    },
+    "reference": "Ref. {{ sku }}"
   },
   "contact": {
     "success": "Thanks for reaching out. We'll get back to you as soon as possible.",

@@ -15,6 +15,7 @@
   @param {string} [sizes] - The `sizes` attribute for the image
   @param {string} [loading] - Image loading strategy (default `lazy`)
   @param {string} [heading_tag] - Title element: `h3` (default), or `h2` when the grid sits directly under the page `h1`
+  @param {number} [number] - Catalogue number of the piece in its grid, shown by the Ledger card style and the collection index view
 
   @example
   {% render 'product-card', product: product, show_secondary_image: true %}
@@ -38,6 +39,32 @@
     endif
     assign price_min = product.price_min | money
     assign from_price = 'product.card.from_price' | t: price: price_min
+
+    # Material line for the Ledger card and index view: the Metal / Material option, else the product type
+    assign material = ''
+    for option in product.options_with_values
+      assign material_option = option.name | downcase
+      if material_option contains 'metal' or material_option contains 'material'
+        assign material = option.values.first.name
+        if option.values.size > 1
+          assign more_materials = option.values.size | minus: 1
+          assign material = 'product.card.material_more' | t: material: material, count: more_materials
+        endif
+        break
+      endif
+    endfor
+    if material == blank
+      assign material = product.type
+    endif
+  endif
+
+  assign number_label = ''
+  if number != blank
+    assign padded_number = number
+    if number < 10
+      assign padded_number = '0' | append: number
+    endif
+    assign number_label = 'product.card.number' | t: number: padded_number
   endif
 
   assign ratio_style = ''
@@ -112,6 +139,16 @@
     </div>
 
     <div class="card__info">
+      {%- if number_label != blank or material != blank -%}
+        <p class="card__ledger">
+          {%- if number_label != blank -%}
+            <span class="card__number">{{ number_label }}</span>
+          {%- endif -%}
+          {%- if material != blank -%}
+            <span class="card__material">{{ material | escape }}</span>
+          {%- endif -%}
+        </p>
+      {%- endif -%}
       {%- if show_vendor -%}
         <p class="card__vendor">{{ product.vendor }}</p>
       {%- endif -%}
@@ -398,6 +435,86 @@
     display: flex;
     flex-direction: column;
     gap: 0.375rem;
+  }
+
+  /* Catalogue number and material: shown by the Ledger style and the collection index view */
+  .card__ledger {
+    display: none;
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--color-foreground) 62%, transparent);
+  }
+
+  .card__number {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /*
+    Ledger style: a catalogue plate. The photo sits on a flat ground inside
+    a ruled cell; below it a ruled line carries the piece number and
+    material, then the title and price share one row like a price list.
+  */
+  .card--ledger {
+    gap: 0;
+    height: 100%;
+  }
+
+  .card--ledger .card__media {
+    border-radius: 0;
+  }
+
+  .card--ledger .card__info {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    column-gap: 1rem;
+    row-gap: 0.25rem;
+    padding-block: 0.875rem 0.25rem;
+  }
+
+  .card--ledger .card__ledger {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block-end: 0.625rem;
+    margin-block-end: 0.375rem;
+    border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+  }
+
+  .card--ledger .card__material {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .card--ledger :is(.card__vendor, .card__unit-price, .card__swatches) {
+    grid-column: 1 / -1;
+  }
+
+  .card--ledger .card__price {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .card--ledger .card__badge {
+    border-radius: 0;
+  }
+
+  /* Ledger grids: every cell is ruled, so the grid reads as one catalogue plate */
+  .product-grid:has(.card--ledger) {
+    column-gap: 0;
+    row-gap: 0;
+    padding-inline-end: 1px;
+    padding-block-end: 1px;
+  }
+
+  .product-grid:has(.card--ledger) > li {
+    margin: 0 -1px -1px 0;
+    padding: clamp(0.75rem, 1.5vw, 1.25rem);
+    border: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
   }
 
   .card__vendor {

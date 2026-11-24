@@ -229,6 +229,10 @@
           {
             "value": "product--modern",
             "label": "t:sections.product.style_modern"
+          },
+          {
+            "value": "product--catalogue",
+            "label": "t:sections.product.style_catalogue"
           }
         ],
         "default": "product--classic"
@@ -250,9 +254,14 @@
           {
             "value": "card--modern",
             "label": "t:settings.product_cards.card_style_modern"
+          },
+          {
+            "value": "card--ledger",
+            "label": "t:settings.product_cards.card_style_ledger"
           }
         ],
-        "default": "card--classic"
+        "default": "card--classic",
+        "info": "t:settings.product_cards.card_style_info"
       },
       {
         "type": "checkbox",

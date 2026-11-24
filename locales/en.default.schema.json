@@ -509,7 +509,8 @@
       "details": "Product details",
       "sticky_details": "Keep details visible while scrolling",
       "enable_zoom": "Enable image zoom",
-      "enable_zoom_info": "Opens images full screen, where shoppers can zoom in."
+      "enable_zoom_info": "Opens images full screen, where shoppers can zoom in.",
+      "style_catalogue": "Catalogue"
     },
     "collection_tiles": {
       "name": "Collection tiles",
@@ -564,7 +565,12 @@
       "filter_layout": "Filter layout",
       "filter_layout_info": "Small screens always use the drawer.",
       "filter_layout_sidebar": "Sidebar",
-      "filter_layout_drawer": "Drawer"
+      "filter_layout_drawer": "Drawer",
+      "enable_index_view": "Show plates and index views",
+      "enable_index_view_info": "Lets shoppers switch between the photo grid and a numbered list. Their choice is remembered.",
+      "default_view": "Default view",
+      "view_plates": "Plates",
+      "view_index": "Index"
     },
     "cart": {
       "summary": "Order summary",
@@ -807,7 +813,9 @@
       "new_badge_days_info": "Days after a product is published. Set to 0 to turn off.",
       "custom_badges_info": "Add custom badges with product tags that start with \"badge:\", for example badge:Bestseller. Up to two show per card.",
       "card_swatches": "Show swatches",
-      "card_swatches_info": "For a \"Color\" or \"Metal\" option. Hovering a swatch shows that variant's image."
+      "card_swatches_info": "For a \"Color\" or \"Metal\" option. Hovering a swatch shows that variant's image.",
+      "card_style_ledger": "Ledger",
+      "card_style_info": "Ledger numbers each piece and adds a material line, like a catalogue."
     },
     "cart": {
       "cart_type": "Cart type",
