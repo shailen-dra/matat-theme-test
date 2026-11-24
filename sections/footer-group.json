@@ -95,7 +95,7 @@
       "settings": {
         "background_color": "#141312",
         "text_color": "#ede8df",
-        "style": "footer--card",
+        "style": "theme",
         "first_column_wide": true,
         "show_wordmark": false,
         "padding_top": 80,

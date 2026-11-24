@@ -53,7 +53,10 @@
           "accent": "#f5f0e8"
         }
       }
-    }
+    },
+    "header_style": "header--sticky-glass",
+    "footer_style": "footer--card",
+    "product_style": "product--modern"
   },
   "presets": {
     "Matat": {
@@ -87,10 +90,13 @@
             "accent": "#F5F0E8"
           }
         }
-      }
+      },
+      "header_style": "header--sticky-glass",
+      "footer_style": "footer--card",
+      "product_style": "product--modern"
     },
     "Apparel": {
-      "card_style": "card--modern",
+      "card_style": "card--classic",
       "color_schemes": {
         "scheme-1": {
           "settings": {
@@ -126,7 +132,10 @@
       "max_page_width": "110rem",
       "min_page_margin": 24,
       "button_corner_radius": 40,
-      "input_corner_radius": 10
+      "input_corner_radius": 10,
+      "header_style": "header--sticky-bar",
+      "footer_style": "footer--classic",
+      "product_style": "product--classic"
     }
   }
 }

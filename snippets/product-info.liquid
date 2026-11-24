@@ -24,8 +24,12 @@
   if section.settings.sticky_details
     assign product_classes = product_classes | append: ' product--sticky'
   endif
-  if section.settings.style != blank
-    assign product_classes = product_classes | append: ' ' | append: section.settings.style
+  assign product_style = section.settings.style
+  if product_style == 'theme'
+    assign product_style = settings.product_style
+  endif
+  if product_style != blank
+    assign product_classes = product_classes | append: ' ' | append: product_style
   endif
 -%}
 

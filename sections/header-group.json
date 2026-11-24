@@ -40,7 +40,7 @@
         "menu_style": "header--menu-uppercase",
         "customer_account_menu": "customer-account-main-menu",
         "sticky": "scroll-up",
-        "sticky_style": "header--sticky-glass",
+        "sticky_style": "theme",
         "transparent_on_home": true,
         "transparent_text_color": "#ffffff",
         "show_search": true,

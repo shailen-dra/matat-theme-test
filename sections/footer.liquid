@@ -12,10 +12,15 @@
   if footer_brightness < 128
     assign footer_accent = footer_accent | color_lighten: 22
   endif
+
+  assign footer_style = section.settings.style
+  if footer_style == 'theme'
+    assign footer_style = settings.footer_style
+  endif
 -%}
 
 <footer
-  class="footer full-width {{ section.settings.style }}{% if section.settings.first_column_wide %} footer--first-wide{% endif %}"
+  class="footer full-width {{ footer_style }}{% if section.settings.first_column_wide %} footer--first-wide{% endif %}"
   style="
     --color-background: {{ section.settings.background_color }};
     --color-foreground: {{ section.settings.text_color }};
@@ -338,10 +343,11 @@
       "id": "style",
       "label": "t:sections.footer.style",
       "options": [
+        { "value": "theme", "label": "t:settings.style.use_theme" },
         { "value": "footer--classic", "label": "t:sections.footer.style_classic" },
         { "value": "footer--card", "label": "t:sections.footer.style_card" }
       ],
-      "default": "footer--classic"
+      "default": "theme"
     },
     {
       "type": "header",

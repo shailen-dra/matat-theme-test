@@ -178,6 +178,64 @@
     ]
   },
   {
+    "name": "t:general.style",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "t:settings.style.info"
+      },
+      {
+        "type": "select",
+        "id": "header_style",
+        "label": "t:settings.style.header_style",
+        "info": "t:settings.style.header_style_info",
+        "options": [
+          {
+            "value": "header--sticky-bar",
+            "label": "t:sections.header.sticky_style_bar"
+          },
+          {
+            "value": "header--sticky-glass",
+            "label": "t:sections.header.sticky_style_glass"
+          }
+        ],
+        "default": "header--sticky-bar"
+      },
+      {
+        "type": "select",
+        "id": "footer_style",
+        "label": "t:settings.style.footer_style",
+        "options": [
+          {
+            "value": "footer--classic",
+            "label": "t:sections.footer.style_classic"
+          },
+          {
+            "value": "footer--card",
+            "label": "t:sections.footer.style_card"
+          }
+        ],
+        "default": "footer--classic"
+      },
+      {
+        "type": "select",
+        "id": "product_style",
+        "label": "t:settings.style.product_style",
+        "options": [
+          {
+            "value": "product--classic",
+            "label": "t:sections.product.style_classic"
+          },
+          {
+            "value": "product--modern",
+            "label": "t:sections.product.style_modern"
+          }
+        ],
+        "default": "product--classic"
+      }
+    ]
+  },
+  {
     "name": "t:general.product_cards",
     "settings": [
       {
@@ -185,8 +243,14 @@
         "id": "card_style",
         "label": "t:settings.product_cards.card_style",
         "options": [
-          { "value": "card--classic", "label": "t:settings.product_cards.card_style_classic" },
-          { "value": "card--modern", "label": "t:settings.product_cards.card_style_modern" }
+          {
+            "value": "card--classic",
+            "label": "t:settings.product_cards.card_style_classic"
+          },
+          {
+            "value": "card--modern",
+            "label": "t:settings.product_cards.card_style_modern"
+          }
         ],
         "default": "card--classic"
       },
