@@ -44,7 +44,7 @@ Alternatives:
 
 ## SEO metadata description
 
-> A refined Shopify theme for jewelry and accessory brands, with shoppable lookbooks, a cart drawer with free shipping progress, size guides, engraving options and full Hebrew and right-to-left support.
+> A refined Shopify theme for jewelry and accessory brands, with shoppable lookbooks, a cart drawer with free shipping progress, size guides, engraving options and right-to-left support.
 
 ## Feature tags to select
 

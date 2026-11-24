@@ -143,14 +143,14 @@ body {
   }
 }
 
-/** Right-to-left (Hebrew) adjustments */
+/** Right-to-left adjustments (Arabic, Hebrew, Persian, Urdu) */
 
-/* Hebrew has no letter case, so wide tracking only hurts legibility */
+/* RTL scripts have no letter case, so wide tracking only hurts legibility */
 :root[dir='rtl'] :is(.heading--eyebrow, .button, .tag, .header__shop-name, .drawer__title, .menu__link, .menu__view-all) {
   letter-spacing: 0;
 }
 
-/* Hebrew fonts have no true italics; emphasis relies on the accent color */
+/* RTL fonts rarely have true italics; emphasis relies on the accent color */
 :root[dir='rtl'] :is(em, i) {
   font-style: normal;
 }

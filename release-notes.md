@@ -31,5 +31,5 @@ First release.
 - Country/currency and language selectors
 - Follow on Shop and payment icons in the footer
 - Custom Liquid section and block; app blocks supported
-- Right-to-left layout and a Hebrew translation
+- Right-to-left layout support
 - Contact, About, FAQ, blog, article, 404, password and gift card pages

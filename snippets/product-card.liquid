@@ -149,7 +149,7 @@
           assign swatch_option = null
           for option in product.options_with_values
             assign option_name = option.name | downcase
-            if option_name contains 'color' or option_name contains 'colour' or option_name contains 'metal' or option_name contains 'צבע' or option_name contains 'מתכת'
+            if option_name contains 'color' or option_name contains 'colour' or option_name contains 'metal'
               assign swatch_option = option
               break
             endif
@@ -164,9 +164,9 @@
                 if swatch_color == blank
                   if value_name contains 'rose'
                     assign swatch_color = '#e3b4a0'
-                  elsif value_name contains 'gold' or value_name contains 'זהב'
+                  elsif value_name contains 'gold'
                     assign swatch_color = '#d4b06a'
-                  elsif value_name contains 'silver' or value_name contains 'platinum' or value_name contains 'white' or value_name contains 'כסף'
+                  elsif value_name contains 'silver' or value_name contains 'platinum' or value_name contains 'white'
                     assign swatch_color = '#cfd2d6'
                   elsif value_name contains 'black'
                     assign swatch_color = '#2a2a2a'

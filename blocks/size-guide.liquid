@@ -15,7 +15,7 @@
   assign show_guide = true
   if block.settings.only_sized_products and request.design_mode == false
     assign option_names = closest.product.options | join: ',' | downcase
-    unless option_names contains 'size' or option_names contains 'מידה'
+    unless option_names contains 'size'
       assign show_guide = false
     endunless
   endif
