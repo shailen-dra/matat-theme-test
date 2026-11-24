@@ -46,3 +46,6 @@ release
 logs/
 *.log
 tmp/
+
+# Playwright MCP screenshots and snapshots from local browser testing
+.playwright-mcp/

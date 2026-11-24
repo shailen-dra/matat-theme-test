@@ -222,11 +222,13 @@
       this.target = [...(productInfo ?? document).querySelectorAll('.buy-buttons')].find((el) => !this.contains(el));
       if (!this.target) return;
 
-      this.observer = new IntersectionObserver(([entry]) => {
-        // Only once the buttons have scrolled up and out, not before reaching them
-        this.toggle(!entry.isIntersecting && entry.boundingClientRect.bottom < 0);
-      });
+      // Only once the buttons have scrolled up and out, not before reaching them. The observer
+      // catches normal scrolling; the scroll check also catches jumps straight past the buttons
+      // (an anchor link or restored scroll position), which never cross the viewport edge
+      this.observer = new IntersectionObserver(() => this.check());
       this.observer.observe(this.target);
+      window.addEventListener('scroll', this.onScroll, { passive: true });
+      this.check();
 
       this.addEventListener('shopify:block:select', () => this.toggle(true, true));
       this.addEventListener('shopify:block:deselect', () => {
@@ -236,6 +238,17 @@
 
     disconnectedCallback() {
       this.observer?.disconnect();
+      window.removeEventListener('scroll', this.onScroll);
+      cancelAnimationFrame(this.frame);
+    }
+
+    onScroll = () => {
+      if (!this.frame) this.frame = requestAnimationFrame(() => this.check());
+    };
+
+    check() {
+      this.frame = null;
+      this.toggle(this.target.getBoundingClientRect().bottom < 0);
     }
 
     toggle(visible, lock = false) {

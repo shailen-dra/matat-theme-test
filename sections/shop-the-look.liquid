@@ -10,7 +10,7 @@
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
   "
 >
-  <shop-the-look class="look {{ section.settings.image_position }}">
+  <shop-the-look class="look {{ section.settings.image_position }}{% if settings.card_style == 'card--modern' %} look--soft{% endif %}">
     <div class="look__media">
       <div class="look__image-wrap">
         {%- if image != blank -%}
@@ -108,6 +108,19 @@
   .look__hotspots {
     position: absolute;
     inset: 0;
+  }
+
+  /* Modern card style (theme settings): soft rounded photo and product rows to match */
+  .look--soft .look__image-wrap {
+    border-radius: 1.5rem;
+  }
+
+  .look--soft .product-row {
+    border-radius: 1.125rem;
+  }
+
+  .look--soft .product-row__media {
+    border-radius: 0.75rem;
   }
 
   .look__content {

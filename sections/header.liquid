@@ -16,7 +16,11 @@
     assign header_classes = header_classes | append: ' header--border'
   endif
   if section.settings.sticky != 'none'
-    assign header_classes = header_classes | append: ' ' | append: section.settings.sticky_style
+    assign sticky_style = section.settings.sticky_style
+    if sticky_style == 'theme'
+      assign sticky_style = settings.header_style
+    endif
+    assign header_classes = header_classes | append: ' ' | append: sticky_style
   endif
 -%}
 
@@ -641,6 +645,33 @@
     text-transform: uppercase;
   }
 
+  /* Laptop widths: tighter menu spacing so more menus fit on one line */
+  @media (min-width: 990px) and (max-width: 1535px) {
+    .header .menu {
+      column-gap: clamp(0.875rem, 2.5vw - 0.75rem, 1.75rem);
+    }
+
+    .header--menu-uppercase .menu__link {
+      letter-spacing: 0.1em;
+    }
+  }
+
+  /*
+    Centered logo: when the menu can't fit on one line beside the logo, the
+    script adds header--nav-compact and the menu moves into the drawer (as on
+    phones) instead of wrapping onto a second row.
+  */
+  @media (min-width: 990px) {
+    .header--nav-compact .header__nav {
+      display: none;
+    }
+
+    .header--nav-compact .header__toggle {
+      display: inline-flex;
+      grid-area: nav;
+    }
+  }
+
   .menu__link::after {
     content: '';
     position: absolute;
@@ -1134,6 +1165,7 @@
       this.setupDialogs();
       this.setupEditorEvents();
       this.observeHeight();
+      this.setupCompactNav();
       this.onScroll();
     }
 
@@ -1145,6 +1177,53 @@
         document.removeEventListener('shopify:block:deselect', this.onBlockDeselect);
       }
       this.resizeObserver?.disconnect();
+      this.navObserver?.disconnect();
+    }
+
+    /**
+     * Centered logo layout: moves the menu into the drawer when it can't fit
+     * on one line beside the logo. The space is judged against the narrower
+     * sticky glass bubble, so the menu doesn't switch back and forth while
+     * scrolling.
+     */
+    setupCompactNav() {
+      this.menu = this.querySelector('.header__nav .menu');
+      this.inner = this.querySelector('.header__inner');
+      this.logo = this.querySelector('.header__logo');
+      if (!this.menu || !this.inner || !this.logo || !this.classList.contains('header--logo-center')) return;
+      this.navObserver = new ResizeObserver(() => this.updateCompactNav());
+      this.navObserver.observe(this.inner);
+      this.navObserver.observe(this.logo);
+      document.fonts?.ready.then(() => this.updateCompactNav());
+    }
+
+    updateCompactNav() {
+      if (window.innerWidth < 990) {
+        this.classList.remove('header--nav-compact');
+        return;
+      }
+      // Measure the menu laid out on one line (sizes change with web fonts, so always re-measure)
+      this.classList.remove('header--nav-compact');
+      const items = [...this.menu.children];
+      const menuGap = parseFloat(getComputedStyle(this.menu).columnGap) || 0;
+      const need = items.reduce((sum, item) => sum + item.getBoundingClientRect().width, 0) + menuGap * (items.length - 1);
+
+      const headerWidth = this.clientWidth;
+      let innerWidth = this.inner.getBoundingClientRect().width;
+      // Glass style: the wide top bubble on the home page narrows once sticky (inset at least
+      // 40px, wrapping the content width), so judge the space by the sticky bubble
+      if (this.classList.contains('header--sticky-glass')) {
+        const inset = parseFloat(getComputedStyle(this, '::before').left) || 0;
+        if (inset < 40) {
+          const pad = 20;
+          const contentWidth = innerWidth < headerWidth - 2 * (inset + pad) - 0.5 ? innerWidth : Infinity;
+          const stickyInset = Math.max(40, Number.isFinite(contentWidth) ? (headerWidth - contentWidth) / 2 - pad : 0);
+          innerWidth = Math.min(contentWidth, headerWidth - 2 * (stickyInset + pad));
+        }
+      }
+      const gap = parseFloat(getComputedStyle(this.inner).columnGap) || 0;
+      const available = (innerWidth - this.logo.getBoundingClientRect().width - gap * 2) / 2;
+      this.classList.toggle('header--nav-compact', need > available + 0.5);
     }
 
     /** Publishes the header height so overlapping sections (e.g. hero) can offset their content. */
@@ -1464,10 +1543,11 @@
       "id": "sticky_style",
       "label": "t:sections.header.sticky_style",
       "options": [
+        { "value": "theme", "label": "t:settings.style.use_theme" },
         { "value": "header--sticky-bar", "label": "t:sections.header.sticky_style_bar" },
         { "value": "header--sticky-glass", "label": "t:sections.header.sticky_style_glass" }
       ],
-      "default": "header--sticky-bar",
+      "default": "theme",
       "visible_if": "{{ section.settings.sticky != 'none' }}"
     },
     {
