@@ -22,8 +22,8 @@ names:
 | Media treatment | Catalogue product page: numbered figure labels, type and SKU reference line, product details as numbered notes | `snippets/product-info.liquid`, `snippets/product-gallery.liquid`, style `product--catalogue` |
 
 ## Presets
-- **Matat**: index rail, ledger cards, catalogue product page, classic footer.
-- **Apparel**: glass header with logo on the left, modern cards and product page, floating card footer.
+- **Monograph**: index rail, ledger cards, catalogue product page, classic footer.
+- **Linen**: glass header with logo on the left, modern cards and product page, floating card footer.
 
 The presets differ in structure, not only in colour and type.
 

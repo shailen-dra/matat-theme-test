@@ -59,7 +59,7 @@
     "product_style": "product--catalogue"
   },
   "presets": {
-    "Matat": {
+    "Monograph": {
       "card_style": "card--ledger",
       "color_schemes": {
         "scheme-1": {
@@ -95,7 +95,7 @@
       "footer_style": "footer--classic",
       "product_style": "product--catalogue"
     },
-    "Apparel": {
+    "Linen": {
       "card_style": "card--modern",
       "color_schemes": {
         "scheme-1": {

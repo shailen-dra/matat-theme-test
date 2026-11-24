@@ -2,7 +2,7 @@
 
 Draft text for the preset's listing page, written to the limits in
 https://shopify.dev/docs/storefronts/themes/store/review-process/listings.
-The theme name isn't decided yet, so none of this text uses it.
+Theme: Monograph. Presets: Monograph (this listing) and Linen.
 
 Screenshots were taken from the dev theme on matat-jwelery. Retake them on the
 client-transfer demo store once it exists, since the listing must link to
