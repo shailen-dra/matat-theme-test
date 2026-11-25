@@ -1,160 +1,111 @@
-<h1 align="center" style="position: relative;">
-  <br>
-    <img src="./assets/shoppy-x-ray.svg" alt="logo" width="200">
-  <br>
-  Shopify Skeleton Theme
-</h1>
+# Monograph
 
-A minimal, carefully structured Shopify theme designed to help you quickly get started. Designed with modularity, maintainability, and Shopify's best practices in mind.
+An editorial Shopify theme for brands whose products and photography should
+do the talking. Monograph is built for the Shopify Theme Store on Online
+Store 2.0, using theme blocks throughout, and ships with two presets.
 
-<p align="center">
-  <a href="./LICENSE.md"><img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License"></a>
-  <a href="./actions/workflows/ci.yml"><img alt="CI" src="https://github.com/Shopify/skeleton-theme/actions/workflows/ci.yml/badge.svg"></a>
-</p>
+| Preset | Made for | Look |
+|---|---|---|
+| **Monograph** | Jewelry and accessories | Laid out like a printed catalogue: a numbered index down the left edge, ledger product cards with a material line and ruled price row, an index view on collection pages and a catalogue product page |
+| **Linen** | Clothing and slow fashion | Soft and modern: Archivo headings with DM Sans body text, rounded buttons, a frosted glass header, modern product cards and a card-style footer |
+
+Version 1.0.0. See [release notes](./release-notes.md) for the full feature list.
+
+## Highlights
+
+- **Catalogue system:** plates and index views on collection pages, numbered figure labels and product notes on the product page
+- **Storytelling sections:** slideshow, hero, video, collage, image with text, timeline, testimonials, press logos, before/after slider and comparison table
+- **Shoppable imagery:** shop the look and shoppable gallery with product hotspots
+- **Product page details:** size guide, engraving and gift notes, delivery estimate, pickup availability, product tabs, bundles and a sticky add to cart bar
+- **Cart and discovery:** cart drawer with a free shipping bar and suggestions, predictive search, quick view, product recommendations and recently viewed products
+- **Theme Store essentials:** country and currency selector, Shop Pay Installments, Custom Liquid section and block, app blocks and accessible markup (Lighthouse accessibility 100 on tested pages)
 
 ## Getting started
 
-### Prerequisites
+### Requirements
 
-Before starting, ensure you have the latest Shopify CLI installed:
+- [Shopify CLI](https://shopify.dev/docs/api/shopify-cli) 3.x
+- Node.js 18 or later, for the packaging script
+- Optional: the [Shopify Liquid VS Code extension](https://shopify.dev/docs/storefronts/themes/tools/shopify-liquid-vscode)
 
-- [Shopify CLI](https://shopify.dev/docs/api/shopify-cli) – helps you download, upload, preview themes, and streamline your workflows
+### Run locally
 
-If you use VS Code:
-
-- [Shopify Liquid VS Code Extension](https://shopify.dev/docs/storefronts/themes/tools/shopify-liquid-vscode) – provides syntax highlighting, linting, inline documentation, and auto-completion specifically designed for Liquid templates
-
-### Clone
-
-Clone this repository using Git or Shopify CLI:
+The dev store is set in `shopify.theme.toml` as the `dev` environment.
 
 ```bash
-git clone git@github.com:Shopify/skeleton-theme.git
-# or
-shopify theme init
+shopify theme dev -e dev     # live preview at http://127.0.0.1:9292
+shopify theme check          # lint Liquid, JSON and translations
 ```
 
-### Preview
+## Project structure
 
-Preview this theme using Shopify CLI:
-
-```bash
-shopify theme dev
-```
-
-## Theme architecture
-
-```bash
+```text
 .
-├── assets          # Stores static assets (CSS, JS, images, fonts, etc.)
-├── blocks          # Reusable, nestable, customizable UI components
-├── config          # Global theme settings and customization options
-├── layout          # Top-level wrappers for pages (layout templates)
-├── locales         # Translation files for theme internationalization
-├── sections        # Modular full-width page components
-├── snippets        # Reusable Liquid code or HTML fragments
-└── templates       # Templates combining sections to define page structures
+├── assets          # critical.css, shared JS (product-components.js) and icons
+├── blocks          # Theme blocks: product page parts, text, media, groups
+├── config          # Global settings schema and the Monograph and Linen presets
+├── layout          # theme.liquid and password.liquid
+├── listings        # Per-preset templates and section groups (required for multi-preset themes)
+│   ├── monograph
+│   └── linen
+├── locales         # en.default.json and en.default.schema.json
+├── sections        # Page sections and the header and footer groups
+├── snippets        # Reusable fragments: product card, price, icons, forms
+├── templates       # Base JSON templates (Monograph demo content)
+├── listing         # Theme Store listing copy and images (not part of the theme)
+├── scripts         # Build tooling
+└── dist            # Packaged zips (git-ignored)
 ```
 
-To learn more, refer to the [theme architecture documentation](https://shopify.dev/docs/storefronts/themes/architecture).
+## Conventions
 
-### Templates
+- Write CSS and JavaScript with `{% stylesheet %}` and `{% javascript %}` in the
+  section, block or snippet that uses them. `assets/critical.css` holds only the
+  styles every page needs.
+- JavaScript shared by several components lives in `assets/product-components.js`.
+  A `{% javascript %}` tag only loads on pages where its file renders, so shared
+  custom elements can't depend on it.
+- Every user-facing string goes through a translation key in `locales/`. Use
+  sentence case.
+- Snippets, and blocks that are rendered statically, start with a `{% doc %}`
+  header.
+- Settings that map to one CSS property use a CSS variable. Settings that change
+  several properties use a class.
 
-[Templates](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) control what's rendered on each type of page in a theme.
+## Presets and listings
 
-The Skeleton Theme scaffolds [JSON templates](https://shopify.dev/docs/storefronts/themes/architecture/templates/json-templates) to make it easy for merchants to customize their store.
+Preset settings live in `config/settings_data.json` under `presets`. Each
+preset also has a folder in `listings/` (kebab-case of the preset name) with
+the templates and section groups from its demo store. Files there override the
+root `templates/` and `sections/` JSON on install.
 
-None of the template types are required, and not all of them are included in the Skeleton Theme. Refer to the [template types reference](https://shopify.dev/docs/storefronts/themes/architecture/templates#template-types) for a full list.
+When you change a demo store's home page or header, pull its JSON back into
+the matching `listings/` folder so the installed preset still matches the demo.
 
-### Sections
+## Packaging for the Theme Store
 
-[Sections](https://shopify.dev/docs/storefronts/themes/architecture/sections) are Liquid files that allow you to create reusable modules of content that can be customized by merchants. They can also include blocks which allow merchants to add, remove, and reorder content within a section.
+```bash
+node scripts/package-for-theme-store.mjs
+```
 
-Sections are made customizable by including a `{% schema %}` in the body. For more information, refer to the [section schema documentation](https://shopify.dev/docs/storefronts/themes/architecture/sections/section-schema).
+The script copies the theme to a temporary folder and cleans it for
+submission:
 
-### Blocks
+- removes demo-store references (`shopify://` images, collections and pages)
+  from templates, section groups and `listings/`
+- removes placeholder social links from the current settings
+- points mega menus at "Catalog", the menu item a new store has
+- checks that a preset is named after the theme and that `listings/` matches
+  the presets
 
-[Blocks](https://shopify.dev/docs/storefronts/themes/architecture/blocks) let developers create flexible layouts by breaking down sections into smaller, reusable pieces of Liquid. Each block has its own set of settings, and can be added, removed, and reordered within a section.
+It then runs `shopify theme package` and saves `dist/Monograph-<version>.zip`.
+The files in the repo aren't changed.
 
-Blocks are made customizable by including a `{% schema %}` in the body. For more information, refer to the [block schema documentation](https://shopify.dev/docs/storefronts/themes/architecture/blocks/theme-blocks/schema).
-
-## Schemas
-
-When developing components defined by schema settings, we recommend these guidelines to simplify your code:
-
-- **Single property settings**: For settings that correspond to a single CSS property, use CSS variables:
-
-  ```liquid
-  <div class="collection" style="--gap: {{ block.settings.gap }}px">
-    ...
-  </div>
-
-  {% stylesheet %}
-    .collection {
-      gap: var(--gap);
-    }
-  {% endstylesheet %}
-
-  {% schema %}
-  {
-    "settings": [{
-      "type": "range",
-      "label": "gap",
-      "id": "gap",
-      "min": 0,
-      "max": 100,
-      "unit": "px",
-      "default": 0,
-    }]
-  }
-  {% endschema %}
-  ```
-
-- **Multiple property settings**: For settings that control multiple CSS properties, use CSS classes:
-
-  ```liquid
-  <div class="collection {{ block.settings.layout }}">
-    ...
-  </div>
-
-  {% stylesheet %}
-    .collection--full-width {
-      /* multiple styles */
-    }
-    .collection--narrow {
-      /* multiple styles */
-    }
-  {% endstylesheet %}
-
-  {% schema %}
-  {
-    "settings": [{
-      "type": "select",
-      "id": "layout",
-      "label": "layout",
-      "values": [
-        { "value": "collection--full-width", "label": "t:options.full" },
-        { "value": "collection--narrow", "label": "t:options.narrow" }
-      ]
-    }]
-  }
-  {% endschema %}
-  ```
-
-## CSS & JavaScript
-
-For CSS and JavaScript, we recommend using the [`{% stylesheet %}`](https://shopify.dev/docs/api/liquid/tags#stylesheet) and [`{% javascript %}`](https://shopify.dev/docs/api/liquid/tags/javascript) tags. They can be included multiple times, but the code will only appear once.
-
-### `critical.css`
-
-The Skeleton Theme explicitly separates essential CSS necessary for every page into a dedicated `critical.css` file.
-
-## Contributing
-
-We're excited for your contributions to the Skeleton Theme! This repository aims to remain as lean, lightweight, and fundamental as possible, and we kindly ask your contributions to align with this intention.
-
-Visit our [CONTRIBUTING.md](./CONTRIBUTING.md) for a detailed overview of our process, guidelines, and recommendations.
+Before each submission, bump `theme_version` in `config/settings_schema.json`
+and add an entry to `release-notes.md`.
 
 ## License
 
-Skeleton Theme is open-sourced under the [MIT](./LICENSE.md) License.
+Monograph is a commercial theme, © 2026 Matat. All rights reserved. It includes
+code from Shopify's Skeleton Theme; see [LICENSE.md](./LICENSE.md) for both
+notices.
