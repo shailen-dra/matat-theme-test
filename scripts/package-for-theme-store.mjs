@@ -6,8 +6,9 @@
  * own images, collections and pages (`shopify://...`). Those don't exist in a
  * merchant's store, and Shopify asks that submitted JSON files don't contain
  * them. This script copies the theme to a temporary folder and:
- *   - includes the listings/ folder (one kebab-case folder per preset), which
- *     the Theme Store requires when a theme has more than one preset
+ *   - includes the listings/ folder when there is one (one kebab-case folder
+ *     per preset), which the Theme Store requires when a theme has more than
+ *     one preset; a single-preset theme doesn't need it
  *   - removes every `shopify://` setting value from templates and section
  *     groups, including the preset copies under listings/
  *   - removes the same values and the placeholder social media links from
@@ -78,10 +79,13 @@ function resetMegaMenus(group, file) {
 }
 
 try {
-  for (const dir of themeDirs) cpSync(join(root, dir), join(work, dir), { recursive: true });
+  // listings/ is only needed (and only present) when the theme has more than one preset
+  for (const dir of themeDirs) {
+    if (existsSync(join(root, dir))) cpSync(join(root, dir), join(work, dir), { recursive: true });
+  }
 
   // Templates and section groups, at the root and in each preset's listings folder
-  const presetFolders = readdirSync(join(work, 'listings'));
+  const presetFolders = existsSync(join(work, 'listings')) ? readdirSync(join(work, 'listings')) : [];
   const jsonDirs = ['templates', 'sections'];
   for (const preset of presetFolders) {
     for (const dir of ['templates', 'sections']) {

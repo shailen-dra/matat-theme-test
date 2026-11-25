@@ -3,26 +3,39 @@
 ## Install the theme
 
 1. In Shopify admin, go to **Online Store → Themes**.
-2. Add Monograph from the Shopify Theme Store and choose a preset.
+2. Add Monograph from the Shopify Theme Store.
 3. Monograph is added to your theme library. Click **Customize** to set it
    up before you publish, then **Publish** when you're ready.
 
 You can try the theme for free in your store before you buy it.
 
-## Presets
+## The Monograph preset
 
 A preset is a starting look for the theme: its fonts, colors, styles and
-the sections on its pages. You can change everything afterwards.
+the sections on its pages. Monograph's preset is made for jewelry and
+accessory brands and is laid out like a printed catalogue: the index rail
+header, ledger product cards, a catalogue product page, an order-slip cart,
+Chapter section headings, a journal list and the Colophon footer, with
+square corners throughout.
 
-| Preset | Made for | Look |
-|---|---|---|
-| **Monograph** | Jewelry and accessories | A printed catalogue: the index rail header, ledger product cards, a catalogue product page, an order-slip cart, Chapter section headings, a journal list and the Colophon footer. Square corners throughout. |
-| **Hemline** | Clothing | Soft and modern: Archivo and DM Sans, rounded buttons and panels, a glass sticky header, modern product cards and product page, and a floating card footer. |
+You can change everything afterwards.
 
-Each preset's look comes from a handful of settings, so you can mix them.
-For example, to use Monograph's catalogue product page with Hemline, set
-**Theme settings → Style → Product page** to **Catalogue**. See
-[Theme settings](theme-settings.md).
+## Making it your own
+
+The catalogue look comes from a handful of settings, so you can take the
+theme in a different direction without editing code. For a softer, more
+modern store, for example:
+
+- **Theme settings → Style:** set **Section headings** to **Classic**,
+  **Sticky header** to **Glass bubble**, **Footer** to **Floating card** and
+  **Product page** to **Modern**.
+- **Theme settings → Product cards:** set **Card style** to **Modern**.
+- **Theme settings → Buttons:** raise **Button corner radius** and **Panel
+  and tag corner radius** for rounded buttons, panels and tags.
+- **Header:** pick a horizontal **Desktop layout** instead of the index rail.
+- **Typography** and **Colors:** choose your own fonts and color schemes.
+
+See [Theme settings](theme-settings.md) for every option.
 
 ## Using the theme editor
 

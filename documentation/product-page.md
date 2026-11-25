@@ -9,10 +9,11 @@ template and assign it in the product's admin page.
 
 **Style:** **Use theme setting**, **Classic**, **Modern** or **Catalogue**.
 
-- **Catalogue** (Monograph): numbered figure labels on the images (FIG. 01,
+- **Catalogue** (the Monograph preset): numbered figure labels on the images (FIG. 01,
   FIG. 02 …), a line with the product type and SKU reference, and numbered
   product notes.
-- **Modern** (Hemline): rounded tabs and a softer sticky add to cart bar.
+- **Modern:** rounded tabs and a softer sticky add to cart bar.
+- **Classic:** a plain layout without the catalogue details.
 
 ## Media gallery
 

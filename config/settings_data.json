@@ -99,49 +99,6 @@
       "panel_corner_radius": 0,
       "section_heading_style": "section-heading--chapter",
       "new_badge_days": 0
-    },
-    "Hemline": {
-      "card_style": "card--modern",
-      "color_schemes": {
-        "scheme-1": {
-          "settings": {
-            "background": "#FAFAF7",
-            "foreground": "#121212",
-            "accent": "#2F3DE0"
-          }
-        },
-        "scheme-2": {
-          "settings": {
-            "background": "#E9ECF5",
-            "foreground": "#121212",
-            "accent": "#2F3DE0"
-          }
-        },
-        "scheme-3": {
-          "settings": {
-            "background": "#121212",
-            "foreground": "#FAFAF7",
-            "accent": "#9AA6FF"
-          }
-        },
-        "scheme-4": {
-          "settings": {
-            "background": "#2F3DE0",
-            "foreground": "#FFFFFF",
-            "accent": "#FFD8C2"
-          }
-        }
-      },
-      "type_heading_font": "archivo_n8",
-      "type_primary_font": "dm_sans_n4",
-      "max_page_width": "110rem",
-      "min_page_margin": 24,
-      "button_corner_radius": 40,
-      "input_corner_radius": 10,
-      "header_style": "header--sticky-glass",
-      "footer_style": "footer--card",
-      "product_style": "product--modern",
-      "panel_corner_radius": 24
     }
   }
 }

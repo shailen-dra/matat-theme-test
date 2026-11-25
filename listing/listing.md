@@ -1,16 +1,15 @@
 # Theme Store listing copy (draft)
 
-Draft text for each preset's listing page, written to the limits in
+Draft text for the theme's listing page, written to the limits in
 https://shopify.dev/docs/storefronts/themes/store/review-process/listings.
-Theme: Monograph. Presets: Monograph and Hemline. Each preset gets its own
-listing, demo store, screenshots and highlights.
+Theme: Monograph, with one preset (Monograph). The listing links to one demo
+store and has its own screenshots and highlights.
 
 Before submitting:
-- Retake every image on the final demo stores (the listing must link to them).
+- Retake every image on the final demo store (the listing must link to it).
   The Monograph images in this folder predate the catalogue redesign of
   2026-11-24/25: they show neither the index rail and mobile index strip nor
   the ledger cards, chapter headings, 7-section home page or colophon footer.
-  The Hemline images don't exist yet.
 - Only claim what the theme ships. The theme no longer includes right-to-left
   translations, so no listing mentions right-to-left support.
 
@@ -75,63 +74,6 @@ recently viewed products, FAQ page.
 
 The countdown timer section is still in the theme, but the Monograph demo no
 longer shows it, so it isn't tagged on this listing.
-
----
-
-# Hemline preset
-
-Demo store: ashana-collection (apparel). Look: Archivo headings with DM Sans
-body text, rounded buttons, glass sticky header, card footer, modern product
-cards and product page. Before capturing: set "Panel and tag corner radius" to
-24 px on the demo theme, and move its countdown end date (currently
-2026-12-24) past the review period.
-
-## Tagline (max 70 characters)
-
-> A soft, modern theme for clothing brands making fewer, better things
-
-(68 characters)
-
-Alternatives:
-- `A bright, rounded design for clothing and slow-fashion brands` (61)
-- `A modern apparel theme built around seasonal edits and lookbooks` (64)
-
-## Demo store screenshots (to capture)
-
-| File | Size | Alt text |
-|---|---|---|
-| `hemline-screenshot-desktop.png` | 2000 × 2496 | Clothing store home page on desktop with a frosted glass header over a slideshow of wool coats and knitwear, headlined Clothes made to be lived in |
-| `hemline-screenshot-mobile.png` | 750 × 1334 | Clothing store home page on mobile with a full-screen slide of an autumn outfit, a headline and a Shop the autumn edit button |
-
-## Key highlights (image 1600 × 1200, title max 30, description max 140)
-
-### 1. `hemline-highlight-1-seasonal-edits.png`
-- **Title:** Seasonal edits up front (23)
-- **Description:** Lead with a slideshow of seasonal edits, then let customers shop by category or material from rounded image tiles. (114)
-- **Alt text:** Clothing store home page with an autumn edit slide above rounded tiles for dresses, tops, outerwear and shoes
-
-### 2. `hemline-highlight-2-shop-the-feed.png`
-- **Title:** Shop the feed (13)
-- **Description:** Turn customer and studio photos into a shoppable gallery. Each photo opens the tagged pieces with an add to cart button. (120)
-- **Alt text:** Grid of lifestyle photos of people wearing knitwear and denim, with one photo open showing two tagged products and add buttons
-
-### 3. `hemline-highlight-3-product-page.png`
-- **Title:** Fit questions, answered (23)
-- **Description:** Size guides, delivery estimates, care tabs and a sticky add to cart bar help shoppers choose the right size with confidence. (124)
-- **Alt text:** Product page for a wool coat with size buttons, a size guide link, a delivery estimate and a sticky add to cart bar at the bottom
-
-## SEO metadata description
-
-> A soft, modern Shopify theme for clothing brands, with seasonal edits, shop by category and material tiles, a shoppable photo gallery, size guides and delivery estimates.
-
-## Feature tags to select
-
-Image display: high resolution images, image galleries, image hotspot, image
-rollover, image zoom, lookbooks, slideshow.
-Product details: product options, product tabs, product videos,
-shipping/delivery information, size chart.
-Marketing and conversion: cross-selling (complete the look), quick view,
-recently viewed products, countdown timer, FAQ page.
 
 ---
 

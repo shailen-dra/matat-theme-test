@@ -43,8 +43,8 @@ Both are turned off automatically for shoppers who prefer reduced motion.
 - **Panel and tag corner radius:** at **0**, panels, tags, labels and icon
   buttons (such as arrows, close buttons and quick add) are square. Above 0,
   glass collage tiles, countdown tiles and testimonial cards are rounded,
-  tags and labels become pills, and icon buttons become circles. Monograph
-  uses 0; Hemline uses 24.
+  tags and labels become pills, and icon buttons become circles. The
+  Monograph preset uses 0.
 
 ## Style
 

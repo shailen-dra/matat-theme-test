@@ -40,7 +40,7 @@ First release.
 - Cart page and cart drawer, with a free shipping bar and suggestions
 
 ### Store-wide
-- Two presets: Monograph (jewelry and accessories) and Hemline (clothing)
+- The Monograph preset, for jewelry and accessory brands
 - Style settings for the header, footer, product page, product cards and section headings
 - A panel and tag corner radius setting: square panels, tags and icon buttons at 0, rounded above it
 - Color schemes, Shopify font picker and global typography settings

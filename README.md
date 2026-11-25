@@ -2,12 +2,13 @@
 
 An editorial Shopify theme for brands whose products and photography should
 do the talking. Monograph is built for the Shopify Theme Store on Online
-Store 2.0, using theme blocks throughout, and ships with two presets.
+Store 2.0, using theme blocks throughout, and ships with one preset,
+**Monograph**, made for jewelry and accessory brands.
 
-| Preset | Made for | Look |
-|---|---|---|
-| **Monograph** | Jewelry and accessories | Laid out like a printed catalogue: a numbered index down the left edge (a numbered strip on mobile), ledger product cards, index views on collection and search pages, a catalogue product page, an order-slip cart, numbered chapter headings and a colophon footer |
-| **Hemline** | Clothing and slow fashion | Soft and modern: Archivo headings with DM Sans body text, rounded buttons, a frosted glass header, modern product cards and a card-style footer |
+The look is a printed catalogue: a numbered index down the left edge (a
+numbered strip on mobile), ledger product cards, index views on collection
+and search pages, a catalogue product page, an order-slip cart, numbered
+chapter headings and a colophon footer.
 
 Version 1.0.0. See [release notes](./release-notes.md) for the full feature list.
 
@@ -44,15 +45,12 @@ shopify theme check          # lint Liquid, JSON and translations
 .
 ├── assets          # critical.css, shared JS (product-components.js) and icons
 ├── blocks          # Theme blocks: product page parts, text, media, groups
-├── config          # Global settings schema and the Monograph and Hemline presets
+├── config          # Global settings schema and the Monograph preset
 ├── layout          # theme.liquid and password.liquid
-├── listings        # Per-preset templates and section groups (required for multi-preset themes)
-│   ├── monograph
-│   └── hemline
 ├── locales         # en.default.json and en.default.schema.json
 ├── sections        # Page sections and the header and footer groups
 ├── snippets        # Reusable fragments: product card, price, icons, forms
-├── templates       # Base JSON templates (Monograph demo content)
+├── templates       # JSON templates (the Monograph demo's content)
 ├── documentation   # Merchant documentation, in Markdown (not part of the theme)
 ├── listing         # Theme Store listing copy and images (not part of the theme)
 ├── scripts         # Build tooling
@@ -74,15 +72,20 @@ shopify theme check          # lint Liquid, JSON and translations
 - Settings that map to one CSS property use a CSS variable. Settings that change
   several properties use a class.
 
-## Presets and listings
+## Preset
 
-Preset settings live in `config/settings_data.json` under `presets`. Each
-preset also has a folder in `listings/` (kebab-case of the preset name) with
-the templates and section groups from its demo store. Files there override the
-root `templates/` and `sections/` JSON on install.
+The Monograph preset's settings live in `config/settings_data.json` under
+`presets`, and its pages are the JSON files in `templates/` and the section
+groups in `sections/`. A merchant who installs the preset gets this setup, so
+keep these files in step with the demo store: when you change the demo
+store's home page or header, pull its JSON back into the repo.
 
-When you change a demo store's home page or header, pull its JSON back into
-the matching `listings/` folder so the installed preset still matches the demo.
+To add a second preset later, add it under `presets` and add a `listings/`
+folder with one kebab-case folder per preset (for example
+`listings/monograph/` and `listings/new-preset/`), each holding that preset's
+`templates/` and, optionally, `sections/` JSON. The Theme Store requires
+`listings/` for themes with more than one preset, and the packaging script
+checks that the folders match the presets.
 
 ## Packaging for the Theme Store
 
@@ -94,11 +97,11 @@ The script copies the theme to a temporary folder and cleans it for
 submission:
 
 - removes demo-store references (`shopify://` images, collections and pages)
-  from templates, section groups and `listings/`
+  from templates and section groups (and `listings/`, if there is one)
 - removes placeholder social links from the current settings
 - points mega menus at "Catalog", the menu item a new store has
-- checks that a preset is named after the theme and that `listings/` matches
-  the presets
+- checks that a preset is named after the theme and, with more than one
+  preset, that `listings/` matches the presets
 
 It then runs `shopify theme package` and saves `dist/Monograph-<version>.zip`.
 The files in the repo aren't changed.

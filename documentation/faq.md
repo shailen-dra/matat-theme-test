@@ -5,12 +5,12 @@
 **Why doesn't my store look like the demo after installing?**
 Demo images and products aren't copied to your store. Each section shows a
 placeholder until you choose your own images, collections and products.
-The layout, fonts, colors and styles match the preset you chose.
+The layout, fonts, colors and styles match the Monograph preset.
 
-**How do I switch to the other preset's look?**
-Change the settings that define it under **Theme settings → Style**,
-**Product cards**, **Typography**, **Colors** and **Buttons**. See
-[Getting started](getting-started.md#presets).
+**Can I make the theme look less like a catalogue?**
+Yes. The catalogue look comes from a few settings under **Theme settings →
+Style**, **Product cards** and **Buttons**, plus the Header's **Desktop
+layout**. See [Making it your own](getting-started.md#making-it-your-own).
 
 **Where do I set up my menus?**
 In **Online Store → Navigation**. Then choose them in the Header's **Menu**
