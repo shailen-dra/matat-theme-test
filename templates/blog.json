@@ -11,7 +11,9 @@
   "sections": {
     "main": {
       "type": "blog",
-      "settings": {}
+      "settings": {
+        "layout": "blog__grid--journal"
+      }
     }
   },
   "order": [

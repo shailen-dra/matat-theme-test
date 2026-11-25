@@ -2,6 +2,10 @@
   assign blog = section.settings.blog
   assign limit = section.settings.articles_to_show
   assign link_url = blog.url
+  assign is_journal = false
+  if section.settings.layout == 'blog__grid--journal'
+    assign is_journal = true
+  endif
 -%}
 
 <div
@@ -20,11 +24,20 @@
   %}
 
   {%- comment -%} Reuses the blog page's article card styles (sections/blog.liquid) {%- endcomment -%}
-  <ul class="blog__grid" role="list" style="--blog-columns: {{ limit | at_most: 4 }};{% if limit == 3 %} --blog-columns-tablet: 3;{% endif %}">
+  <ul class="blog__grid {{ section.settings.layout }}" role="list" style="--blog-columns: {{ limit | at_most: 4 }};{% if limit == 3 %} --blog-columns-tablet: 3;{% endif %}">
     {%- if blog.articles_count > 0 -%}
       {%- for article in blog.articles limit: limit -%}
         <li>
           <article class="article-card">
+            {%- if is_journal -%}
+              {%- liquid
+                assign entry_number = forloop.index
+                if entry_number < 10
+                  assign entry_number = '0' | append: entry_number
+                endif
+              -%}
+              <p class="article-card__number">{{ 'product.card.number' | t: number: entry_number }}</p>
+            {%- endif -%}
             {%- if section.settings.show_image and article.image -%}
               <a href="{{ article.url }}" class="article-card__media" tabindex="-1" aria-hidden="true">
                 {{
@@ -108,6 +121,16 @@
       "max": 4,
       "step": 1,
       "default": 3
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "t:labels.layout",
+      "options": [
+        { "value": "blog__grid--cards", "label": "t:sections.blog.layout_cards" },
+        { "value": "blog__grid--journal", "label": "t:sections.blog.layout_journal" }
+      ],
+      "default": "blog__grid--cards"
     },
     {
       "type": "checkbox",

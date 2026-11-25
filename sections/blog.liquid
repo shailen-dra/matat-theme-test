@@ -5,6 +5,13 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/blog
 {% endcomment %}
 
+{%- liquid
+  assign is_journal = false
+  if section.settings.layout == 'blog__grid--journal'
+    assign is_journal = true
+  endif
+-%}
+
 <div
   class="blog section"
   style="
@@ -50,10 +57,19 @@
 
   {%- paginate blog.articles by section.settings.articles_per_page -%}
     {%- if blog.articles.size > 0 -%}
-      <ul class="blog__grid" role="list">
+      <ul class="blog__grid {{ section.settings.layout }}" role="list">
         {%- for article in blog.articles -%}
           <li>
             <article class="article-card">
+              {%- if is_journal -%}
+                {%- liquid
+                  assign entry_number = paginate.current_offset | plus: forloop.index
+                  if entry_number < 10
+                    assign entry_number = '0' | append: entry_number
+                  endif
+                -%}
+                <p class="article-card__number">{{ 'product.card.number' | t: number: entry_number }}</p>
+              {%- endif -%}
               {%- if section.settings.show_image and article.image -%}
                 <a href="{{ article.url }}" class="article-card__media" tabindex="-1" aria-hidden="true">
                   {%- liquid
@@ -232,6 +248,80 @@
     opacity: 0.8;
   }
 
+  /*
+    Journal list: articles as numbered, ruled entries. The number and text
+    lead, and the photo sits at the end of the row as a small plate.
+  */
+  .blog__grid.blog__grid--journal {
+    display: block;
+    border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+
+  .blog__grid--journal > li {
+    border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+
+  .blog__grid--journal .article-card {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr) minmax(0, 17rem);
+    grid-template-areas: 'number content media';
+    align-items: start;
+    gap: 1rem clamp(1.5rem, 3vw, 2.5rem);
+    padding-block: clamp(1.25rem, 2.5vw, 2rem);
+  }
+
+  .article-card__number {
+    grid-area: number;
+    margin: 0;
+    padding-block-start: 0.25rem;
+    color: color-mix(in srgb, var(--color-foreground) 72%, transparent);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .blog__grid--journal .article-card__content {
+    grid-area: content;
+    max-width: 40rem;
+  }
+
+  .blog__grid--journal .article-card__media {
+    grid-area: media;
+    border-radius: 0;
+  }
+
+  .blog__grid--journal .article-card__title {
+    font-size: clamp(1.375rem, 1.4vw + 1rem, 2rem);
+  }
+
+  .blog__grid--journal .article-card:hover .article-card__title a {
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  @media (max-width: 749px) {
+    .blog__grid--journal .article-card {
+      grid-template-columns: minmax(0, 1fr) 6rem;
+      grid-template-areas:
+        'number number'
+        'content media';
+      row-gap: 0.75rem;
+    }
+
+    .blog__grid--journal .article-card__title {
+      font-size: 1.25rem;
+    }
+
+    .blog__grid--journal .article-card__excerpt {
+      display: none;
+    }
+  }
+
+  [dir='rtl'] .article-card__number {
+    letter-spacing: 0;
+  }
+
   @media (max-width: 989px) {
     .blog__grid {
       /* Sections can set --blog-columns-tablet (e.g. 3 for a row of 3, avoiding a lone card) */
@@ -257,6 +347,16 @@
   "name": "t:general.blog",
   "settings": [
     {
+      "type": "select",
+      "id": "layout",
+      "label": "t:labels.layout",
+      "options": [
+        { "value": "blog__grid--cards", "label": "t:sections.blog.layout_cards" },
+        { "value": "blog__grid--journal", "label": "t:sections.blog.layout_journal" }
+      ],
+      "default": "blog__grid--cards"
+    },
+    {
       "type": "range",
       "id": "articles_per_page",
       "label": "t:sections.blog.articles_per_page",
@@ -268,6 +368,7 @@
     {
       "type": "select",
       "id": "columns_desktop",
+      "visible_if": "{{ section.settings.layout == 'blog__grid--cards' }}",
       "label": "t:labels.columns_desktop",
       "options": [
         { "value": "2", "label": "2" },

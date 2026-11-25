@@ -429,6 +429,8 @@
       "max_days": "Latest delivery (business days)",
       "cutoff_hour": "Same-day order cutoff (hour)",
       "cutoff_hour_info": "Orders after this hour count from the next business day. Uses the shopper's local time.",
+      "show_countdown": "Show order-by countdown",
+      "show_countdown_info": "Adds \"Order within 2h 10m\" before the delivery dates while the cutoff hasn't passed.",
       "skip_weekends": "Skip weekends",
       "weekend": "Weekend days",
       "fri_sat": "Friday and Saturday",
@@ -633,6 +635,8 @@
       "tinted": "Tinted background"
     },
     "blog": {
+      "layout_cards": "Cards",
+      "layout_journal": "Journal list",
       "articles_per_page": "Articles per page",
       "show_tags": "Show topic filter",
       "show_image": "Show featured image",

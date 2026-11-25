@@ -57,7 +57,8 @@
     "header_style": "header--sticky-bar",
     "footer_style": "footer--colophon",
     "product_style": "product--catalogue",
-    "section_heading_style": "section-heading--chapter"
+    "section_heading_style": "section-heading--chapter",
+    "new_badge_days": 0
   },
   "presets": {
     "Monograph": {
@@ -96,7 +97,8 @@
       "footer_style": "footer--colophon",
       "product_style": "product--catalogue",
       "panel_corner_radius": 0,
-      "section_heading_style": "section-heading--chapter"
+      "section_heading_style": "section-heading--chapter",
+      "new_badge_days": 0
     },
     "Hemline": {
       "card_style": "card--modern",

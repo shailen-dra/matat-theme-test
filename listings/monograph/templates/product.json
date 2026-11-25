@@ -187,7 +187,8 @@
             "max_days": 5,
             "cutoff_hour": 14,
             "skip_weekends": true,
-            "weekend": "fri-sat"
+            "weekend": "fri-sat",
+            "show_countdown": false
           }
         },
         "payment_icons": {

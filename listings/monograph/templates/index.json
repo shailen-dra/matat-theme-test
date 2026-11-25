@@ -590,7 +590,8 @@
         "title": "Stories from the studio",
         "link_label": "Read the journal",
         "padding_top": 64,
-        "padding_bottom": 64
+        "padding_bottom": 64,
+        "layout": "blog__grid--journal"
       }
     }
   },

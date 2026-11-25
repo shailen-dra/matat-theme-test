@@ -25,7 +25,9 @@
 >
   {%- render 'icon', name: 'truck', class: 'delivery__icon' -%}
   <p class="delivery__text">
-    <span class="delivery__countdown" data-delivery-countdown></span>
+    {%- if block.settings.show_countdown -%}
+      <span class="delivery__countdown" data-delivery-countdown></span>
+    {%- endif -%}
     <span data-delivery-window></span>
   </p>
 </delivery-estimate>
@@ -127,7 +129,7 @@
       this.querySelector('[data-delivery-window]').textContent = windowText;
 
       const countdown = this.querySelector('[data-delivery-countdown]');
-      if (beforeCutoff) {
+      if (countdown && beforeCutoff) {
         const end = new Date(now);
         end.setHours(cutoff, 0, 0, 0);
         const minutes = Math.max(1, Math.round((end - now) / 60000));
@@ -136,7 +138,7 @@
             ? this.dataset.hoursMinutes.replace('[h]', Math.floor(minutes / 60)).replace('[m]', minutes % 60)
             : this.dataset.minutes.replace('[m]', minutes);
         countdown.textContent = this.dataset.countdown.replace('[time]', time);
-      } else {
+      } else if (countdown) {
         countdown.textContent = '';
       }
       this.hidden = false;
@@ -179,6 +181,13 @@
       "max": 23,
       "step": 1,
       "default": 14
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "t:blocks.delivery_estimate.show_countdown",
+      "info": "t:blocks.delivery_estimate.show_countdown_info",
+      "default": true
     },
     {
       "type": "checkbox",
