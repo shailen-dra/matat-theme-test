@@ -79,7 +79,7 @@
     "body_font": "Body",
     "button_corner_radius": "Button corner radius",
     "panel_corner_radius": "Panel and tag corner radius",
-    "panel_corner_radius_info": "Rounds cards, collage tiles, countdown tiles and testimonials. Tags and labels become pills above 0.",
+    "panel_corner_radius_info": "Rounds glass collage tiles, countdown tiles and testimonials. Above 0, tags and labels become pills and icon buttons become circles.",
     "color": "Color",
     "columns_desktop": "Columns on desktop",
     "full_width": "Full width",
@@ -492,6 +492,7 @@
       "style": "Style",
       "style_classic": "Classic",
       "style_card": "Floating card",
+      "style_colophon": "Colophon",
       "first_column_wide": "Make first column wider",
       "show_wordmark": "Show large wordmark",
       "show_wordmark_info": "Displays the store name in large type above the bottom bar.",
@@ -640,7 +641,9 @@
       "show_excerpt": "Show excerpt"
     },
     "collections_list": {
-      "show_count": "Show product count"
+      "show_count": "Show product count",
+      "layout_grid": "Grid",
+      "layout_index": "Contents list"
     },
     "password": {
       "logo": "Logo",

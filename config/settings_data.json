@@ -55,7 +55,7 @@
       }
     },
     "header_style": "header--sticky-bar",
-    "footer_style": "footer--classic",
+    "footer_style": "footer--colophon",
     "product_style": "product--catalogue"
   },
   "presets": {
@@ -92,7 +92,7 @@
         }
       },
       "header_style": "header--sticky-bar",
-      "footer_style": "footer--classic",
+      "footer_style": "footer--colophon",
       "product_style": "product--catalogue",
       "panel_corner_radius": 0
     },

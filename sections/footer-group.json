@@ -93,12 +93,12 @@
         "newsletter"
       ],
       "settings": {
-        "background_color": "#141312",
-        "text_color": "#ede8df",
+        "background_color": "#ffffff",
+        "text_color": "#333333",
         "style": "theme",
         "first_column_wide": true,
         "show_wordmark": false,
-        "padding_top": 80,
+        "padding_top": 24,
         "padding_bottom": 32,
         "show_policies": true,
         "show_payment_icons": true,

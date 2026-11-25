@@ -307,6 +307,8 @@
   },
   "footer": {
     "copyright": "© {{ year }} {{ shop }}",
+    "colophon": "Set in {{ heading }} and {{ body }}",
+    "colophon_single": "Set in {{ font }}",
     "payment_methods": "Payment methods"
   },
   "newsletter": {

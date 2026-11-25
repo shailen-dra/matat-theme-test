@@ -358,7 +358,7 @@ main:focus {
   width: 2.75rem;
   height: 2.75rem;
   border: 1px solid color-mix(in srgb, var(--color-foreground) 15%, transparent);
-  border-radius: 50%;
+  border-radius: var(--style-border-radius-tags);
   background-color: var(--color-background);
   color: var(--color-foreground);
   box-shadow: 0 6px 20px rgb(0 0 0 / 0.08);

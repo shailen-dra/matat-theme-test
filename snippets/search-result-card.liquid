@@ -10,6 +10,8 @@
   @param {string} [sizes] - The `sizes` attribute for the image
   @param {string} [loading] - Image loading strategy (default `lazy`)
   @param {string} [heading_tag] - Title element: `h3` (default) or `h2`
+  @param {number} [number] - Position in the results. Shown with the result type as a
+    ledger line in index view, so articles and pages line up with product rows
 
   @example
   {% render 'search-result-card', result: result, terms: search.terms %}
@@ -66,6 +68,18 @@
   </div>
 
   <div class="card__info">
+    {%- if number != blank -%}
+      {%- liquid
+        assign padded_number = number
+        if number < 10
+          assign padded_number = '0' | append: number
+        endif
+      -%}
+      <p class="card__ledger">
+        <span class="card__number">{{ 'product.card.number' | t: number: padded_number }}</span>
+        <span class="card__material">{{ type_label }}</span>
+      </p>
+    {%- endif -%}
     {%- if result.object_type == 'article' -%}
       <p class="card__vendor">
         {{- result.published_at | time_tag: format: 'date' -}}
@@ -103,6 +117,11 @@
 
   .search-card:hover .search-card__monogram {
     transform: scale(1.08);
+  }
+
+  /* Index view: one ruled row like a product, with the type in the material column */
+  [data-view='index'] .collection__grid .search-card__excerpt {
+    display: none;
   }
 
   .search-card__excerpt {

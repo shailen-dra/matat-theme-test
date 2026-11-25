@@ -1,12 +1,24 @@
 {% comment %}
-  This section is used in the list-collections template to render a grid of
-  every collection, each with its image, title and product count.
+  This section is used in the list-collections template to render every
+  collection with its image, title and product count, either as a grid of
+  image cards or as a numbered contents list. In the contents layout each row
+  is ruled like the collection index view, and on desktop the collection's
+  photo follows the cursor (`collections-index` in assets/product-components.js).
 
   https://shopify.dev/docs/storefronts/themes/architecture/templates/list-collections
 {% endcomment %}
 
-<div
-  class="collections-list section"
+{%- liquid
+  assign is_index = false
+  assign root_tag = 'div'
+  if section.settings.layout == 'collections-list--index'
+    assign is_index = true
+    assign root_tag = 'collections-index'
+  endif
+-%}
+
+<{{ root_tag }}
+  class="collections-list section {{ section.settings.layout }}"
   style="
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
@@ -58,6 +70,15 @@
               {%- endif -%}
             </span>
             <span class="collection-card__label">
+              {%- if is_index -%}
+                {%- liquid
+                  assign row_number = paginate.current_offset | plus: forloop.index
+                  if row_number < 10
+                    assign row_number = '0' | append: row_number
+                  endif
+                -%}
+                <span class="collection-card__number">{{ 'product.card.number' | t: number: row_number }}</span>
+              {%- endif -%}
               <span class="collection-card__title">{{ collection.title | escape }}</span>
               {%- if section.settings.show_count -%}
                 <span class="collection-card__count">
@@ -72,7 +93,10 @@
 
     {% render 'pagination', paginate: paginate %}
   {%- endpaginate -%}
-</div>
+  {%- if is_index -%}
+    <div class="index-preview" aria-hidden="true"></div>
+  {%- endif -%}
+</{{ root_tag }}>
 
 {% stylesheet %}
   .collections-list__grid {
@@ -172,6 +196,106 @@
       transition: none;
     }
   }
+
+  /*
+    Contents list: the collections as a numbered table of contents. Ruled
+    rows carry the number, the title and the product count; phones show a
+    small plate on each row, and desktop drops it for the photo that follows
+    the cursor.
+  */
+  .collections-list--index .collections-list__grid {
+    display: block;
+    border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+
+  .collections-list--index .collections-list__grid > li {
+    border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+
+  .collections-list--index .collection-card {
+    display: grid;
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 1rem;
+    padding-block: 0.75rem;
+  }
+
+  .collections-list--index .collection-card__media {
+    aspect-ratio: 1;
+    border-radius: 0;
+  }
+
+  .collections-list--index .collection-card__label {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'number number'
+      'title count';
+    align-items: baseline;
+    gap: 0.25rem 1rem;
+  }
+
+  .collection-card__number {
+    grid-area: number;
+    color: color-mix(in srgb, var(--color-foreground) 72%, transparent);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .collections-list--index .collection-card__title {
+    grid-area: title;
+  }
+
+  .collections-list--index .collection-card__count {
+    grid-area: count;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.72;
+  }
+
+  .collections-list--index .collection-card:hover .collection-card__title {
+    color: var(--color-accent);
+  }
+
+  @media (min-width: 750px) {
+    .collections-list--index .collection-card {
+      grid-template-columns: minmax(0, 1fr);
+      padding-block: 1.125rem;
+      transition: padding-inline 0.3s ease;
+    }
+
+    .collections-list--index .collection-card__media {
+      display: none;
+    }
+
+    .collections-list--index .collection-card__label {
+      grid-template-columns: 5rem minmax(0, 1fr) auto;
+      grid-template-areas: 'number title count';
+    }
+
+    .collections-list--index .collection-card__title {
+      font-size: clamp(1.25rem, 2vw, 1.875rem);
+    }
+
+    .collections-list--index .collection-card:hover,
+    .collections-list--index .collection-card:focus-visible {
+      padding-inline-start: 0.75rem;
+    }
+  }
+
+  [dir='rtl'] :is(.collection-card__number, .collections-list--index .collection-card__count) {
+    letter-spacing: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .collections-list--index .collection-card {
+      transition: none;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}
@@ -195,7 +319,18 @@
     },
     {
       "type": "select",
+      "id": "layout",
+      "label": "t:labels.layout",
+      "options": [
+        { "value": "collections-list--grid", "label": "t:sections.collections_list.layout_grid" },
+        { "value": "collections-list--index", "label": "t:sections.collections_list.layout_index" }
+      ],
+      "default": "collections-list--grid"
+    },
+    {
+      "type": "select",
       "id": "columns_desktop",
+      "visible_if": "{{ section.settings.layout == 'collections-list--grid' }}",
       "label": "t:labels.columns_desktop",
       "options": [
         { "value": "2", "label": "2" },
@@ -207,6 +342,7 @@
     {
       "type": "select",
       "id": "columns_mobile",
+      "visible_if": "{{ section.settings.layout == 'collections-list--grid' }}",
       "label": "t:labels.columns_mobile",
       "options": [
         { "value": "1", "label": "1" },

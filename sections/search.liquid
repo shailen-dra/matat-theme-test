@@ -83,6 +83,9 @@
 <collection-facets
   class="collection search section full-width"
   data-section-id="{{ section.id }}"
+  {% if section.settings.enable_index_view %}
+    data-view="{{ section.settings.default_view }}"
+  {% endif %}
   style="
     --section-padding-top: {{ section.settings.padding_top }}px;
     --section-padding-bottom: {{ section.settings.padding_bottom }}px;
@@ -188,6 +191,18 @@
           {{- 'search.result_count' | t: count: search.results_count -}}
         </p>
       </div>
+
+      {%- if section.settings.enable_index_view -%}
+        <view-toggle class="view-toggle" data-default="{{ section.settings.default_view }}">
+          <span class="visually-hidden">{{ 'collections.view.label' | t }}</span>
+          <button type="button" class="view-toggle__button" data-view-option="plates" aria-pressed="{% if section.settings.default_view == 'plates' %}true{% else %}false{% endif %}">
+            {{- 'collections.view.plates' | t -}}
+          </button>
+          <button type="button" class="view-toggle__button" data-view-option="index" aria-pressed="{% if section.settings.default_view == 'index' %}true{% else %}false{% endif %}">
+            {{- 'collections.view.index' | t -}}
+          </button>
+        </view-toggle>
+      {%- endif -%}
 
       {%- if section.settings.enable_sorting -%}
         <div class="collection__sort">
@@ -340,6 +355,7 @@
                     {% render 'search-result-card',
                       heading_tag: 'h2',
                       result: result,
+                      number: card_number,
                       terms: terms,
                       ratio: section.settings.image_ratio,
                       sizes: sizes,
@@ -411,6 +427,9 @@
         </div>
       {%- endif -%}
     {%- endif -%}
+  {%- endif -%}
+  {%- if section.settings.enable_index_view -%}
+    <div class="index-preview" aria-hidden="true"></div>
   {%- endif -%}
 </collection-facets>
 
@@ -484,7 +503,7 @@
     height: 2.75rem;
     padding: 0;
     border: 0;
-    border-radius: 50%;
+    border-radius: var(--style-border-radius-tags);
     background: none;
     color: inherit;
     cursor: pointer;
@@ -729,6 +748,23 @@
       "id": "enable_sorting",
       "label": "t:sections.collection.enable_sorting",
       "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_index_view",
+      "label": "t:sections.collection.enable_index_view",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "t:sections.collection.default_view",
+      "options": [
+        { "value": "plates", "label": "t:sections.collection.view_plates" },
+        { "value": "index", "label": "t:sections.collection.view_index" }
+      ],
+      "default": "plates",
+      "visible_if": "{{ section.settings.enable_index_view }}"
     },
     {
       "type": "header",

@@ -11,7 +11,9 @@
   "sections": {
     "main": {
       "type": "collections",
-      "settings": {}
+      "settings": {
+        "layout": "collections-list--index"
+      }
     }
   },
   "order": [

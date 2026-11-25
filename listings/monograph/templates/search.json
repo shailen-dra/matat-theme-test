@@ -11,7 +11,9 @@
   "sections": {
     "main": {
       "type": "search",
-      "settings": {}
+      "settings": {
+        "default_view": "index"
+      }
     }
   },
   "order": [

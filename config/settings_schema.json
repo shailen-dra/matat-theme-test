@@ -224,6 +224,10 @@
           {
             "value": "footer--card",
             "label": "t:sections.footer.style_card"
+          },
+          {
+            "value": "footer--colophon",
+            "label": "t:sections.footer.style_colophon"
           }
         ],
         "default": "footer--classic"

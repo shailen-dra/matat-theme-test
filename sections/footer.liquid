@@ -52,6 +52,20 @@
           {%- endif -%}
         </p>
 
+        {%- if footer_style == 'footer--colophon' -%}
+          {%- liquid
+            assign heading_family = settings.type_heading_font.family
+            assign body_family = settings.type_primary_font.family
+          -%}
+          <p class="footer__colophon">
+            {%- if heading_family == body_family -%}
+              {{- 'footer.colophon_single' | t: font: heading_family -}}
+            {%- else -%}
+              {{- 'footer.colophon' | t: heading: heading_family, body: body_family -}}
+            {%- endif -%}
+          </p>
+        {%- endif -%}
+
         {%- if section.settings.show_policies and shop.policies.size > 0 -%}
           <ul class="footer__policies" role="list">
             {%- for policy in shop.policies -%}
@@ -212,6 +226,110 @@
   }
 
   /*
+    Colophon style: the footer as the back page of a printed catalogue. A
+    heavy rule opens it, columns are divided by hairline rules, menu headings
+    are numbered like the index rail, and the bottom line names the typefaces.
+  */
+  .footer--colophon {
+    counter-reset: colophon;
+  }
+
+  .footer--colophon .footer__inner {
+    gap: clamp(2.5rem, 4vw, 3.5rem);
+    padding-block-start: clamp(1.75rem, 3vw, 2.5rem);
+    border-block-start: 2px solid var(--color-foreground);
+  }
+
+  .footer--colophon .footer__blocks {
+    column-gap: 0;
+  }
+
+  .footer--colophon .footer__blocks > * {
+    padding-inline: clamp(1rem, 2vw, 1.75rem);
+    border-inline-start: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+  }
+
+  .footer--colophon .footer__blocks > :first-child {
+    padding-inline-start: 0;
+    border-inline-start: 0;
+  }
+
+  .footer--colophon .footer__blocks > :last-child {
+    padding-inline-end: 0;
+  }
+
+  .footer--colophon .menu-block {
+    counter-increment: colophon;
+  }
+
+  .footer--colophon .menu-block__heading::before {
+    content: counter(colophon, decimal-leading-zero);
+    margin-inline-end: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    opacity: 0.72;
+  }
+
+  .footer--colophon .footer__bottom {
+    border-top-color: var(--color-foreground);
+    font-size: 0.6875rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .footer__colophon {
+    margin: 0;
+  }
+
+  [dir='rtl'] .footer--colophon .footer__bottom {
+    letter-spacing: 0;
+  }
+
+  /* Where columns pair up or stack, rules run across instead of down */
+  @media (max-width: 989px) {
+    .footer--colophon .footer__blocks {
+      row-gap: 0;
+    }
+
+    .footer--colophon .footer__blocks > * {
+      padding: 1.5rem 0;
+      border-inline-start: 0;
+      border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+    }
+
+    .footer--colophon .footer__blocks > :first-child {
+      padding-block-start: 0;
+      border-block-start: 0;
+    }
+
+    .footer--colophon .footer__blocks > .menu-block + .menu-block {
+      padding-inline-start: 1rem;
+      border-inline-start: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+    }
+  }
+
+  @media (min-width: 990px) and (max-width: 1279px) {
+    body:has(.header--rail) .footer--colophon .footer__blocks {
+      row-gap: 0;
+    }
+
+    body:has(.header--rail) .footer--colophon .footer__blocks > * {
+      padding: 1.5rem 0;
+      border-inline-start: 0;
+      border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+    }
+
+    body:has(.header--rail) .footer--colophon .footer__blocks > :first-child {
+      padding-block-start: 0;
+      border-block-start: 0;
+    }
+
+    body:has(.header--rail) .footer--colophon .footer__blocks > .menu-block + .menu-block {
+      padding-inline-start: 1rem;
+      border-inline-start: 1px solid color-mix(in srgb, var(--color-foreground) 16%, transparent);
+    }
+  }
+
+  /*
     Floating card style: the footer is a rounded panel inset from the page edges
     (lined up with the glass bubble header), with a soft accent glow, a glass
     newsletter card, round social buttons and animated link underlines.
@@ -356,7 +474,8 @@
       "options": [
         { "value": "theme", "label": "t:settings.style.use_theme" },
         { "value": "footer--classic", "label": "t:sections.footer.style_classic" },
-        { "value": "footer--card", "label": "t:sections.footer.style_card" }
+        { "value": "footer--card", "label": "t:sections.footer.style_card" },
+        { "value": "footer--colophon", "label": "t:sections.footer.style_colophon" }
       ],
       "default": "theme"
     },
