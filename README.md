@@ -53,6 +53,7 @@ shopify theme check          # lint Liquid, JSON and translations
 ├── sections        # Page sections and the header and footer groups
 ├── snippets        # Reusable fragments: product card, price, icons, forms
 ├── templates       # Base JSON templates (Monograph demo content)
+├── documentation   # Merchant documentation, in Markdown (not part of the theme)
 ├── listing         # Theme Store listing copy and images (not part of the theme)
 ├── scripts         # Build tooling
 └── dist            # Packaged zips (git-ignored)
