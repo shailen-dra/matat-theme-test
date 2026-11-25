@@ -36,7 +36,7 @@ Retake both: the current files show the old header and cards.
 
 | File | Size | Alt text |
 |---|---|---|
-| `screenshot-desktop.png` | 2000 × 2496 | Jewelry store home page on desktop with a numbered index down the left edge, a full-width slideshow of gold rings and a scrolling announcement strip |
+| `screenshot-desktop.png` | 2000 × 2496 | Jewelry store home page on desktop with a numbered index down the left edge and a full-width slideshow of gold rings |
 | `screenshot-mobile.png` | 750 × 1334 | Jewelry store home page on mobile with a full-screen slide of a gold necklace, a headline and a Shop the collection button |
 
 ## Key highlights (image 1600 × 1200, title max 30, description max 140)

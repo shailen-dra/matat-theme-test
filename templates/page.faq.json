@@ -72,7 +72,7 @@
       "settings": {
         "layout": "faq--split",
         "eyebrow": "Help",
-        "title": "Questions, <em>answered</em>",
+        "title": "Questions, answered",
         "heading_alignment": "start",
         "contact_text": "Still have a question?",
         "contact_label": "Contact us",

@@ -197,6 +197,23 @@
       },
       {
         "type": "select",
+        "id": "section_heading_style",
+        "label": "t:settings.style.section_heading_style",
+        "info": "t:settings.style.section_heading_style_info",
+        "options": [
+          {
+            "value": "section-heading--classic",
+            "label": "t:settings.style.section_heading_classic"
+          },
+          {
+            "value": "section-heading--chapter",
+            "label": "t:settings.style.section_heading_chapter"
+          }
+        ],
+        "default": "section-heading--classic"
+      },
+      {
+        "type": "select",
         "id": "header_style",
         "label": "t:settings.style.header_style",
         "info": "t:settings.style.header_style_info",

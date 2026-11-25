@@ -44,7 +44,7 @@
           "type": "_timeline-item",
           "settings": {
             "date": "Today",
-            "title": "Made to be <em>kept</em>",
+            "title": "Made to be kept",
             "text": "<p>Every piece is still finished by hand, and comes with a lifetime warranty.</p>"
           }
         }
@@ -58,7 +58,7 @@
       "settings": {
         "color_scheme": "scheme-2",
         "eyebrow": "Our story",
-        "title": "From one bench <em>to many</em>",
+        "title": "From one bench to many",
         "padding_top": 64,
         "padding_bottom": 64
       }
@@ -71,7 +71,7 @@
         "after_label": "After",
         "start_position": 50,
         "eyebrow": "Restoration",
-        "title": "Polished back to <em>new</em>",
+        "title": "Polished back to new",
         "subtitle": "Drag to compare a well-loved piece before and after polishing.",
         "padding_top": 64,
         "padding_bottom": 64,
@@ -99,7 +99,7 @@
       "settings": {
         "color_scheme": "scheme-2",
         "eyebrow": "Visit us",
-        "title": "Try it on <em>in person</em>",
+        "title": "Try it on in person",
         "subtitle": "Book a private appointment for engagement rings, sizing and custom pieces.",
         "padding_top": 64,
         "padding_bottom": 64
@@ -159,7 +159,7 @@
       "settings": {
         "color_scheme": "scheme-1",
         "eyebrow": "Why it lasts",
-        "title": "Made to be <em>kept</em>, not replaced",
+        "title": "Made to be kept, not replaced",
         "column_1": "Our jewelry",
         "column_2": "Typical fashion jewelry",
         "padding_top": 64,

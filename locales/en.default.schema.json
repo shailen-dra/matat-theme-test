@@ -872,6 +872,10 @@
       "header_style_info": "Applies when the header is set to stick.",
       "footer_style": "Footer",
       "product_style": "Product page",
+      "section_heading_style": "Section headings",
+      "section_heading_style_info": "Chapter opens each section with a full-width rule, a running number and a left-aligned title.",
+      "section_heading_classic": "Classic",
+      "section_heading_chapter": "Chapter",
       "use_theme": "Use theme setting"
     }
   }
