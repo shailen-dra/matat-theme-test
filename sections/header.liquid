@@ -226,7 +226,41 @@
     </div>
   </div>
 
-  <dialog id="{{ drawer_id }}" class="drawer" aria-label="{{ 'header.main_menu' | t }}" scroll-lock>
+  {%- comment -%}
+    Mobile index strip: the rail's numbered, ruled index laid out as a single
+    scrolling row under the bar. Top-level links only; the drawer holds the rest.
+  {%- endcomment -%}
+  {%- if is_rail and menu != blank -%}
+    <nav class="header__index" aria-label="{{ 'header.catalogue_index' | t }}">
+      <ol class="header__index-list" role="list">
+        {%- for link in menu.links -%}
+          <li class="header__index-item">
+            <a
+              href="{{ link.url }}"
+              class="header__index-link"
+              {% if link.current %}
+                aria-current="page"
+              {% elsif link.active or link.child_active %}
+                data-active
+              {% endif %}
+            >
+              <span class="header__index-number" aria-hidden="true">
+                {{- forloop.index | prepend: '0' | slice: -2, 2 -}}
+              </span>
+              {{- link.title | escape -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ol>
+    </nav>
+  {%- endif -%}
+
+  <dialog
+    id="{{ drawer_id }}"
+    class="drawer{% if is_rail %} drawer--index{% endif %}"
+    aria-label="{{ 'header.main_menu' | t }}"
+    scroll-lock
+  >
     <div class="drawer__header">
       <span class="drawer__title">{{ shop.name }}</span>
       <button type="button" class="header__icon" data-dialog-close>
@@ -1344,6 +1378,131 @@
     /* Overlays pinned to the page edges make room for the rail */
     body:has(.header--rail) .sticky-atc {
       inset-inline-start: var(--rail-width);
+    }
+  }
+
+  /*
+    Index rail on mobile. The rail can't run down the edge of a phone, so its
+    numbered, ruled index becomes a scrolling strip under the bar, and the menu
+    drawer reads as the full index with the same numbers and rules.
+  */
+  .header__index {
+    display: none;
+  }
+
+  @media (max-width: 989px) {
+    .header__index {
+      --index-rule: color-mix(in srgb, var(--color-foreground) 12%, transparent);
+
+      display: block;
+      border-block-start: 1px solid var(--index-rule);
+      /* Fade the trailing edge so a cut-off item reads as "scroll for more" */
+      mask-image: linear-gradient(to right, #000 calc(100% - 2.5rem), transparent);
+    }
+
+    [dir='rtl'] .header__index {
+      mask-image: linear-gradient(to left, #000 calc(100% - 2.5rem), transparent);
+    }
+
+    .header__index-list {
+      display: flex;
+      margin: 0;
+      padding: 0;
+      overflow-x: auto;
+      list-style: none;
+      scrollbar-width: none;
+      scroll-padding-inline: var(--page-margin);
+      scroll-snap-type: x proximity;
+    }
+
+    .header__index-list::-webkit-scrollbar {
+      display: none;
+    }
+
+    .header__index-item {
+      flex: none;
+      scroll-snap-align: start;
+      border-inline-end: 1px solid var(--index-rule);
+    }
+
+    .header__index-item:first-child .header__index-link {
+      padding-inline-start: var(--page-margin);
+    }
+
+    .header__index-link {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      min-height: 2.75rem;
+      padding: 0.875rem 1.125rem 0.75rem;
+      color: var(--color-foreground);
+      font-size: 0.6875rem;
+      letter-spacing: 0.12em;
+      line-height: 1.4;
+      text-decoration: none;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .header__index-number {
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.08em;
+      opacity: 0.72;
+    }
+
+    .header__index-link[aria-current='page'],
+    .header__index-link[data-active] {
+      color: var(--color-accent);
+    }
+
+    .header__index-link:focus-visible {
+      outline-offset: -0.25rem;
+    }
+
+    /* Drawer as the full index: numbered rows, rail type, ruled lines */
+    .drawer--index .drawer-menu {
+      counter-reset: drawer-index;
+      border-block-start: 1px solid var(--index-rule, color-mix(in srgb, var(--color-foreground) 12%, transparent));
+    }
+
+    .drawer--index .drawer-menu > li {
+      counter-increment: drawer-index;
+      border-bottom-color: color-mix(in srgb, var(--color-foreground) 12%, transparent);
+    }
+
+    .drawer--index .drawer-menu__link {
+      justify-content: flex-start;
+      gap: 1rem;
+      font-family: inherit;
+      font-size: 0.8125rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .drawer--index .drawer-menu__link::before {
+      content: counter(drawer-index, decimal-leading-zero);
+      min-width: 1.5rem;
+      font-size: 0.6875rem;
+      letter-spacing: 0.08em;
+      font-variant-numeric: tabular-nums;
+      opacity: 0.72;
+    }
+
+    .drawer--index .drawer-menu__chevron {
+      margin-inline-start: auto;
+    }
+
+    .drawer--index .drawer-menu__details[open] > .drawer-menu__link {
+      color: var(--color-accent);
+    }
+
+    /* Sub-links line up under the parent's title, past its number */
+    .drawer--index .drawer-menu__sublist {
+      padding-inline-start: 2.5rem;
+    }
+
+    .drawer--index .drawer-menu__sublist--nested {
+      padding-inline-start: 1rem;
     }
   }
 

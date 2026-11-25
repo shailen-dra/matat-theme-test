@@ -7,7 +7,7 @@ Store 2.0, using theme blocks throughout, and ships with two presets.
 | Preset | Made for | Look |
 |---|---|---|
 | **Monograph** | Jewelry and accessories | Laid out like a printed catalogue: a numbered index down the left edge, ledger product cards with a material line and ruled price row, an index view on collection pages and a catalogue product page |
-| **Linen** | Clothing and slow fashion | Soft and modern: Archivo headings with DM Sans body text, rounded buttons, a frosted glass header, modern product cards and a card-style footer |
+| **Hemline** | Clothing and slow fashion | Soft and modern: Archivo headings with DM Sans body text, rounded buttons, a frosted glass header, modern product cards and a card-style footer |
 
 Version 1.0.0. See [release notes](./release-notes.md) for the full feature list.
 
@@ -43,11 +43,11 @@ shopify theme check          # lint Liquid, JSON and translations
 .
 ├── assets          # critical.css, shared JS (product-components.js) and icons
 ├── blocks          # Theme blocks: product page parts, text, media, groups
-├── config          # Global settings schema and the Monograph and Linen presets
+├── config          # Global settings schema and the Monograph and Hemline presets
 ├── layout          # theme.liquid and password.liquid
 ├── listings        # Per-preset templates and section groups (required for multi-preset themes)
 │   ├── monograph
-│   └── linen
+│   └── hemline
 ├── locales         # en.default.json and en.default.schema.json
 ├── sections        # Page sections and the header and footer groups
 ├── snippets        # Reusable fragments: product card, price, icons, forms

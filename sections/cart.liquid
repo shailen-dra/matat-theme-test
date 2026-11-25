@@ -11,10 +11,17 @@
 
 {%- liquid
   assign form_id = 'CartForm-' | append: section.id
+
+  # With ledger product cards the cart reads as an order slip: numbered,
+  # ruled lines and a ruled summary in place of a filled panel.
+  assign is_ledger = false
+  if settings.card_style == 'card--ledger'
+    assign is_ledger = true
+  endif
 -%}
 
 <cart-items
-  class="cart section full-width"
+  class="cart section full-width{% if is_ledger %} cart--ledger{% endif %}"
   data-section-id="{{ section.id }}"
   data-cart-page
   style="
@@ -58,12 +65,29 @@
                 </a>
 
                 <div class="cart-item__info">
+                  {%- if is_ledger -%}
+                    {%- liquid
+                      assign line_number = forloop.index
+                      if line_number < 10
+                        assign line_number = '0' | append: line_number
+                      endif
+                    -%}
+                    <p class="cart-ledger">
+                      <span class="cart-ledger__number">{{ 'product.card.number' | t: number: line_number }}</span>
+                      {%- if item.product.type != blank -%}
+                        <span class="cart-ledger__type">{{ item.product.type | escape }}</span>
+                      {%- endif -%}
+                    </p>
+                  {%- endif -%}
                   {%- if section.settings.show_vendor and item.vendor != blank -%}
                     <p class="cart-item__vendor">{{ item.vendor }}</p>
                   {%- endif -%}
                   <h2 class="cart-item__title">
                     <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
                   </h2>
+                  {%- if is_ledger and item.sku != blank -%}
+                    <p class="cart-ledger__ref">{{ 'product.reference' | t: sku: item.sku | escape }}</p>
+                  {%- endif -%}
 
                   <p class="cart-item__price">
                     {%- if item.original_price > item.final_price -%}
@@ -573,6 +597,100 @@
     margin: 0;
   }
 
+  /*
+    Ledger: the cart as an order slip. Each line carries its number and type
+    on a ruled line like the ledger cards, with the SKU as a reference; the
+    summary drops its filled panel for a ruled slip under a heavy top rule.
+  */
+  .cart-ledger {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 0.375rem;
+    padding-block-end: 0.5rem;
+    border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+    color: color-mix(in srgb, var(--color-foreground) 72%, transparent);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .cart-ledger__number {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .cart-ledger__type {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .cart-ledger__ref {
+    margin: 0;
+    color: color-mix(in srgb, var(--color-foreground) 72%, transparent);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  :is(.cart--ledger, .cart-drawer--ledger) :is(.cart-item__media, .drawer-item__media, .product-row__media) {
+    border-radius: 0;
+  }
+
+  :is(.cart--ledger, .cart-drawer--ledger) :is(.cart-item__total, .cart__totals dd, .drawer-item__price, .cart-drawer__row) {
+    font-variant-numeric: tabular-nums;
+  }
+
+  :is(.cart--ledger, .cart-drawer--ledger) .shipping-bar {
+    padding: 0.875rem 0;
+    border-block: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+    border-radius: 0;
+    background: none;
+  }
+
+  :is(.cart--ledger, .cart-drawer--ledger) .shipping-bar__track {
+    height: 2px;
+    border-radius: 0;
+  }
+
+  .cart--ledger .cart__summary {
+    padding: 1.25rem 0 0;
+    border-block-start: 2px solid var(--color-foreground);
+    border-radius: 0;
+    background: none;
+  }
+
+  .cart--ledger .cart__summary-title {
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .cart--ledger .cart__totals {
+    gap: 0;
+  }
+
+  .cart--ledger .cart__row {
+    padding-block: 0.75rem;
+    border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+  }
+
+  .cart--ledger .cart__row--total {
+    margin-block-start: 0;
+    padding-block: 1rem;
+    border-block: 1px solid var(--color-foreground);
+  }
+
+  .cart--ledger .cart__note {
+    border-radius: 0;
+  }
+
+  [dir='rtl'] :is(.cart-ledger, .cart-ledger__ref, .cart--ledger .cart__summary-title) {
+    letter-spacing: 0;
+  }
+
   .cart__row--discount {
     color: var(--color-accent);
   }
@@ -794,8 +912,7 @@
     {
       "type": "richtext",
       "id": "summary_text",
-      "label": "t:sections.cart.summary_text",
-      "default": "<p>Use this text to share your shipping and return details.</p>"
+      "label": "t:sections.cart.summary_text"
     },
     {
       "type": "header",

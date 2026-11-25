@@ -10,11 +10,17 @@
 
 {%- liquid
   assign form_id = 'CartDrawerForm'
+
+  # Ledger product cards turn the drawer into an order slip, like the cart page
+  assign is_ledger = false
+  if settings.card_style == 'card--ledger'
+    assign is_ledger = true
+  endif
 -%}
 
 <side-drawer id="CartDrawer">
   <dialog class="side-drawer" aria-labelledby="CartDrawerTitle" scroll-lock>
-    <cart-items class="cart-drawer" data-section-id="{{ section.id }}">
+    <cart-items class="cart-drawer{% if is_ledger %} cart-drawer--ledger{% endif %}" data-section-id="{{ section.id }}">
       <div class="side-drawer__inner" data-cart-content>
         <div class="side-drawer__header">
           <h2 id="CartDrawerTitle" class="side-drawer__title">
@@ -49,6 +55,20 @@
                   </a>
 
                   <div class="drawer-item__info">
+                    {%- if is_ledger -%}
+                      {%- liquid
+                        assign line_number = forloop.index
+                        if line_number < 10
+                          assign line_number = '0' | append: line_number
+                        endif
+                      -%}
+                      <p class="cart-ledger">
+                        <span class="cart-ledger__number">{{ 'product.card.number' | t: number: line_number }}</span>
+                        {%- if item.product.type != blank -%}
+                          <span class="cart-ledger__type">{{ item.product.type | escape }}</span>
+                        {%- endif -%}
+                      </p>
+                    {%- endif -%}
                     <div class="drawer-item__top">
                       <h3 class="drawer-item__title">
                         <a href="{{ item.url }}">{{ item.product.title | escape }}</a>
@@ -528,6 +548,44 @@
 
   .cart-upsell:not(:has(.cart-upsell__list)) {
     display: none;
+  }
+
+  /* Ledger drawer: suggestions become a ruled, numbered list instead of boxed rows */
+  .cart-drawer--ledger .cart-upsell__list {
+    gap: 0;
+    border-block-start: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+    counter-reset: upsell;
+  }
+
+  .cart-drawer--ledger .cart-upsell__list > li {
+    counter-increment: upsell;
+  }
+
+  .cart-drawer--ledger .cart-upsell .product-row {
+    grid-template-columns: 1.75rem 3.5rem minmax(0, 1fr) auto;
+    padding: 0.75rem 0;
+    border: 0;
+    border-block-end: 1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent);
+    border-radius: 0;
+    background: none;
+  }
+
+  .cart-drawer--ledger .cart-upsell .product-row::before {
+    content: counter(upsell, decimal-leading-zero);
+    color: color-mix(in srgb, var(--color-foreground) 72%, transparent);
+    font-size: 0.6875rem;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The drawer header already draws the rule above the shipping bar */
+  .cart-drawer--ledger .cart-drawer__body .shipping-bar {
+    border-block-start: 0;
+  }
+
+  .cart-drawer--ledger .cart-drawer__row--total {
+    padding-block: 0.875rem;
+    border-block: 1px solid var(--color-foreground);
   }
 
   .cart-upsell__title {

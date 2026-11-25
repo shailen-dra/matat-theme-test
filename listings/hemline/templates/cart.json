@@ -11,7 +11,9 @@
   "sections": {
     "main": {
       "type": "cart",
-      "settings": {}
+      "settings": {
+        "summary_text": "<p>Free shipping on orders over $150. Returns and exchanges are free within 30 days.</p>"
+      }
     }
   },
   "order": [

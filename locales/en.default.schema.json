@@ -78,6 +78,8 @@
     "accent": "Accent",
     "body_font": "Body",
     "button_corner_radius": "Button corner radius",
+    "panel_corner_radius": "Panel and tag corner radius",
+    "panel_corner_radius_info": "Rounds cards, collage tiles, countdown tiles and testimonials. Tags and labels become pills above 0.",
     "color": "Color",
     "columns_desktop": "Columns on desktop",
     "full_width": "Full width",

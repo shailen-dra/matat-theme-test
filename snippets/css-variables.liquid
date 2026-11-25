@@ -23,6 +23,9 @@
     --color-accent: {{ settings.body_color_scheme.settings.accent }};
     --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
     --style-border-radius-buttons: {{ settings.button_corner_radius }}px;
+    --style-border-radius-panels: {{ settings.panel_corner_radius }}px;
+    /* Tags and labels: square at 0, a full pill at any other value */
+    --style-border-radius-tags: calc(var(--style-border-radius-panels) * 100);
   }
 
   {% # Color schemes: sections apply one with `color-scheme color-<id>` %}
