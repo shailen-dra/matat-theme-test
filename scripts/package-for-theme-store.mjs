@@ -6,7 +6,10 @@
  * own images, collections and pages (`shopify://...`). Those don't exist in a
  * merchant's store, and Shopify asks that submitted JSON files don't contain
  * them. This script copies the theme to a temporary folder and:
- *   - removes every `shopify://` setting value from templates and section groups
+ *   - includes the listings/ folder (one kebab-case folder per preset), which
+ *     the Theme Store requires when a theme has more than one preset
+ *   - removes every `shopify://` setting value from templates and section
+ *     groups, including the preset copies under listings/
  *   - removes the same values and the placeholder social media links from
  *     the `current` settings in config/settings_data.json
  *   - points header mega menu blocks back at "Catalog", the top-level menu
@@ -24,7 +27,7 @@ import { join, resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const themeDirs = ['assets', 'blocks', 'config', 'layout', 'locales', 'sections', 'snippets', 'templates'];
+const themeDirs = ['assets', 'blocks', 'config', 'layout', 'listings', 'locales', 'sections', 'snippets', 'templates'];
 const work = mkdtempSync(join(tmpdir(), 'theme-package-'));
 const removed = [];
 const DEFAULT_MEGA_MENU_ITEM = 'Catalog';
@@ -77,13 +80,20 @@ function resetMegaMenus(group, file) {
 try {
   for (const dir of themeDirs) cpSync(join(root, dir), join(work, dir), { recursive: true });
 
-  // Templates and section groups
-  for (const dir of ['templates', 'sections']) {
+  // Templates and section groups, at the root and in each preset's listings folder
+  const presetFolders = readdirSync(join(work, 'listings'));
+  const jsonDirs = ['templates', 'sections'];
+  for (const preset of presetFolders) {
+    for (const dir of ['templates', 'sections']) {
+      if (existsSync(join(work, 'listings', preset, dir))) jsonDirs.push(join('listings', preset, dir));
+    }
+  }
+  for (const dir of jsonDirs) {
     for (const name of readdirSync(join(work, dir)).filter((file) => file.endsWith('.json'))) {
       const path = join(work, dir, name);
       const { banner, data } = readJson(path);
       stripStoreReferences(data, `${dir}/${name}`);
-      if (dir === 'sections' && name === 'header-group.json') resetMegaMenus(data, `${dir}/${name}`);
+      if (dir.endsWith('sections') && name === 'header-group.json') resetMegaMenus(data, `${dir}/${name}`);
       writeJson(path, banner, data);
     }
   }
@@ -94,6 +104,16 @@ try {
   const themeName = readJson(join(work, 'config', 'settings_schema.json')).data.find((group) => group.name === 'theme_info')?.theme_name;
   if (!settings.presets || !settings.presets[themeName]) {
     throw new Error(`settings_data.json has no preset named "${themeName}". Add it back before packaging.`);
+  }
+  // With more than one preset, each needs a kebab-case listings folder (and no strays)
+  const presetNames = Object.keys(settings.presets);
+  if (presetNames.length > 1) {
+    const expected = presetNames.map((name) => name.toLowerCase().replace(/\s+/g, '-'));
+    const missing = expected.filter((folder) => !presetFolders.includes(folder));
+    const extra = presetFolders.filter((folder) => !expected.includes(folder));
+    if (missing.length || extra.length) {
+      throw new Error(`listings/ doesn't match the presets. Missing: ${missing.join(', ') || 'none'}. Unexpected: ${extra.join(', ') || 'none'}.`);
+    }
   }
   if (settings.current && typeof settings.current === 'object') {
     for (const key of Object.keys(settings.current)) {
