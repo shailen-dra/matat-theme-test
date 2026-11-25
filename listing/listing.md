@@ -7,9 +7,10 @@ listing, demo store, screenshots and highlights.
 
 Before submitting:
 - Retake every image on the final demo stores (the listing must link to them).
-  The Monograph images below predate the catalogue redesign of 2026-11-24 and
-  don't show the index rail header or ledger cards yet. The Hemline images don't
-  exist yet.
+  The Monograph images in this folder predate the catalogue redesign of
+  2026-11-24/25: they show neither the index rail and mobile index strip nor
+  the ledger cards, chapter headings, 7-section home page or colophon footer.
+  The Hemline images don't exist yet.
 - Only claim what the theme ships. The theme no longer includes right-to-left
   translations, so no listing mentions right-to-left support.
 
@@ -17,8 +18,10 @@ Before submitting:
 
 # Monograph preset
 
-Demo store: matat-jwelery (jewelry). Look: index rail header, ledger product
-cards, catalogue product page, classic footer.
+Demo store: matat-jwelery (jewelry). Look: index rail header with a numbered
+strip on mobile, ledger product cards, catalogue product page, order-slip cart,
+chapter section headings, journal list and colophon footer. Home page: slideshow,
+categories, bestsellers, shop the look, brand story, metals and journal.
 
 ## Tagline (max 70 characters)
 
@@ -37,7 +40,7 @@ Retake both: the current files show the old header and cards.
 | File | Size | Alt text |
 |---|---|---|
 | `screenshot-desktop.png` | 2000 × 2496 | Jewelry store home page on desktop with a numbered index down the left edge and a full-width slideshow of gold rings |
-| `screenshot-mobile.png` | 750 × 1334 | Jewelry store home page on mobile with a full-screen slide of a gold necklace, a headline and a Shop the collection button |
+| `screenshot-mobile.png` | 750 × 1334 | Jewelry store home page on mobile with a numbered index strip under the header and a full-screen slide of a gold necklace with a Shop the collection button |
 
 ## Key highlights (image 1600 × 1200, title max 30, description max 140)
 
@@ -58,7 +61,7 @@ Retake both: the current files show the old header and cards.
 
 ## SEO metadata description
 
-> A catalogue-style Shopify theme for jewelry and accessory brands, with ledger product cards, an index view, shoppable lookbooks, size guides and engraving options.
+> A catalogue-style Shopify theme for jewelry and accessory brands, with numbered ledger cards, index views, an order-slip cart, shoppable lookbooks and engraving options.
 
 ## Feature tags to select
 
@@ -68,7 +71,10 @@ Product details: product options, product tabs, product videos,
 shipping/delivery information, size chart.
 Visual effects: animation.
 Marketing and conversion: cross-selling (complete the look), quick view,
-recently viewed products, countdown timer, FAQ page.
+recently viewed products, FAQ page.
+
+The countdown timer section is still in the theme, but the Monograph demo no
+longer shows it, so it isn't tagged on this listing.
 
 ---
 
@@ -76,7 +82,9 @@ recently viewed products, countdown timer, FAQ page.
 
 Demo store: ashana-collection (apparel). Look: Archivo headings with DM Sans
 body text, rounded buttons, glass sticky header, card footer, modern product
-cards and product page.
+cards and product page. Before capturing: set "Panel and tag corner radius" to
+24 px on the demo theme, and move its countdown end date (currently
+2026-12-24) past the review period.
 
 ## Tagline (max 70 characters)
 

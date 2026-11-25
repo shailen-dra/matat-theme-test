@@ -6,19 +6,20 @@ Store 2.0, using theme blocks throughout, and ships with two presets.
 
 | Preset | Made for | Look |
 |---|---|---|
-| **Monograph** | Jewelry and accessories | Laid out like a printed catalogue: a numbered index down the left edge, ledger product cards with a material line and ruled price row, an index view on collection pages and a catalogue product page |
+| **Monograph** | Jewelry and accessories | Laid out like a printed catalogue: a numbered index down the left edge (a numbered strip on mobile), ledger product cards, index views on collection and search pages, a catalogue product page, an order-slip cart, numbered chapter headings and a colophon footer |
 | **Hemline** | Clothing and slow fashion | Soft and modern: Archivo headings with DM Sans body text, rounded buttons, a frosted glass header, modern product cards and a card-style footer |
 
 Version 1.0.0. See [release notes](./release-notes.md) for the full feature list.
 
 ## Highlights
 
-- **Catalogue system:** plates and index views on collection pages, numbered figure labels and product notes on the product page
+- **Catalogue system:** the index rail and mobile index strip, plates and index views on collection and search pages, a contents list for collections, numbered figure labels and product notes on the product page, an order-slip cart, chapter headings, a journal list for the blog and a colophon footer
 - **Storytelling sections:** slideshow, hero, video, collage, image with text, timeline, testimonials, press logos, before/after slider and comparison table
 - **Shoppable imagery:** shop the look and shoppable gallery with product hotspots
 - **Product page details:** size guide, engraving and gift notes, delivery estimate, pickup availability, product tabs, bundles and a sticky add to cart bar
 - **Cart and discovery:** cart drawer with a free shipping bar and suggestions, predictive search, quick view, product recommendations and recently viewed products
-- **Theme Store essentials:** country and currency selector, Shop Pay Installments, Custom Liquid section and block, app blocks and accessible markup (Lighthouse accessibility 100 on tested pages)
+- **Style settings:** theme-wide header, footer, product page, card and section heading styles, plus one corner radius for panels, tags and icon buttons, so each preset keeps a single shape language
+- **Theme Store essentials:** country and currency selector, Shop Pay Installments, Custom Liquid section and block, app blocks and accessible markup
 
 ## Getting started
 
