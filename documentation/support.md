@@ -1,7 +1,7 @@
 # Support
 
 <!--
-  TODO before publishing: replace every [PLACEHOLDER] on this page.
+  TODO before publishing: replace [SUPPORT FORM LINK] with the Tally form URL.
   The support form must be public, linked from here and from the Theme Store
   listing, and include: name, email, store URL (with an example), problem
   description, file upload, and an automatic reply when it's sent.
@@ -20,8 +20,7 @@ Please include:
 - a description of the problem, and screenshots if you can
 
 You'll get an automatic confirmation when your message is sent. We reply
-within **two business days**, [SUPPORT HOURS AND TIME ZONE, for example
-"Monday to Friday, 9:00–17:00 UTC"].
+within **two business days**.
 
 ## What our support covers
 
@@ -43,8 +42,6 @@ fix critical bugs as quickly as we can.
   [Shopify Support](https://help.shopify.com).
 
 For custom work, you can [hire a Shopify Partner](https://www.shopify.com/partners/directory).
-[If you offer paid customization, describe it here. It can't be included in
-the theme's price.]
 
 ## Before you contact us
 
