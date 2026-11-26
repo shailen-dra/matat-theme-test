@@ -1455,6 +1455,11 @@
       color: var(--color-accent);
     }
 
+    .header__index-link[aria-current='page'] .header__index-number,
+    .header__index-link[data-active] .header__index-number {
+      opacity: 1;
+    }
+
     .header__index-link:focus-visible {
       outline-offset: -0.25rem;
     }

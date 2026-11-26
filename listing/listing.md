@@ -17,7 +17,7 @@ Before submitting:
 
 # Monograph preset
 
-Demo store: matat-jwelery (jewelry). Look: index rail header with a numbered
+Demo store: lustra-jewelry.myshopify.com (Lustra, jewelry). Look: index rail header with a numbered
 strip on mobile, ledger product cards, catalogue product page, order-slip cart,
 chapter section headings, journal list and colophon footer. Home page: slideshow,
 categories, bestsellers, shop the look, brand story, metals and journal.
